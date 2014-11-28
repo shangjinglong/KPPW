@@ -1,0 +1,41 @@
+
+
+    <div class="deliver-content form-horizontal">
+      <!-- 中标者查看 -->
+{if $arrAgreeInfo['seller_uid'] == $gUid}
+      <p class="lead text-center text-info mt_20"><i class="fa fa-spinner fa-spin"></i> 已经提交源文件，等待对方确认源文件！</p>
+       <p class="lead text-center text-info mt_20">
+      <a href="javascript:report(1,'task','{$arrAgreeInfo[buyer_uid]}','{$arrAgreeInfo[task_id]}','{$arrAgreeInfo[task_id]}');void(0);" class="btn btn-default">
+	    	<i class="fa fa-bell"></i> 维权
+	    </a>
+	    </p>
+{else}
+
+      <!-- 雇主查看 -->
+      <p class="lead text-center text-success mt_20"><i class="fa fa-check-circle"></i> 对方已经提交源文件，开始确认源文件内容！</p>
+      <div class="form-group">
+        <label class="col-sm-2 control-label">下载源文件 </label>
+        <div class="col-sm-10 form-control-static">
+        {if $arrProcessCan['download']&&$fileList}
+          <ul class="detail-affix" id="fileSource">
+          {loop $fileList $k $v}
+              <li class="detail-affix-item"><a href="{$v['save_name']}"><i class="fa fa-download"></i> {$v['file_name']}</a></li>
+          {/loop}
+          </ul>
+        {/if}
+        </div>
+      </div>
+
+	{if $arrProcessCan['confirm']}
+      <div class="deliver-footer">
+        <button class="btn btn-success" type="button" onclick="confirmFile();" >确认源文件</button>
+       <a href="javascript:report(1,'work','{$arrAgreeInfo[seller_uid]}','{$arrAgreeInfo[task_id]}','{$arrAgreeInfo[work_id]}');void(0);" class="btn btn-default">
+	    	<i class="fa fa-bell"></i> 维权
+	    </a>
+
+      </div>
+	{/if}
+{/if}
+    </div>
+<script src="static/js/uploadify/jquery.uploadify.min.js" type="text/javascript"></script>
+<link href="static/js/uploadify/uploadify.css" rel="stylesheet">

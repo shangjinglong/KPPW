@@ -1,0 +1,245 @@
+<!--{template ADMIN_DIRECTORY/tpl/admin_header}-->
+<style type="text/css">
+.jia {background: url(tpl/img/plus.gif)}
+.jian {background: url(tpl/img/minus.gif) }
+</style>
+<div class="page_title">
+    	<h1>{$_lang['industry_manage']}</h1>
+        <div class="tool">
+            <a href="index.php?do=task&view=industry" class="here">{$_lang['industry_list']}</a>
+            <a href="index.php?do=task&view=industry_edit">{if $indus_id}{$_lang['edit']}{else}{$_lang['add']}{/if}{$_lang['industry']}</a> 
+            <a href="index.php?do=$do&view=union_industry" >{$_lang['industry_merge']}</a>
+		</div>
+</div>
+
+<div class="box search p_relative">
+    	<div class="title"><h2>{$_lang['search']}</h2></div>
+        <div class="detail" id="detail">
+           
+		    <form action="" method="get">
+            	<input type="hidden" name="do" value="$do">
+				<input type="hidden" name="view" value="$view">
+				<input type="hidden" name="type" value="$type">
+				<input type="hidden" name="page" value="$page">
+				 
+                <table cellspacing="0" cellpadding="0">
+					<tbody>
+                        <tr>
+                            <th>{$_lang['by_industry']}</th>
+                            <td>
+                            	<select   name="w[indus_pid]" id="catid">
+                            	{loop $indus_option_arr $v}
+									$v
+								{/loop}
+								</select>
+								{$_lang['indus_parent']}
+                            </td>
+                            <th>{$_lang['industry_name']}*</th>
+                            <td><input type="text" value="$w['indus_name']" name="w[indus_name]" class="txt"/>*{$_lang['search_by_like']}</td>
+                             <td></td> 
+						</tr>
+                        <tr >
+                            
+							<th>{$_lang['result_order']}</th>
+							<td>
+								
+								<select name="ord[]">
+                                <option value="indus_id" {if $ord['0']=='indus_id' or !isset($ord['0'])} selected="selected"{/if}>{$_lang['default_order']}</option>
+                                <option value="on_time" {if $ord['0']=='on_time' } selected="selected"{/if}>{$_lang['add_time']}</option>
+                                </select>
+                                <select name="ord[]">
+                                <option {if $ord['1']=='desc' or !isset($ord['1'])}selected="selected" {/if} value="desc">{$_lang['desc']}</option>
+                                <option {if $ord['1']=='asc'}selected="selected" {/if} value="asc">{$_lang['asc']}</option>
+                                </select>
+								<button class="pill" type="submit" value={$_lang['search']} name="sbt_search">
+                            		<span class="icon magnifier">&nbsp;</span>{$_lang['search']}
+								</button>
+							</td>
+                             
+                            <td colspan="3"> 
+                              	&nbsp;
+							</td>
+							  
+                        </tr>
+                    </tbody>
+                </table>
+            </form>
+			
+        </div>
+    </div>
+    <!--搜索结束-->
+	<div class="box list">
+    	<div class="title"><h2>{$_lang['industry_list']}</h2></div>
+        <div class="detail">
+        	<form action="" id='frm_list' method="post">
+              <table cellpadding="0" cellspacing="0">
+                <tbody>
+                <tr>
+                   
+                    <th width="7%">{$_lang['show_order']}</th>
+                    <th width="30%">{$_lang['industry_name']}</th>
+                    <th width="10%">适用任务</th>
+					<th width="10%">适用商品</th>
+                    <th width="10%">{$_lang['is_recommend']}</th>
+                    <th width="17%"> {$_lang['change_time']}</th>
+                   <th width="13%">{$_lang['operate']}</th>
+                </tr>
+                
+                {loop $indus_show_arr $k $v}
+				 <tbody id="indus_item_l_{$v['indus_id']}" {if $v['indus_pid'] && !$w}style="display:none;"{else}style="display:;"{/if}>
+                  <tr class="item" align="center">
+                  	
+                    <td class="td28" align="left">
+                    	<input type="text" size=3 class="txt" name="indus_item_listorder_{$v['indus_id']}" value="$v['listorder']" onblur="edit_listorder({$v['indus_id']},this.value)"></td>
+                    <td align="left">
+                    	$v['ext']
+						<span class="{if $indus_index_arr[$v['indus_id']]}jia{else}jian{/if}" 
+						{if $indus_index_arr[$v['indus_id']]}
+						onclick="if($(this).attr('class')=='jia'){
+							showids_{$v['indus_id']}('show');
+							$(this).attr('class','jian');
+							}else{showids_{$v['indus_id']}('hide');
+							$(this).attr('class','jia')}
+							" {/if}>&nbsp;&nbsp;&nbsp;&nbsp;</span>
+                            <span id="indus_item_span_{$v['indus_id']}"
+							 style="font-weight:<!--{eval echo 900-$v['level']*300}-->;font-size:<!--{eval echo 16-$v['level']*2}-->px;">
+                            <input type="text" class="txt" value="$v['indus_name']" 
+							readonly="readonly" >
+							</span>
+							{if !$v['indus_pid']}
+								<a href="javascript:;" style="color:#ff6600" onclick="addchild({$v['indus_id']},'$v['ext']')">{$_lang['add_son_class']}</a>					
+							{/if}
+					</td>
+					<td>
+						{if !$v['indus_pid']}
+						<input type="checkbox"  data-indusId = "{$v['indus_id']}" class="CheckedForTask" {if $v['totask']==1}checked="checked"{/if}>
+						{/if}
+					</td>
+					<td>
+						{if !$v['indus_pid']}
+						<input type="checkbox"  data-indusId = "{$v['indus_id']}" class="CheckedForGoods" {if $v['togoods']==1}checked="checked"{/if}>
+						{/if}
+					</td>
+                    <td align="left">{if $v['is_recommend']==1}{$_lang['recommend']}{else}{$_lang['no']}{/if}</td>
+                     
+                    <td align="left"><!--{date('Y-m-d H:i:s',$v['on_time'])}--></td>
+                    <td align="left">
+						<a href="index.php?do={$do}&view=industry_edit&indus_id={$v['indus_id']}&indus_pid=$v['indus_pid']" class="button dbl_target"><span class="pen icon"></span>{$_lang['edit']}</a>
+						<a href="$url&indus_id=$v['indus_id']&indus_pid=$v['indus_pid']&ac=del"  onclick="return cdel(this);" class="button"><span class="trash icon"></span>{$_lang['delete']}</a>
+					</td>
+                  </tr>
+				  </tbody>
+                  {/loop}
+               <tr>
+               	<td>&nbsp;</td>
+                    <td colspan="8">
+	                    <div class="clearfix">
+	                  		<div class="clearfix">	
+	                        <a href="index.php?do=task&view=union_industry"   class="button pill negative"><span class="icon cog">&nbsp;</span>{$_lang['industry_merge']}</a>
+							<button  name="sbt_action" type="submit" value={$_lang['submit']} class="positive primary pill button" /><span class="check icon"></span>{$_lang['submit']}</button>
+	                    </div>
+	                    </div>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+
+		   	</form>
+        </div>       
+    </div>
+<script type="text/javascript">
+      	/*
+var arr_editstatusarr = Array();
+      	function edititemname(eid,text){
+    		if(arr_editstatusarr['eid']){
+    			return ;
+    		}
+    		var mod = '<input type="text" class="txt" name="edit_indus_name_arr['+eid+']" value="'+text+'">';
+    		$('#indus_item_span_'+eid).html(mod);
+    		arr_editstatusarr['eid']=1;
+    	}
+*/
+    	
+    	function edit_listorder(iid,v){
+    		$.get('index.php?do=$do&ac=editlistorder',{iid:iid,val:v});
+    	}
+    	
+    	var newindus_c = 0;
+    	function addchild(pid,ext){
+    		newindus_c++;
+    		if(ext=='')
+    		{ext = '|';}
+    		if(ext!=' ')
+    		{ext = '&nbsp;&nbsp;&nbsp;'+ext+'---';}
+    		var mod = '<tr class="item" id="newindus_c_'+newindus_c+'">';
+    		  	mod+='<td class="td28">'+'<input type=text size=3 class="txt" name="add_indus_name_listarr['+pid+']['+newindus_c+']" size=3>';+'</td>';
+    		  	mod+='<td>'+ext;
+    			mod+='<input type=text class="txt" name="add_indus_name_arr['+pid+']['+newindus_c+']">';
+    			mod+='</td>';
+    		    mod+='<td>{$_lang['no']}</td>';
+    	 
+    		    mod+='<td>&nbsp;</td>';
+    			mod+='<td>';
+    			mod+='<a href="javascript:;" class="button" onclick="$(\'#newindus_c_'+newindus_c+'\').remove()">';
+    			mod+='{$_lang['delete']}';
+    			mod+='</a>';
+    			mod+='</td>';
+    		  	mod+='</tr>	';
+    			
+    			$('#indus_item_l_'+pid).append(mod); 
+    		
+    	}
+    	
+       {loop $indus_index_arr $k $v}
+      	function showids_{$k}(op){
+    		if(op=='show'){
+    			{loop $indus_index_arr[$k] $ik $iv}
+    			$('#indus_item_l_{$ik}').show();
+    			{/loop}
+    		}
+    		else{
+    			{loop $indus_index_arr[$k] $ik $iv}
+    			$('#indus_item_l_{$ik}').hide();
+    			{/loop}
+    		}
+    		
+    		{if $indus_index_arr[$v['indus_id']]}
+    			showids_{$v['task']}(op);
+    		{/if}
+    		
+    	}
+    	{/loop}
+      
+</script>	
+<script type="text/javascript">
+	$(function(){
+		
+		$('.CheckedForTask').click(function(){
+			var val = 0;
+			if($(this).is(":checked")){
+				val = 1;
+			}
+			var indusId = trim($(this).attr('data-indusId'));
+			if(indusId){
+				setIndusIdForAjax(indusId,'forTask',val);
+			}
+			
+		});
+		$('.CheckedForGoods').click(function(){
+			var val = 0;
+			if($(this).is(":checked")){
+				val = 1;
+			}
+			var indusId = trim($(this).attr('data-indusId'));
+			if(indusId){
+				setIndusIdForAjax(indusId,'forGoods',val);
+			}
+		});
+	});
+	
+	function setIndusIdForAjax(indusId,ac,value){
+		$.post('index.php?do=task&view=industry',{indusId:indusId,acAjax:ac,value:value},function(){});
+	}
+
+</script>	
+<!--{template ADMIN_DIRECTORY/tpl/admin_footer}-->

@@ -1,0 +1,73 @@
+<!--{template ADMIN_DIRECTORY/tpl/admin_header}--> 
+
+
+<div class="page_title">
+	<h1>{if !$editgid}{$_lang['add_user_group']}{else}{$_lang['user_group_manage']}{/if}</h1>
+     <div class="tool"> 
+        <a href="index.php?do=user&view=group_list"      {if $view=='group_list'}class="here"{/if}>{$_lang['user_group_manage']}</a>
+        <a href="index.php?do=user&view=group_add&op=add" {if $view=='group_add'}class="here"{/if}>{$_lang['add_user_group']}</a>
+	</div>
+</div>
+<!--页头结束-->
+
+<div class="box post">
+    <div class="tabcon">
+        	<div class="title"><h2>{if $editgid}{$_lang['edit_user_group']}{else}{$_lang['add_user_group']}{/if}</h2></div>       	
+            <div class="detail">
+				<form action="index.php?do=user&view=group_add&op=add&type=group&editgid=$editgid" method="post">
+				    <table width="100%" border="0" cellspacing="0" cellpadding="0">
+					   <input type="hidden" name="is_submit" value="1"/>
+					   <tr>
+				        <th width="10%" scope="row">{$_lang['group_name']}{$_lang['zh_mh']}</th>
+				        <td><input type="text" value="{$groupinfo_arr['groupname']}" name="txt_groupname" id="txt_groupname" maxlength="50" 
+						limit="required:true" 
+						msg="{$_lang['group_name_can_not_null']}" 
+						msgArea="txt_groupname_msg" 
+						title="{$_lang['please_input_right_group_name']}" class="txt"  style=" width:260px;"/><b style="color:red">*</b><span id="txt_groupname_msg"></span></td>
+				       </tr>
+					  
+					   <tr>
+					  	<th scope="row">{$_lang['rights']}{$_lang['zh_mh']}</th>
+						<td>
+							{loop $menuset_arr['menu'] $meunname $meun}
+							<b>{$menu_arr[$meunname]}</b><br>
+							<div style="display:block;width:100%">
+							{loop $meun $submenuname}
+							<dl><dt>$submenuname['name']:</dt>
+							  <dd>
+								<ul>
+								{loop $submenuname['items'] $resource}
+								<label>
+								<input type="checkbox" {if in_array($resource['resource_id'],$grouprole_arr)}checked="checked"{/if} name="chb_resource[]" value="{$resource['resource_id']}">{$resource['resource_name']}
+								</label>
+								{/loop}
+								</ul>
+							  </dd>
+							</dl>
+							{/loop}
+							</div>
+							{/loop}
+						</td>
+					  </tr>
+					 
+					  <tr>
+					 	<th scope="row">&nbsp;</th>
+				        <td>
+				          <div class="clearfix padt10">
+ 
+						  <button type="submit" onclick="return checkForm(document.getElementById('frm_art_edit'),false)" name="sbt_edit" class="positive pill primary button"  value="{if $editgid}{$_lang['edit_user_group']}{else}{$_lang['add_user_group']}{/if}"/><span class="check icon"></span>{$_lang['submit']}</button>
+				       	 
+				          </div>
+						</td>
+				     </tr>
+					  
+				    </table>
+				 </form>
+            	
+            </div>
+	</div>
+</div>
+
+
+
+<!--{template ADMIN_DIRECTORY/tpl/admin_footer}-->

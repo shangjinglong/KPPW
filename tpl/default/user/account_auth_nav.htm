@@ -1,0 +1,17 @@
+ {loop $arrAuthItems $k $v}
+   <a   {if in_array($code,array('realname','enterprise'))}
+			{if $k === 'realname'||$k === 'enterprise'}class="selected"{/if}
+        {else}
+			{if $code === $k}class="selected"{/if}
+        {/if}
+
+        href="index.php?do=user&view={$view}&op={$op}&code={$k}">
+
+		{if in_array($v['auth_code'],array('realname','enterprise'))}
+			身份认证
+        {else}
+			{$v['auth_title']}
+        {/if}
+
+   </a>
+  {/loop}

@@ -1,0 +1,393 @@
+<!--{template header}-->
+<!--{template breadcrumb}-->
+<!-- 查看大图js -->
+<link href="static/js/jqplugins/fancybox/jquery.fancybox.min.css" rel="stylesheet">
+<script src="static/js/jqplugins/fancybox/jquery.fancybox.min.js"></script>
+<link href="static/js/jqplugins/fancybox/helpers/jquery.fancybox-buttons.css" rel="stylesheet">
+<script src="static/js/jqplugins/fancybox/helpers/jquery.fancybox-buttons.js"></script>
+<script src="static/js/uploadify/jquery.uploadify.min.js" type="text/javascript"></script>
+<link href="static/js/uploadify/uploadify.css" rel="stylesheet">
+<!-- 滚动视图 -->
+<script src="static/js/jqplugins/jcarousel/jquery.jcarousel.js"></script>
+<script src="static/js/jqplugins/jcarousel/jquery.jcarousel.control.js"></script>
+
+<div class="container">
+<div id="main">
+
+  <div class="for-advertise">
+    <!--{ad_show(GOODINFO_HEAD)}-->
+  </div>
+  <!-- for-advertise end -->
+
+  <div class="detail">
+    <div class="detail-header">
+    	<a href="index.php?do=seller&id={$arrServiceInfo['uid']}" class="detail-header-pic" title="$arrServiceInfo['username']">
+          <!--{userpic($arrServiceInfo['uid'],'middle')}-->
+        </a>
+        <div class="detail-ctrl">
+              <div class="btn-group">
+               {if $gUid!=$arrServiceInfo['uid']}
+                <a href="index.php?do=order&sid={$arrServiceInfo['service_id']}" class="btn btn-primary btn-lg">我要购买</a>
+				{/if}
+
+              </div>
+        </div>
+        <!-- detail-ctrl end -->
+        <div class="detail-header-body">
+          <h1 class="detail-title">
+            <span class="money"><sub>￥</sub>{$arrServiceInfo['price']}/{$arrServiceInfo['unite_price']}</span>
+            {$arrServiceInfo['title']}
+			{loop $arrPayitemShow $k $v}
+            <span class="marked $v['style']">$v['abbr']</span>
+			{/loop}
+          </h1>
+          <div class="detail-obj">
+            <div class="detail-obj-item">
+              <div class="method">
+                <a href="index.php?do=goodslist&m={$arrServiceInfo['model_id']}">服务</a>
+                <span>已售出：{$arrServiceInfo['sale_num']}</span>
+              </div>
+
+            </div>
+            <div class="detail-obj-item">
+              <a href="index.php?do=seller&id={$arrServiceInfo['uid']}" class="btn btn-primary btn-xs">进入店铺</a>
+			   {if $gUid != $arrServiceInfo['uid']}
+	              <a href="javascript:sendMessage({$arrServiceInfo['uid']});void(0);" class="btn btn-default btn-xs">联系我</a>
+				   {if $intFollow}
+				   <div class="btn-group">
+				  <a href="javascript:void(0);" class="btn btn-success btn-xs disabled" role="button"><i class="fa fa-check"></i> 已关注</a>
+  				  <a href="javascript:cancelFollow({$arrServiceInfo[uid]});void(0);"  class="btn btn-success btn-xs" id="follow{$arrServiceInfo[uid]}">取消</a>
+				   </div>
+				  {else}
+	              <a href="javascript:addFollow({$arrServiceInfo[uid]});void(0);" class="btn btn-default btn-xs" id="follow{$arrServiceInfo[uid]}"><i class="fa fa-plus"></i> 加关注</a>
+				  {/if}
+			  {/if}
+            </div>
+          </div>
+        </div>
+        <!-- detail-header-body end -->
+
+    </div>
+    <!-- detail-header end -->
+	{if $arrCoverList}
+    <div class="detail-thumbnail">
+      <div class="detail-thumbnail-inner">
+        <ul class="detail-thumbnail-body">
+          {loop $arrCoverList $k $v}
+          <li class="detail-thumbnail-item">
+            <a href="{$v}" rel="detail-thumbnail-group">
+              <img src="{$v}">
+            </a>
+          </li>
+		  {/loop}
+        </ul>
+      </div>
+        <a href="#" class="detail-thumbnail-pv btn btn-default jcarousel-control-prev"><i class="fa fa-angle-double-left"></i></a>
+        <a href="#" class="detail-thumbnail-nx btn btn-default jcarousel-control-next"><i class="fa fa-angle-double-right"></i></a>
+    </div>
+	{/if}
+    <!-- detail-thumbnail end -->
+
+    <div class="detail-body">
+      <h2 class="detail-title-min">商品描述</h2>
+
+      <div class="detail-desc">
+         <!--{eval echo htmlspecialchars_decode($arrServiceInfo['content'])}-->
+      </div>
+
+
+      <div class="poster-card">
+        <div class="panel panel-default">
+          <div class="panel-heading">
+            <h2 class="detail-title-min">卖家名片</h2>
+          </div>
+          <div class="panel-body">
+
+            <div class="media poster-top">
+              <div class="post-avatar">
+                <a href="index.php?do=seller&id={$arrOwnerInfo['uid']}">
+                 	<!--{userpic($arrOwnerInfo['uid'],'middle')}-->
+                </a>
+              </div>
+              <div class="post-content media-body">
+                <h4 class="media-heading">{$arrOwnerInfo['username']}
+
+                </h4>
+                <p>{$strUserLevel['pic']}</p>
+                <p>
+                  <!--卖家的认证信息-->
+                    {loop $arrAuthInfo $k $v}
+						<a href="index.php?do=user&view=account&op=auth&code={$v['auth_code']}" title="{$v['auth_title']}" class="mr_5">
+							<img src="{$_K['siteurl']}/{$v['auth_small_ico']}" alt=''>
+						</a>
+					{/loop}
+                </p>
+
+              </div>
+
+            </div>
+
+
+            <ul class="poster-num">
+              <li class="poster-num-item"><p>好评率 <span class="text-danger num">{if $arrOwnerInfo['seller_total_num']}<!--{eval echo number_format($arrOwnerInfo['seller_good_num']/$arrOwnerInfo['seller_total_num'],4)*100}-->{else}0{/if}%</span></p></li>
+              <li class="poster-num-item"><p>出售商品 <span class="num">{$intSellerGoodsNum}</span></p></li>
+            </ul>
+            <ul class="poster-meta">
+            	{loop $arrShopAid $k $v}
+				<li class="poster-meta-item">
+					{$v['aid_name']}<span class="text-danger">{$v['avg']}{$_lang['fen']}</span>
+				<!--{eval echo keke_user_mark_class::gen_star2($v['avg']);}-->
+				<li>
+				{/loop}
+            </ul>
+
+          </div>
+        </div>
+      </div>
+
+
+     <!-- <div class="poster-ctrl">
+            <a href="#" class="btn btn-default btn-sm">设为置顶商品</a>
+      </div>-->
+
+    </div>
+    <!-- detail-body end -->
+
+    <div class="detail-footer">
+      <ul class="detail-footer-meta for-poster">
+        <li class="for-poster-item">卖家：<a href="index.php?do=seller&id={$arrOwnerInfo['uid']}" title="{$arrOwnerInfo['username']}">{$arrOwnerInfo['username']}</a></li>
+        <li class="for-poster-item"><i class="fa fa-clock-o"></i> 发布时间：<!--{eval echo date('Y-m-d H:i:s',$arrServiceInfo['on_time']);}--></li>
+        <li class="for-poster-item">编号：#{$arrServiceInfo['service_id']}</li>
+		{if $gUid&&$gUid!=$arrOwnerInfo['uid']}
+        <li class="for-poster-item"><a  href="javascript:report(2,'product','{$arrOwnerInfo[uid]}','{$arrServiceInfo[service_id]}','{$arrServiceInfo[service_id]}');void(0);"   class="action-report"><i class="fa fa-bell"></i> 举报</a></li>
+		{/if}
+      </ul>
+      <ul class="detail-footer-meta for-user">
+        <li class="for-user-item">
+          <div class="bdsharebuttonbox">
+            <a href="#" class="bds_more" data-cmd="more">分享到：</a>
+            <a title="分享到新浪微博" href="#" class="bds_tsina" data-cmd="tsina"></a>
+            <a title="分享到腾讯微博" href="#" class="bds_tqq" data-cmd="tqq"></a>
+            <a title="分享到人人网" href="#" class="bds_renren" data-cmd="renren"></a>
+            <a title="分享到微信" href="#" class="bds_weixin" data-cmd="weixin"></a>
+            <a title="分享到复制网址" href="#" class="bds_copy" data-cmd="copy"></a>
+            <a title="分享到打印" href="#" class="bds_print" data-cmd="print"></a>
+          </div>
+          <script>window._bd_share_config={"common":{"bdSnsKey":{},"bdText":"","bdMini":"2","bdMiniList":false,"bdPic":"","bdStyle":"1","bdSize":"16"},"share":{}};with(document)0[(getElementsByTagName('head')[0]||body).appendChild(createElement('script')).src='http://bdimg.share.baidu.com/static/api/js/share.js?v=89860593.js?cdnversion='+~(-new Date()/36e5)];</script>
+        </li>
+         {if $gUid!=$arrServiceInfo['uid']}
+          <li class="for-user-item" >
+	          {if $intFavorite}
+
+	          	<a id="favorite{$arrServiceInfo['service_id']}" href="javascript:cancelFavorite('service',{$arrServiceInfo['service_id']});" title="取消收藏" class="action-collect on"><i class="fa fa-star"></i></a>
+			  {else}
+	          	<a id="favorite{$arrServiceInfo['service_id']}" href="javascript:addFavorite('service',{$arrServiceInfo['service_id']});" title="收藏" class="action-collect"><i class="fa fa-star"></i></a>
+
+			  {/if}
+		  </li>
+		 {/if}
+
+      </ul>
+    </div>
+    <!-- detail-footer end -->
+
+  </div>
+  <!-- detail end-->
+
+  <div class="tab tab-darken" id="pageT">
+    <a href="{$strUrl}&view=sale#pageT" {if $view=='sale'}class="selected"{/if}>交易记录 <span class="badge">{$arrServiceInfo['sale_num']}</span></a>
+    <a href="{$strUrl}&view=comment#pageT" {if $view=='comment'}class="selected"{/if}>留言 <span class="badge">{$arrServiceInfo['leave_num']}</span></a>
+    <a href="{$strUrl}&view=mark#pageT" {if $view=='mark'}class="selected"{/if}>评价 <span class="badge">{$mc['all']}</span></a>
+  </div>
+  <!-- tab end -->
+ <!--{eval require keke_tpl_class::template ( "shop/" . $arrModelInfo ['model_code'] . "/tpl/" . $_K ['template'] . "/".$view );}-->
+
+
+  <!-- list-page end -->
+
+  <div class="for-advertise">
+    <!--{ad_show(GOODINFO_BOTTOM)}-->
+  </div>
+  <!-- for-advertise end -->
+
+</div>
+<!-- #main end -->
+
+<div id="side">
+
+    <div class="box-body site-security">
+      <h2 class="min-title">诚信威客网站，服务更放心</h2>
+      <ul>
+          <li class="col3">
+            <p>
+              <span class="fa-stack fa-2x">
+                <i class="fa fa-circle fa-stack-2x text-success"></i>
+                <i class="fa fa-yen fa-stack-1x fa-inverse"></i>
+              </span>
+            </p>
+            <p>担保交易</p>
+          </li>
+          <li class="col3">
+            <p>
+              <span class="fa-stack fa-2x">
+                <i class="fa fa-circle fa-stack-2x text-success"></i>
+                <i class="fa fa-shield fa-stack-1x fa-inverse"></i>
+              </span>
+            </p>
+            <p>诚信保障</p>
+          </li>
+          <li class="col3">
+            <p>
+              <span class="fa-stack fa-2x">
+                <i class="fa fa-circle fa-stack-2x text-success"></i>
+                <i class="fa fa-user fa-stack-1x fa-inverse"></i>
+              </span>
+            </p>
+            <p>威客认证</p>
+          </li>
+      </ul>
+    </div>
+	{if TOOL === TRUE}
+	{if $uid==$arrServiceInfo['uid']&&$arrPayitemLists&&$arrServiceInfo['service_status']==2}
+    <div class="box-header">
+      <h2 class="min-title">提升效果，你可能还需要</h2>
+    </div>
+    <div class="box-body apply-for-service">
+    	{loop $arrPayitemLists $k $v}
+      <dl>
+        <dt>
+          <a  href="javascript:payitem('goods','{$arrServiceInfo['service_id']}','{$arrServiceInfo['uid']}');void(0);"  class="btn btn-success btn-sm" role="button">$v['item_name']</a>（<span class="money"><sub>￥</sub>$v['item_cash'] 元</span> / $v['item_standard']）
+        </dt>
+        <dd>$v['item_desc']</dd>
+      </dl>
+	  {/loop}
+    </div>
+   {/if}
+   {/if}
+    <!--  site-security end -->
+
+<!--
+    <div class="box-header">
+      <h2 class="min-title">威客网站独特VIP特权</h2>
+    </div>
+    <div class="box-body apply-for-vip">
+        <dl>
+          <dt>1.VIP身份标志</dt>
+          <dd>VIP公司商铺，信用度更高，增加能力表示度，更易获得客户青睐。</dd>
+          <dt>2.旺铺装修特权</dt>
+          <dd>自定义商铺，主题、风格、导航都可个性化装修设置，凸显能力标签。</dd>
+          <dt>3.黄金广告位</dt>
+          <dd>首页黄金推荐位独享，栏目推荐位独享，让更多订单找上门。</dd>
+          <dt>4.专属独立域名</dt>
+          <dd>商铺设置个性化独立域名，易于搜索、记忆，收获更多订单。</dd>
+        </dl>
+        <button class="btn btn-success btn-lg btn-block" type="button">申请成为VIP</button>
+    </div>
+    VIP apply-for-vip end -->
+
+
+
+    <div class="box-header">
+      <h2 class="min-title">该服务商的其他商品</h2>
+    </div>
+    <div class="box-body same-type">
+      <ul class="min-list img">
+       {if $arrOtherGoods}
+		{loop $arrOtherGoods $k $v}
+        <li>
+            <a title="$v['title']" href="index.php?do=goods&id=$v['service_id']">
+              <div class="min-list-img">
+              <img alt="$v['title']" onerror='$(this).attr("src","tpl/default/img/shop/shop_default_big.jpg")' alt="$v['title']"    class="lazy" src="tpl/default/img/grey.gif"  data-original="<!--{eval echo keke_shop_class::output_pics($v['pic'],210,1);}-->">
+              <span class="money"><sub>￥</sub>$v['price']</span>
+              </div>
+              <div class="min-list-title"> $v['title'] </div>
+            </a>
+        </li>
+		{/loop}
+		{else}
+			暂无数据
+		{/if}
+      </ul>
+    </div>
+
+    <div class="box-header">
+      <h2 class="min-title">推荐服务商</h2>
+    </div>
+    <div class="box-body">
+      <ul class="record-list img">
+          {if $arrRecommShops}
+          {loop $arrRecommShops $k $v}
+          <li>
+            <a href="index.php?do=seller&id=$v['uid']" class="avatar" title="$v['shop_name']">
+              <!--{userpic($v['uid'],'middle')}-->
+            </a>
+
+            <div class="avatar-detail">
+              <p class="record-list-title">
+                <a href="index.php?do=seller&id=$v['uid']" title="$v['shop_name']">
+                  $v['shop_name']
+                </a>
+              </p>
+              <p class="record-list-meta">好评率 <span><!--{eval echo $v['good_rate']*100}--><sub>%</sub></span></p>
+              <p>
+                <span class="marked marked-tags">{$indus_p_arr[$v[indus_pid]][indus_name]}</span>
+                <span class="marked marked-tags">{$indus_c_arr[$v[indus_id]][indus_name]}</span>
+              </p>
+            </div>
+          </li>
+		  {/loop}
+		  {else}
+暂无数据
+		  {/if}
+        </ul>
+    </div><!-- 推荐服务商 & box-body end -->
+
+
+</div><!-- #side end -->
+
+
+
+</div>
+<!-- container end -->
+<script type="text/javascript" src="shop/service/tpl/default/service.js"></script>
+<script type="text/javascript">
+  $(function(){
+    $('.detail-thumbnail-item a').fancybox({
+      openEffect  : 'none',
+      closeEffect : 'none',
+      padding     : 5,
+      closeBtn    : false,
+      tpl:{
+        error    : '<p class="fancybox-error">内容无法加载。<br/>请稍后重试。</p>'
+      },
+      helpers : {
+        title : {
+          type : 'over'
+        },
+        buttons : {}
+      }
+    });
+
+    $('.detail-thumbnail-inner').jcarousel({});
+
+    $('.jcarousel-control-prev').on('jcarouselcontrol:active', function() {
+      $(this).removeClass('inactive');
+    }).on('jcarouselcontrol:inactive', function() {
+      $(this).addClass('inactive');
+    }).jcarouselControl({
+      // Options go here
+      target: '-=1'
+    });
+
+     $('.jcarousel-control-next').on('jcarouselcontrol:active', function() {
+      $(this).removeClass('inactive');
+    }).on('jcarouselcontrol:inactive', function() {
+      $(this).addClass('inactive');
+    }).jcarouselControl({
+      // Options go here
+      target: '+=1'
+    });
+  })
+</script>
+
+<!--{template footer}-->

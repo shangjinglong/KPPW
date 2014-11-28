@@ -1,0 +1,19 @@
+<div class="buy-body">
+			<p class="lead text-center text-success mt_20"><i class="fa fa-check-circle"></i> 对方已完成工作，请检查工作内容！</p>
+			{if $arrFileLists}
+
+			<h2 class="min-title">下载源文件 </h2>
+			<ul class="detail-affix">
+			{loop $arrFileLists $k $v}
+		        <li class="detail-affix-item"><a href="{$v['save_name']}"><i class="fa fa-download"></i> {$v['file_name']}</a></li>
+		    {/loop}
+		    </ul>
+
+		    {/if}
+			<div class="text-center">
+				<a class="btn btn-success" href="javascript:void(0);" id="buyerConfirmAcceptance" >确认验收</a>
+				<a href="javascript:report(1,'gy_order','$arrSellerInfo[uid]','{$arrSellerInfo[uid]}','{$orderId}');void(0);" class="btn btn-default">
+	    			<i class="fa fa-bell"></i> 申请仲裁
+	   		 	</a>
+			</div>
+		</div>

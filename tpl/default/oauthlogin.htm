@@ -1,0 +1,73 @@
+<!--{template header}-->
+<div  class="container">
+<div id="main">
+
+    <div class="oauth login-and-register-container">
+
+      <div class="page-header">
+        <div class="pull-right">或 <a href="index.php?do=oauthregister&type={$type}">完善个人信息</a></div>
+        <h1>绑定已有帐号</h1>
+      </div>
+
+      <form role="form" action="index.php?do=oauthlogin&type={$type}"  class="form-horizontal" name="loginForm" id="loginForm" method="post">
+    	<input type="hidden" name="formhash" id="formhash" value="{FORMHASH}">
+		<input type="hidden" name="hdn_refer" id="hdn_refer" value="{$_K['refer']}">
+
+      <div class="form-group">
+        <label for="" class="control-label col-xs-3"><img src="static/img/ico/ico_32_{$type}.gif" alt="{$arrOauthType[$type]}帐号"> {$arrOauthType[$type]}帐号</label>
+        <div class="col-xs-7">
+          <p class="form-control-static">{$arrOauthInfo['nickname']}</p>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="account" class="control-label col-xs-3">帐号</label>
+        <div class="col-xs-7">
+          <input type="email" class="form-control" id="account" name="account" placeholder="请输入网站已有帐号">
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="password" class="control-label col-xs-3">密码</label>
+        <div class="col-xs-7">
+          <input type="password" class="form-control" id="password" name="password" placeholder="请输入帐号的密码">
+        </div>
+      </div>
+{if $intLoginTimes}
+      <div class="form-group">
+        <label for="code" class="control-label col-xs-3">验证码</label>
+        <div class="col-xs-3">
+          <input type="text" class="form-control" id="code" name="code" placeholder="验证码">
+        </div>
+        <div class="col-xs-4 code-img">
+          <img id="secode_img" src="index.php?do=ajax&view=captcha" onclick="document.getElementById('secode_img').src='index.php?do=ajax&view=captcha&sid='+Math.random(); return false;">
+           <a  href="javascript:document.getElementById('secode_img').src='index.php?do=ajax&view=captcha&sid='+Math.random();void(0);" >换一组</a>
+        </div>
+      </div>
+      {/if}
+      <div class="form-group">
+      <div class="col-sm-offset-3 col-sm-5">
+        <div class="checkbox">
+          <label>
+            <input type="checkbox"  name="agree" id="agree" value="1" checked="checked"> 我同意<a href="index.php?do=single&id=312" target="_blank">《网站KPPW条款》</a>
+          </label>
+        </div>
+      </div>
+    </div>
+      <div class="form-group">
+        <div class="col-md-offset-3 col-xs-5">
+          <button type="submit" class="btn btn-primary">绑定账号</button>
+        </div>
+      </div>
+
+      </form>
+
+
+    </div><!-- oauth end -->
+
+
+
+</div>
+</div>
+<script type="text/javascript" src="static/js/model/register/register.js"></script>
+<!--{template footer}-->

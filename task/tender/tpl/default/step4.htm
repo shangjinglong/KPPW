@@ -1,0 +1,22 @@
+      <div class="release-form">
+      	{if !$status}
+          <p class="lead text-center text-success mt_20"><i class="fa fa-check-circle"></i> 感谢，您的任务订单已提交，支付网站服务费之后用户才能投稿！<a href="index.php?do=task&id={$taskId}" target="_blank">查看任务</a></p>
+
+          <div class="text-center">
+          {if !$boolValue}
+            <a href="index.php?do=pay&type=task&id={$taskId}" class="btn btn-primary">在线充值托管赏金</a>
+          {else}
+          	<a href="index.php?do=yepay&type=task&id={$taskId}" class="btn btn-primary">使用余额托管赏金</a>
+          {/if}
+            <a href="index.php?do=task&id={$taskId}" class="btn btn-default">稍后再托管赏金</a>
+          </div>
+        {else}
+			<p class="lead text-success text-center mt_20 "><i class="fa fa-check-circle"></i> 恭喜，您已完成付款 <sub>￥</sub>{$floatPayCash} <sub>元</sub>！{if $arrTaskInfo['task_status']=='1'}请等待后台审核{/if}</p>
+
+			<div class="text-center mb_20">
+				<a href="index.php?do=task&id={$taskId}" class="btn btn-primary">确定</a>
+				<a href="index.php?do=user&view=transaction&op=released&intModelId={$id}" class="btn btn-default">到用户中心查看详细</a>
+			</div>
+        {/if}
+
+      </div>

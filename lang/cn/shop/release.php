@@ -1,0 +1,120 @@
+<?php
+/**
+*@copyright keke-tech
+*@author deng
+*@version KPPW 2.0
+*2012-1-15 下午02:54:16
+*/
+$lang=array(
+  /*goods release*/
+      /*step1*/
+	 'shang'=>'商',
+	 'fu'=>'服',
+	 'pub'=>'发布',
+	 'audit'=>'审核',
+	 'shelves'=>'上架',
+	 'sold'=>'售出',
+	 'payment'=>'支付',
+	 'peer'=>'结算',
+	 'assessment'=>'互评',
+	 'end'=>'结束', 
+     'goods_info_notice'=>'此类型适合贩卖源代码、设计图等，已经有文件的商品。',
+     'flow_map'=>'流程图',
+     'goods_sell_agreement'=>'作品出售协议',
+     'agree_next_step'=>'同意，下一步',
+    /*step2*/
+	  'upload_pic'=>'封面图片',
+     'goods_class'=>'作品分类',
+     'industry_class_has_not_choose'=>'行业分类未选择',
+	 'can_upload_five'=>',可以上传五张',
+     'please_choose_class'=>'请选择分类',
+     'please_choose_son_class'=>'请选择子分类',
+     'industry_son_class_not_choose'=>'行业子分类未选择',
+     'your_goods_what_industry'=>'你的作品是哪个行业的呢？',
+     'you_submit_goods_notice'=>'您要发布什么商品?5-50字',
+     'please_input_goods_name'=>'请填写商品名称，5-50字',
+     'goods_name_max_word'=>'作品名称最多50字',
+     'goods_description'=>'作品描述',
+     'goods_detail_description'=>'作品详细描述;50-1000字',
+     'input_length'=>'已输入长度:0,还可以输入:1000',
+     'detail_picture'=>'详细图片:',
+     'detail_picture_size'=>'尺寸为525x525PX，100KB以内，支持.jpg,.gif,.png格式，RGB模式。',
+     'picture_show_in_goods_detail'=>'此图片用于商品详细页展示',
+     'index_picture'=>'封面图片:',
+     'index_picture_size'=>'尺寸为100x100PX，100KB以内，支持.jpg,.gif,.png格式，RGB模式。',
+     'picture_show_in_goods_list'=>'此图片用于商品列表页展示',
+     'sell_price'=>'出售价格',
+     'sell_min_money'=>'售价最小金额为：',
+     'input_goods_sell_price'=>'填写商品售价。最小金额为：',
+     'sell_company'=>'出售单位:',
+     'pay_way'=>'交付方式',
+     'goods_original'=>'作品源件：',
+     'website_out_pay'=>'联系客服',
+     'wensite_in_download'=>'直接下载',
+     'upload_file'=>'上传文件',
+		'agree'=>'同意',
+     'upload_size_limit'=>'最多可添加',
+     'upload_size'=>'个附件，每个大小不超过，每个大小不超过',
+     'upload_file_format'=>'上传文件格式.rar,.zip',
+     'next'=>'下一步',
+     'name'=>'姓名:',
+     'phone'=>'电话:',
+     'qq_chat'=>'QQ咨询',
+     'upload_max'=>'最大',
+     'upload_style'=>'格式限制为',
+     'upload_limit'=>'最多可上传',
+     'file_max'=>'个附件,最大',
+     /*step3*/
+     'list_list'=>'列表清单',
+     'goods_model'=>'商品模式',
+     'goods_title'=>'商品标题',
+     'money'=>'金额',
+     'you_may_be_need'=>'您可能会需要',
+     'set_map_coordinate'=>'设置地图坐标',
+     'sould_pay_total_money'=>'应付总额',
+     'confirm_submit'=>'确认发布',
+     /*step4*/
+     'congrate_goods_submit_success'=>'恭喜，商品发布成功',
+     'please_wait_audit'=>'请等待审核',
+     'confirm_now_to_view_goods'=>'确认，现在去查看商品',
+     'back_continue_submit_goods'=>'返回，继续发布新商品',
+
+
+/*service*/
+     /*step1*/
+     'service_sell_agreement'=>'服务出售协议',
+     /*step2*/
+     'industry_class'=>'行业分类：',
+     'your_service_is_what_industry'=>'你提供的服务是哪个行业的呢？',
+     'service_name'=>'服务名称：',
+     'you_submit_service_notice'=>'您要发布什么样的服务?5-50字',
+     'please_input_service_name'=>'请填写服务名称，5-50字',
+     'service_name_max_word'=>'服务名称最多50字',
+     'service_description'=>'服务描述：',
+     'service_detail_description'=>'服务详细描述;50-1000字',
+     'input_service_sell_price'=>'填写服务售价。最小金额为：',
+     'work_time'=>'预计工时',
+     'service_work_time_notice'=>'服务完成预计工时，不得为空',
+
+/*shop_release.php*/
+     'pub_witkey_service'=>'发布威客服务--',
+     'now_no_goods_model'=>'暂无商品模型开放',
+     'choose_goods_type'=>'选择商品类型',
+     'choose_model_to_confirm_trans'=>'选择模型来确定交易进行的方式',
+     'input_goods_description'=>'填写商品描述',
+     'from_description_to_confirm_detail'=>'通过描述来确定商品的详细信息',
+     'pub_success'=>'发布成功',
+     'complete_pub'=>'完成发布，开始出售',
+/**shelves.htm**/
+	'witkey_shop'=>'威客商城',
+	'release'=>'发布',	
+	'shop_box'=>'商品匣子',
+	'back'=>'后退',
+	'forward'=>'前进',
+	'value_added_can_bigger_not_than_delivery_time'=>'商品增值属性的有效期不能大于交稿期限',
+	'haved_buy'=>'使用',
+	'tian'=>'天',
+	'payment_item_msg_error'=>'您的输入有误',
+
+
+);

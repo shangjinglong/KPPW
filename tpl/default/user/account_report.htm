@@ -1,0 +1,126 @@
+<!--{template user/header}-->
+<div class="container">
+<div class="nav-action">
+    <!--{template user/left_side}-->
+  </div>
+
+  <div class="content-panel">
+
+    <div class="tab">
+        <a {if $op == 'report'}class="selected"{/if} href="index.php?do=user&view=account&op=report" >举报管理</a>
+		<a {if $op == 'rights'}class="selected"{/if} href="index.php?do=user&view=account&op=rights" >维权管理</a>
+    </div>
+    <div class="tab_detail">
+
+      <ul class="nav nav-pills second-nav">
+            <!--type表示举报类型1、我对其他人的举报 2、其他人对我的举报-->
+            <li {if $type == 1} class="active" {/if}>
+              <a href="{$strUrl}&type=1">发起的举报</a>
+            </li>
+			<li {if $type == 2} class="active" {/if}>
+              <a href="{$strUrl}&type=2">收到的举报</a>
+            </li>
+
+      </ul>
+
+
+    <div class="action-bar">
+    <form action="{$strUrl}" method="post" name="searchReportForm" id="searchReportForm">
+        <div class="action-item">
+          <select class="form-control" name="strReportObj" id="strReportObj">
+            <option value=" ">举报对象</option>
+             {loop $arrReportObj $k $v}
+            	<option value="{$k}" {if $strReportObj ==$k} selected="selected"{/if}>{$v}</option>
+            {/loop}
+          </select>
+        </div>
+        <div class="action-item">
+          <select class="form-control" name="strReportStatus" id="strReportStatus">
+          	<option value="-1">举报状态</option>
+            {loop $arrReportStatus $k $v}
+            	<option value="{$k}" {if $strReportStatus ==$k} selected="selected"{/if}>{$v}</option>
+            {/loop}
+
+          </select>
+        </div>
+        <div class="action-item">
+          <select class="form-control" name="intPagesize" id="intPagesize">
+            <option value="10" {if $intPagesize =='10'} selected="selected"{/if}>每页10条</option>
+            <option value="20" {if $intPagesize =='20'} selected="selected"{/if}>每页20条</option>
+            <option value="30" {if $intPagesize =='30'} selected="selected"{/if}>每页30条</option>
+            <option value="40" {if $intPagesize =='40'} selected="selected"{/if}>每页40条</option>
+            <option value="50" {if $intPagesize =='50'} selected="selected"{/if}>每页50条</option>
+          </select>
+        </div>
+        <div role="toolbar" class="action-item btn-toolbar">
+          <div class="btn-group">
+            <button class="btn btn-default" type="submit">搜索</button>
+          </div>
+        </div>
+      </form>
+      </div>
+
+      <div class="table-responsive">
+        <table class="table table-hover ">
+        <thead>
+          <tr>
+            <th>编号</th>
+            <th>举报原因</th>
+            <th>举报图片</th>
+            <th>发起时间</th>
+            <th>当前状态</th>
+            <th>操作</th>
+          </tr>
+        </thead>
+        <tbody>
+        {if $arrReportLists}
+        {loop $arrReportLists $k $v}
+          <tr>
+            <td>{$v['report_id']}</td>
+            <td title='$v['report_desc']'><!--{eval echo kekezu::cutstr(htmlspecialchars_decode($v['report_desc']),15)}-->...</td>
+            <td>
+            	{if $v['report_file']}
+                <!--{eval $fileList=explode('|',$v['report_file']);}-->
+				<a target="_blank" href="$fileList[0]">点击查看</a>
+				{else}
+				未提交图片
+			    {/if}
+            </td>
+            <td><!--{eval echo date('Y-m-d H:i:s',$v['on_time'])}--></td>
+            <td>$arrReportStatus[$v['report_status']]</td>
+            <td>
+            	{if $v['obj']=='task'}<!--任务-->
+            	<a href="index.php?do=task&id={$v['origin_id']}" target='_blank'>
+            	{elseif $v['obj']=='work'}<!--稿件-->
+				<!--<a href="index.php?do=taskhandle&op=workinfo&taskId={$v['origin_id']}#{$v['obj_id']}" target='_blank'>-->
+				<a href="index.php?do=task&id={$v['origin_id']}#{$v['obj_id']}" target='_blank'>
+			    {elseif $v['obj']=='product'}<!--商品-->
+				<a href="index.php?do=goods&id={$v['origin_id']}" target="_blank">
+				{/if}
+				查看对应{$arrReportObj[$v['obj']]}</a>
+            </td>
+          </tr>
+
+         {/loop}
+
+         {else}
+         	<tr>
+         		<td colspan="6" class="text-center">暂无相关举报</td>
+         	</tr>
+         {/if}
+        </tbody>
+      </table>
+      </div>
+      <div class="clearfix">
+      	{if $strPages}
+	      <ul class="pagination pagination-sm pull-right">
+	       {$strPages['page']}
+	      </ul>
+	    {/if}
+      </div>
+    </div>
+  </div>
+  </div>
+
+  <!-- 我的消息 end &content-panel end -->
+<!--{template user/footer}-->

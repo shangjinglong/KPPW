@@ -1,0 +1,63 @@
+<!--{template user/header}-->
+<div class="container">
+  <div class="nav-action">
+		<!--{template user/left_side}-->
+  </div>
+  <!-- nav-action end -->
+  <div class="content-panel">
+      <div class="tab">
+      	<a {if $op === 'password'}class="selected"{/if} href="index.php?do=user&view=account&op=password" >登陆密码</a>
+        <a {if $op === 'security'}class="selected"{/if} href="index.php?do=user&view=account&op=security" >安全密码</a>
+      </div>
+      <div class="tab_detail">
+      <p class="text-info"><i class="fa fa-info-circle"></i>
+
+		安全码变更：在进行操作同时，请牢记自己的新安全码，安全码将用于涉及到资金流确认时使用。<br />如：提现、付款等【用户的初始安全码与用户密码相同】
+		</p> <div class="mb_10"></div>
+      		<!-- 基本资料 start -->
+          <form role="form" action="{$strUrl}" method="post" class="form-horizontal" name="editSecurityForm" id="editSecurityForm">
+          	<input type="hidden" name="formhash" id="formhash" value="{FORMHASH}">
+          	<input type="hidden" name="pk[uid]" value="{$gUserInfo['uid']}">
+          	<!-- 邮箱 start -->
+            <div class="form-group">
+              <label class="col-sm-2 control-label" for="old_code">当前安全码：</label>
+              <div class="col-sm-10 row">
+                <div class="col-sm-8">
+                  <input type="password" placeholder="当前安全码" name="old_code" id="old_code" class="form-control" autocomplete="off">
+                </div>
+              </div>
+            </div>
+            <!-- 邮箱 end -->
+            <!-- 手机 start -->
+            <div class="form-group">
+              <label class="col-sm-2 control-label" for="new_code">新安全码：</label>
+              <div class="col-sm-10 row">
+                <div class="col-sm-8">
+                  <input type="password" placeholder="新安全码" name="new_code" id="new_code" class="form-control" autocomplete="off">
+                </div>
+              </div>
+            </div>
+            <!-- 手机 end -->
+            <!-- QQ start -->
+            <div class="form-group">
+              <label class="col-sm-2 control-label" for="confirm_code">确认安全码：</label>
+              <div class="col-sm-10 row">
+                <div class="col-sm-8">
+                  <input type="password" placeholder="确认安全码" name="confirm_code" id="confirm_code" class="form-control" autocomplete="off">
+                </div>
+              </div>
+            </div>
+            <!-- QQ end -->
+            <div class="form-group">
+              <div class="col-sm-offset-2 col-sm-10">
+                <button class="btn btn-default" type="submit"  value="1">确定</button>
+                <span class="text-success" id="tipsUser"></span>
+              </div>
+            </div>
+          </form>
+      		<!-- 基本资料 end -->
+      </div>
+  </div>
+  </div>
+<script type="text/javascript" src="static/js/model/user/account.js" ></script>
+<!--{template user/footer}-->

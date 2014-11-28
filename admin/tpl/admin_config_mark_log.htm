@@ -1,0 +1,125 @@
+<!--{template ADMIN_DIRECTORY/tpl/admin_header}--> 
+<div class="page_title">
+	<h1>{$_lang['mutual_evaluation_record_manage']}</h1>
+	<!--
+    <div class="tool"> 
+        <a href="index.php?do=$do&view=$view&op=$op" class="here">{$_lang['mutual_evaluation_record_manage']}</a>
+	</div>
+	-->
+</div>
+   <div class="box search p_relative">
+    	<div class="title"><h2>{$_lang['search']}</h2></div>
+        <div class="detail" id="detail">
+			<form action="" method="get">
+        	<input type="hidden" name="do"   value="$do">
+			<input type="hidden" name="view" value="$view">
+			<input type="hidden" name="op" value="$op">
+			<input type="hidden" name="page" value="$page">
+			<table cellspacing="0" cellpadding="0">
+			 <tbody>
+			 	<tr>
+			 		<th>{$_lang['mutual_evaluation_id']}</th>
+					<td><input type="text" class="txt" name="w[mark_id]" value="{$w['mark_id']}" onkeyup="clearstr(this);"></td>
+					<th>{$_lang['from']}</th>
+					<td><input type="text" class="txt" name='w[by_username]' value="{$w['by_username']}" onkeyup="clearspecial(this);"></td>
+			 	</tr>
+
+				<tr>
+					<th>{$_lang['display_number']}</th>
+					<td>
+						<select name="w[page_size]" class="ps vm">
+						<option value="10" {if $w['page_size']=='10'}selected="selected"{/if}>{$_lang['page_size']}10</option>
+						<option value="20" {if $w['page_size']=='20'}selected="selected"{/if}>{$_lang['page_size']}20</option>
+						<option value="30" {if $w['page_size']=='30'}selected="selected"{/if}>{$_lang['page_size']}30</option>
+						</select>
+					</td>
+					<th>{$_lang['result_order']}</th>
+					<td>
+						
+						<select name="ord[]">
+                        <option value="mark_id" {if $ord['0']=='mark_id' or !isset($ord['0'])} selected="selected"{/if}>{$_lang['default_order']}</option>
+                        <option value="mark_time" {if $ord['0']=='mark_time' } selected="selected"{/if}>{$_lang['mutual_evaluation_time']}</option>
+						<option value="mark_status" {if $ord['0']=='mark_status' } selected="selected"{/if}>{$_lang['mutual_evaluation_status']}</option>
+						<option value="mark_value" {if $ord['0']=='mark_value' } selected="selected"{/if}>{$_lang['mutual_evaluation_value']}</option>
+						 
+						
+                        </select>
+                        <select name="ord[]">
+                        <option {if $ord['1']=='desc' or !isset($ord['1'])}selected="selected" {/if} value="desc">{$_lang['desc']}</option>
+                        <option {if $ord['1']=='asc'}selected="selected" {/if} value="asc">{$_lang['asc']}</option>
+                        </select>
+						<button type="submit" name="sbt_search" value={$_lang['search']} class="pill" /><span class="icon magnifier">&nbsp;</span>{$_lang['search']}</button>
+					</td>
+				</tr>
+			 
+			 </tbody>
+			</table>
+			</form>
+        </div>
+	 </div>
+
+
+
+<div class="box list">
+    	<div class="title"><h2>{$_lang['mutual_evaluation_record']}</h2></div>
+        <div class="detail">
+			<form method="post" action="#" id="frm_user_search">
+			<div id="ajax_dom">
+				<input type="hidden" name="page" value="{$page}" />
+		  		<table cellpadding="0" cellspacing="0">
+		  		  <tbody>
+		          <tr>
+		          	<th>
+	<input type="checkbox" id="checkbox" onclick="checkall();" class="checkbox" >编号
+</th>
+					<th width="15%">{$_lang['belong_model']}</th>
+					<th>{$_lang['from']}</th>
+					<th>{$_lang['to_user']}</th>
+					<th>{$_lang['evaluation']}</th>
+					<th>{$_lang['ability_credit']}</th>
+					<th>{$_lang['time']}</th>
+					<th>{$_lang['operate']}</th>
+		          </tr>
+				{loop $mark_data $k $v}
+		        <tr class="item">
+		        	<td><input type="checkbox" name="ckb[]" class="checkbox" value="{$v['mark_id']}">{$v['mark_id']}
+		        	</td>
+		            
+		            <td width="12%">
+		            	《{$model_type_arr[$v['model_code']]}》
+						{if $model_list[$v['model_code']]['model_type']=='task'}
+							<a href="{$_K['siteurl']}/index.php?do=task&id={$v['origin_id']}&page={$page}" target="_blank">{$_lang['view_task']}</a>
+						{else}
+							<a href="{$_K['siteurl']}/index.php?do=goods&id={$v['origin_id']}&page={$page}" target="_blank">{$_lang['view_service']}</a>
+						{/if}
+					</td>
+					<td>$form[$v['mark_type']] {$v['by_username']}</td>
+		            <td>{$v["username"]}</td>
+					<td>{$status[$v["mark_status"]]}</td>
+					<td>{$v['mark_value']}</td>
+					<td>{if $v['mark_time']}<!--{date('Y-m-d',$v['mark_time'])}-->{/if}</td>
+					<td>
+						<a class="button" href="{$url}&ac=del&mark_id={$v['mark_id']}&page={$page}" onclick="return cdel(this);"><span class="trash icon"></span>{$_lang['delete']}</a>
+					</td>
+		          </tr>
+				 {/loop}
+		          <tr>
+		          	<td colspan="9">
+						<div class="clearfix">
+                    
+                    <label for="checkbox" onclick="checkall(event);">{$_lang['select_all']}</label>
+						<input type="hidden" name="sbt_action" class="sbt_action" />
+						<button type="submit" name="sbt_action" value="{$_lang['mulit_delete']}" class="pill negative" onclick="return batch_act(this,'frm_user_search');">
+						<span class="icon trash"></span>{$_lang['mulit_delete']}</button>
+						</div>	
+		          	</td>
+		          </tr>
+				  </tbody>
+		        </table>
+				<div class="page">{$pages['page']}</div>
+				</div>
+			</form>
+        </div>
+</div>
+<!--主体结束-->
+<!--{template ADMIN_DIRECTORY/tpl/admin_footer}-->

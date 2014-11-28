@@ -1,0 +1,64 @@
+<!--{template ADMIN_DIRECTORY/tpl/admin_header}-->
+<div class="page_title">
+    <h1>{$_lang['financial_model']}</h1>
+    <div class="tool">
+    	 <a href="index.php?do={$do}&view=revenue">财务概况</a>
+    	 <a href="index.php?do={$do}&&view=budget">网站收支</a>
+		<a href="index.php?do={$do}&view=all">{$_lang['flow_record']}</a>
+	    <a href="index.php?do={$do}&view=recharge">{$_lang['recharge_audit']}</a>
+	   <a href="index.php?do={$do}&view=withdraw">{$_lang['withdraw_audit']}</a>
+	   
+    </div>
+</div>
+<div class="box search p_relative">
+ </div>
+<!--搜索结束-->
+<div class="box list">
+	<table width="100%" border="0" cellspacing="0" cellpadding="0">
+	    <tr>
+	        <th scope="row"><strong>{$_lang['income_report']}</strong>
+				 <button type="button" class="pill" onclick="location.href='index.php?do=$do&view=$view&ac=update'">
+                 	<span class="icon magnifier">&nbsp;</span>{$_lang['refresh_report_data']}
+           		</button>
+			</th>
+	     </tr>
+	     <tr>
+	     	<th scope="row">
+	     		<select id="years">
+	     			{loop $year_arr $k $v}
+	     			<option value="{$v['year']}">{$v['year']}</option>
+	     			{/loop}
+	     			<option value="total">{$_lang['all']}</option>
+	     		</select>
+	     		<button type="button" class="pill" onclick="return setXML_Flie();">
+                 	<span class="icon magnifier">&nbsp;</span>{$_lang['view']}
+           		</button>
+			</th>
+	     </tr>
+  	</table>   
+     <div id="income" style="float:left;"></div>
+     <div id="analysis"></div>
+</div>  
+<script type="text/javascript" src="tpl/anychart_files/js/AnyChart.js"></script>
+<script type='text/javascript'>
+	 //<![CDATA[
+	     	AnyChart.swfFile='tpl/anychart_files/swf/AnyChart.swf';
+		 	var chart = new AnyChart();
+		 	chart.width = '500';
+		 	chart.height = '500';
+		 	<!--{eval $year_arr['0']['year']=$year_arr['0']['year']? $year_arr['0']['year'] : 'total';}-->
+		 	chart.setXMLFile("<!--{eval echo sprintf($income_path,$year_arr['0']['year']);}-->");//('{$income_path}');//tpl/anychart_files/xml/income.xml
+		    chart.write('income');
+		    var charts = new AnyChart();
+		 	charts.width = '500';
+		 	charts.height = '500';
+		    charts.setXMLFile("<!--{eval echo sprintf($analysis_path,$year_arr['0']['year']);}-->");
+		    charts.write('analysis');
+		//]]>
+	function setXML_Flie(){
+		 chart.setXMLFile('tpl/anychart_files/xml/income_'+$('#years').val()+'.xml');
+		 charts.setXMLFile('tpl/anychart_files/xml/analysis_'+$('#years').val()+'.xml');
+		 return false;
+	 }
+</script>
+<!--{template ADMIN_DIRECTORY/tpl/admin_footer}-->

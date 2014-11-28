@@ -1,0 +1,51 @@
+<!--{template ADMIN_DIRECTORY/tpl/admin_header}-->
+<div class="box post">
+	 <div class="tabcon">
+            <div class="detail">
+                <form action="" method="post" id="frm1">
+                	 <input type="hidden" name="to_uid" value="{$to_uid}">
+ 					<input type="hidden" name="to_username" value="{$to_username}">
+                    <table width="100%" border="0" cellspacing="0" cellpadding="0">
+                      <tr>
+                        <th scope="row" width="80">{$_lang['reply_title']}</th>
+                        <td>
+                        	<input type="text" name="fds[msg_title]" id="msg_title" class="txt" style="width:260px;" limit="required:true;len:2-" msg={$_lang['reply_title_not_empty']} title={$_lang['enter_reply_title']} msgArea="span_title"/>
+							<br><span id="span_title"></span>
+                        </td>
+                      </tr>
+					  <tr>
+                        <th scope="row">{$_lang['reply_content']}</th>
+                        <td>
+                        	<textarea style="width:260px;" name="fds[msg_content]" id="msg_content" cols="50" rows="6" id ="msg_content"></textarea>
+						</td>
+                      </tr>
+                    
+                      <tr>
+                        <th scope="row">&nbsp;</th>
+                        <td>
+                            <div class="clearfix padt10">
+                                <button class="positive primary pill button" type="button" value={$_lang['submit']} name="sbt_edit" onclick="show();"><span class="icon post"></span>{$_lang['submit']}</button>
+                             </div>
+                        </td>
+                      </tr>
+                    </table>
+                </form>
+            </div>
+        </div>
+    </div>
+<script type="text/javascript">
+	function show(){
+		var content = $("#msg_content").val();
+		if (content.length < 5) {
+			art.dialog.alert("{$_lang['reply_content_less']}");
+			return false;
+		}
+		if (checkForm(document.getElementById('frm1'))) {
+			var data = $("#frm1").serialize();
+			$.post("index.php?do=task&view=custom&by=1&ac=1&" + data, function(txt){
+				art.dialog.close();
+			}, 'txt')
+		}
+}
+</script>
+<!--{template ADMIN_DIRECTORY/tpl/admin_footer}-->

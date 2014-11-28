@@ -1,0 +1,203 @@
+<!--{template ADMIN_DIRECTORY/tpl/admin_header}-->
+<div class="page_title">
+    <h1>{$_lang['trans_rights']}</h1>
+    <div class="tool">
+    	{loop $action_arr $k $v}
+		  <a href="index.php?do={$do}&view={$k}&report_type={$v['0']}" {if $view==$k}class="here"{/if}>{$v['1']}{$_lang['list']}</a>
+		{/loop}
+		<a href="index.php?do=user&view=suggest">建议列表</a>
+    </div>
+</div>
+<div class="box tip clearfix p_relative" id="man_tips">
+ <div class="control"><a href="javascript:void(0);" title={$_lang['close']}><b>&times;</b></a></div>
+ <div class="title"><h2>{$_lang['tips']}</h2></div>
+ <div class="detail pad10">
+  <ul>
+     <li>{$_lang['only_delete_not_accept']}<font color="red">{$action_arr[$view]['1']}{$_lang['record']}</font>{$_lang['zh_jh']}{$_lang['delete_it_carefully_confirm']}</li>
+  </ul>
+ </div>
+</div>
+<div class="box search p_relative">
+ <div class="title">
+    <h2>{$_lang['search']}</h2>
+ </div>
+ <div class="detail" id="detail">
+  <form action="index.php?do={$do}&view={$view}" method="post" id="frm_user_search">
+   <input type="hidden" value="{$page}" name="page">
+     <table cellspacing="0" cellpadding="0">
+      <tbody>
+       <tr>
+        <th>{$action_arr[$view]['1']}{$_lang['id']}</th>
+        <td> <input type="text" name="report_id" class="txt" onkeyup="clearstr(this);"/> </td>
+		<th>{$action_arr[$view]['1']}{$_lang['type']}</th>
+        <td>
+          <select class="ps vm" name="obj">
+		    <option value="" {if !$obj}selected="selected"{/if}>{$_lang['all']}</option>
+          	{loop $trans_object $k $v}
+				 <option value="{$k}" {if $k==$obj}selected="selected"{/if}>{$v} </option>
+			{/loop}
+          </select>
+        </td>
+       	<th>{$action_arr[$view]['1']}{$_lang['status']}</th>
+        <td>
+          <select class="ps vm" name="report_status" id="catid">
+          	<option value="" {if !$report_status}selected="selected"{/if}>{$_lang['all']}</option>
+          	{loop $trans_status $k $v}
+				 <option value="{$k}" {if $k==$report_status}selected="selected"{/if}>{$v} </option>
+			{/loop}
+          </select>
+        </td>
+       </tr>
+       <tr>
+       	 <th>{$_lang['order_way']}</th>
+       <td>
+            <select name="ord[]">
+                                	<option value="report_id" {if $ord['0']=='report_id' or !isset($ord['0'])} selected="selected"{/if}>{$_lang['trans_rights']}</option>
+                                	<option value="on_time" {if $ord['0']=='on_time' } selected="selected"{/if}>{$_lang['pub_time']}</option>
+                                </select>
+            <select name="ord[]">
+                               		 <option {if $ord['1']=='desc' or !isset($ord['1'])}selected="selected" {/if} value="desc">{$_lang['desc']}</option>
+                                	<option {if $ord['1']=='asc'}selected="selected" {/if} value="asc">{$_lang['asc']}</option>
+                                </select>
+        </td>
+        <th>{$_lang['list_result']}</th>
+        <td>
+         <select name="w[page_size]">
+           <option value="10" {if $w['page_size']=='10'}selected="selected"{/if}>{$_lang['page_size']}10</option>
+           <option value="20" {if $w['page_size']=='20'}selected="selected"{/if}>{$_lang['page_size']}20</option>
+           <option value="30" {if $w['page_size']=='30'}selected="selected"{/if}>{$_lang['page_size']}30</option>
+         </select>
+		 <button class="pill" type="submit" value={$_lang['search']} name="sbt_search">
+          		<span class="icon magnifier">&nbsp;</span>{$_lang['search']}
+         </button>
+		 <th>&nbsp;</th>
+
+
+
+        </td>
+       </tr>
+      </tbody>
+     </table>
+  </form>
+ </div>
+ </div>
+<!--搜索结束-->
+<div class="box list">
+<div class="tab">
+   <a href="index.php?do={$do}&view={$view}&ord={$ord}&page_size={$page_size}" {if !$report_status}style="color:red" class="select"{/if}>{$_lang['all']}</a>
+    {loop $trans_status $k $v}
+      <a href="index.php?do={$do}&view={$view}&ord={$ord}&obj={$obj}&report_status={$k}&page_size={$page_size}" {if $report_status==$k}style="color:red" class="select"{/if}>{$v}</a>
+    {/loop}
+  </div>
+  <div class="tabcon">
+  <div class="title">
+    <h2>{$_lang['task_manage']}</h2>
+  </div>
+  <div class="detail">
+   <form action="index.php?do={$do}&w['report_status']=$w['report_status']" method="post" id="frm_art_action">
+	<input type="hidden" value="{$page}" name="page">
+	<input type="hidden" value="{$page_size}" name="page_size">
+	<div id="ajax_dom"><input type="hidden" name="page" value="{$page}" />
+	<table cellpadding="0" cellspacing="0">
+      <tbody>
+       <tr>
+        <th>{$action_arr[$view]['1']}{$_lang['id']}</th>
+		<th>{$_lang['belong_to']}
+		{if !$obj}{$_lang['object']}{else}
+		{$trans_object[$obj]}
+		{/if}</th>
+        <th>举报类型</th>
+        <th>举报原因</th>
+		<th>{$action_arr[$view]['1']}{$_lang['people']}</th>
+        <th>{$_lang['be']}{$action_arr[$view]['1']}{$_lang['people']}</th>
+		<th>{$action_arr[$view]['1']}{$_lang['attachment']}</th>
+        <th>{$action_arr[$view]['1']}{$_lang['time']}</th>
+        <th>{$_lang['now_status']}</th>
+        <th>{$_lang['process_people']}</th>
+		<th>{$_lang['operate']}</th>
+       </tr>
+     {loop $report_list $v}
+       <tr class="item">
+         <td class="td25">
+         <!-- <input type="checkbox" name="ckb[]" class="checkbox" value="{$v['report_id']}"> -->
+         {$v['report_id']}</td>
+         <td width="td28">
+        	{if $v['obj']=='task'}<!--任务-->
+			<a href="{$_K['siteurl']}/index.php?do=task&id={$v['origin_id']}" target="_blank">
+			{elseif $v['obj']=='work'}<!--稿件-->
+
+				{if $v['model_id']==1||$v['model_id']==2||$v['model_id']==3}
+				<a href="{$_K['siteurl']}/index.php?do=taskhandle&op=workinfo&taskId={$v['origin_id']}&workId={$v['obj_id']}" target="_blank">
+				{else}
+				<a href="{$_K['siteurl']}/index.php?do=task&id={$v['origin_id']}&view=work#detail" target="_blank">
+				{/if}
+			{elseif $v['obj']=='order'}<!--商品订单-->
+				{if $v['origin_id']}<a href="{$_K['siteurl']}/index.php?do=goods&id={$v['origin_id']}" target="_blank">{/if}
+			{elseif $v['obj']=='product'}<!--商品-->
+				<a href="{$_K['siteurl']}/index.php?do=goods&id={$v['obj_id']}" target="_blank">
+			{elseif $v['obj']=='seller'}<!--商家-->
+				<a href="{$_K['siteurl']}/index.php?do=seller&id={$v['to_uid']}" target="_blank">
+			{/if}
+        	 {if $v['obj']=='order'}
+        	 	{if $v['origin_id']} {$_lang['view_belongs']}{$trans_object[$v['obj']]}</a>{else}雇佣任务{/if}
+        	 {else}
+        	 		{$_lang['view_belongs']}{$trans_object[$v['obj']]}</a>
+        	 {/if}
+		 </td>
+		 <td>{$v['report_reason']}</td>
+		 <td><!--{eval echo kekezu::cutstr($v['report_desc'],30);}-->...</td>
+         <td><a href="{$_K['siteurl']}/index.php?do=seller&id={$v['uid']}" target="_blank">{$v['username']}</a></td>
+		 <td><a href="{$_K['siteurl']}/index.php?do=seller&id={$v['to_uid']}" target="_blank">{$v['to_username']}</a></td>
+         <td>
+
+			{if $v['report_file']}
+				<!--{eval $fileLists=explode('|',$v['report_file']);}-->
+				{loop $fileLists $k2 $v2}
+					<!--{eval $k2= $k2+1 ;}-->
+					<a target="_blank" href="../{$v2}">附件{$k2}</a>
+				{/loop}
+			{else}
+				{$_lang['not_submit_attachment']}
+			{/if}
+		</td>
+		<td><!--{date('Y-m-d',$v['on_time'])}--></td>
+		<td>{$trans_status[$v['report_status']]}</td>
+		<td>{if $v['op_uid']}<a href="{$_K['siteurl']}/index.php?do=seller&id={$v['op_uid']}" target="_blank">{$v['op_username']}</a>{else}--{/if}</td>
+		<td>
+
+            {if $v['report_status']=='1'||$v['report_status']=='2'||$v['report_status']=='4'}<!--待处理、处理中、已受理-->
+			<a class="button" href="index.php?do={$do}&view=process&type={$view}&report_id={$v['report_id']}">{if $v['report_status']=='4'}{$_lang['view_scheme']}{else}<span class="check icon"></span>{$_lang['process']}{$action_arr[$view]['1']}{/if}</a>
+			{/if}
+			{if $v['report_status']=='3'}<!--未受理、-->
+				<a class="button" href="{$url}&ac=del&report_id={$v['report_id']}" onclick="return cdel(this);"><span class="trash icon"></span>{$_lang['delete']}</a>
+			{/if}
+		 </td>
+        </tr>
+        {/loop}
+        <tr>
+       <td colspan="9">
+         <div class="page fl_right">{$pages['page']}</div>
+         <div class="clearfix">
+         {if $report_status=='4'}<!--对已过期开放批量删除-->
+         <label for="checkbox" onclick="checkall(event);">{$_lang['select_all']}</label>
+          <button name="sbt_action" type="submit" value={$_lang['mulit_delete']} onclick="return confirm({$_lang['you_comfirm_to']}+this.value+'?{$_lang['only_delete_overdue']}{$action_arr[$view]['1']}{$_lang['record']}');" class="pill negative">
+           <span class="icon trash"></span>{$_lang['mulit_delete']}
+          </button>
+		  {/if}
+		</div>
+       </td>
+      </tr>
+     </tbody>
+   </table></div>
+  </form>
+  </div>
+  </div>
+</div>
+ <script type="text/javascript">
+	$(function(){
+		$(".control").add(".title").click(function(){
+			$(".tip").children().not($(".control,.title")).slideToggle('800');
+		});
+	})
+</script>
+<!--{template ADMIN_DIRECTORY/tpl/admin_footer}-->

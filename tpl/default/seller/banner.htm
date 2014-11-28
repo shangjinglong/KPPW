@@ -1,0 +1,112 @@
+<script src="static/js/model/seller/seller.js" charset="{CHARSET}"></script>
+<div id="space_bg" style="background-image:url({$arrSellerInfo['shop_background']});background-repeat:{$arrBackgroudStyle['repeat']}; background-position:{$arrBackgroudStyle['position']};background-attachment:fixed}">
+    	<div class="space_body">
+	    <!--导航图片 -->
+	    <div id="shop_banner" class="banner">
+	    	{if $gUid == $arrSellerInfo['uid']}
+	      	<a id="change_banner"  href="javascript:changeBanner('{$id}');void(0);" >点击更改图片</a>
+			{/if}
+			<img onerror="this.src='tpl/default/img/store_banner.jpg'" src="{if $arrSellerInfo['banner']}{$arrSellerInfo['banner']}{else}tpl/default/img/store_banner.jpg{/if}">
+		</div>
+		<!--导航图片 end-->
+
+        <div class="store_detail">
+
+           <div class="store_left">
+		        <div class="left_img ">
+		        	<!--{userpic($arrSellerInfo['uid'],'larger')}-->
+		        </div>
+		        <div class="left_detail">
+			        <h1 class="store_name">{if $arrSellerInfo['shop_name']}{$arrSellerInfo['shop_name']}{else}{$arrSellerInfo['username']}{/if}</h1>
+			        <p>等级： {$arrSellerLevel['pic']}</p>
+			        <p>认证：
+					  {loop $arrAuthItems $k $v}
+						  {if $k!=$strUncode}
+			              {if $arrAuthInfos[$k]['auth_status']==1}
+							<a href="index.php?do=user&view=account&op=auth&code={$v['auth_code']}"><img class="mar0" src="{$v['auth_small_ico']}" width="16px" height="16px" alt="" title="{$v['auth_title']}"></a>
+							{else}
+							<a href="index.php?do=user&view=account&op=auth&code={$v['auth_code']}"><img class="mar0" src="{$v['auth_small_n_ico']}" width="16px" height="16px" alt="" title="{$v['auth_title']}"></a>
+							{/if}
+						  {/if}
+						{/loop}
+
+		            </p>
+			        <p>来自：
+					{if $arrProvince['name']}
+					{$arrProvince['name']}
+					{/if}
+					{if $arrCity['name']}
+					 - {$arrCity['name']}
+					{/if}
+					</p>
+
+			        <div class="store_ctrl">
+			        
+			        	 {if $gUid !=$arrSellerInfo['uid']}
+			        	 
+			        	 <div class="row mb_5">
+			        	 	<div class="col-sm-4">
+			        	 		<a href="javascript:sendMessage({$arrSellerInfo['uid']});void(0);" class="btn btn-default btn-xs btn-block" >联系我</a>
+			        	 	</div>
+			        	 	<div class="col-sm-8">
+			        	 		{if $arrSellerInfo['follow']==1}
+				         <span class="btn-group">
+							   <a href="javascript:void(0);" class="btn btn-success btn-xs disabled" role="button"><i class="fa fa-check"></i> 已关注</a>
+				  				  <a href="javascript:cancelFollow({$arrSellerInfo[uid]});void(0);"  class="btn btn-success btn-xs" id="follow{$arrSellerInfo[uid]}">取消</a>
+				          </span>
+							  {else}
+				              <a href="javascript:addFollow({$arrSellerInfo[uid]});void(0);" class="btn btn-default btn-xs btn-block" id="follow{$arrSellerInfo[uid]}"><i class="fa fa-plus"></i> 加关注</a>
+							  {/if}
+
+			        	 	</div>
+			        	 </div>
+		                  
+		                  <a href="index.php?do=gy&id={$arrSellerInfo['uid']}" class="btn btn-success btn-xs btn-block " >雇佣TA</a>
+						    
+							  
+						 {/if}
+              		</div>
+		        </div>
+      		</div><!-- store_left end -->
+
+          <div class="store_adv">
+			<h2 class="min-title">简介</h2>
+          	<div class="store_desc">
+          		{if $arrSellerInfo['shop_slogans']}
+          		{$arrSellerInfo['shop_slogans']}
+				{else}
+				这家伙很懒，啥都没有留下...
+				{/if}
+          	</div><!-- .store_desc end-->
+
+			<div class="store_skill">
+	        	技能：
+
+				{if $arrSkill}
+				{loop $arrSkill $k $v}
+				<span class="skill-item">{$v}</span>
+				{/loop}
+				{else}
+				<span class="skill-item">暂无</span>
+				{/if}
+	        </div>
+
+          	<ul class="user-meta">
+				<li>最近三月收入：<span class="money"><sub>￥</sub>
+				{if $incomeCash}
+				{$incomeCash}
+				{else}
+				0.00
+				{/if}
+				</span></li>
+				{loop $arrSellerMark $k $v}
+				<li>
+					{$v['aid_name']}
+					<span class="text-danger">{$v['avg']}分</span>
+					<!--{eval echo keke_user_mark_class::gen_star2($v['avg']);}-->
+				</li>
+				{/loop}
+			</ul>
+          </div>
+
+		  <div class="store_down" id="main_nav">

@@ -1,0 +1,12 @@
+{
+	"appid":"101085277",
+	"appkey":"558090303c89f32044b6faa8f568e191",
+	"callback":"demo.kppw.cn/index.php?do=callbackqq",
+	"scope":"get_user_info",
+	"errorReport":true,
+	"storageType":"file",
+	"host":"localhost",
+	"user":"root",
+	"password":"root",
+	"database":"test"
+}

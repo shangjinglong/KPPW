@@ -1,0 +1,29 @@
+<!--安全码验证 start-->
+
+    <p class="text-warning">
+        <i class="fa fa-exclamation-triangle"></i>
+        尊敬的用户，为了您的账号安全，在进行此操作前，请先输入安全密码
+    </p>
+
+
+    <form action="index.php?do=user&view=finance&op=withdraw&action=safe_secode"  class="form-horizontal" name="secodeForm" id="secodeForm" method="post" onload="document.form.autocomplete.setAttribute('autocomplete', 'off');">
+
+	<div class="form-group mt_20">
+      <label class="col-sm-2 control-label" for="sec_code">安全码：</label>
+        <div class="col-sm-8">
+          <input type="password"  name="sec_code" id="sec_code"  class="form-control" >
+          <p class="help-block">个人初始安全码为个人密码，请尽量修改。</p>
+        </div>
+    </div>
+    <div class="form-group">
+        <div class="col-sm-offset-2 col-sm-10">
+           <button class="btn btn-default" type="submit" value="1" >提交</button>
+           <span class="text-success" id="tipsUser"></span>
+        </div>
+    </div>
+    </form>
+
+
+
+
+<!--安全码验证 end-->

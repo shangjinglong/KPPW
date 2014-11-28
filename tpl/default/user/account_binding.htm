@@ -1,0 +1,52 @@
+<!--{template user/header}-->
+<div class="container">
+  <div class="nav-action">
+		<!--{template user/left_side}-->
+  </div>
+  <!-- nav-action end -->
+  <div class="content-panel">
+      <div class="tab">
+      	<a {if $op === 'binding'}class="selected"{/if} href="{$strUrl}" >账号绑定</a>
+      </div>
+      <div class="tab_detail">
+        <p class="text-info"><i class="fa fa-exclamation-circle"></i> 可以使用多个帐号进行登录。</p>
+        {if $t}
+	        <table class="table table-hover">
+	          <thead>
+	            <tr>
+	              <th>绑定项目</th>
+	              <th>绑定状态</th>
+	              <th>操作</th>
+	            </tr>
+	          </thead>
+	          <tbody>
+	            {loop $t $k $v}
+	            	{if $weibo_list[$k.'_app_id']}
+			            <tr>
+			              <td><img src="static/img/ico/ico_32_{$k}.gif"> {$arrApiNames[$k]['name']}</td>
+			              <td>
+			                {if $v['uid']}
+			                	<span class="label label-success">已绑定到 $v['account']</span>
+			                {else}
+			                	<span class="label label-default">未绑定</span>
+			                {/if}
+			              </td>
+			              <td>
+			                {if $v['uid']}
+			                  <button class="btn btn-default" type="button" onclick="formSubmit('{$strUrl}&ac=unbind&id={$v[id]}','url');" value="取消绑定">取消绑定</button>
+		                  	{else}
+			                  <button class="btn btn-default" type="button" onclick="location.href='{$strUrl}&ac=bind&type={$k}';" value="去绑定">去绑定</button>
+		                  	{/if}
+			              </td>
+			            </tr>
+			           {/if}
+	            {/loop}
+	          </tbody>
+	        </table>
+        {else}
+          	<p class="text-center">未开放</p>
+        {/if}
+      </div>
+  </div>
+  </div>
+<!--{template user/footer}-->

@@ -1,0 +1,92 @@
+<!--{template ADMIN_DIRECTORY/tpl/admin_header}--> 
+<div class="page_title">
+    	<h1>{$_lang['withdraw_audit']}</h1>
+        <div class="tool">
+            <a href="index.php?do={$do}&view={$view}" >{$_lang['withdraw_list']}</a>
+            <a href="index.php?do={$do}&view={$view}&withdraw_id={$withdraw_id}" class="here">{$_lang['withdraw_audit']}</a>
+    	</div>
+    </div>
+ <div class="box post">
+        <div class="tabcon">
+        	<div class="title"><h2>{$_lang['mention_now_info_audit']}</h2></div>
+            <div class="detail">
+                <form action="index.php?do=finance&view=withdraw&ac=pass&withdraw_id=$withdraw_id" method="post">
+                	<input type="hidden" name="is_submit" value="1">
+                    <table width="100%" border="0" cellspacing="0" cellpadding="0">
+                      <tr>
+                        <th scope="row" width="130">{$_lang['withdraw_applicant']}</th>
+                        <td> $withdraw_info['username']</td>
+                      </tr>
+					  <tr>
+                        <th scope="row" width="130">{$_lang['withdraw_amount']}</th>
+                        <td>
+							{if $withdraw_info['pay_type']=='alipayjs'}
+                        		<!--{eval $get_cash = keke_finance_class::alipayjs_format_moneys($withdraw_info['withdraw_cash']);}-->
+                        	{else}
+                        		<!--{eval $get_cash = keke_finance_class::get_to_cash($withdraw_info['withdraw_cash']);}-->
+                        	{/if}
+							{c:$get_cash}
+                        </td>
+                      </tr>
+					  <tr>
+                        <th scope="row" width="130">{$_lang['application_time']}</th>
+                        <td><!--{date('Y-m-d H:i:s',$withdraw_info['applic_time'])}--></td>
+                      </tr>
+					  <tr>
+                        <th scope="row" width="130">{$_lang['accepts_state']}</th>
+                        <td>{$status_arr[$withdraw_info['withdraw_status']]}</td>
+                      </tr>
+					  <tr>
+                        <th scope="row" width="130">{$_lang['payment_method']}</th>
+                        <td>  {if in_array($withdraw_info['pay_type'],$k_arr)}
+								{$bank_arr[$withdraw_info['pay_type']]}
+							 {else}
+							 	{$withdraw_info['pay_type']}
+							 {/if}</td>
+                      </tr>
+                      <tr>
+                        <th scope="row" width="130">{$_lang['payment_accoun']}</th>
+                        <td>$withdraw_info['pay_account']</td>
+                      </tr>
+                      <tr>
+                        <th scope="row" width="130">{$_lang['collection_name']}</th>
+                        <td>$withdraw_info['pay_username']</td>
+                      </tr>
+                      <tr>
+                        <th scope="row">&nbsp;</th>
+                        <td>
+							{if $withdraw_info['withdraw_status']==1}
+								{if $withdraw_info['pay_type']=='alipayjs'}
+									<!--<button class="positive primary button" id="submit_save" type="button" value={$_lang['payment']} onclick="batch_pay({$withdraw_info['withdraw_id']});">
+										<span class="loop  check"></span>{$_lang['confirm_cash']}</button>-->
+								{/if}
+								<button class="positive primary button" id="submit_save" type="submit" value="{$_lang['pass']}" onclick="return confirm('确认打款{$_lang['me']}?');">
+									<span class="icon check"></span>确认打款</button>
+                       		    <button class="button" type="button" value="{$_lang['nopass']}" onclick="location.href='index.php?do=finance&view=withdraw&ac=nopass&withdraw_id=$withdraw_id'"><span class="icon trash"></span>{$_lang['nopass']}</button>
+                              {/if}
+							  
+                       </td>
+                      </tr>
+                    </table>
+                    
+                </form>
+            </div>
+        </div>
+<script type="text/javascript">
+	var payType="$withdraw_info['pay_type']";
+	function batch_pay(withdraw_id){
+		if(payType=='alipayjs'){
+			$.post("index.php?do=finance&view=withdraw&type=batch&pay_type=alipayjs&ids="+withdraw_id,function(url){
+			art.dialog({
+				title:"{$_lang['confirm_payment']}",
+				content: "{$_lang['you_confirm_payment']}",
+   				yesFn: function(){
+					window.open(url);this.close();
+				},
+				noFn :function(){this.close();return false;}
+				});
+			},'text')
+		}
+	}
+</script>
+    <!--{template ADMIN_DIRECTORY/tpl/admin_footer}-->

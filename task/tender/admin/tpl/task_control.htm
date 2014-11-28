@@ -1,0 +1,129 @@
+<!--{template ADMIN_DIRECTORY/tpl/admin_header}--> 
+<style type="text/css">
+	table tr .t_r{text-align:right}
+</style>
+<div class="page_title">
+  <h1>{$model_info[model_name]}{$_lang['task_config']}</h1>
+    <div class="tool">
+      <a href="index.php?do={$do}&model_id={$model_id}&view={$view}&op=config">{$_lang['basic_config']}</a>
+      <a href="index.php?do={$do}&model_id={$model_id}&view={$view}&op=control" class="here">{$_lang['control_config']}</a>
+      <a href="index.php?do={$do}&model_id={$model_id}&view={$view}&op=priv">{$_lang['private_config']}</a>
+    </div>
+</div>
+<div class="box post">
+<div class="tabcon">
+ <div class="title"><h2>{$_lang['control_config']}</h2></div>
+  <form name="frm_config_reward" action="{$ac_url}" method="post" id="frm_config_reward">
+  <input type="hidden" name="pk[model_id]" value="{$model_id}">
+	<table width="100%" border="0" cellspacing="0" cellpadding="0">
+  	
+	<tr>
+		 <th scope="row" width="200"> <b>{$_lang['task_commission_strategy']}</b>{$_lang['zh_mh']}</th><td>&nbsp;</td>
+	</tr>
+	<tr> 
+		<th scope="row" width="200" class="t_r">{$_lang['tender_audit_set']}{$_lang['zh_mh']}</th>
+		  <td>
+			<label for="zb_audit_1">
+				<input type="radio"  {if $zb_audit =='1'}checked{/if} name="conf[zb_audit]" id="zb_audit_1" value="1">{$_lang['open_audit']}</label>
+			<label for="zb_audit_2">
+				<input type="radio" {if $zb_audit =='2' }checked{/if} name="conf[zb_audit]" id="zb_audit_2" value="2">{$_lang['closed_audit']}</label>
+			{$_lang['audit_notice']}
+		 </td>
+				 
+		 
+    </tr>
+ 
+	<tr>
+		<th scope="row" width="200" class="t_r">{$_lang['platform_service_cost']}{$_lang['zh_mh']}</th> 
+		<td>
+			<input type="text" size="10" name="conf[zb_fees]" id="zb_fees" value="{$zb_fees}" limit="required:true;type:int;len:1-3;between:0-"  msg="{$_lang['task_royalty_lenght_notice']}" title="{$_lang['task_royalty_is_positive_integer']}" msgArea="deduct_scale_msg" class="txt"/><span id="deduct_scale_msg"></span>
+			{$_lang['service_cost_notice']}
+		</td>
+	</tr>
+  	<tr><th scope="row" width="200">{$_lang['cash_cove_config']}{$_lang['zh_mh']}</th>
+	<td><a class="button" href="index.php?do=model&model_id=$model_id&view=config&op=cash_rule&ac=add">
+			<span class="pen icon"></span>{$_lang['add_new_cove']}
+		</a>
+	</td>
+	</tr>
+	<tr>
+		<th scope="row" width="200" class="t_r">&nbsp;</th> 
+		 <td>
+			<ul>
+			 	{loop $cash_cove $k $v}
+					<li>
+						{$v['cove_desc']}&nbsp;&nbsp;&nbsp;
+							<a class="button" href="index.php?do=model&model_id=$model_id&view=config&op=cash_rule&ac=edit&rule_id={$k}">
+								<span class="pen icon"></span>{$_lang['edit']}
+							</a>&nbsp;&nbsp;
+							<a class="button" href="index.php?do=model&model_id=$model_id&view=config&op=cash_rule&ac=del&rule_id={$k}">
+								<span class="trash icon"></span>{$_lang['delete']}
+							</a>
+					</li>
+				{/loop}
+			</ul>
+		</td>
+	</tr>
+  	<tr><th scope="row" width="200">{$_lang['task_time_rule_set']}{$_lang['zh_mh']}</th><td>&nbsp;</td></tr>
+
+	<tr>
+		<th scope="row" width="200" class="t_r">{$_lang['task_time_rule_set']}{$_lang['zh_mh']}</th> 
+		 <td>
+			<input type="text" size="10" name="conf[zb_max_time]" id="zb_max_time" value="{$zb_max_time}"  limit="required:true;type:int;between:1-" msg="{$_lang['time_input_error']}" title="{$_lang['task_bid_time_notice']}"  msgArea="span_max_time" class="txt">{$_lang['bid_time_notice']}<span id="span_max_time"></span>
+			
+		</td>
+	</tr>
+	<tr>
+		<th scope="row" width="200" class="t_r">{$_lang['task_time_min_rule_set']}{$_lang['zh_mh']}</th> 
+		 <td>
+			<input type="text" size="10" name="conf[zb_min_time]" id="zb_min_time" value="{$zb_min_time}"  limit="required:true;type:int;between:1-" msg="{$_lang['time_input_error']}" title="{$_lang['task_bid_time_notice']}"  msgArea="span_min_time" class="txt">{$_lang['bid_time_min_notice']}<span id="span_min_time"></span>
+			
+		</td>
+	</tr>
+	<tr>
+		<th scope="row" width="200" class="t_r">{$_lang['choose_max_time_set']}{$_lang['zh_mh']}</th> 
+		 <td>
+			<input type="text" size="10" name="conf[choose_time]" id="choose_time" value="{$choose_time}"  limit="required:true;type:int;between:1-" msg="{$_lang['time_input_error']}" title="{$_lang['task_choose_tender_notice']}"  msgArea="span_draft_time" class="txt">{$_lang['task_choose_works_time_notice']}<span id="span_draft_time"></span>
+		</td>
+	</tr>
+	    
+	<!--
+	<tr>
+		<th scope="row" width="200" class="t_r">{$_lang['in_a_bid_to_choose']}{$_lang['zh_mh']}</th> 
+		<td>
+			<label for="open_select_yes"><input type="radio" name="conf[open_select]"  {if !$open_select||$open_select =='open'} checked {/if} id="open_select_yes" value="open">{$_lang['open']}</label>
+			<label for="open_select_no"><input type="radio" name="conf[open_select]" {if $open_select =='close'} checked {/if} id="open_select_no" value="close">{$_lang['close']}</label>
+		</td>
+	</tr>-->
+	<tr>
+		<th scope="row" width="200">&nbsp;</th>
+		<td>
+            <div class="clearfix padt10">
+            	<input type="hidden" name="sbt_edit" value="1">
+			 <button type="button" name="sbt_edit" class="positive primary  button" value="1" onclick="confirmSub()"><span class="check icon"></span>{$_lang['submit']}</button>
+			</div>
+		</td>
+	</tr>
+  </table>
+  </form>
+   </div>
+ </div>
+ 
+<!--{template ADMIN_DIRECTORY/tpl/admin_footer}-->
+<script type="text/javascript">
+	function confirmSub(){
+		var i = checkForm(document.getElementById('frm_config_reward'));
+		var min_day = parseInt($("#zb_min_time").val())+0;
+		var max_day = parseInt($("#zb_max_time").val())+0;
+		if(i){
+			//alert(min_day);
+			if(min_day>max_day){
+				art.dialog.alert("任务最大时间限制不能小于任务最小时间限制");return false;
+			}else{
+				$("#frm_config_reward").submit();
+			}
+		}else{
+			return false;
+		}
+	}
+</script>

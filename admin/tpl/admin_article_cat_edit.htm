@@ -1,0 +1,112 @@
+<!--{template ADMIN_DIRECTORY/tpl/admin_header}-->
+ 
+
+	<div class="page_title">
+   <h1>{$_lang['cat_manage']}</h1>
+         <div class="tool"> 
+            <a href="index.php?do=$do&view=cat_list&type=$type" {if $view=='cat_list'}class="here"{/if} {if $view=='list'}class="here" {/if}>{$_lang['cat_list']}</a>
+            <a href="index.php?do=$do&view=cat_edit&type=$type" {if $view=='cat_edit'}class="here"{/if} {if $view=='edit'}class="here" {/if}>{$_lang['cat_add']}</a>
+    	</div>
+	</div>
+	<!--页头结束-->
+    
+<div class="box post">
+    <div class="tabcon">
+        	<div class="title"><h2>{if $art_cat_id}{$_lang['edit']}{else}{$_lang['add']}{/if}{if $type=='art'}{$_lang['article']}{elseif $type=='help'}{$_lang['help']}{else}{$_lang['single_page']}{/if}{$_lang['category']}</h2></div>
+            <div class="detail">
+                <form method="post" action="index.php?do={$do}&view={$view}" id="frm_cat_edit" >
+                <input type="hidden" name="do" value="{$do}">
+                <input type="hidden" name="view" value="{$view}">
+                <input type="hidden" name="hdn_art_cat_id" value="{$art_cat_info['art_cat_id']}">
+                <input type="hidden" name="type" value="{$type}">
+                    <table width="100%" border="0" cellspacing="0" cellpadding="0">
+                      <tr>
+                        <th scope="row" width="130">{$_lang['father_cat']}{$_lang['zh_mh']}</th>
+                        <td>
+	                        <select id="slt_cat_id" name="slt_cat_id" style=" width:270px;"
+	                        		 limit = "required:true;type:int" 
+                                     msg = '{$_lang['select_father_cat']}' 
+                                     title='{$_lang['cat_what']}{$_lang['zh_wh']}' 
+                                     msgArea="msg_cat_id">
+	                        {loop $cat_arr $v}
+	                        $v
+	                        {/loop}
+	                   		 </select>
+	                        <span id="msg_cat_id"></span>
+                        </td>
+                      </tr>
+                      
+                      <tr>
+                        <th scope="row">{$_lang['cat_name']}{$_lang['zh_mh']}</th>
+                        <td> 
+                         <input type="text" class="txt" style=" width:260px;" name="txt_cat_name" id="txt_cat_name" value="{$art_cat_info['cat_name']}" maxlength="20" 
+                         limit="required:true;len:2-20" 
+                         msg="{$_lang['cat_name_limit']}" 
+                         msgArea="cat_name_msg" 
+                         title="{$_lang['input_cat_name']}"/><span id="cat_name_msg"></span>
+	                	</td>
+                      </tr>
+                      
+                      <tr>
+                        <th scope="row">{$_lang['order']}{$_lang['zh_mh']}</th>
+                        <td>
+                         <input type="text"  class="txt" style=" width:260px;" id="txt_listorder" name="txt_listorder" value="{if $art_cat_info['listorder']}{$art_cat_info['listorder']}{else}1{/if}" maxlength="5" 
+								limit = "required:true;type:int" 
+                                onkeyup="clearstr(this)"
+                                msg = '{$_lang['please_enter']}{if $type=='art'}{$_lang['article']}{elseif $type=='help'}{$_lang['help']}{else}{$_lang['single_page']}{/if}{$_lang['category']}{lang:order' 
+                                title='{if $type=='art'}{$_lang['article']}{elseif $type=='help'}{$_lang['help']}{else}{$_lang['single_page']}{/if}{$_lang['category_order']}' 
+                                msgArea="slt_txt_listorder"/><span id="slt_txt_listorder"></span>
+                        </td>
+                      </tr>
+                      
+                      {if $type =='help'}
+                      
+					  <tr>
+                        <th scope="row">SEO{$_lang['title']}{$_lang['zh_mh']}</th>
+                        <td><textarea cols="70" rows="2"  name="seo_title" value="{$art_cat_info['seo_title']}">{$art_cat_info['seo_title']}</textarea></td>
+                     </tr>
+                     
+                     <tr>
+                        <th scope="row">SEO{$_lang['keywords']}{$_lang['zh_mh']}</th>
+                        <td><textarea cols="70" rows="2"  name="seo_keyword" value="{$art_cat_info['seo_keyword']}">{$art_cat_info['seo_keyword']}</textarea></td>
+                     </tr>
+                     
+                      <tr>
+                        <th scope="row">SEO{$_lang['description']}{$_lang['zh_mh']}</th>
+                        <td><textarea cols="70" rows="3" name="seo_desc" value="{$art_cat_info['seo_desc']}">{$art_cat_info['seo_desc']}</textarea></td>
+                     </tr>
+                     {/if}
+					  <tr style="display:none;">
+                        <th scope="row">{$_lang['is_recommend']}{$_lang['zh_mh']}</th>
+                        <td>
+                          <p>
+                            <label><input type="checkbox" value="1" name="chk_is_show" {if $art_cat_info['is_show']==1}checked="checked"{/if}/>&nbsp;{$_lang['yes']}</label> <br />
+                          </p>
+                        </td>
+                      </tr>
+                      				
+					{if $art_cat_info['on_time']}
+					 <tr>
+                        <th scope="row">{$_lang['last_modify']}{$_lang['zh_mh']}</th>
+                        <td><!--{date('Y-m-d H:i:s',$art_cat_info['on_time'])}--></td>
+                     </tr>
+                    {/if} 
+                    
+                    <tr>
+                        <th scope="row">&nbsp;</th>
+                    	<td>
+                    	<button name="sbt_edit" value="1" onclick="return checkForm(document.getElementById('frm_cat_edit'),false)" class="pill positive primary  button" type="submit"><span class="check icon"></span>{$_lang['submit']}</button>
+                    	<button class="pill button" type="button" onclick="history.go(-1);" value="{$_lang['return']}"><span class="uparrow icon"></span>{$_lang['return']}</button>
+                    	</td>
+                    </tr>
+                    
+                    </table>
+                </form>
+             </div>
+       </div>
+</div>
+<!--主体结束-->
+
+ 
+
+<!--{template ADMIN_DIRECTORY/tpl/admin_footer}-->

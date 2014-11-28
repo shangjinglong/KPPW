@@ -1,0 +1,134 @@
+<!--{template ADMIN_DIRECTORY/tpl/admin_header}-->
+<div class="page_title">
+    <h1>{$auth_item['auth_title']}{$_lang['detail_info']}</h1>
+    <div class="tool">
+        <a href="index.php?do=auth&view=list&code={$code}">{$_lang['auth_list']}</a>
+        <a href="index.php?do=auth&view={$view}&code={$code}&op=info&bank_a_id=$bank_a_id" class="here">{$_lang['detail_info']}</a>
+    </div>
+</div>
+<div class="box post">
+    <div class="tabcon">
+        <div class="title">
+            <h2>{$_lang['detail_info']}</h2>
+        </div>
+        <div class="detail">
+            <form method="post" action="index.php?do={$do}&view={$view}&op=info&code=$code&bank_a_id=$bank_a_id">
+                <input type="hidden" name="pk[auth_code]" value="{$code}">
+                <table width="100%" border="0" cellspacing="0" cellpadding="0">
+                    <tr>
+                        <th scope="row" width="130">
+                            {$_lang['username']}
+                        </th>
+                        <td>
+                            {$bank_info[username]}
+                        </td>
+                    </tr>
+                    <tr>
+                        <th scope="row" width="130">
+                            {$_lang['payment_type']}
+                        </th>
+                        <td>
+                           {if $bank_info[pay_type]==1}{$_lang['online_payment']}{else}{$_lang['downline_payment']}{/if}
+                        </td>
+                    </tr>
+			{if $bank_info[pay_type]==1}
+					 <tr>
+                        <th scope="row" width="130">
+                            {$_lang['payment_tool']}
+                        </th>
+                        <td>
+                          {$pay_tool_arr[$bank_info[online_pay_tool]]}
+                        </td>
+                    </tr>
+					<tr>
+                        <th scope="row" width="130">
+                            {$_lang['payment_account']}
+                        </th>
+                        <td>
+                          {$bank_info[online_pay_account]}
+                        </td>
+                    </tr>
+	 		 {else}
+				 <tr>
+                        <th scope="row" width="130">
+                            {$_lang['bank_name']}
+                        </th>
+                        <td>
+                          {$bank_name_arr[$bank_info[bank_name]]}
+                        </td>
+                    </tr>
+					<tr>
+                        <th scope="row" width="130">
+                            {$_lang['open_account_place']}
+                        </th>
+                        <td>
+                          {$bank_info[deposit_area]}
+                        </td>
+                    </tr>
+					<tr>
+                        <th scope="row" width="130">
+                            {$_lang['open_account_name']}
+                        </th>
+                        <td>
+                          {$bank_info[bank_full_name]}
+                        </td>
+                    </tr>
+					<tr>
+                        <th scope="row" width="130">
+                            {$_lang['bank_account']}
+                        </th>
+                        <td>
+                         {$bank_info[bank_account]}
+                        </td>
+                    </tr>
+		  {/if}
+		<!--  <tr>
+                        <th scope="row" width="130">
+                            {$_lang['cash']}
+                        </th>
+                        <td>
+                     	  {c:$bank_info[cash]}
+                        </td>
+         </tr>-->
+		  <tr>
+                        <th scope="row" width="130">
+                            {$_lang['admin_give_cash']}
+                        </th>
+                        <td>
+                     	 {if $bank_info[pay_to_user_cash]>0.00}
+							<font color="#ff7700">{c:$bank_info[pay_to_user_cash]}</font>
+							[{$_lang['give_cash_time']}{$_lang['zh_mh']}<!--{date('Y-m-d H:i:s',$bank_info[pay_time])}-->]
+						{else}
+							<input type="text" name="fds[pay_to_user_cash]" class="txt">{$_lang['yuan']}
+							<input type="hidden" name="fds[bank_a_id]" value="{$bank_info[bank_a_id]}">
+							<button class="positive primary pill button" name="sbt_pay_to_user" type="submit" value="{$_lang['give_cash_user']}">{$_lang['give_cash_user']}</button>
+						{/if}
+                        </td>
+         </tr>
+		 <tr>
+                        <th scope="row" width="130">
+                            {$_lang['user_gain_cash']}
+                        </th>
+                        <td>
+                     		<font color="#ff7700">{c:$bank_info[user_get_cash]}</font>
+                        </td>
+         </tr>
+		 <tr>
+                        <th scope="row" width="130">
+                            {$_lang['validity']}
+                        </th>
+                        <td>
+                     	{if $bank_info[start_time]==$bank_info[end_time]}
+							{$_lang['lifetime_validity']}
+						{else}
+							<!--{date('Y-m-d',$bank_info[start_time])}-->{$_lang['to']}<!--{date('Y-m-d',$bank_info[end_time])}-->
+						{/if}
+                        </td>
+         </tr>
+
+                </table>
+            </form>
+        </div>
+    </div>
+</div>
+<!--{template ADMIN_DIRECTORY/tpl/admin_footer}-->

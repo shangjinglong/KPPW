@@ -1,0 +1,205 @@
+<!--{template ADMIN_DIRECTORY/tpl/admin_header}-->
+<style type="text/css">
+.jia {background: url(tpl/img/plus.gif)}
+.jian {background: url(tpl/img/minus.gif) }
+</style>
+<div class="page_title">
+    	<h1>{$_lang['cat_manage']}</h1>
+        <div class="tool">
+            <a href="index.php?do=$do&view=cat_list&type={$type}" class="here">{$_lang['cat_manage']}</a>
+          <a href="index.php?do=$do&view=cat_edit&type=$type" {if $view=='cat_edit'}class="here"{/if} {if $view=='edit'}class="here" {/if}>{$_lang['cat_add']}</a>           
+		</div>
+</div>
+
+{if $type=='art'}
+<div class="box tip clearfix p_relative" id="man_tips">
+   <div class="control"><a href="javascript:void(0);" title={$_lang['close']} onclick="$('#man_tips').fadeOut();"><b>&times;</b></a></div>
+   <div class="title"><h2>{$_lang['tips']}</h2></div>
+   <div class="detail pad10">
+      <ul>
+         <li>*本站默认模版风格中文章二级分类无效</li>
+      </ul>
+   </div>
+</div>
+{/if}
+
+
+<div class="box search p_relative">
+    	<div class="title"><h2>{$_lang['search']}</h2></div>
+        <div class="detail" id="detail">
+           
+		    <form action="" method="get">
+            	<input type="hidden" name="do" value="$do">
+				<input type="hidden" name="view" value="$view">
+				<input type="hidden" name="type" value="$type">
+				<input type="hidden" name="page" value="$page">
+				 
+                <table cellspacing="0" cellpadding="0">
+					<tbody>
+                        <tr>
+                            <th>所属分类</th>
+                            <td>
+                            	<select   name="w[art_cat_pid]" id="catid">
+                            	{loop $cat_option_arr $v}
+									$v
+								{/loop}
+								</select>
+								(父分类)
+                            </td>
+                            <th>{$_lang['category']}{$_lang['name']}</th>
+                            <td><input type="text" value="$w['cat_name']" name="w[cat_name]" class="txt"/>*{$_lang['search_by_like']}</td>
+                             <td></td> 
+						</tr>
+                        <tr >
+                            
+							<th>{$_lang['result_order']}</th>
+							<td>
+								
+								<select name="ord[]">
+                                <option value="art_cat_id" {if $ord['0']=='art_cat_id' or !isset($ord['0'])} selected="selected"{/if}>{$_lang['default_order']}</option>
+                                <option value="on_time" {if $ord['0']=='on_time' } selected="selected"{/if}>添加时间</option>
+                                </select>
+                                <select name="ord[]">
+                                <option {if $ord['1']=='desc' or !isset($ord['1'])}selected="selected" {/if} value="desc">{$_lang['desc']}</option>
+                                <option {if $ord['1']=='asc'}selected="selected" {/if} value="asc">{$_lang['asc']}</option>
+                                </select>
+								<button class="pill" type="submit" value={$_lang['search']} name="sbt_search">
+                            		<span class="icon magnifier">&nbsp;</span>{$_lang['search']}
+								</button>
+							</td>
+                             
+                            <td colspan="3"> 
+                              	&nbsp;
+							</td>
+							  
+                        </tr>
+                    </tbody>
+                </table>
+            </form>
+			
+        </div>
+    </div>
+    <!--搜索结束-->
+	<div class="box list">
+    	<div class="title"><h2>{$_lang['cat_list']}</h2></div>
+        <div class="detail">
+        	<form action="" id='frm_list' method="post">
+              <table cellpadding="0" cellspacing="0">
+                <tbody>
+                <tr>
+                 <!--   <th width="8%">ID</th>-->
+                    <th width="7%">显示顺序</th>
+                    <th width="30%">{$_lang['category']}{$_lang['name']}</th>                    
+                    <th width="17%"> 修改时间</th>
+                   <th width="13%">{$_lang['operate']}</th>
+                </tr>
+                
+                {loop $cat_show_arr $k $v}
+				 <tbody id="indus_item_l_{$v['art_cat_id']}" {if $v['art_cat_pid'] && !$w}style="display:none;"{else}style="display:;"{/if}>
+                  <tr class="item" align="left">
+                  <!--	<td>$v['art_cat_id']</td>-->
+                    <td class="td28">
+                    	<input type="text" size=3 class="txt" name="indus_item_listorder_{$v['art_cat_id']}" value="$v['listorder']" onblur="edit_listorder({$v['art_cat_id']},this.value)"></td>
+                    <td align="left">
+                    	$v['ext']
+						<span class="{if $cat_index_arr[$v['art_cat_id']]}jia{else}jian{/if}" 
+						{if $cat_index_arr[$v['art_cat_id']]}
+						onclick="if($(this).attr('class')=='jia'){
+							showids_{$v['art_cat_id']}('show');
+							$(this).attr('class','jian');
+							}else{showids_{$v['art_cat_id']}('hide');
+							$(this).attr('class','jia')}
+							" {/if}>&nbsp;&nbsp;&nbsp;&nbsp;</span>
+                            <span id="indus_item_span_{$v['art_cat_id']}"
+							 style="font-weight:<!--{eval echo 900-$v['level']*300}-->;font-size:<!--{eval echo 16-$v['level']*2}-->px;">
+                            <input type="text" class="txt" value="$v['cat_name']" 
+							readonly="readonly" >
+							</span>
+							{if !$v['art_cat_pid']}
+								<a href="javascript:;" style="color:#ff6600" onclick="addchild({$v['art_cat_id']},'$v['ext']')">增加子类</a>					
+							{/if}
+					</td>                                
+                    <td><!--{date('Y-m-d H:i:s',$v['on_time'])}--></td>
+                    <td>
+						<a href="index.php?do={$do}&view=cat_edit&art_cat_id={$v['art_cat_id']}&art_cat_pid={$v['art_cat_pid']}&type={$type}" class="button dbl_target"><span class="pen icon"></span>{$_lang['edit']}</a>
+						{if $v[art_cat_pid]!=0}
+						<a href="$url&art_cat_id=$v['art_cat_id']&ac=del"  onclick="return cdel(this);" class="button"><span class="trash icon"></span>{$_lang['delete']}</a>
+						{/if}
+						
+					</td>
+                  </tr>
+				  </tbody>
+                  {/loop}
+               <tr>
+               	<td>&nbsp;</td>
+                    <td colspan="6">
+	                   
+	                    
+	                    <div class="clearfix">
+	                  		<div class="clearfix">	
+	                      <!--  <a href="index.php?do=task&view=union_industry"   class="button pill negative"><span class="icon cog">&nbsp;</span>{$_lang['industry_merge']}</a>-->
+							<button  name="sbt_action" type="submit" value={$_lang['submit']} class="positive primary pill button" /><span class="check icon"></span>{$_lang['submit']}</button>
+	                    </div>
+	                    </div>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+
+		   	</form>
+        </div>       
+    </div>
+<script type="text/javascript">
+
+    	function edit_listorder(iid,v){
+    		$.get('index.php?do={$do}&view={$view}&ac=editlistorder',{iid:iid,val:v});
+    	}
+    	
+    	var newindus_c = 0;
+    	function addchild(pid,ext){
+    		newindus_c++;
+    		if(ext=='')
+    		{ext = '|';}
+    		if(ext!=' ')
+    		{ext = '&nbsp;&nbsp;&nbsp;'+ext+'---';}
+    		var mod = '<tr class="item" id="newindus_c_'+newindus_c+'">';
+    		  	mod+='<td class="td28">'+'<input type=text size=3 class="txt" name="add_cat_name_listarr['+pid+']['+newindus_c+']" size=3>';+'</td>';
+    		  	mod+='<td>'+ext;
+    			mod+='<input type=text class="txt" name="add_cat_name_arr['+pid+']['+newindus_c+']">';
+    			mod+='</td>';
+    		   
+    	 
+    		    mod+='<td>&nbsp;</td>';
+    			mod+='<td>';
+    			mod+='<a href="javascript:;" onclick="$(\'#newindus_c_'+newindus_c+'\').remove()">';
+    			mod+='{$_lang['delete']}';
+    			mod+='</a>';
+    			mod+='</td>';
+    		  	mod+='</tr>	';
+    			
+    			$('#indus_item_l_'+pid).append(mod); 
+    		
+    	}
+    	
+       {loop $cat_index_arr $k $v}
+      	function showids_{$k}(op){
+    		if(op=='show'){
+    			{loop $cat_index_arr[$k] $ik $iv}
+    			$('#indus_item_l_{$ik}').show();
+    			{/loop}
+    		}
+    		else{
+    			{loop $cat_index_arr[$k] $ik $iv}
+    			$('#indus_item_l_{$ik}').hide();
+    			{/loop}
+    		}
+    		
+    		{if $cat_index_arr[$v['art_cat_id']]}
+    			showids_{$v['task']}(op);
+    		{/if}
+    		
+    	}
+    	{/loop}
+      
+</script>	
+<!--{template ADMIN_DIRECTORY/tpl/admin_footer}-->

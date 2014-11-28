@@ -1,0 +1,127 @@
+<script src="static/js/holder.min.js"></script>
+<div id="change_banner_div">
+<!-- style="margin-top:-42px;" -->
+    <ul class="nav nav-tabs pl_20 mt_10" >
+      <li class="active"><a href="#div_set_1" data-toggle="tab">设置头部图片</a></li>
+      <li><a href="#div_set_2" data-toggle="tab">设置背景图片</a></li>
+    </ul>
+    <div class="tab-content ">
+        <!--设置头部图片开始 -->
+        <div id="div_set_1" class="tab-pane active">
+        	<form role="form" action="index.php?do=ajax&view=banner" method="post" class="form-horizontal" name="bannerForm" id="bannerForm">
+        		<input type="hidden" name="formhash" id="formhash" value="{FORMHASH}">
+        		<input type="hidden" name="id" value="{$arrSellerInfo['uid']}">
+		<div class="modal-body">
+            <p class="text-info mb_10"><i class="fa fa-info-circle"></i> <strong>提示</strong> 最佳图片尺寸：1200*280像素</p>
+            <img id="banner_img" onerror="this.src='tpl/default/img/store_banner.jpg'" src="{if $arrSellerInfo['banner']}{$arrSellerInfo['banner']}{else}tpl/default/img/store_banner.jpg{/if}" alt="banner" class="img-responsive mb_20">
+			 <input type="file" class="file" name="upload1" id="upload1">
+			 <input type="hidden"  name="banner" id="banner_path"  class="form-control">
+	     
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-default" data-dismiss="modal" onclick="$('.close').trigger('click');">取消</button>
+            <button type="submit" name="submit" class="btn btn-primary">确定</button>
+			<span class="text-success" id="tipsUser"></span>
+        </div>
+		</form>
+        </div>
+        <!--设置头部图片结束 -->
+
+        <!--设置背景图片结束 开始-->
+        <div id="div_set_2" class="tab-pane">
+          <form role="form" action="index.php?do=ajax&view=banner" method="post" class="form-horizontal" name="backgroundForm" id="backgroundForm">
+          	<input type="hidden" name="formhash" id="formhash" value="{FORMHASH}">
+        		<input type="hidden" name="id" value="{$arrSellerInfo['uid']}">
+             <div id="bground" class="modal-body">
+                <p class="text-info mb_10">
+                    <i class="fa fa-info-circle"></i> <strong>提示</strong>
+                    店铺背景图片,宽度必须为950px。支持.jpg,.gif,.png,.jpeg格式。
+                </p>
+                <img id="background_img" class="img-responsive mb_20" src="{if $arrSellerInfo['shop_background']}{$arrSellerInfo['shop_background']}{/if}" data-src="holder.js/560x100/text:Background">
+                <div class="form-inline pull-right">      
+                    <div class="checkbox">
+                        <label>
+                          <input type="checkbox" name="repeat" value="repeat-x" {if $arrBackgroudStyle['repeat']=='repeat-x'}checked="checked"{/if}> 平铺
+                        </label>
+                      </div>
+                    <select id="position" name="position" class="form-control">
+                        <option value="left top" {if $arrBackgroudStyle['position']=='left top'}selected="selected"{/if}>居中对齐</option>
+                        <option value="center top" {if $arrBackgroudStyle['position']=='center top'}selected="selected"{/if}>居左对齐</option>
+                        <option value="right top" {if $arrBackgroudStyle['position']=='right top'}selected="selected"{/if}>居右对齐</option>
+                     </select>
+                </div>
+				 <input type="file" class="file" name="upload2" id="upload2">
+			 <input type="hidden"  name="background" id="background_path"  class="form-control">
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-default" data-dismiss="modal" onclick="$('.close').trigger('click');">取消</button>
+            <button type="submit" name="submit" class="btn btn-primary">确定</button>
+			<span class="text-success" id="tipsUser"></span>
+            </div>
+			</form>
+        </div>
+    </div>
+</div>
+<!--设置背景图片结束 --> 
+<script src="static/js/uploadify/jquery.uploadify.min.js" type="text/javascript"></script>
+<link href="static/js/uploadify/uploadify.css" rel="stylesheet">
+<script type="text/javascript">
+        $(function(){
+            uploadify({file:'upload1',debug:false,text:'上传图片',auto:true,limit:1,hide:false},'',uploadR1);
+        });
+		 $(function(){
+            uploadify({file:'upload2',debug:false,text:'上传图片',auto:true,limit:1,hide:false},'',uploadR2);
+        })
+		function uploadR1(json){
+			$('#banner_path').val(json.msg.url);
+			$('#banner_img').prop('src',json.msg.url);
+		}
+		function uploadR2(json){
+			$('#background_path').val(json.msg.url);
+			$('#background_img').prop('src',json.msg.url);
+		}
+</script>
+<script type="text/javascript">
+	$(function(){
+	//发送消息
+	$('#bannerForm').scojs_valid({
+		rules: {
+	    	banner : ['not_empty']
+	    },
+	    messages: {
+	    	banner:{
+	    		not_empty:"上传Banner图片"
+	    	},
+	    },
+		wrapper:'.form-group',onSuccess: function(response, validator) {
+		    	  tipsUser(response.data,response.status);
+		    		setTimeout(function(){
+						$('.close').trigger('click');
+						if(response.url){
+								window.location.href=response.url;
+				    	}
+					},2000);
+			}
+		});
+		
+		$('#backgroundForm').scojs_valid({
+		rules: {
+	    	background : ['not_empty']
+	    },
+	    messages: {
+	    	background:{
+	    		not_empty:"上传Banner图片"
+	    	},
+	    },
+		wrapper:'.form-group',onSuccess: function(response, validator) {
+		    	  tipsUser(response.data,response.status);
+		    		setTimeout(function(){
+						$('.close').trigger('click');
+						if(response.url){
+								window.location.href=response.url;
+				    	}
+					},2000);
+			}
+		});
+});
+</script>

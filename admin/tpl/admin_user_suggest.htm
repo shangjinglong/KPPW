@@ -1,0 +1,129 @@
+<!--{template ADMIN_DIRECTORY/tpl/admin_header}--> 
+
+<div class="page_title">
+	<h1>投诉建议</h1>
+     <div class="tool"> 
+        <a href="index.php?do=$do&view=$view" class="here">投诉建议</a>
+        
+	</div>
+</div>
+<!--页头结束--> 
+
+      <div class="box search p_relative">
+    	<div class="title"><h2>{$_lang['search']}</h2></div>
+        <div class="detail" id="detail">
+			<form action="#" method="post">
+        	<input type="hidden" name="do"   value="$do">
+			<input type="hidden" name="view" value="$view">
+			<input type="hidden" name="type" value="$type">
+			<input type="hidden" name="page" value="$page">
+			<table cellspacing="0" cellpadding="0">
+			 <tbody>
+			 	<tr>
+			 		<th>编号</th>
+					<td><input type="text" class="txt" name="txt_p_id" value="{$txt_p_id}" onkeyup="clearstr(this);"></td>
+					<th>标题</th>
+					<td><input type="text" class="txt" name='txt_pro_title' value="{$txt_pro_title}" onkeyup="clearspecial(this);"></td>
+			 	</tr>
+				<tr>
+					<th>{$_lang['show_number']}</th>
+					<td>
+						<select name="slt_page_size" class="ps vm">
+						<option value="10" {if $slt_page_size=='10'}selected="selected"{/if}>{$_lang['page_size']}10</option>
+						<option value="20" {if $slt_page_size=='20'}selected="selected"{/if}>{$_lang['page_size']}20</option>
+						<option value="30" {if $slt_page_size=='30'}selected="selected"{/if}>{$_lang['page_size']}30</option>
+						</select>
+					</td>
+					<th>{$_lang['result_order']}</th>
+					<td>
+						
+						
+						<select name="ord[]">
+                           <option value="p_id" {if $ord['0']=='p_id' or !isset($ord['0'])} selected="selected"{/if}>{$_lang['default']}{$_lang['order']}</option>
+                           <option value="pro_time" {if $ord['0']=='pro_time' } selected="selected"{/if}>时间</option>
+                      </select>
+                      <select name="ord[]">
+                            <option {if $ord['1']=='desc' or !isset($ord['1'])}selected="selected" {/if} value="desc">{$_lang['desc']}</option>
+                            <option {if $ord['1']=='asc'}selected="selected" {/if} value="asc">{$_lang['asc']}</option>
+                      </select>
+					</td>
+				</tr>
+				<tr>
+					<th>状态</th>
+					<td>
+						<select name="slt_static" style="width:60px;">
+			      		<option value="0" {if !$slt_static}selected="selected"{/if}> {$_lang['all']} </option>
+						<option value="1" {if $slt_static=='1'}selected="selected"{/if}> 待回复 </option>
+						<option value="2" {if $slt_static=='2'}selected="selected"{/if}> 已回复 </option>
+						</select>
+						<button type="submit" name="sbt_search" value="$_lang['search']" class="pill" />
+							<span class=icon magnifier>&nbsp;</span>{$_lang['search']}</button>
+					</td>
+				</tr>
+			 </tbody>
+			</table>
+			</form>
+        </div>
+	 </div>
+
+    <div class="box list">
+    	<div class="title"><h2>投诉建议</h2></div>
+        <div class="detail">
+			<form method="post" action="#" id="frm_user_search">
+				<div id="ajax_dom">
+					<input type="hidden" name="page" value="{$page}" />
+			  		<table cellpadding="0" cellspacing="0">
+			  		<thead>
+			          <tr>
+			          	<th width="15">
+			          	<!-- <input type="checkbox" id="checkbox" onclick="checkall()"> -->
+			          	编号</th>
+			            <th>建议标题</th>
+						<th>建议类型</th>
+						<th>详细描述</th>
+						<th>建议时间</th>
+						<th>状态</th>
+						<th>回复内容</th>
+						<th>操作</th>
+			         </tr>
+					 </thead>
+					 <tbody> 
+					{loop $suggestlist_arr $k $v}
+			        <tr class="item">
+			        	<td class="td25">
+			        	<!--<input type="checkbox" name="ckb[]" class="checkbox" value="{$v['p_id']}">-->
+			        	{$v['p_id']}</td>
+						<td title="{$v['pro_title']}"><!--{eval echo kekezu::cutstr($v['pro_title'],20)}--></td>
+						<td>$suggest_type_arr[$v['pro_type']]</td>
+						<td title="{$v['pro_desc']}"><!--{eval echo kekezu::cutstr($v['pro_desc'],30)}--></td>
+						<td><!--{date('Y-m-d',$v['pro_time'])}--></td>
+						<td>
+							{$suggest_status_arr[$v['pro_status']]}
+						</td>
+						<td title="{$v['op_content']}">
+							{if $v['pro_status'] == 2}
+								<!--{eval echo kekezu::cutstr($v['op_content'],30)}-->
+							{else}
+								{$suggest_status_arr[$v['pro_status']]}
+							{/if}
+						</td>
+						<td>
+							{if $v['pro_status'] == 2}
+								<a href="index.php?do=user&view=suggest_reply&suggest_id={$v['p_id']}">查看</a>
+								<a href="index.php?do=user&view=suggest&ac=del&page={$page}&p_id={$v['p_id']}" onclick="return cdel(this);">删除</a>
+							{else}
+								<a href="index.php?do=user&view=suggest_reply&suggest_id={$v['p_id']}">回复</a>
+							{/if}
+						</td>
+ 			        </tr>
+					{/loop}
+					 </tbody>
+			        </table>
+					{if $pages['page']}
+					<div class="page">{$pages['page']}</div>
+					{/if}
+					</div>
+			</form>
+        </div>
+	</div>
+<!--{template ADMIN_DIRECTORY/tpl/admin_footer}-->

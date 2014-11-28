@@ -1,0 +1,47 @@
+<anychart>
+  <settings>
+    <animation enabled="false"/>
+  </settings>
+  <charts>
+    <chart plot_type="Pie">
+      <data_plot_settings enable_3d_mode="false">
+        <pie_series>
+          <tooltip_settings enabled="true">
+            <format>
+                <![CDATA[{%Name}
+盈利: {%Value}
+百分比: {%YPercentOfSeries}{numDecimals: 2}%]]>
+            </format>
+            <background>
+              <corners type="Rounded" all="3"/>
+            </background>
+          </tooltip_settings>
+
+          <label_settings enabled="true" mode="Outside" multi_line_align="Center">
+            <background enabled="false"/>
+            <position anchor="Center" valign="Center" halign="Center" padding="20"/>
+            <format>
+                <![CDATA[{%Name}
+￥{%Value} ({%YPercentOfSeries}{numDecimals:1}%)]]>
+            </format>
+            <font bold="False" size="12"/>
+            <states><hover><font underline="true"/></hover></states>
+          </label_settings>
+          <connector color="Black" opacity="0.4"/>
+        </pie_series>
+      </data_plot_settings>
+      <data><series name="Series 1"><point name="威客任务" y="1892.5"/><point name="威客商城" y="0.41"/><point name="增值服务" y="70"/><point name="用户认证" y="1"/></series></data>
+		<chart_settings>
+        <title enabled="true" padding="15">
+          <text>盈利分析报表</text>
+          <font color="Green" render_as_html="true" />
+        </title>
+        <footer enabled="true" text_align="Center">
+    		<text><![CDATA[(注:点击右键可打印、生成图片、pdf文档等)]]></text>
+    		<background enabled="False"/>
+    		<font render_as_html="True" size="10"/>
+    	</footer>
+      </chart_settings>
+    </chart>
+  </charts>
+</anychart>

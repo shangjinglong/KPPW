@@ -1,0 +1,100 @@
+<!--{template ADMIN_DIRECTORY/tpl/admin_header}-->
+
+ <div class="page_title">
+    	<h1>{$_lang['integrate_vip']}</h1>
+        <div class="tool">
+            <a href="index.php?do=$do&view=$view&type=uc" {if $type=="uc"}class="here" {/if}>Ucenter{$_lang['integrate_user']}</a>
+            <a href="index.php?do=$do&view=$view&type=pw" {if $type=="pw"}class="here" {/if}>PhpWind{$_lang['integrate_user']}</a>
+    	</div>
+</div>
+<!--页头结束--> 
+
+<div class="box post">
+    <div class="tabcon">
+    		<div class="title"><h2>PhpWind{$_lang['integrate_user']}</h2></div>
+            <div class="detail">
+            	<form action="index.php?do=config&view=integration&type=pw&ac=setting" method="post">
+		        <input type="hidden" name="settingnew[UC_DBCONNECT]" value="0">
+		        <table width="100%" border="0" cellspacing="0" cellpadding="0">
+		            <tr>
+		                <th scope="row" width="180">PhpWind {$_lang['communication_key']}:</th>
+		                <td><input name="settingnew[UC_KEY]" value="<!--{UC_KEY}-->" type="text" class="txt" style="width: 260px;"/></td>
+		                <td> {$_lang['phpwind_set_the_same_communication_key']}</td>
+		            </tr>
+					
+		            <tr>
+		                <th scope="row">PhpWind {$_lang['official_website']}:</th>
+		                <td><input name="settingnew[UC_API]" value="<!--{UC_API}-->" type="text" class="txt" size="50" style="width: 260px;"/>
+		                </td>
+		                <td> {$_lang['phpwind_important_reminder']}</td>
+		            </tr>
+		            <tr>
+		                <th scope="row">PhpWind {$_lang['ip_address']}:</th>
+		                <td><input name="settingnew[UC_IP]" value="<!--{UC_IP}-->" type="text" class="txt" style="width: 260px;"/></td>
+		                <td> {$_lang['phpwind_tips_about_domain_cannot_access']}</td>
+		            </tr>
+					
+	                <tr>
+	                    <th scope="row">PhpWind {$_lang['database_server_address']}:</th>
+	                    <td><input name="settingnew[UC_DBHOST]" value="<!--{UC_DBHOST}-->" type="text" class="txt" style="width: 260px;"/></td>
+	                    <td>{$_lang['phpwind_tips_about_database_port']}</td>
+	                </tr>
+					
+	                <tr>
+	                    <th scope="row">PhpWind {$_lang['database_username']}:</th>
+	                    <td><input name="settingnew[UC_DBUSER]" value="<!--{UC_DBUSER}-->" type="text" class="txt" style="width: 260px;"/></td>
+	                    <td>&nbsp;</td>
+	                </tr>
+
+	                <tr>
+	                    <th scope="row">PhpWind {$_lang['database_password']}:</th>
+	                    <td><input name="settingnew[UC_DBPW]" value="<!--{UC_DBPW}-->" type="password" class="txt" style="width: 260px;"/></td>
+	                    <td>&nbsp;</td>
+	                </tr>
+
+	                <tr>
+	                    <th scope="row">PhpWind {$_lang['database_name']}:</th>
+	                    <td><input name="settingnew[UC_DBNAME]" value="<!--{UC_DBNAME}-->" type="text" class="txt" style="width: 260px;"/></td>
+	                    <td>&nbsp;</td>
+	                </tr>
+
+	                <tr>
+	                    <th scope="row">PhpWind {$_lang['database_prefix']}:</td>
+	                    <td><input name="settingnew[UC_DBTABLEPRE]" value="<!--{UC_DBTABLEPRE}-->" type="text" class="txt" style="width: 260px;"/></td>
+	                    <td>&nbsp;</td>
+	                </tr>
+
+	                <tr>
+	                    <th scope="row">{$_lang['database_coding']}:</td>
+	                    <td><input name="settingnew[UC_DBCHARSET]" value="<!--{UC_DBCHARSET}-->" type="text" class="txt" style="width: 260px;"/></td>
+	                    <td>&nbsp;</td>
+	                </tr>
+
+	                <tr>
+	                    <th scope="row">PhpWind{$_lang['which_coding']}:</td>
+	                    <td><input name="settingnew[UC_CHARSET]" value="<!--{UC_CHARSET}-->" type="text" class="txt" style="width: 260px;"/></td>
+	                    <td>&nbsp;</td>
+	                </tr>
+
+	                <tr>
+	                    <th scope="row">PhpWind {$_lang['app_id']}:</td>
+	                    <td><input name="settingnew[UC_APPID]" value="<!--{UC_APPID}-->" type="text" class="txt" style="width: 260px;"/></td>
+	                    <td>{$_lang['phpwind_app_id']}</td>
+	                </tr>
+					
+	                <tr>
+	                	<th scope="row">&nbsp;</th>
+						<td>
+		                    <div class="clearfix padt10">
+							<button type="submit" name="sbt_edit" class="positive pill primary button" value="{$_lang['submit']}"/><span class="check icon"></span>{$_lang['submit']}</button>
+							</div>
+						<td>
+						<td>&nbsp;</td>
+	                </tr>
+		        </table>
+		    </form>
+            </div>
+	</div>
+</div>
+
+<!--{template ADMIN_DIRECTORY/tpl/admin_footer}-->

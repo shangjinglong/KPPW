@@ -1,0 +1,153 @@
+<!--{template ADMIN_DIRECTORY/tpl/admin_header}--> 
+<div class="page_title">
+    <h1>{$_lang['ads_manage']}</h1>
+    <div class="tool">
+        <a href="index.php?do={$do}&view=ad" >{$_lang['advertising']}</a>
+        <a class="here" href="index.php?do={$do}&view=ad_list&page={$page}&ord={$ord}" >{$_lang['ads_list']}</a>
+       
+    </div>
+</div>
+    <!--页头结束-->
+ 
+    <!--提示结束-->
+     
+        <div class="box search p_relative">
+    	<div class="title"><h2>{$_lang['search']}</h2></div>
+        <div class="detail" id="detail">
+           
+		    <form action="#" method="get" name="s" id="sl">
+            	<input type="hidden" name="do" value="$do">
+				<input type="hidden" name="view" value="$view">
+				<input type="hidden" name="type" value="$type">
+				<input type="hidden" name="page" value="$page">
+				
+                <table cellspacing="0" cellpadding="0">
+					<tbody>
+                        <tr>
+                           
+                            <th>{$_lang['ads_name']}</th>
+                            <td><input type="text" value="$w['art_title']" name="ad_name" class="txt"/>*{$_lang['search_by_like']}</td>
+                             <th></th><td></td>
+						</tr>
+    
+                        
+                        <tr> 
+                            <th>{$_lang['ads_type']}</th>
+                            <td>
+                            	<select class="ps vm" name="target_id" id="catid" onchange="return sync_select();">
+                            		<option value=""/>{$_lang['please_choose']}</option>
+                            	{loop $targets_arr $key $value}
+									<option {if $target_id==$value['target_id']}selected="selected"{/if} value="{$value['target_id']}"/>{$value['name']}</option>
+								{/loop}
+								
+								</select>
+								</td>
+							<th>{$_lang['result_order']}</th>
+							<td>
+                                <select name="ord[]">
+                                	<option value="ad_id" {if $ord['0']=='ad_id' or !isset($ord['0'])} selected="selected"{/if}>{$_lang['default']}{$_lang['order']}</option>
+                                	<option value="end_time" {if $ord['0']=='end_time' } selected="selected"{/if}>{$_lang['end_time']}</option>
+                                </select>
+                                <select name="ord[]">
+                               		 <option {if $ord['1']=='desc' or !isset($ord['1'])}selected="selected" {/if} value="desc">{$_lang['desc']}</option>
+                                	<option {if $ord['1']=='asc'}selected="selected" {/if} value="asc">{$_lang['asc']}</option>
+                                </select>
+							</td> 
+                            <th>{$_lang['list_result']}</th>
+                            <td><select name="page_size">
+									<option value="10" {if $page_size=='10'}selected="selected"{/if}>{$_lang['page_size']}10</option>
+									<option value="20" {if $page_size=='20'}selected="selected"{/if}>{$_lang['page_size']}20</option>
+									<option value="30" {if $page_size=='30'}selected="selected"{/if}>{$_lang['page_size']}30</option>
+								</select>
+                              	<button class="pill" type="submit" value="{$_lang['search']}" name="sbt_search">
+                            		<span class="icon magnifier"></span>{$_lang['search']}
+								</button>
+								</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </form>
+			
+        </div>
+    </div>
+    <!--搜索结束-->
+    
+    <div class="box list">
+    	<div class="title"><h2>{$_lang['ads_list']}</h2></div>
+        <div class="detail">
+        	<form action="" id='frm_list' method="post">
+        	<div id="ajax_dom"> 
+              <table cellpadding="0" cellspacing="0">
+                <tbody>
+                  <tr>
+                    <th width="20%">{$_lang['ads_title']}</th>
+					<th width="15%">{$_lang['location']}</th>
+                    <th width="15%">{$_lang['start_time']}</th>
+                    <th width="15%">{$_lang['end_time']}</th>
+					<th width="15%">编辑时间</th>
+					<th width="10%">是否可用</th>
+                    <th>{$_lang['operate']}</th>
+                  </tr>
+                  
+                  {loop $ad_arr $key $value}
+                  <tr class="item">
+                  
+                    <td class="td28">{$value['ad_name']}</td>
+                    <td>{$targets_arr[$value['target_id']]['name']}</td><!-- 投放范围 -->
+				    <td>{if $value['start_time']}<!--{date('Y-m-d',$value['start_time'])}-->{else}永久有效{/if}</td> <!-- 起始时间 -->
+                    <td>{if $value['end_time']}<!--{date('Y-m-d',$value['end_time'])}-->{else}永久有效{/if}</td>
+					<td><!--{date('Y-m-d',$value['on_time'])}--></td>
+                    <td>{if $value['is_allow']==1}<span style="color:green">{$_lang['available']}</span>{else}<span style="color:red">{$_lang['not_available']}</span>{/if}</td><!-- 是否可用 -->
+                    <td>
+						<!-- <a href="../index.php?do=article&id=" target="_blank">{$_lang['view']}</a> -->
+						<a href="index.php?do={$do}&view=ad_add&ac=edit&ad_id={$value['ad_id']}&target_id={$value['target_id']}&page={$page}" class="button dbl_target"><span class="pen icon"></span>{$_lang['edit']}</a>
+						<!--<a href="index.php?do={$do}&view=ad_list&ac=del&ad_id=$value['ad_id']&target_id={$value['target_id']}&page={$page}&ord={$ord}"  onclick="return cdel(this);" class="button"><span class="trash icon"></span>{$_lang['delete']}</a>-->
+						<!-- <a href="#" onclick="javascript:setCopy(document.getElementById('code_{$value['ad_id']}').value, {$_lang['copy_code']});" class="button"><span class="book icon"></span>{$_lang['copy']}</a>  -->
+					</td>
+                  </tr>
+                  {/loop}
+                  <tr>
+                    <td colspan="7">
+	                    <div class="clearfix">
+	                        <input type="hidden" name="sbt_action" class="sbt_action"/>
+							<select class="ps vm" id="ad_target_id">
+								<option value="">{$_lang['please_choose']}</option>
+                            	{loop $targets_arr $key $value}
+									<option {if $target_id==$value['target_id']||$key==1}selected="selected"{/if} value="{$value['target_id']}">{$value['name']}</option>
+								{/loop}
+							</select>
+							<a href="#" id="add_ad" class="button" onclick="return setlinks();"><span class="check icon"></span>{$_lang['add_ads']}</a>
+	                    </div>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+			  <div class="page">{$pages['page']}</div>
+              </div>
+        	</form>
+        </div>       
+    </div>
+    <script type="text/javascript">
+    	function setlinks(){
+    		var target_id=document.getElementById("ad_target_id");
+    		var alink=document.getElementById("add_ad");
+    		if(target_id.value!=""){
+    			alink.href="index.php?do={$do}&view=ad_add&target_id="+target_id.value;
+    			return true;
+    		}
+    		return false;
+    	}
+    	function sync_select(){
+    		var cat=document.getElementById("catid");
+    		var target=document.getElementById("ad_target_id");
+    		if(cat.value!=""){
+    			var i=cat.selectedIndex;
+    			target.options['i'].selected=true;
+    		}
+    	}
+    	function update_order(n_id,n_value){
+    		$.get("index.php?do=tpl&view=ad_list&action=u_order",{u_id:n_id,u_value:n_value});
+    	}
+    </script>
+ 	<!--主体结束-->
+<!--{template ADMIN_DIRECTORY/tpl/admin_footer}-->

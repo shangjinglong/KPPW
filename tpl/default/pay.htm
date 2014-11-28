@@ -1,0 +1,91 @@
+<!--{template header}-->
+
+<div  class="container">
+<div id="main">
+	<div class="payfor">
+		
+		<div class="payfor-money">
+				<div class="alert alert-warning">
+					<p>支付项目：{$title}</p>
+					<p>
+					您要支付的金额为：<strong class="money"><sub>￥</sub>{$cash} <sub>元</sub></strong>
+					</p>
+				</div>
+		</div>
+		<!-- payfor-money end -->
+
+		<div class="payfor-progress">
+			<ul class="step step3">
+		      <li class="step-item action">
+		        <span class="step-num ">1</span>
+		        <div class="step-text step-bottom">
+		          <p><strong class="step-title ">选择支付方式</strong></p>
+		        </div>
+		      </li>
+		      <li class="step-item {if $status==1}action{/if}" id="payfor-progress-li-2" >
+		        <span class="step-num " >2</span>
+		        <div class="step-text step-bottom">
+		          <p><strong class="step-title">正在支付</strong></p>
+		        </div>
+		      </li>
+		      <li class="step-item  {if $status==1}action{/if}">
+		        <span class="step-num">3</span>
+		        <div class="step-text step-bottom">
+		          <p><strong class="step-title ">完成支付</strong></p>
+		        </div>
+		      </li>
+		    </ul>
+		</div>
+		<!-- payfor-progress end -->
+		
+		
+		<div class="payfor-body">
+			{if $status==1}
+			<p class="lead text-success text-center mt_20 "><i class="fa fa-check-circle"></i> 恭喜，您已完成付款 <sub>￥</sub>$cash<sub>元</sub>！</p>
+			<div class="text-center mb_20">
+				<a class="btn btn-default" href="index.php?do=user&view=finance&op=details">到用户中心查看详细</a>
+			</div>
+			{else}
+			 <form role="form" action="{$strUrl}" method="post" class="form-horizontal" name="payForm" id="payForm" target="_blank">
+			 	<input type="hidden" name="formhash" id="formhash" value="{FORMHASH}">
+				<input name="id" value="{$id}" type="hidden">
+			 	<input name="type" value="{$type}" type="hidden">
+				<input name="cash" value="{$cash}" type="hidden">
+			<div class="tab-content">
+			  <div class="tab-pane active" id="online">
+			  	<div class="payfor-selecter">
+					{loop $arrOnlinePayList $k $v}
+					{if $v['pay_status']}
+					<span class="btn btn-default">
+					<label class="radio-inline">
+					  <input type="radio" {if $v['payment']=='alipayjs'}checked="checked"{/if}  value="{$v['payment']}" name="bank">
+					  <img align="absmiddle" src="include/payment/{$v['payment']}/{$v['payment']}.gif" style="width:100px;" alt="{$v['pay_name']}" >
+					</label>
+					</span>
+					{/if}
+					{/loop}
+                </div>
+			  </div>
+			  </div>
+			  	<div class="text-center mb_20">
+						<button class="btn btn-primary" type="button" onclick="payTips();$('#payForm').submit();">确定，去付款</button>
+					</div>
+
+		</form>
+		{/if}
+		<!-- pafor-body end-->
+	</div>
+	<!-- payfor end -->
+</div>        
+</div>
+<script type="text/javascript">
+
+var payStatus=$payStatus;
+$(function(){
+	if(payStatus==0){
+		tipsOp('<div  id="payTips"><p class="info">线上支付接口未开启，请去<label for="pay_out"><a href="index.php?do=user&view=finance&op=rechargeoffline" class="text-primary">线下充值</a></label>支付!</p></div>');
+	}
+});
+</script>
+<script type="text/javascript" src="static/js/model/pay/pay.js"></script>
+<!--{template footer}-->

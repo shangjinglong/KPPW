@@ -1,0 +1,117 @@
+<!--{template ADMIN_DIRECTORY/tpl/admin_header}--> 
+ 
+	<div class="page_title">	
+    	<h1>{$_lang['buy_spend_payitem_record']}</h1>
+        
+	</div>
+    <!--页头结束-->
+
+    
+        <div  class="box search p_relative">
+    	<div class="title"><h2>{$_lang['search']}</h2></div>
+        <div class="detail" id="detail">
+           
+		    <form action="index.php?do={$do}&view={$view}" method="get" name="s" id="sl">
+            	<input type="hidden" name="do" value="$do">
+				<input type="hidden" name="view" value="$view">
+                <table cellspacing="0" cellpadding="0">
+					<tbody>
+						<tr>
+							<th>编号</th>
+                                <td><input type="text" value="$w['record_id']" name="w[record_id]" class="txt"/></td>
+							<th>{$_lang['username']}*</th>
+                                <td><input type="text" value="$w['username']" name="w[username]" class="txt"/></td>
+							<th></th><td></td>
+					   </tr>
+					
+					   <tr>
+							<th>{$_lang['pay_item_type']}</th>
+                            <td><select name="w[item_code]">
+                            	<option value="">{$_lang['please_choose']}</option>
+                            	{loop $add_service_type $k $v}
+                            	<option value="$k" {if $w['item_code']==$k}selected="selected"{/if}>{$v}</option>
+								{/loop}
+                            </select>
+							</td>
+							 <th>
+                         {$_lang['result_order']}
+                        </th>
+                        <td>
+                     <select name="w[ord][]">
+                           <option value="record_id" {if $w['ord']['0']=='record_id' or !isset($w['ord']['0'])} selected="selected"{/if}>{$_lang['default']}{$_lang['order']}</option>
+                           <option value="on_time" {if $w['ord']['0']=='on_time' } selected="selected"{/if}>{$_lang['spend_time']}</option>
+                      </select>
+                      <select name="w[ord][]">
+                            <option {if $w['ord']['1']=='desc' or !isset($w['ord']['1'])}selected="selected" {/if} value="desc">{$_lang['desc']}</option>
+                            <option {if $w['ord']['1']=='asc'}selected="selected" {/if} value="asc">{$_lang['asc']}</option>
+                      </select>
+                       </td>
+                        <th>
+                    {$_lang['list_result']}
+                         </th>
+                        <td>
+                            <select name="w[page_size]">
+                               <option value="10" {if $w['page_size']=='10'}selected="selected"{/if}>{$_lang['page_size']}10</option>
+                               <option value="20" {if $w['page_size']=='20'}selected="selected"{/if}>{$_lang['page_size']}20</option>
+                               <option value="30" {if $w['page_size']=='30'}selected="selected"{/if}>{$_lang['page_size']}30</option>
+                             </select>
+                             <button class="pill" type="submit" value={$_lang['search']} name="sbt_search">
+                                <span class="icon magnifier">&nbsp;</span>{$_lang['search']}
+                              </button>
+                           	</td>
+                     </tr>
+					 
+                    </tbody>
+                </table>
+            </form>
+			
+        </div>
+    </div>
+    <!--搜索结束-->
+	
+    <div class="box list">
+    	<div class="title"><h2>{$_lang['buy_spend_list']}</h2></div>
+        <div class="detail">
+        	<form  action="index.php?do={$do}&view={$view}"  id='frm_list' method="post">
+        	<div id="ajax_dom">
+        	<input type="hidden" name="page" value="{$page}" />
+              <table cellpadding="0" cellspacing="0">
+                <tbody>
+                  <tr>
+                    <th width="8%">使用记录编号</th>
+                    <th width="10%">{$_lang['pay_item_type']}</th>
+                    <th width="10%">{$_lang['username']}</th>
+                    <th width="10%">{$_lang['spend_type']}</th>
+					<th width="10%">{$_lang['spend_cost']}</th>
+                    <th width="10%">{$_lang['spend_number']}</th>
+                    <th width="17%">{$_lang['spend_time']}</th>
+                  </tr>
+                  
+                  {loop $payitem_record_arr $k $v}
+                  <tr class="item">
+                 	<td>{$v['record_id']}</td>
+					<td>{$add_service_type[$v['item_code']]}</td>
+                    <td>{$v['username']}</td>
+                    <td>{if $v['obj_type']=='task'}任务{else}商品/服务{/if}</td>
+                    <td>{c:$v['use_cash']}</td>
+                    <td>{$v['use_num']}</td>
+                    <td><!--{date('Y-m-d H:i:s',$v['on_time'])}--></td>
+                   </tr>
+                  {/loop}
+				  <tr>
+                    <td colspan="7">
+                               
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+			  <div class="page">{$pages['page']}</div>
+			</div>
+        	</form>
+			<div class="box tip clearfix p_relative">
+        		<div class="title t_r"><h2><span>{$_lang['user_buy_the_total_amount']}{$_lang['zh_mh']}<font color="red">{c:$all_buy_pro['cash']}</font></span></h2></div>
+			</div>
+        </div>       
+    </div>
+	<!--主体结束-->
+<!--{template ADMIN_DIRECTORY/tpl/admin_footer}-->

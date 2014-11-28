@@ -1,0 +1,143 @@
+<!--{template ADMIN_DIRECTORY/tpl/admin_header}-->
+<div class="page_title">
+    	<h1>{$_lang['global_config']}</h1>
+        <div class="tool">         
+            <a href="index.php?do=config&view=basic&op=info" {if $op == 'info'}class="here"{/if} > {$_lang['global_config']}</a>
+            <a href="index.php?do=config&view=basic&op=conf" {if $op == 'conf'}class="here"{/if} > {$_lang['basic_config']}</a>
+			<a href="index.php?do=config&view=basic&op=seo" {if $op == 'seo'}class="here"{/if} >{$_lang['seo_config']}</a>
+            <a href="index.php?do=config&view=mail" {if $view == 'mail'}class="here"{/if} >{$_lang['mail_config']}</a>
+    	</div>
+</div>
+<div class="box post">
+        <div class="tabcon">
+        	<div class="title"><h2>{$_lang['mail_config']}<span ><a href="#" style="font-size:small;">查看相关教程</a></span></h2></div>
+            <div class="detail">
+    <form name="frm_config_pay" action="#" method="post">
+ 
+        <table width="100%"  border="0" cellspacing="0" cellpadding="0" class="tab_m t_l">
+            <tr>
+                <th scope="row" width="160">
+                    {$_lang['mail_serve']}{$_lang['zh_mh']}
+                </th>
+                <td>
+                    <label for="rdo_mail_server_cat_mail">
+                        <input id="rdo_mail_server_cat_mail" type="radio" name="mail_server_cat"<!--{if $config_arr['mail_server_cat'] == "mail"}-->checked="checked" <!--{/if}-->value="mail"  />{$_lang['built_in_mail_serve']}
+                    </label>
+                    <label for="rdo_mail_server_cat_smtp">
+                        <input id="rdo_mail_server_cat_smtp" type="radio" name="mail_server_cat"<!--{if $config_arr['mail_server_cat'] == "smtp"}-->checked="checked" <!--{/if}-->value="smtp" />{$_lang['other_mail_serve']}
+                    </label>
+                </td>
+            </tr>
+            <tr>
+                <th scope="row">
+                    {$_lang['open_ssl']}(SSL){$_lang['zh_mh']}
+                </th>
+                <td>
+                    <label for="rdo_mail_ssl_no">
+                        <input id="rdo_mail_ssl_no" type="radio" name="mail_ssl"<!--{if $config_arr['mail_ssl']==2}-->checked="checked"<!--{/if}--> value="2" id="rdo_mail_ssl_no">{$_lang['no']}
+                    </label>
+                    <label for="rdo_mail_ssl_yes">
+                        <input id="rdo_mail_ssl_yes" type="radio" name="mail_ssl"<!--{if $config_arr['mail_ssl']==1}-->checked="checked"<!--{/if}--> value="1"  id="rdo_mail_ssl_yes">{$_lang['yes']}
+                    </label>
+                </td>
+            </tr>
+            <tr>
+                <th scope="row">
+                    {$_lang['outgoing_mail_server']}{$_lang['zh_mh']}
+                </th>
+                <td>
+                    <input type="text" size="50" name="smtp_url" value="{$config_arr['smtp_url']}" limit="len:3-100" msg="{$_lang['tips_about_outgoing_mail_server_length']}3-100" msgArea="txt_reg_limit_msg" class="txt"/><span id="txt_reg_limit_msg"></span>
+                    ({$_lang['mail_host']})
+                </td>
+            </tr>
+            <tr>
+                <th scope="row">
+                    {$_lang['mail_server_port']}{$_lang['zh_mh']}
+                </th>
+                <td>
+                    <input type="text" size="50" name="mail_server_port" value="{$config_arr['mail_server_port']}" limit="type:int" msg="{$_lang['port_must_be_an_integer']}" msgArea="txt_mail_server_port_msg" class="txt"/><span id="txt_mail_server_port_msg"></span>
+                    ({$_lang['port_default']}{$_lang['zh_mh']}25)
+                </td>
+            </tr>
+            <tr>
+                <th scope="row">
+                    {$_lang['mail_account_number']}{$_lang['zh_mh']}
+                </th>
+                <td>
+                    <input type="text" size="50" name="post_account" value="{$config_arr['post_account']}" limit="type:email" msg="{$_lang['mail_address_incorrect_format']}" msgArea="txt_post_account_msg" class="txt"/><span id="txt_post_account_msg"></span>
+                    ({$_lang['tips_about_account']})
+                </td>
+            </tr>
+            <tr>
+                <th scope="row">
+                    {$_lang['mail_password']}{$_lang['zh_mh']}
+                </th>
+                <td>
+                    <input type="password" size="50" name="account_pwd" value="{$config_arr['account_pwd']}" limit="len:0-20" msg="" msgArea="txt_account_pwd_msg" class="txt"/><span id="txt_account_pwd_msg"></span>
+                </td>
+            </tr>
+            <tr>
+                <th scope="row">
+                    {$_lang['mail_reply_address']}{$_lang['zh_mh']}
+                </th>
+                <td>
+                    <input type="text" size="50" name="mail_replay" value="{$config_arr['mail_replay']}" limit="type:email" msg="{$_lang['mail_address_incorrect_format']}" msgArea="txt_mail_replay_msg" class="txt"/><span id="txt_mail_replay_msg"></span>
+                </td>
+            </tr>
+            <tr>
+                <th scope="row">
+                    {$_lang['mail_coding']}{$_lang['zh_mh']}
+                </th>
+                <td>
+                    <label for="rdo_mail_charset_utf8">
+                        <input type="radio" id="rdo_mail_charset_utf8" name="mail_charset"<!--{if $config_arr['mail_charset']=="utf-8"}-->
+                        checked="checked"<!--{/if}-->
+                        value="utf-8" >{$_lang['mail_global_coding']}(utf-8)
+                    </label>
+                    <label for="rdo_mail_charset_gbk">
+                        <input type="radio" id="rdo_mail_charset_gbk" name="mail_charset"<!--{if $config_arr['mail_charset']=="gbk"}-->
+                        checked="checked"<!--{/if}-->
+                        value="gbk" >{$_lang['simplified_chinese']}
+                    </label>
+                </td>
+            </tr>
+            <tr>
+                <th scope="row">
+                    {$_lang['mail_address']}{$_lang['zh_mh']}
+                </th>
+                <td>
+                    <input type="text" size="50" id="txt_test_mail" name="txt_test_mail" class="txt"/>
+					<button type="button" id="btn_send_test" class="button pill" >{$_lang['mail_send_testing_mail']} </button>
+                </td>
+            </tr>
+            <tr>
+                <th scope="row">&nbsp;
+                    					
+                </th>
+                <td>
+                	<button type="submit"  name="submit" class="positive pill primary button" ><span class="check icon"></span>{$_lang['submit']}</button>
+					
+                </td>
+            </tr>
+        </table>
+    </form>
+</div>
+</div>
+</div>
+<script type="text/javascript">
+    $(function(){
+        $("#btn_send_test").click(function(){
+            var mail = $.trim($("#txt_test_mail").val());
+            if (isEmail(mail)) {
+                $.get("index.php?do=config&view=mail&email=" + mail, function(data){
+						art.dialog.alert(data); 
+                });
+            }
+            else {
+				art.dialog.alert("{$_lang['mail_address_incorrect_format']}");
+	 ;
+            }
+        })
+    })
+</script>
+<!--{template ADMIN_DIRECTORY/tpl/admin_footer}-->

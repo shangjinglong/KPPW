@@ -1,0 +1,185 @@
+<!--{template ADMIN_DIRECTORY/tpl/admin_header}-->
+<div class="page_title">
+    <h1>{$_lang['financial_model']}</h1>
+    <div class="tool">
+    	<a href="index.php?do={$do}&view=revenue">财务概况</a>
+    	<a href="index.php?do={$do}&&view=budget">网站收支</a>
+		<a href="index.php?do={$do}&view=all">{$_lang['flow_record']}</a>
+	    <a href="index.php?do={$do}&view=recharge" class="here">{$_lang['recharge_audit']}</a>
+	   <a href="index.php?do={$do}&view=withdraw">{$_lang['withdraw_audit']}</a>
+    </div>
+</div>
+<div class="box search p_relative">
+    <div class="title">
+        <h2>{$_lang['search']}</h2>
+    </div>
+    <div class="detail" id="detail">
+        <form action="#" method="post" id=frm_user_search>
+        	<input type="hidden" value="{$page}" name="page">
+        	 <table cellspacing="0" cellpadding="0">
+        	 	
+                <tbody>
+                    <tr>
+                    	 <th>
+                           {$_lang['recharge_single_num']}
+                        </th>
+                        <td>
+                            <input type="text" value="{$w['order_id']}" name="w[order_id]" class="txt" onkeyup="clearstr(this);"/>
+                        </td>
+						 <th>
+                            {$_lang['username']}*
+                        </th>
+                        <td>
+                            <input type="text" value="{$w['username']}" name="w[username]" class="txt"/>
+                        </td>
+						<th>
+                            {$_lang['order_type']}
+                        </th>
+                        <td>
+                            <select name="w[order_type]">
+                            		<option value="">---{$_lang['please_choose']}---</option>
+                            	{loop $charge_type_arr $k $v}
+								
+								 	<option {if $w['order_type']==$k}selected="selected" {/if}  value="{$k}">{$v}</option>
+								{/loop}
+                            </select>
+                       </td>
+					   
+			</tr>
+			<tr>
+                        <th>
+                            {$_lang['result_order']}
+                        </th>
+                        <td>
+                       <select name="w[ord][]">
+                           <option value="order_id" {if $w['ord']['0']=='order_id' or !isset($w['ord']['0'])} selected="selected"{/if}>{$_lang['default']}{$_lang['order']}</option>
+                           <option value="pay_time" {if $w['ord']['0']=='pay_time' } selected="selected"{/if}>{$_lang['recharge_time']}</option>
+                      </select>
+                      <select name="w[ord][]">
+                            <option {if $w['ord']['1']=='desc' or !isset($w['ord']['1'])}selected="selected" {/if} value="desc">{$_lang['desc']}</option>
+                            <option {if $w['ord']['1']=='asc'}selected="selected" {/if} value="asc">{$_lang['asc']}</option>
+                      </select>
+                       </td>
+                        <th>
+                                                    {$_lang['list_result']}
+                         </th>
+                        <td>
+                            <select name="w[page_size]">
+                               <option value="10" {if $w['page_size']=='10'}selected="selected"{/if}>{$_lang['page_size']}10</option>
+                               <option value="20" {if $w['page_size']=='20'}selected="selected"{/if}>{$_lang['page_size']}20</option>
+                               <option value="30" {if $w['page_size']=='30'}selected="selected"{/if}>{$_lang['page_size']}30</option>
+                             </select>
+                             <button class="pill" type="submit" value="{$_lang['search']}" name="sbt_search">
+                                <span class="icon magnifier">&nbsp;</span>{$_lang['search']}
+                              </button>
+                           </td>
+						   
+					<th>&nbsp;</th>
+                     <td>&nbsp;</td>
+                        </tr>
+                  </tbody>
+            </table>
+        </form>
+    </div>
+ </div>
+<!--搜索结束-->
+<div class="box list">
+    <div class="title">
+        <h2>{$_lang['statistics_info']}</h2>
+    </div>
+     <div class="detail">
+        <form action="index.php?do={$do}&view=recharge" method="post" id=frm_art_action>
+		 	<input type="hidden" value="{$page}" name="page">
+			<input type="hidden" name="w[page_size]" value="{$page_size}">
+			<div id="ajax_dom"><input type="hidden" value="{$page}" name="page">
+		  <table cellpadding="0" cellspacing="0">
+             <tbody>
+               <tr>
+               		<th>
+               			<input type="checkbox" id="checkbox" onclick="checkall();" class="checkbox" >编号
+               		</th>
+                    
+					   <th>
+                        {$_lang['order_type']}
+                    </th>
+                    <th>
+                        {$_lang['collection_type']}
+                    </th>
+                    <th>
+                        {$_lang['recharge_er']}
+                    </th>
+                    <th>
+                        {$_lang['recharge_cash']}
+                    </th>
+                    <th>
+                        {$_lang['recharge_time']}
+					 </th>
+                    <th>
+                        {$_lang['recharge_status']}
+                    </th>
+                    <th>
+                       {$_lang['operate']}
+                    </th>
+                </tr>
+  				 {loop $recharge_arr $k $v}
+                <tr class='item'>
+                	<td>
+                		<input type="checkbox" name="ckb[]" class="checkbox" value="{$v['order_id']}">{$v['order_id']}
+                	
+					</td>
+                   
+                    <td>
+                    	{$charge_type_arr[$v['order_type']]}
+                    </td>
+                    <td>
+                        <font color="red">
+                          {if $v['order_type']=='offline_charge'}
+							{$bank_arr[$v['pay_type']]}
+						  {else}
+							{$v['pay_type']}
+						  {/if}
+						</font>
+                    </td>
+                    <td>
+                        {$v['username']}
+                    </td>
+					<td>
+                        <font color=red>{c:$v['pay_money']}</font>
+                    </td>
+					 <td>
+                        <!--{date('Y-m-d H:i:s',$v['pay_time'])}-->
+                    </td>
+                    <td>
+                    	$status_arr[$v['order_status']]
+                    </td>
+                    <td>
+                    	{if $v['order_status']=='wait'&&$offline_pay[$v['pay_type']]}
+                    		<a href="index.php?do={$do}&view={$view}&ac=pass&order_id={$v['order_id']}" onclick="return cdel(this,'<div style=width:300px;word-wrap:break-word;word-break:normal>{if $v[pay_info]}{$_lang[user_recharge_att_info]}：$v[pay_info]{else}{$_lang[user_does_not_charge_info]}{/if}</div>{$_lang[confirm_cashin]}？');" class="button"><span class="cog icon"></span>{$_lang['confirm_of_payment']}？</a>
+                       		<a href="index.php?do={$do}&view={$view}&ac=del&order_id={$v['order_id']}" onclick="return cdel(this);" class="button"><span class="trash icon"></span>{$_lang['delete']}</a>
+                    	{/if}
+					</td>
+                  
+                </tr>{/loop}
+                    <tr>
+                    <td colspan="9">
+                               
+                           <div class="clearfix">
+                           	 
+							<label for="checkbox">{$_lang['select_all']}</label>　
+								<input type="hidden" name="sbt_action" class="sbt_action"/>   
+                           		<button name="sbt_action" type="submit" value="{$_lang['mulit_delete']}" onclick="return batch_act(this,'frm_art_action');" class="pill negative">
+                                      <span class="icon trash"></span>{$_lang['mulit_delete']}
+                                 </button>
+						  </div>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+			  <div class="page">{$pages['page']}</div>
+			</div>
+        	</form>
+        </div>
+        
+    </div>
+<!--{template ADMIN_DIRECTORY/tpl/admin_footer}-->
+   

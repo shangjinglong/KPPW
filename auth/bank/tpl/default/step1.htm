@@ -1,0 +1,95 @@
+<!--{template user/header}-->
+<div class="container">
+  <div class="nav-action">
+		<!--{template user/left_side}-->
+  </div>
+  <!-- nav-action end -->
+  <div class="content-panel">
+     <div class="tab">
+      <!--{template user/account_auth_nav}-->
+      </div>
+      <div class="tab_detail">
+      <p class="text-warning"><i class="fa fa-exclamation-circle"></i>  警告：以下帐户信息以网上为准，非本站金融体系,信息误差概不负责</p>
+
+      <div class="table-responsive">
+        <table class="table table-hover">
+          <thead>
+            <tr>
+              <th>开户银行</th>
+              <th>银行账户类型</th>
+              <th>银行卡卡号</th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody>
+            <!--{eval $ki=0;}-->{loop $arrAccountLists $v}<!--{eval $ki++;}-->
+            <tr>
+              <td>
+
+                <img src="static/img/system/kppw_2.0_{$v[bank_name]}.png" alt="{$bank_arr[$v[bank_name]]}" title="{$bank_arr[$v[bank_name]]}"/>
+                </td>
+                <td>
+                  {if $v['bank_type']=='1'}个人{else}企业{/if}
+                </td>
+                <td>
+                <!--{eval echo kekezu::set_star($v[card_num],3,3);}-->
+              </td>
+              <td>
+                <div class="pull-right">
+                  {if $v['auth_status']==1}
+                    <span class="label label-success"><i class="fa fa-check"></i> 认证成功</span>
+                  {elseif $v['auth_status']==2}
+                    <span class="label label-warning">认证失败</span>
+                  {else}
+                    <span class="label label-default">未认证</span>
+                  {/if}
+
+                  {if $v['auth_status']}
+                      <button type="button" class="btn btn-default btn-xs" onclick="opBankAuth('你确定要取消该认证吗？','{$strUrl}&step=step1&action=cancelAuth&step=step1&intBankAid={$v['bank_a_id']}');">
+                          取消认证
+                      </button>
+                          {if $v['auth_status']==1}
+                              <button type="button" class="btn btn-default btn-xs" onclick="location.href='{$strUrl}&step=step3&intBankAid=$v['bank_a_id']&ver=1'" value="{$_lang['view']}" name="{$_lang['view']}">
+                                  查看
+                              </button>
+                          {/if}
+                   {else}
+                          {if !$auth_bank[$v[bank_id]]}
+                              <button type="button" class="btn btn-primary btn-xs" onclick="opBankAuth('你确定现在就提交认证吗？','{$strUrl}&action=subAuth&step=step1&intBankId={$v['bank_id']}');">
+                                  立即认证
+                              </button>
+                              <button type="button" class="btn btn-danger btn-xs" onclick="opBankAuth('你确定要解除绑定该认证吗？','{$strUrl}&action=unBind&step=step1&intBankId={$v['bank_id']}');">
+                                  解除绑定
+                              </button>
+                          {else}
+                              <button type="button"  class="btn btn-primary btn-xs" onclick="location.href='{$strUrl}&step=step2&intBankAid={$v['bank_a_id']}&ver=1'">
+                                  继续认证
+                              </button>
+                            <button type="button" class="btn btn-danger btn-xs" onclick="opBankAuth('你确定要删除该认证吗？','{$strUrl}&action=delAuth&step=step1&intBankId={$v['bank_id']}');">
+                                删除
+                            </button>
+                          {/if}
+                    {/if}
+                </div>
+              </td>
+            </tr>
+            {/loop}
+
+          </tbody>
+        </table>
+      </div>
+
+      <div class="action-bar">
+        <div class="action-item">
+          <a class="btn btn-default" href='index.php?do=user&view=account&op=addbankinfo'>
+              <i class="fa fa-plus-circle"></i> 添加新账户
+          </a>
+        </div>
+      </div>
+
+
+      </div>
+  </div>
+  </div>
+<script src="static/js/model/user/auth.js"></script>
+<!--{template user/footer}-->

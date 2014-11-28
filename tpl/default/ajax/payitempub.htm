@@ -1,0 +1,55 @@
+				{if TOOL === TRUE}
+				<h2 class="statistics-title">您可能会需要</h2>
+				<div class="statistics-body ">
+		            <div class="table-responsive">
+		            <table class="table table-hover table-condensed appreciation">
+		            <tbody>
+		            {loop $arrPayitemLists $k $v}
+		              <tr>
+		                <td><span class="marked {$v['style']}">{$v['item_name']}</span></td>
+		                <td width="50%">
+		                	<p>{$v['item_desc']}</p>
+		                	<p>{$v['exttips']}</p>
+		                </td>
+		                <td width="5%">
+		                  <div class="form-group">
+
+		                    <div class="input-group" style="width:100px">
+		                    <span class="input-group-addon">购买</span>
+		                      <input type="text" data-code="{$v['item_code']}" data-unit-price="{$v['item_cash']}" name="txt_{$v['item_code']}" id="txt_{$v['item_code']}" class="form-control" value="0" size="3"  maxlength="{$v['maxlength']}">
+								<span class="input-group-addon">{$v['item_standard']}</span>
+		                      </div>
+		                    </div>
+		                </td>
+		                <td>单价:<span class="money"><sub>￥</sub>{$v['item_cash']}</span> / {$v['item_standard']}</td>
+		              </tr>
+		              {/loop}
+		            </tbody>
+		          </table>
+		          </div>
+		          <!-- table-responsive end -->
+		        </div>
+             {/if}
+     <div class="statistics-all">
+         <p class="{if $do == 'pubgoods'}hidden{/if}">
+           <strong class="statistics-title">任务费用合计：</strong>
+           <span class="money"><sub>￥</sub> <span id="task-costs"><!--{eval echo floatval($arrPubInfo['txt_task_cash'])}--></span> <sub>元</sub></span>
+         </p>
+		 {if TOOL === true}
+         <p>
+           <strong class="statistics-title">增值费用合计：</strong>
+           <span class="money"><sub>￥</sub> <span id="payitem-costs">0</span> <sub>元</sub></span>
+         </p>
+		 {/if}
+         <p>
+           <strong class="statistics-title">费用总计：</strong>
+           <input type="hidden" name="hdn_total_costs" id="hdn-total-costs" value="0">
+           <span class="money"><sub>￥</sub> <span id="total-costs"><!--{eval echo floatval($arrPubInfo['txt_task_cash'])}--></span> <sub>元</sub></span>
+         </p>
+         <p>
+           <strong class="statistics-title">账户余额：</strong>
+           <span class="money"><sub>￥</sub> <!--{eval echo floatval($gUserInfo['balance'])}--> <sub>元</sub></span>
+         </p>
+       </div>
+
+<script type="text/javascript" src="static/js/model/payitem/itempub.js"></script>

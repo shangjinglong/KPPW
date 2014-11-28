@@ -1,0 +1,215 @@
+<!--{template user/header}-->
+<div class="container">
+  <div class="nav-action">
+    <!--{template user/left_side}-->
+  </div>
+  <!-- nav-action end -->
+
+  <div class="content-panel">
+    <div class="user-short">
+
+        <div class="media">
+          <div class="user-avatar">
+          <a href="index.php?do=seller&id={$gUid}">
+          	<!--{userpic($gUid,'larger')}-->
+          </a>
+        </div>
+        <div class="media-body">
+
+          <div class="user-info">
+            <h2 class="media-heading username">{$username}</h2>
+
+            <div class="p-row">
+              账号认证：
+			  {loop $arrAuthItems $k $v}
+			  {if $k!=$strUncode}
+              {if $arrAuthInfos[$k]['auth_status']==1}
+				<a href="index.php?do=user&view=account&op=auth&code={$v['auth_code']}"><img class="mar0" src="{$v['auth_small_ico']}" width="16px" height="16px" alt="" title="{$v['auth_title']}"></a>
+				{else}
+				<a href="index.php?do=user&view=account&op=auth&code={$v['auth_code']}"><img class="mar0" src="{$v['auth_small_n_ico']}" width="16px" height="16px" alt="" title="{$v['auth_title']}"></a>
+				{/if}
+			  {/if}
+			  {/loop}
+            </div>
+
+            <div class="p-row">
+              现金：<b class="money">{c:$gUserInfo['balance']}</b>
+              <a href="index.php?do=user&view=finance&op=withdraw" class="btn btn-default btn-xs">提现</a>
+              <a href="index.php?do=user&view=finance&op=rechargeonline" class="btn btn-default btn-xs">充值</a>
+            </div>
+
+
+            <div class="p-row">
+              手机：{if $gUserInfo['mobile']}{$gUserInfo['mobile']}{else}暂无{/if}
+            </div>
+
+            <div class="p-row">
+              雇主等级：{$arrBuyerLevel['pic']}
+            </div>
+
+            <div class="p-row">
+              Q Q：{if $gUserInfo['qq']}{$gUserInfo['qq']}{else}暂无{/if}
+            </div>
+
+            <div class="p-row">
+              威客等级：{$arrSellerLevel['pic']}
+            </div>
+
+            <div class="p-row">
+              邮箱：{if $gUserInfo['email']}{$gUserInfo['email']}{else}暂无{/if}
+            </div>
+
+
+
+            <div class="p-row">
+              上次登录时间：<!--{eval echo date('Y-m-d H:i:s',$gUserInfo['last_login_time'])}-->
+            </div>
+
+         </div>
+
+        </div>
+
+      </div>
+    </div>
+    <!-- user-short end -->
+
+    <div class="horizontal-row">
+      <div class="user-type">
+
+          <div class="type-heading">
+            <h3 class="type-title">我是雇主</h3>
+          </div>
+          <div class="type-body">
+            <ul class="count">
+              <li class="item"><span class="num">{$gUserInfo['buyer_credit']}</span>信誉值：</li>
+              <li class="item"><span class="num">{$floatMarkRateG}<sub>%</sub></span>好评率：</li>
+              <li class="item"><span class="num">{$gUserInfo['pub_num']}</span>发布任务数：</li>
+              <li class="item"><span class="num"><sub></sub>{c:$floatPubTask[0]['cash']}</span>支付任务款：</li>
+              <li class="item"><span class="num">{$floatPayService[0]['count']}</span>购买商品数：</li>
+              <li class="item"><span class="num"><sub></sub>{c:$floatPayService[0]['cash']}</span>支付服务款：</li>
+            </ul>
+          </div>
+          <div class="type-footer">
+            <ul class="count tips">
+              <li class="item"><strong>雇主提醒</strong></li>
+              <li class="item">待付款 <span class="badge">{if $arrTaskCount[0]['count']}{$arrTaskCount[0]['count']}{else}0{/if}</span></li>
+              <li class="item">待选稿 <span class="badge">{if $arrTaskCount[3]['count']}{$arrTaskCount[3]['count']}{else}0{/if}</span></li>
+              </ul>
+          </div>
+      </div>
+      <!-- user-type end -->
+
+      <div class="user-type">
+
+          <div class="type-heading">
+            <h3 class="type-title">我是威客</h3>
+          </div>
+          <div class="type-body">
+            <ul class="count">
+              <li class="item"><span class="num">{$gUserInfo['seller_credit']}</span>能力值：</li>
+              <li class="item"><span class="num">{$floatMarkRateS}<sub>%</sub></span>好评率：</li>
+              <li class="item"><span class="num">{$gUserInfo['accepted_num']}</span>中标稿件数：</li>
+              <li class="item"><span class="num">{c:$floatBidTask[0]['cash']}</span>获得任务款：</li>
+              <li class="item"><span class="num">{$floatSaleService[0]['count']}</span>出售商品数：</li>
+              <li class="item"><span class="num">{c:$floatSaleService[0]['cash']}</span>获得服务款：</li>
+            </ul>
+          </div>
+          <div class="type-footer">
+            <ul class="count tips">
+              <li class="item"><strong>威客提醒</strong></li>
+              <li class="item">待接受订单 <span class="badge">{if $arrServiceWait['0']['count']}{$arrServiceWait['0']['count']}{else}0{/if}</span></li>
+              <li class="item">待确认完工 <span class="badge">{if $strServiceComp['0']['count']}{$strServiceComp['0']['count']}{else}0{/if}</span></li>
+              </ul>
+          </div>
+      </div>
+      <!-- user-type end -->
+    </div>
+    <!-- row end -->
+
+
+    <div class="feed-list">
+      	<ul class="tab">
+            <li class="active" >
+              <a href="#myfeed" data-toggle="tab">我的动态
+              </a>
+            </li>
+            <li>
+              <a href="#friendfeed" data-toggle="tab">好友动态
+              </a>
+            </li>
+
+        </ul>
+        <!--<a href="#myfeed" class="active" data-toggle="tab">我的动态</a>
+		<a href="#friendfeed" data-toggle="tab">好友动态</a>-->
+	  <div class="tab-content" >
+      <div class="tab_detail tab-pane  active" id="myfeed">
+          <div class="table-responsive">
+          <table class="table table-hover">
+          <tbody>
+          	{loop $arrMyFeeds $k $v}
+            <tr>
+              <td>
+                <span class="marked  {if $v['feedtype']=='pub_task'}marked-task{else}marked-shop{/if}">{if $v['feedtype']=='pub_task'}需求{else}出售{/if}</span>
+
+              </td>
+              <td>
+                {if $v['feedtype']=='pub_task'} 赏金{else}售价{/if}：<span class="money"><sub>￥</sub>
+               	 {if $v['event']['model_id']=='4'||$v['event']['model_id']=='5'||$v['event']['model_id']=='12'}
+               	 	{$arrCashCoves[$v['event']['cash']]['start_cove']}-<sub>￥</sub>{$arrCashCoves[$v['event']['cash']]['end_cove']}
+               	 {else}
+               	 	{$v['event']['cash']}
+               	 {/if}
+               	 </span>
+              </td>
+              <td>
+                <a href="$v['event']['url']">$v['event']['content']</a>
+              </td>
+              <td>{$model_list[$v[event][model_id]]['model_name']}</td>
+              <!--{eval $timedesc = kekezu::time2Units(intval(time()-$v['feed_time']),'minutes');}-->
+              <td>{if $timedesc}{$timedesc}前{else}刚刚{/if}发布</td>
+            </tr>
+			{/loop}
+          </tbody>
+        </table>
+        </div>
+        <!-- 我的动态 end -->
+        </div>
+      <!-- tab_detail end-->
+
+        <div class="tab_detail tab-pane" id="friendfeed">
+          <div class="table-responsive">
+          <table class="table table-hover">
+          <tbody>
+          	{loop $arrFriendFeeds $k $v}
+            <tr>
+              <td>
+                <span class="marked {if $v['feedtype']=='pub_task'}marked-task{else}marked-shop{/if}">{if $v['feedtype']=='pub_task'}需求{else}出售{/if}</span>
+
+              </td>
+              <td>
+                {if $v['feedtype']=='pub_task'}赏金{else}售价{/if}：<span class="money"><sub>￥</sub>{if $v['event']['model_id']=='4'||$v['event']['model_id']=='5'}{$arrCashCoves[$v['event']['cash']]['start_cove']}-<sub>￥</sub>{$arrCashCoves[$v['event']['cash']]['end_cove']}{else}{$v['event']['cash']}{/if}</span>
+              </td>
+              <td>
+                <a href="$v['event']['url']">$v['event']['content']</a>
+              </td>
+              <td>{$model_list[$v[event][model_id]]['model_name']}</td>
+ <!--{eval $timedesc = kekezu::time2Units(intval(time()-$v['feed_time']),'minutes');}-->
+              <td>{if $timedesc}{$timedesc}前{else}刚刚{/if}发布</td>
+            </tr>
+			{/loop}
+
+          </tbody>
+        </table>
+        <!-- 好友动态 end -->
+        </div>
+      </div>
+	  </div>
+      <!-- tab_detail end-->
+    </div>
+    <!-- feed-list end-->
+
+  </div>
+  <!-- content-panel end -->
+
+</div>
+<!--{template user/footer}-->

@@ -1,0 +1,86 @@
+  <form role="form" action="{$strUrl}" method="post" class="form-horizontal" name="editBasicEnterPriseForm" id="editBasicEnterPriseForm">
+  	<input type="hidden" name="formhash" id="formhash" value="{FORMHASH}">
+  	<input type="hidden" name="pk[uid]" value="{$gUserInfo['uid']}">
+    <div class="form-group">
+       <label class="col-sm-2 control-label">所属行业：</label>
+            <div class="col-sm-4">
+            <select class="form-control" name="indus_pid" id="indus_pid" onchange="getIndustry(this.value,'indus_id')">
+              <option value="-1">请选择父行业</option>
+              {loop $arrTopIndustrys $v}
+              		<option value="{$v['indus_id']}" {if $gUserInfo['indus_pid'] ==$v['indus_id']} selected="selected"{/if}>{$v['indus_name']}</option>
+              {/loop}
+            </select>
+          </div>
+          <div class="col-sm-4">
+            <select class="form-control" name="indus_id" id="indus_id">
+              <option value="-1">请选择子行业</option>
+              {if $gUserInfo['indus_id']}
+               {loop $arrAllIndustrys $v}
+					<option value="{$v['indus_id']}" {if $gUserInfo['indus_id'] == $v['indus_id']} selected="selected"{/if}>{$v['indus_name']}</option>
+               {/loop}
+              {/if}
+            </select>
+          </div>
+          <div class="col-sm-offset-2 col-sm-8">
+            <span class="help-block"></span>
+          </div>
+    </div>
+    <div class="form-group">
+      <label class="col-sm-2 control-label" for="company">企业/机构名称：</label>
+        <div class="col-sm-8">
+          <input type="text"  name="company" id="company"  class="form-control" value="{$arrEnterPriseInfo['company']}" {if $intAuthStatus} readonly="readonly"{/if}>
+        </div>
+
+        <div class="col-sm-offset-2 col-sm-8">
+            <span class="help-block"></span>
+        </div>
+    </div>
+    <div class="form-group">
+      	<label class="col-sm-2 control-label" for="licen_num">营业执照号码：</label>
+        <div class="col-sm-8">
+          <input type="text"  name="licen_num" id="licen_num"  class="form-control" value="{$arrEnterPriseInfo['licen_num']}" {if $intAuthStatus} readonly="readonly"{/if}>
+    	</div>
+  	</div>
+    <div class="form-group">
+      	<label class="col-sm-2 control-label" for="legal">法人代表：</label>
+        <div class="col-sm-8">
+          <input type="text"  name="legal" id="legal"  class="form-control" value="{$arrEnterPriseInfo['legal']}">
+    	</div>
+  	</div>
+    <div class="form-group">
+      	<label class="col-sm-2 control-label" for="staff_num">员工人数：</label>
+        <div class="col-sm-8">
+          <input type="text"  name="staff_num" id="staff_num"  class="form-control" value="{$arrEnterPriseInfo['staff_num']}">
+    	</div>
+  	</div>
+    <div class="form-group">
+      	<label class="col-sm-2 control-label" for="run_years">经营年数：</label>
+        <div class="col-sm-8">
+          <input type="text"  name="run_years" id="run_years"  class="form-control" value="{$arrEnterPriseInfo['run_years']}">
+    	</div>
+  	</div>
+    <div class="form-group">
+      	<label class="col-sm-2 control-label" for="url">企业/机构网址：</label>
+        <div class="col-sm-8">
+          <input type="text"  name="url" id="url"  class="form-control" value="{$arrEnterPriseInfo['url']}">
+    	</div>
+  	</div>
+    <div class="form-group">
+      	<label class="col-sm-2 control-label" for="address">详细地址：</label>
+        <div class="col-sm-8">
+          <input type="text"  name="address" id="address"  class="form-control" value="{$gUserInfo['address']}">
+    	</div>
+  	</div>
+    <div class="form-group">
+      	<label class="col-sm-2 control-label" for="summary">企业简介：</label>
+        <div class="col-sm-8">
+          	<textarea id="summary" name="summary" rows="5"   class="form-control"> {$gUserInfo['summary']}</textarea>
+    	</div>
+  	</div>
+  <div class="form-group">
+    <div class="col-sm-offset-2 col-sm-10">
+      <button class="btn btn-default" type="submit" value="1" >保存</button>
+      <span class="text-success" id="tipsUser"></span>
+    </div>
+  </div>
+</form>

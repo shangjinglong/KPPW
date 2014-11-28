@@ -1,0 +1,46 @@
+<!--{template header}-->
+<div  class="container">
+  <div id="main">
+ <div class="for-advertise">
+    <!--{ad_show(NEWSINFO_HEAD)}-->
+  </div>
+    <div class="single">
+
+      <ul class="nav nav-tabs single-nav">
+        <li {if $id=='299'}class="active"{/if}><a href="index.php?do=single&id=299" >关于我们</a></li>
+        <li {if $id=='300'}class="active"{/if}><a href="index.php?do=single&id=300" >联系我们</a></li>
+        <li {if $id=='312'}class="active"{/if}><a href="index.php?do=single&id=312">服务条款</a></li>
+        <li {if $id=='313'}class="active"{/if}><a href="index.php?do=single&id=313" >隐私政策</a></li>
+      </ul><!-- single-nav end -->
+
+      <div class="single-body ">
+
+
+
+        <div id="server-info" class=" single-detail">
+			<!--{eval echo stripslashes(htmlspecialchars_decode(stripslashes($arrArtInfo['content'])))}-->
+        </div>
+
+
+
+
+      </div><!-- single-body end -->
+
+    </div><!-- single end-->
+
+
+
+
+
+<div class="for-advertise">
+    <!--{ad_show(NEWSINFO_BOTTOM)}-->
+  </div>
+  <!-- for-advertise end -->
+  </div><!-- #main end-->
+</div><!-- .container end -->
+
+
+
+
+
+<!--{template footer}-->

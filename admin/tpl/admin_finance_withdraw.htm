@@ -1,0 +1,250 @@
+<!--{template ADMIN_DIRECTORY/tpl/admin_header}-->
+<div class="page_title">
+    <h1>{$_lang['financial_model']}</h1>
+    <div class="tool">
+    	<a href="index.php?do={$do}&view=revenue">财务概况</a>
+    	<a href="index.php?do={$do}&&view=budget">网站收支</a>
+		<a href="index.php?do={$do}&view=all">{$_lang['flow_record']}</a>
+	    <a href="index.php?do={$do}&view=recharge">{$_lang['recharge_audit']}</a>
+	   <a href="index.php?do={$do}&view=withdraw" class="here">{$_lang['withdraw_audit']}</a>
+    </div>
+</div>
+<div class="box tip clearfix p_relative" id="man_tips">
+   <div class="control"><a href="javascript:void(0);" title={$_lang['close']} onclick="$('#man_tips').fadeOut();"><b>&times;</b></a></div>
+   <div class="title"><h2>{$_lang['tips']}</h2></div>
+   <div class="detail pad10">
+      <ul>
+         <li>{$_lang['system_info']}</li>
+         <li>{$_lang['search_info']}</li>
+      </ul>
+   </div>
+</div>
+<div class="box search p_relative">
+    <div class="title">
+        <h2>{$_lang['search']}</h2>
+    </div>
+    <div class="detail" id="detail">
+        <form action="index.php?do={$do}&view=withdraw" method="post" id=frm_user_search>
+        	<input type="hidden" value="{$page}" name="page">
+        	 <table cellspacing="0" cellpadding="0">
+        	 	
+                <tbody>
+                    <tr>
+                    	 <th>
+                            {$_lang['financial_id']}
+                        </th>
+                        <td>
+                            <input type="text" value="{$w['withdraw_id']}" name="w[withdraw_id]" class="txt" onkeyup="clearstr(this);"/>
+                        </td>
+						 <th>
+                            {$_lang['username']}
+                        </th>
+                        <td>
+                            <input type="text" value="{$w['username']}" name="w[username]" class="txt"/>
+                        </td>
+						 <th>
+                         {$_lang['payment_account_type']}
+                        </th>
+                        <td>
+                            <select name="w[pay_type]">
+                            	<option value=''>{$_lang['all']}</option>
+								{loop $paytype_list $k $v}
+									<!--{eval $config = unserialize($v['config']);}-->
+									{if $config['pay_status']}
+										<option {if $w['pay_type']==$k}selected{/if} value="{$k}">{$k}</option>
+									{/if}
+                                {/loop}
+                            </select>
+                        </td>
+					   
+			</tr>
+			<tr>
+                        <th>
+                            {$_lang['result_order']}
+                        </th>
+                        <td>
+                      <select name="w[ord][]">
+                           <option value="withdraw_id" {if $w['ord']['0']=='withdraw_id' or !isset($w['ord']['0'])} selected="selected"{/if}>{$_lang['default']}{$_lang['order']}</option>
+                           <option value="applic_time" {if $w['ord']['0']=='applic_time' } selected="selected"{/if}>{$_lang['application_time']}</option>
+                           <option value="process_time" {if $w['ord']['0']=='process_time' } selected="selected"{/if}>{$_lang['processing_time']}</option>
+                      </select>
+                      <select name="w[ord][]">
+                            <option {if $w['ord']['1']=='desc' or !isset($w['ord']['1'])}selected="selected" {/if} value="desc">{$_lang['desc']}</option>
+                            <option {if $w['ord']['1']=='asc'}selected="selected" {/if} value="asc">{$_lang['asc']}</option>
+                      </select>
+                       </td>
+                        <th>
+                                                    {$_lang['list_result']}
+                         </th>
+                        <td>
+                            <select name="w[page_size]">
+                               <option value="10" {if $w['page_size']=='10'}selected="selected"{/if}>{$_lang['page_size']}10</option>
+                               <option value="20" {if $w['page_size']=='20'}selected="selected"{/if}>{$_lang['page_size']}20</option>
+                               <option value="30" {if $w['page_size']=='30'}selected="selected"{/if}>{$_lang['page_size']}30</option>
+                             </select>
+                             <button class="pill" type="submit" value={$_lang['search']} name="sbt_search">
+                                <span class="icon magnifier">&nbsp;</span>{$_lang['search']}
+                              </button>
+                           </td>
+                        </tr>
+                  </tbody>
+            </table>
+        </form>
+    </div>
+ </div>
+<!--搜索结束-->
+<div class="box list">
+    <div class="title">
+        <h2>{$_lang['statistical_info']}</h2>
+    </div>
+     <div class="detail">
+        <form action="index.php?do={$do}&view=withdraw" method="post" id='frm_art_action' >
+		 	<input type="hidden" value="{$page}" name="page">
+			<input type="hidden" name="w[page_size]" value="{$page_size}">
+			<div id="ajax_dom"><input type="hidden" value="{$page}" name="page">
+		  <table cellpadding="0" cellspacing="0">
+             <tbody>
+               <tr>
+               	   <th>
+	<input type="checkbox" id="checkbox" onclick="checkall();" class="checkbox" >编号
+</th>
+                    <th>
+                       {$_lang['withdraw_type']}
+					</th>
+                    <th>
+                        {$_lang['withdraw_people']}
+                    </th>
+                    <th>
+                       {$_lang['real_withdraw_amount']}/ {$_lang['withdraw_amount']}
+                    </th>
+                    <th>
+                        {$_lang['payment_accoun']}
+                    </th>
+                    <th>
+                        {$_lang['collection_name']}
+                    </th>
+                    <th>
+                        {$_lang['withdraw_state']}
+                    </th>
+                    <th>
+                        {$_lang['operate']}
+                    </th>
+                    <th>
+                        {$_lang['view']}
+                    </th>
+                </tr>
+  				 {loop $withdraw_arr $key $v}
+                <tr class='item'>
+                    <td>
+                        <input type="checkbox" name="ckb[]" id="ckb_$v['withdraw_id']" class="checkbox" value="{$v['withdraw_id']}">{$v['withdraw_id']}
+                    </td>
+                    <td>
+                        {if $v['pay_type']=='alipayjs'}
+							{$_lang['alipay']}
+						{else}
+							$bank_arr[$v['pay_type']]
+						{/if}
+                    </td>
+                    <td>
+                        {$v['username']}
+                    </td>
+                    <td>
+                        <font color="red">
+                        	{if $v['pay_type']=='alipayjs'}
+                        		<!--{eval $get_cash = keke_finance_class::alipayjs_format_moneys($v['withdraw_cash']);}-->
+                        	{else}
+                        		<!--{eval $get_cash = keke_finance_class::get_to_cash($v['withdraw_cash']);}-->
+                        	{/if}
+							{c:$v['withdraw_cash']}/{c:$get_cash}
+						</font>
+                    </td>
+                    <td>
+                        {$v['pay_account']}
+                    </td>
+                    <td>
+                        {$v['pay_username']}
+                    </td>
+                    <td>
+                    	{$status_arr[$v['withdraw_status']]}
+                    </td>
+                     <td>
+                    	{if $v['withdraw_status']==1}
+               			<a href="index.php?do={$do}&view={$view}&ac=pass&withdraw_id={$v['withdraw_id']}&page={$page}&is_submit=1" class="button">
+               			<span class="check  icon"></span>{$_lang['confirm_cash']}</a>
+                        <a href="index.php?do={$do}&view={$view}&ac=nopass&withdraw_id={$v['withdraw_id']}&page={$page}" onclick="return cdel(this);" class="button"><span class="trash icon"></span>{$_lang['nopass']}</a>
+                    	 {/if}
+					  </td>
+					   <td>
+                      	 <a href="index.php?do={$do}&view={$view}&ac=pass&withdraw_id={$v['withdraw_id']}&page={$page}" class="button dbl_target"><span class="book icon"></span>{$_lang['view']}</a>
+                   		</td>
+				 </tr>
+				 {/loop}
+                    <tr>
+                    <td colspan="9">
+                               
+                           <div class="clearfix">
+                           	 
+							 <input type="hidden" name="action_type" id="action_type" value="0" />
+							 
+							<label for="checkbox" onclick="checkall(event);">{$_lang['select_all']}</label>
+
+								 <input type="hidden" name="sbt_action" class="sbt_action"/>   
+								 {if $w['pay_type']!='alipayjs'}
+								 <button name="sbt_action" type="submit" value="{$_lang['mulit_review']}" onclick="return batch_act(this,'frm_art_action');" class="pill positive button">
+                                      <span class="icon check"></span>{$_lang['mulit_review']}
+                                 </button>
+								{else}
+								 <button name="sbt_action" type="button" value="{$_lang['mulit_payment']}" onclick="batch_pay();" class="pill positive button">
+                                      <span class="icon check"></span>{$_lang['mulit_payment']}
+                                 </button>
+								{/if} 
+                           		 <button name="sbt_action" type="submit" value="{$_lang['mulit_nopass']}" onclick="return batch_act(this,'frm_art_action');" class="pill negative button">
+                                      <span class="icon trash"></span>{$_lang['mulit_nopass']}
+                                 </button>
+						  </div>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+			  <div class="page">{$pages['page']}</div>
+			  </div>
+        	</form>
+        </div>
+        
+    </div>
+<script type="text/javascript">
+	function batch_pay(withdraw_id){
+		var ids;
+		
+		if(withdraw_id){ 
+			$("#ckb_"+withdraw_id).attr("checked","checked");
+		}
+		
+		if($(":checkbox[name='ckb[]']:checked").length>0){
+			$(":checkbox[name='ckb[]']:checked").each(function(i,n){
+				i==0?ids=$(this).val():ids+=","+$(this).val();
+			})
+			if(ids&&typeof(ids)!=undefined){
+			$.post("index.php?do=finance&view=withdraw&type=batch&pay_type=alipayjs&ids="+ids,function(url){
+			art.dialog({
+				title:"{$_lang['confirm_payment']}",
+				content: "{$_lang['you_confirm_payment']}",
+   				yesFn: function(){
+					window.open(url);this.close();
+				},
+				noFn :function(){this.close();return false;}
+				});
+			},'text')
+			 }
+		}else{
+			art.dialog.alert("{$_lang['have_no_choice_play_money']}");
+		}
+	}
+	$(function(){
+		$(".control").add(".title").click(function(){
+			$(".tip").children().not($(".control,.title")).slideToggle('800');
+		});
+	})
+</script>
+<!--{template ADMIN_DIRECTORY/tpl/admin_footer}-->
+   

@@ -1,0 +1,109 @@
+<!--{template ADMIN_DIRECTORY/tpl/admin_header}-->
+	<div class="page_title">
+    	<h1>{if $item_id}{$_lang['edit_material']}{else}{$_lang['add_material']}{/if}</h1>
+        <div class="tool">
+            <a href="index.php?do={$do}&view=item&op={$op}">{$_lang['prom_material_manage']}</a>
+            <a href="index.php?do={$do}&view={$view}&op={$op}&item_id={$item_id}" class="here">{if $item_id}{$_lang['edit_material']}{else}{$_lang['add_material']}{/if}</a>
+    	</div>
+    </div>
+    
+    <div class="box post">
+        	<div class="title"><h2>{if $item_id}{$_lang['edit_material']}{else}{$_lang['add_material']}{/if}</h2></div>
+            <div class="detail">
+               <form method="post" action="index.php?do={$do}&view={$view}&op={$op}&item_id={$item_id}" id="frm_art_edit" name="frm_art_edit" enctype="multipart/form-data">
+                <input type="hidden" name="pk[item_id]" value="{$item_id}">
+				  <table width="100%" border="0" cellspacing="0" cellpadding="0">
+                      {if $op!='site'}
+                      <tr>
+                        <th scope="row"><span class="bg1 t_r">{$_lang['material_type']}</span></th>
+                        <td>
+                          <select name="fds[item_type]"  class="ps vm" id="slt_type2" msgarea='msg_item_type' msg='{$_lang['please_choose_type']}' title='{$_lang['please_choose_type']}' limit="required:true" 
+						  onchange="$('#tbody_prom_text').hide();$('#tbody_prom_img').hide();$('#tbody_prom_'+this.value).show();">
+                            <option value="">{$_lang['choose_type']}</option>
+                            <option value="img"  {if $item_info['item_type']=='img'} selected="selected"{/if}>{$_lang['img']}</option>
+                            <option value="text" {if $item_info['item_type']=='text'}selected="selected"{/if}>{$_lang['text']}</option>
+                           </select>
+                        <span id="msg_item_type"></span>
+                        </td>
+                      </tr>
+                      {/if}
+                      <tr>
+                        <th scope="row"><span class="bg1 t_r">{$_lang['prom_name']}</span></th>
+                        <td>
+                        <input type="text" class="txt" size='55' msgarea='msg_item_name' msg='{$_lang['prom_name_can_not_null']}' title='{$_lang['prom_name_length_limit']}' limit=
+                        "required:true;len:2-50" name="fds[item_name]" id="txt_item_name" value="$item_info['item_name']">
+                         <span id="msg_item_name"></span>
+                        </td>
+                      </tr>
+                      
+                      <tr id="tbody_prom_img" {if $item_info['item_type']!='img'||$op=='tsite'}style="display:none;"{/if} >
+                        <th scope="row"><span class="bg1 t_r">{$_lang['prom_picture']}</span></th>
+                        <td>
+                         <input type="file" name="item_pic" id="fle_item_pic" size="50" ext=".png,.jpeg,.gif,.bmp,.jpg" onchange="isExtName(this,1)">
+                        {if $item_info['item_pic']!=''}
+                        <input type="hidden" name="hdn_item_pic" value="{$item_info['item_pic']}">
+                       <a href="../$item_info['item_pic']"  target="_blank">{$_lang['click_view']}</a>
+                        {/if}
+                        </td>
+                      </tr>
+					  {if $op!='site'}
+                      <tr>
+                        <th scope="row"><span class="bg1 t_r">{$_lang['code_and_content']}</span></th>
+                        <td>
+                        	<textarea cols="80" rows="8" class="textarea" id="tar_item_content" name="fds[item_content]" value="{$item_info['item_content']}">{$item_info['item_content']}</textarea>
+							  <div class="padt10 direct">
+                            <p>
+                        		 {$_lang['prom_notice']}
+							</p>
+                        </div>
+                		</td>
+                      </tr>
+					  {else}
+					   <tr>
+                        <th scope="row"><span class="bg1 t_r">{$_lang['website']}url</span></th>
+                        <td>
+                        	<input type="text" class="txt" size='100' name="fds[item_content]" value="{$item_info['item_content']}">
+							 <div class="padt10 direct">
+                            <p>
+                        		{$_lang['prom_notice']}
+							</p>
+                        </div>
+                		</td>
+                      </tr>
+					  {/if}
+                      
+                       {if $item_info['on_time']}
+                      <tr>
+                        <th scope="row"><span class="bg1 t_r">{$_lang['last_modify']}</span></th>
+                        <td><!--{date('Y-m-d H:i:s',$item_info['on_time'])}--></td>
+                      </tr>
+                       {/if}
+                      <tr>
+                        <th scope="row">&nbsp;</th>
+                        <td>
+                            <div class="clearfix padt10">
+                                <button class="positive primary pill button" type="submit" name="sbt_edit" value="{$_lang['submit']}">{if $item_id}<span class="check icon"></span>{$_lang['submit']}{else}<span class="check icon"></span>{$_lang['add_prom_item']}{/if}</button>
+                               
+                            </div>
+                        </td>
+                      </tr>
+                      
+                    </table>
+                </form>
+  		</div>   
+    </div>
+
+
+<script type="text/javascript">
+$(function(){
+$("#slt_type").change(function(){
+	if($("#slt_type").val()=='img'){
+		$("#tr_item_pic").show();
+	}else{
+		$("#tr_item_pic").hide();
+	}
+	})		   
+})
+</script>
+
+<!--{template ADMIN_DIRECTORY/tpl/admin_footer}-->

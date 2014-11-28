@@ -1,0 +1,124 @@
+<!--{template ADMIN_DIRECTORY/tpl/admin_header}-->
+<div class="page_title">
+    	<h1>{$_lang['msg_tpl_page_title']}</h1>
+         <div class="tool">       
+		   <a href="index.php?do=$do&view=$view&op=config" class="here">{$_lang['sms_config']}</a>
+           <a href="index.php?do=$do&view=send">{$_lang['send_sms']}</a>
+         </div>
+
+</div>
+
+<div class="box post">
+   <div class="tabcon">
+      <div class="title"><h2>{$_lang['account_info']}</h2></div>
+         <div class="detail">
+         	{if !$bind_info||$ac=='change'}
+             <table width="100%" border="0" cellspacing="0" cellpadding="0">
+                <tr class="apply_bind">
+                      <th scope="row" width="130">{$_lang['apply']}{$_lang['zh_mh']}</th>
+                      <td>
+                       	<a href="http://www.kekezu.com/index.php?do=increase_2" style="color:red" target="_blank">{$_lang['apply_for_account']}</a>（{$_lang['click_to_apply_account']}）
+                      </td>
+                  </tr>
+				<tr class="apply_bind">
+				<th scope="row" width="130">{$_lang['bind']}{$_lang['zh_mh']}</th>
+                        <td>
+                        	<button class="pill negative" type="button" id="bind" value="{$_lang['bind_account']}" name="searchsubmit"><span class="icon plus">&nbsp;</span>{$_lang['bind_account']}</button>
+                       </td>
+                </tr>
+				<tbody id="account" style="display:none">
+				<form action="index.php?do=$do&view=$view&op=config" id="frm_bind" name="frm_bind" method="post">
+					<tr>
+						<th scope="row" width="130">{$_lang['sms_account']}{$_lang['zh_mh']}</th>
+                        <td>
+                        	 <input type="text" class="txt"
+							  name="conf[mobile_username]"
+							  value="{$mobile_u}"
+							  id="mobile_username" 
+							  limit="required:true;len:2-"
+							  msg="{$_lang['account_cannot_be_null']}"
+							  title="{$_lang['input_cellphone_validate_code']}"
+							  msgArea="span_mobile_username"><span id="span_mobile_username"></span>
+                       </td>
+                    </tr>
+					<tr>
+                      <th scope="row" width="130">{$_lang['sms_password']}{$_lang['zh_mh']}</th>
+                        <td>
+                        	 <input type="password" class="txt"
+							  name="conf[mobile_password]"
+							  value="{$mobile_p}"
+							  id="mobile_passwrd"
+							  limit="required:true;len:2-"
+							  msg="{$_lang['password_cannot_be_null']}"
+							  title="{$_lang['input_cellphone_password']}"
+							  msgArea="span_mobile_password"><span id="span_mobile_password"></span>
+                      </td>
+                    </tr>
+                   <tr>
+						<th scope="row">&nbsp;</th>
+						<td>
+							<div class="clearfix padt10">
+                        		 <button class="positive primary pill button" type="submit" name='sbt_edit' value="{$_lang['submit']}"><span class="check icon"></span>{$_lang['submit']}</button>
+                        		  
+                			</div>
+						</td>
+					</tr>
+					
+           		 </form>
+			</tbody>
+		</table>
+			{else}
+            <table width="96%" height="200" border="0" cellspacing="0" cellpadding="0" class="tab_m t_l">
+               	<tr>
+               		 <th scope="row">{$_lang['account_info']}{$_lang['zh_mh']}</th>
+                        <td>
+                        	<input type="txt" readonly="readonly" value="{$mobile_u}" class="txt">
+							<a href="index.php?do=$do&view=$view&op=config&ac=change">{$_lang['account_change']}</a>
+                       </td>
+                    </tr>
+					<tr>
+						<th scope="row">{$_lang['balance_inquiries']}{$_lang['zh_mh']}</th>
+                        <td>
+                        	<div id="remainfee"></div>
+                        	 
+                      		 <a class="button" href="http://www.kekezu.com/index.php?do=increase_3" target="_blank"><span class="icon book">&nbsp;</span>&nbsp;</span>{$_lang['user_recharge']}</a>（{$_lang['click']}{$_lang['user_recharge']}）
+                       </td>
+                    </tr>
+				 
+				</table>
+			 {/if}	
+</div>
+</div>
+</div>
+<script type="text/javascript">
+	var ac = "$ac";
+	if(ac=='change'){
+		$(".apply_bind").hide();
+		$("#account").show();
+	}
+ $(function(){
+ 	$("#bind").click(function(){
+		$("#account").show();
+	})
+	$("#sbt_edit").click(function(){
+		if(checkForm(document.getElementById("frm_bind"))){
+			$("#frm_bind").submit();
+		}
+	})
+ 
+  
+  $("#remainfee").ready(function(){
+		$.post("index.php?do=$do&view=$view&op=manage&remain_fee=1",function(json){
+			if(json.status==1){
+				var num = json.msg.balance;
+				var str="余额:<span>"+num+"</span>元<br>";
+					$("#remainfee").html(str);
+			}else{
+				alert(json.msg);
+				showDialog(json.msg,'alert',"{$_lang['error_notice']}");return false;
+			}
+		},'json')
+  })
+ })
+</script>
+<!--{template ADMIN_DIRECTORY/tpl/admin_footer}-->

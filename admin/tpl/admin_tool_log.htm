@@ -1,0 +1,109 @@
+<!--{template ADMIN_DIRECTORY/tpl/admin_header}--> 
+
+ <div class="page_title">
+    	<h1>{$_lang['system_log']}</h1>
+          <div class="tool">          
+			<a href="index.php?do=tool&view=log" {if $view == 'log'}class="here"{/if} >{$_lang['log']}</a>
+      
+    	</div>
+</div>
+
+
+      <div class="box search p_relative">
+    	<div class="title"><h2>{$_lang['search']}</h2></div>
+        <div class="detail" id="detail">
+			<form action="index.php?do={$do}&view={$view}" method="post" id="frm_list">
+        	<input type="hidden" name="do"   value="$do">
+			<input type="hidden" name="view" value="$view">
+			<input type="hidden" name="type" value="$type">
+			<input type="hidden" name="page" value="$page">
+			<table cellspacing="0" cellpadding="0">
+			 <tbody>
+			 	<tr>
+			 		<th>{$_lang['log']}编号</th>
+					<td><input type="text" class="txt" name="txt_log_id" value="$txt_log_id" onkeyup="clearstr(this);"></td>
+					<th>{$_lang['operator']}</th>
+					<td><input type="text" class="txt" name='txt_username' value="{$txt_username}" onkeyup="clearspecial(this);"></td>
+					<th>{$_lang['log_content']}</th>
+					<td><input type="text" class="txt" name='txt_content' value="{$txt_content}" onkeyup="clearspecial(this);"> &nbsp;*{$_lang['search_by_like']}</td>
+			 	</tr>
+
+				<tr>
+					<th>{$_lang['show_number']}</th>
+					<td>
+						<select name="wh[page_size]" class="ps vm">
+						<option value="10" {if $wh['page_size']=='10'}selected="selected"{/if}>{$_lang['page_size']}10</option>
+						<option value="20" {if $wh['page_size']=='20'}selected="selected"{/if}>{$_lang['page_size']}20</option>
+						<option value="30" {if $wh['page_size']=='30'}selected="selected"{/if}>{$_lang['page_size']}30</option>
+						</select>
+					</td>
+					<th>{$_lang['result_order']}</th>
+					<td>
+						 <select name="w[ord][]">
+                           <option value="log_id" {if $w['ord']['0']=='log_id' or !isset($w['ord']['0'])} selected="selected"{/if}>{$_lang['default']}{$_lang['order']}</option>
+                           <option value="log_time" {if $w['ord']['0']=='log_time' } selected="selected"{/if}>{$_lang['log_time']}</option>
+                      </select>
+                      <select name="w[ord][]">
+                            <option {if $w['ord']['1']=='desc' or !isset($w['ord']['1'])}selected="selected" {/if} value="desc">{$_lang['desc']}</option>
+                            <option {if $w['ord']['1']=='asc'}selected="selected" {/if} value="asc">{$_lang['asc']}</option>
+                      </select>
+					<button type="submit" name="sbt_search" value={$_lang['search']} class="pill" />
+						<span class="icon magnifier">&nbsp;</span>{$_lang['search']}</button>
+					</td>
+				</tr>
+				 
+			 </tbody>
+			</table>
+			
+        </div>
+	 </div>
+
+
+<div class="box list">
+ 	<div class="title"><h2>{$_lang['system_log']}</h2></div>
+      	<div class="detail">
+ 		 <!--<span style="color:red;">{$_lang['warm_prompt']}</span>-->
+		<div id="ajax_dom">
+		<input type="hidden" name="page" value="{$page}">
+  		<table width="100%" border="0" cellspacing="0" cellpadding="0" >
+          <tr>
+          	<th>
+	<input type="checkbox" id="checkbox" onclick="checkall();" class="checkbox" >编号
+</th>
+            <th width="5%">{$_lang['operator']}</th>
+			<th width="5%">{$_lang['user_groups']}</th>
+			<th width="40%">{$_lang['content']}</th>
+            <th width="15%">{$_lang['time']}</th>
+			<th width="10%">{$_lang['delete']}</th>
+          </tr>
+		{loop $log_data $key $value}
+        <tr class="item">
+        	<td><input type="checkbox" name="ckb[]" class="checkbox" value="{$value['log_id']}">{$value['log_id']}</td>
+           
+			<td>{$value['username']}</td>
+			<td>{if $value['uid']==ADMIN_UID}{$_lang['public_admin_uid']}{else}{$group_arr[$value['user_type']]['groupname']}{/if}</td>
+            <td><a  href="javascript:void(0)" title="{$value['log_content']}">{$value['log_content']}</a></td>
+			<td><!--{date('Y-m-d H:i:s',$value['log_time'])}--></td>
+			<td>
+				<a class="button dbl_target" href="$url&ac=del&log_id=$value['log_id']" onclick="return cdel(this);"><span class="icon trash">&nbsp;</span>{$_lang['delete']}</a>
+			</td>
+          </tr>
+		 {/loop}
+          <tr>
+            <td colspan="6">
+            	<label for="checkbox" onclick="checkall(event);">{$_lang['select_all']}</label>
+				<input type="hidden" name="sbt_action" class="sbt_action"/>　
+			<button type="submit" name="sbt_action" value="{$_lang['mulit_delete']}" class="negative pill button" onclick="return batch_act(this,'frm_list')" >
+				<span class="trash icon"></span>{$_lang['mulit_delete']}</button>
+			<a href="$url&ac=del_all" class="pill button" >
+				<span class="icon"></span>{$_lang['empty_log']}</a>
+			</td>
+		  </tr>
+        </table>
+		<div class="page">{$pages['page']}</div>
+		</div>
+	</div>
+</form>
+		
+</div>
+<!--{template ADMIN_DIRECTORY/tpl/admin_footer}-->

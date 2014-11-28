@@ -1,0 +1,66 @@
+<!--{template ADMIN_DIRECTORY/tpl/admin_header}--> 
+
+<div class="page_title"><h1>{$_lang['page_title']}</h1></div>
+<!--页头结束-->
+
+<div class="box list">
+    <div class="detail">
+    	<form method="post" action="index.php?do={$do}&view={$view}" name="frm_art_search" id="frm_art_search">
+    	<div id="ajax_dom">
+    	<input type="hidden" name="page" value="{$page}" />
+    	<table cellspacing="0" cellpadding="0">
+    	  <tbody>
+          <tr>
+            <th>{$_lang['auth_logo']}</th>
+			<th>{$_lang['auth_name']}</th>
+			<th>{$_lang['auth_audit_days']}</th>
+			<!--<th>{$_lang['auth_cash']}</th>-->
+			<th>{$_lang['auth_period']}</th>
+			<th>{$_lang['is_open']}</th>
+			<th>{$_lang['last_update']}</th>
+			<th>{$_lang['operate']}</th>
+          </tr>
+		  {loop $auth_item_arr $key $value}
+		 <tr class="item">
+			<td>{$value['auth_code']}</td>
+			<td>{$value['auth_title']}</td>
+			<td>{$value['auth_day']}{$_lang['workdays']}</td>
+			<!--<td><font color="#ff7700">{if $value['auth_code'] =='enterprise' || $value['auth_code'] =='realname'}免费认证{else}{c:$value['auth_cash']}{/if}</font></td>-->
+			<td>{if $value['auth_expir']}{$value['auth_expir']}{$_lang['day']}{else}{$_lang['no_limit']}{/if}</td>
+			<td>{if $value['auth_open']==1}<font color="green">{$_lang['open']}</font>{else}<font color="gray">{$_lang['close']}</font>{/if}</td>
+			<td><!--{date('Y-m-d H:i:s',$value['update_time'])}--></td>
+			<td>
+				{if $value['auth_open']==1}
+					<a class="button" href="index.php?do=auth&view=item_edit&sbt_edit=1&code={$value['auth_code']}&pk[auth_code]={$value['auth_code']}&fds[auth_open]=0"><span class="cross icon"></span>{$_lang['disable']}</a>
+				{else}
+					<a class="button" href="index.php?do=auth&view=item_edit&sbt_edit=1&code={$value['auth_code']}&pk[auth_code]={$value['auth_code']}&fds[auth_open]=1"><span class="check icon"></span>{$_lang['use']}</a>
+				{/if}
+					<a class="button dbl_target" href="index.php?do={$do}&view=item_edit&code={$value['auth_code']}"><span class="pen icon"></span>{$_lang['edit']}</a>
+					<a class="button" href="index.php?do={$do}&view={$view}&ac=del&code={$value['auth_code']}" onclick="return cdel(this);"><span class="trash icon"></span>{$_lang['delete']}</a>
+			</td>
+		</tr>
+		{/loop}
+		
+          <tr>
+          	<td colspan='11'>
+          		
+				<div class="clearfix">
+					
+					<span>{$_lang['enter_dirname']}:</span>
+					<input  type="text"   name="auth_dir"   id="auth_dir"    class="txt"/>&nbsp;
+					<button type="submit" name="sbt_add"    value="{$_lang['install_module']}" class="pill positive"><span class="check icon">&nbsp;</span>{$_lang['install_module']}</button>
+					</div>
+          	</td>
+         </tr>
+		 
+		 </tbody>
+        </table>
+		<div class="page">{$pages['page']}</div>
+		</div>
+		</form>
+		
+    </div>
+</div>
+<!--主体结束-->
+
+<!--{template ADMIN_DIRECTORY/tpl/admin_footer}-->

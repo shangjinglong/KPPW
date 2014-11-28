@@ -1,0 +1,124 @@
+<!--{template ADMIN_DIRECTORY/tpl/admin_header}-->
+<div class="page_title">
+    	<h1>{$_lang['dns_manage']}</h1>
+        <div class="tool">         
+			
+            <a href="index.php?do={$do}&view=feed" {if $type == 'data'}class="here"{/if}>{$_lang['dns_list']}</a>
+			
+        </div>
+</div>
+
+<form method="get" action="index.php" id="frm_search">
+	<input type="hidden" name="do" value="{$do}">
+	<input type="hidden" name="view" value="{$view}">
+	<input type="hidden" name="page" value="{$page}">
+	<input type="hidden" name="type" value="{$type}">
+	<div class="box search p_relative">
+    	<div class="title"><h2>{$_lang['search']}</h2></div>
+    	<div class="detail"  id="detail"> 
+    		<table cellspacing="0" cellpadding="0">    		
+				<tbody>
+					<tr>
+	                <th>{$_lang['dns_name']}</th>
+		                <td>
+		                 <input type="text" class="txt" name="txt_title" id="txt_title" value="{$txt_title}">
+						 *{$_lang['search_by_like']}
+						 </td>
+	                </tr>
+					<tr>
+						<th>{$_lang['result_order']}</th>
+						<td>
+							<select name="ord[]">
+                        <option value="feed_id" {if $ord['0']=='feed_id' or !isset($ord['0'])} selected="selected"{/if}>{$_lang['default_id_sort']}</option>
+                        <option value="title" {if $ord['0']=='title' } selected="selected"{/if}>{$_lang['dns_names']}</option>
+						 <option value="feed_time" {if $ord['0']=='feed_time' } selected="selected"{/if}>{$_lang['time']}</option>
+                        </select>
+                        <select name="ord[]">
+                        <option {if $ord['1']=='desc' or !isset($ord['1'])}selected="selected" {/if} value="desc">{$_lang['desc']}</option>
+                        <option {if $ord['1']=='asc'}selected="selected" {/if} value="asc">{$_lang['asc']}</option>
+                        </select>
+						</td>
+						<th>{$_lang['list_result']}</th>
+						<td >
+						<select name="slt_page_size">
+                			<option value="10" {if $slt_page_size=='10'}selected="selected"{/if}>{$_lang['page_size']}10</option>
+                			<option value="20" {if $slt_page_size=='20'}selected="selected"{/if}>{$_lang['page_size']}20</option>
+                			<option value="30" {if $slt_page_size=='30'}selected="selected"{/if}>{$_lang['page_size']}30</option>
+            			</select>
+           				<button class="pill" type="submit" value={$_lang['search']} name="sbt_search">
+								<span class="icon magnifier">&nbsp;</span>{$_lang['search']}
+							</button>
+						</td>
+					</tr>          			
+           		</tbody>
+			</table>
+    	</div> 
+</div>
+
+<div class="box list">
+	 
+
+ 
+<div class="title"><h2>{$_lang['dns_list']}</h2></div>
+    <div class="detail"> 
+	<div id="ajax_dom">
+		<input type="hidden" name="page" value="{$page}">
+	 <table width="100%" border="0" cellspacing="0" cellpadding="0"  >
+                <tr>
+                    <th>
+						<input type="checkbox" id="checkbox" onclick="checkall();" class="checkbox" >编号
+					</th>
+                    <th width="350">
+                       {$_lang['event_title']}
+                    </th>
+                    <th width="100">
+                       {$_lang['event_type']}
+                    </th>
+                    <th width="100">
+                       {$_lang['username']}
+                    </th>
+                    <th width="200">
+                        {$_lang['on_time']}
+                    </th>
+                    <th width="120">
+                        {$_lang['operate']}
+                    </th>
+                </tr>
+                {loop $feed_arr $key $value}
+                <tr class="item">
+                    <td>
+                        <input type="checkbox" name="ckb[]" class="checkbox" value="{$value['feed_id']}">{$value['feed_id']}
+                    </td>
+                    <td>
+                    	{$value['title']}
+                    
+                    </td>
+                    <td>
+                        {if $feed_type[$value['feedtype']]}{$feed_type[$value['feedtype']]}{else}$value['feedtype']{/if}
+                    </td>
+                    <td>
+                       {$value['username']}
+                    </td>
+                    <td>
+                       <!--{date('Y-m-d H:i',$value['feed_time'])}-->
+                    </td>
+                    <td>
+                        <a href="$url&ac=del&delid=$value['feed_id']" onclick="return cdel(this)" class="button"> <span class="trash icon"></span>{$_lang['delete']}</a>
+                    </td>
+                </tr>
+				{/loop}
+                <tr>
+                    <td colspan="6" >
+                       <label for="checkbox" onclick="checkall(event);">{$_lang['select_all']}</label>	
+						<input type="hidden" name="sbt_action" class="sbt_action"/>
+							<button type="submit" onclick="return batch_act(this,'frm_search')" name="sbt_action" value={$_lang['mulit_delete']} class="pill negative button" >
+								<span class="trash"></span>{$_lang['mulit_delete']}
+							</button>
+                    </td>
+                  </tr>
+            </table>
+			<div class="page">{$pages['page']}</div>
+			</div>
+	</div>
+</form>
+<!--{template ADMIN_DIRECTORY/tpl/admin_footer}-->

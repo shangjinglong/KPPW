@@ -1,0 +1,203 @@
+<!--{template header}-->
+<div  class="container">
+<div class="helper">
+    <div class="nav-action">
+
+    <div class="nav-header">
+      <h2 class="min-title">帮助解答</h2>
+    </div>
+
+    <dl class="nav-list">
+    {loop $arrSidesPrimary $k $v}
+      <dt class="nav-list-title"><i class="fa fa-plus-square"></i> {$v['cat_name']}</dt>
+      <dd class="nav-list-body">
+       {loop $arrSecondary $k2 $v2}
+        {if $v2['art_cat_pid'] == $v['art_cat_id']}
+        	<a href="index.php?do=help&id={$v2['art_cat_id']}" {if $id ==$v2['art_cat_id']}class="selected"{/if}>{$v2['cat_name']}</a>
+        {/if}
+        {/loop}
+      </dd>
+      {/loop}
+    </dl>
+  </div>
+  <!-- nav-action end -->
+
+  <div class="content-panel">
+		<div class="helper-search">
+	        <form class="form-horizontal" role="form" method="post" action="index.php?do=help">
+	          <div class="form-group">
+	            <div class="col-xs-10">
+	            <div class="input-group">
+	              <span class="input-group-addon"><i class="fa fa-search"></i></span>
+	              <input type="text" class="form-control" id="word" name="word" placeholder="请输入您想搜索的帮助主题关键字" value="{$Keyword}">
+	            </div>
+	            </div>
+	            <div class="col-xs-2"><button type="submit" class="btn btn-default btn-block">搜索</button></div>
+	          </div>
+	        </form>
+
+	        <div class="header-keywords">
+	          热门搜索：
+	          {loop $arrHotSearch $v}
+	          	<a class="marked marked-tags" href="index.php?do=help&word={$v}">{$v}</a>
+	          {/loop}
+	        </div>
+
+	      </div><!-- helper-search end -->
+
+
+	{if !$id&&!$word}
+      <div class="helper-fresh">
+        <h2 class="min-title">雇主入门流程</h2>
+
+        <ul class="step step4">
+          <li class="step-item action">
+            <span class="step-num"><i class="fa fa-search"></i></span>
+            <div class="step-text step-bottom">
+              <p><strong class="step-title ">寻找合适的服务商</strong></p>
+            </div>
+
+          </li>
+          <li class="step-item action">
+            <span class="step-num"><i class="fa fa-user"></i></span>
+            <div class="step-text step-bottom">
+              <p><strong class="step-title">雇佣他</strong></p>
+            </div>
+          </li>
+          <li class="step-item action">
+            <span class="step-num"><i class="fa fa-comments-o"></i></span>
+            <div class="step-text step-bottom">
+              <strong class="step-title ">沟通细节</strong><p></p>
+            </div>
+          </li>
+          <li class="step-item action">
+            <span class="step-num"><i class="fa fa-jpy"></i></span>
+            <div class="step-text step-bottom">
+              <strong class="step-title ">完成后付款</strong><p></p>
+            </div>
+          </li>
+        </ul>
+
+        <div class="line"></div>
+
+        <h2 class="min-title">威客入门流程</h2>
+
+        <ul class="step step3">
+          <li class="step-item action">
+            <span class="step-num"><i class="fa fa-user"></i></span>
+            <div class="step-text step-bottom">
+              <p><strong class="step-title ">注册</strong></p>
+            </div>
+
+          </li>
+          <li class="step-item action">
+            <span class="step-num"><i class="fa fa-check-circle-o"></i></span>
+            <div class="step-text step-bottom">
+              <p><strong class="step-title">入驻成为服务商</strong></p>
+            </div>
+          </li>
+          <li class="step-item action">
+            <span class="step-num"><i class="fa fa-gavel"></i></span>
+            <div class="step-text step-bottom">
+              <strong class="step-title ">上架服务或作品</strong><p></p>
+            </div>
+          </li>
+        </ul>
+      </div>
+
+      <!-- fresh end -->
+
+
+      <div class="row">
+
+        <div class="col-xs-6 helper-box">
+          <h2 class="min-title">最常用帮助</h2>
+          <ul class="min-list">
+            {loop $arrCommonHelp $k $v}
+            	<li><a href="index.php?do=help&id={$v['art_cat_id']}&anchor={$v['art_id']}#collapse_{$v['art_id']}">{$v['art_title']}</a></li>
+            {/loop}
+          </ul>
+        </div><!-- helper-box end -->
+
+        <div class="col-xs-6 helper-box">
+          <h2 class="min-title">最新帮助</h2>
+          <ul class="min-list">
+            {loop $arrLastsHelp $k $v}
+            	<li><a href="index.php?do=help&id={$v['art_cat_id']}&anchor={$v['art_id']}#collapse_{$v['art_id']}">{$v['art_title']}</a></li>
+            {/loop}
+          </ul>
+        </div><!-- helper-box end -->
+      </div>
+
+      {else}
+
+
+      <!-- row end -->
+
+      <div class="helper-detail">
+        {if $arrSecondary[$id]['cat_name']}<h2 class="min-title">{$arrSecondary[$id]['cat_name']}</h2>{else}<h2 class="min-title">全部分类</h2>{/if}
+        <div class="helper-detail-body">
+        {if $arrLists}
+	         {loop $arrLists $k $v}
+		          <dl class="helper-item">
+		            <dt>
+		              <a data-toggle="collapse" data-toggle="collapse" data-parent=".helper-detail-body" href="#collapse_{$v['art_id']}">
+		                <i class="fa fa-caret-right"></i> {$v['art_title']}
+		              </a>
+		            </dt>
+		            <dd id="collapse_{$v['art_id']}" class="collapse {if $anchor == $v['art_id']}in{/if}">
+		            	<!--{eval echo htmlspecialchars_decode($v['content'])}-->
+		            </dd>
+		          </dl>
+	          {/loop}
+          {else}
+          	该分类下暂无内容
+          {/if}
+        </div><!-- helper-detail-body end -->
+      </div><!-- helper-detail end -->
+        <div class="list-page">
+
+	   	{if $strPages['page']}
+	      <ul class="pagination pagination-sm pull-right">
+	       {$strPages['page']}
+	      </ul>
+	    {/if}
+  		</div>
+      {/if}
+
+  </div><!-- content-panel end-->
+
+</div>
+<!-- helper end -->
+
+
+
+
+</div>
+<script type="text/javascript">
+$(function(){
+
+	$(".nav-list dd").each(function(){
+		if($(this).children('a').hasClass('selected')){
+			$(this).prev().children('i').removeClass('fa-plus-square').addClass('fa-minus-square');
+			$(this).slideDown();
+		}
+	});
+  //左边菜单目录
+  $('.nav-list dt').click(function() {
+    var inner_menu = $(this).next('dd'),
+      title_icon = $(this).children('i'),
+      op_class = 'fa-minus-square',
+      cl_class = 'fa-plus-square';
+    if(inner_menu.is(':visible')){
+      title_icon.removeClass(op_class).addClass(cl_class);
+      inner_menu.slideUp();
+    }else{
+      title_icon.removeClass(cl_class).addClass(op_class);
+      inner_menu.slideDown();
+    }
+  });
+})
+
+</script>
+<!--{template footer}-->

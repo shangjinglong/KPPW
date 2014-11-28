@@ -1,0 +1,317 @@
+<!--{template ADMIN_DIRECTORY/tpl/admin_header}-->
+<div class="page_title">
+	<h1>{$_lang['ads']}{$page_tips}</h1>
+	<div class="tool">
+		<a href="index.php?do={$do}&view=ad_list">{$_lang['ads_list']}</a> <a
+			href="index.php?do={$do}&view={$view}&ac={$ac}&ad_id={$ad_id}&target_id={$target_id}"
+			class="here">{$_lang['ads']}{$page_tips}</a>
+	</div>
+</div>
+<div class="box post">
+	<div class="box tip clearfix p_relative" id="man_tips">
+		<div class="control">
+			<a href="javascript:void(0);" onclick="$('#man_tips').fadeOut();"
+				title={$_lang['close']}><b>&times;</b></a>
+		</div>
+		<div class="title">
+			<h2>{$_lang['tips']}</h2>
+		</div>
+		{if $target_arr}
+		<div class="detail pad10">
+			<ul>
+				<li><img src="../{$target_arr['sample_pic']}">
+					{$_lang['ad_position_name']}:{$target_arr['name']},
+					{$_lang['ad_position_desc']}:{$target_arr['description']}
+					,{$_lang['this_ad_position_has']}{$ad_count}{$_lang['tiao_ad_ad_allow']}{$target_arr['ad_num']}{$_lang['tiao']}
+					<br style="float: right" />
+				<b>{$important_msg}</b></li>
+				<li>上传提示：附件上传最大不得超过{$basic_config['max_size']}M</li>
+			</ul>
+		</div>
+		{/if}
+	</div>
+	<div class="tabcon">
+		<div class="title">
+			<h2>{$_lang['ads']}{$page_tips}</h2>
+		</div>
+		<div class="detail">
+			<form method="post" action="index.php?do={$do}&view={$view}&ac={$ac}"
+				enctype="multipart/form-data" id="form1">
+				<input type="hidden" name="ad_id" value="{$ad_data['ad_id']}">
+				<input type="hidden" name="hdn_ad_type" id="hdn_ad_type"
+					value="{$ad_data['ad_type']}" /> <input type="hidden"
+					name="hdn_target_id" id="hdn_ad_type" value="{$target_id}" />
+				<table width="100%" border="0" cellspacing="0" cellpadding="0">
+					<tr>
+						<th scope="row" width="130">{$_lang['ads_title']}</th>
+						<td><input type="text" value="{$ad_data['ad_name']}"
+							name="ad_name" id="title" class="txt" style="width: 260px;"
+							limit="required:true;len:1-50"
+							msg="{$_lang['ad_title_not_null']}"
+							original-title="{$_lang['ads_description']}"
+							msgArea="item_title_msg" /><b style="color: red">*</b>
+						<!--
+                            {if $group_arr}<input type="hidden" value="{$ad_data['ad_name']}" name="hdn_ad_name" />{/if} 隐藏域优先添加
+                            -->
+							<span id="item_title_msg">{$_lang['ads_description']}</span></td>
+					</tr>
+					<tr>
+						<th scope="row" width="130">{$_lang['start_time']}</th>
+						<td><input type="text"
+							value="<!--{date('Y-m-d',$ad_data['start_time'])}-->"
+							name="start_time" class="txt"
+							onclick="showcalendar(event, this, 0)"
+							title="设置广告广告开始的时间，格式 yyyy-mm-dd，留空为不限制开始时间"> <span
+							id="start_time_msg">设置广告展示生效开始时间，留空为永久有效</span></td>
+					</tr>
+					<tr>
+						<th scope="row" width="130">{$_lang['end_time']}</th>
+						<td><input type="text"
+							value="<!--{date('Y-m-d',$ad_data['end_time'])}-->"
+							name="end_time" class="txt"
+							onclick="showcalendar(event, this, 0)"
+							title="设置广告广告结束的时间，格式 yyyy-mm-dd，留空为不限制结束时间" /> <span
+							id="end_time_msg">设置广告展示生效结束时间，留空为永久有效</span></td>
+					</tr>
+					<tr>
+						<th scope="row" width="130">{$_lang['presentation']}</th>
+						<td>
+							<div id="select_ad_type">
+								<input type="radio" name="ad_type" value="code"
+									onclick="swaptab('ad','backLava','',4,1)" checked />{$_lang['code']}
+								<input type="radio" name="ad_type" value="text"
+									onclick="swaptab('ad','backLava','',4,2)" />{$_lang['text']} <input
+									type="radio" name="ad_type" value="image"
+									onclick="swaptab('ad','backLava','',4,3)" />{$_lang['img']} <input
+									type="radio" name="ad_type" value="flash"
+									onclick="swaptab('ad','backLava','',4,4)" />flash
+								({$_lang['select_ads_presentation']})
+							</div>
+						</td>
+					</tr>
+					<!-- code -->
+					<tbody id="div_ad_1" class="hidden">
+						<tr>
+							<th>{$_lang['html_code']}</th>
+							<td><textarea name="ad_type_code_content" title={$_lang[
+									'according_display_effect_enter_content']} cols="100" rows="10"
+									class="txt">{$ad_data['ad_content']}</textarea></td>
+						</tr>
+
+					</tbody>
+					<!-- 文字 -->
+					<tbody id="div_ad_2" class="hidden">
+						<tr>
+							<th>{$_lang['text_content']}</th>
+							<td><textarea name="ad_type_text_content" cols="100"
+									title={$_lang[
+									'according_display_effect_enter_content']} rows="10"
+									class="txt">{$ad_data['ad_content']}</textarea></td>
+						</tr>
+
+					</tbody>
+					<!-- 图片 -->
+					<tbody id="div_ad_3" class="hidden">
+						<tr>
+							<th>{$_lang['img_address']}</th>
+							<td><input type="file" name="ad_type_image_file"
+								value="{$ad_data['ad_file']}" onchange="isExtName(this,1)"
+								ext=".jpg,.png,.gif,.jpeg,.bmp" title={$_lang[ 'img_ads_img_call_address']} />
+								{if $ad_data['ad_file']}
+								<div class="clear"></div> <input type="hidden"
+								name="ad_type_image_path" value="{$ad_data['ad_file']}">
+								<div style="margin-top: 10px;">
+									<img src="../{$ad_data['ad_file']}" width="200px"
+										height="200px" alt="{$_lang['ad_thumbnail']}" />
+								</div> {/if}</td>
+						</tr>
+
+						<tr>
+							<th>{$_lang['image_width']}</th>
+							<td><input type="text" limit="required:false;type:int"
+								msg="{$_lang['width_error']}"
+								value="{if $ad_data['ad_type']==image}{$ad_data['width']}{/if}"
+								name="ad_type_image_width" id="ad_type_image_width"
+								title={$_lang[ 'enter_img_ads_width']}  class="txt"
+								msgArea="span_width" /><span id="span_width"></span></td>
+						</tr>
+						<tr>
+							<th>{$_lang['image_height']}</th>
+							<td><input type="text" limit="required:false;type:int"
+								msg="{$_lang['height_error']}"
+								value="{if $ad_data['ad_type']==image}{$ad_data['height']}{/if}"
+								name="ad_type_image_height" id="ad_type_image_height"
+								title={$_lang[ 'enter_img_ads_height']} class="txt"
+								msgArea="span_height" /><span id="span_height"></span></td>
+						</tr>
+
+					</tbody>
+					<!-- flash -->
+					<tbody id="div_ad_4" class="hidden">
+						<tr>
+							<th>{$_lang['flash_address']}</th>
+							<td><div id="flash_way">
+									<input type="radio" id="flash_file" name="flash_method" value="file" checked="checked">{$_lang['file']}
+									<input type="radio" id="flash_url"  name="flash_method" value="url">url
+									<br />
+									<input type="file" name="ad_type_flash_file" id="ad_type_flash_file"
+										value="{$ad_data['ad_file']}"
+										onchange="isExtName(this,1)" ext=".swf" />
+									<input type="text" name="ad_type_flash_url" id="ad_type_flash_url" size="60"
+										{if $ad_data['ad_file']}
+											value="{$ad_data['ad_file']}"
+										{/if}
+										class="txt" style="display: none;" />
+
+								</div>
+							</td>
+						</tr>
+						<tr>
+							<th>{$_lang['flash_width']}</th>
+							<td><input type="text"
+								value="{if $ad_data['ad_type']==flash}{$ad_data['width']}{/if}"
+								name="ad_type_flash_width" id="ad_type_flash_width"
+								title={$_lang[ 'flash_ads_call_address']} class="txt" /></td>
+						</tr>
+						<tr>
+							<th>{$_lang['flash_height']}</th>
+							<td><input type="text"
+								value="{if $ad_data['ad_type']==flash}{$ad_data['height']}{/if}"
+								name="ad_type_flash_height" id="ad_type_flash_height"
+								title={$_lang[ 'flash_ads_height']} class="txt" /></td>
+						</tr>
+
+					</tbody>
+						<tr>
+							<th>链接地址</th>
+							<td><input type="text" value="{$ad_data['ad_url']}"
+								name="ad_url" class="txt" title={$_lang[ 'img_ads_img_call_address']} /></td>
+						</tr>
+
+					<tr>
+						<th>{$_lang['order']}</th>
+						<td><input type="text" name="listorder"
+							value="{$ad_data['listorder']}" class="txt" limit="type:int" />
+							</td>
+					</tr>
+
+					<tr>
+						<th>{$_lang['is_open']}</th>
+						<td><input type="radio" name="rdn_is_allow" value="1"
+							{if $ad_data['is_allow']===
+							'1' || !$ad_data['is_allow']}checked="checked" {/if} />{$_lang['yes']}
+							<input type="radio" name="rdn_is_allow" value="0"
+							{if $ad_data['is_allow']=== '0'}checked="checked" {/if} />{$_lang['no']}
+						</td>
+					</tr>
+					<tr>
+						<th scope="row">&nbsp;</th>
+						<td>
+							<div class="clearfix padt10">
+								<input type="hidden" name="sbt_action" value="1">
+								<button class="positive pill primary button" type="button"
+									name="sbt_action" value="{$_lang['submit']}"
+									onclick="checkform();">
+									<span class="check icon"></span>{$_lang['submit']}
+								</button>
+							</div>
+						</td>
+					</tr>
+				</table>
+			</form>
+			<script type="text/javascript">
+                $(function(){
+            		var show_type=$("#hdn_ad_type").val();
+					if(show_type){
+						$("#select_ad_type :radio").each(function(index){
+            			var value=$(this).val();
+            			if(value==show_type){ //alert(index);
+            				$(this).attr("checked","checked");
+            				var tab = 'div_ad_'+(index+1);
+							$("#"+tab+"").removeClass("hidden");
+            			}
+            			});
+					}else{
+							$("#div_ad_1").removeClass("hidden");
+					}
+            		$("#flash_file").click(function(){
+            			$("#ad_type_flash_file").show();
+            			$("#ad_type_flash_url").val();
+            			$("#ad_type_flash_url").hide();
+            		});
+            		$("#flash_url").click(function(){
+            			$("#ad_type_flash_url").show();
+            			$("#ad_type_flash_file").hide();
+            		});
+
+            		$("#rdn_position :radio").click(function(){
+            			var type=$("#select_ad_type :checked").val();
+            			var typeID=type+"_select";
+            			var i = $(this).index();
+            			i++;
+            			var sel_option=document.getElementById(typeID);
+            			if(typeof(sel_option)=="object")
+            				sel_option.options['i'].selected=true;//没有触发onchange事件
+            				var v=sel_option.value;
+            				setsize(v,type);
+            		})
+            });
+            	// v = value o = code|text|image|flash
+            	function setsize(v, o) {
+					if(v!=-1) {
+						var size = v.split('*');
+						//ad_type_image_width
+						 var w = size['0'];
+						 var h = size['1'];
+						 document.getElementById('ad_type_' + o + '_width').value = w;
+						 document.getElementById('ad_type_' +o + '_height').value = h;
+					}else{
+						document.getElementById('ad_type_' + o + '_width').value = '';
+						document.getElementById('ad_type_' +o + '_height').value = '';
+					}
+				}
+				function checkform(){
+
+					var i = checkForm(document.getElementById('form1'));
+					if(i){
+
+					 	document.getElementById("form1").submit();
+
+					}else{
+						return false;
+					}
+				}
+				function chkCheckBoxChs(){ //檢測是否有選擇多选框的至少一项
+					var obj = document.getElementsByName('ckb_tpl_type[]'); //獲取多選框數組
+					var objLen= obj.length; //獲取數據長度
+					var objYN; //是否有選擇
+					var i;
+					objYN=false;
+					for (i = 0;i< objLen;i++){
+					if (obj [i].checked==true) {
+					objYN= true;
+					break;
+					}
+					}
+					return objYN;
+
+					}
+				function chkRadio(){
+				 var position = document.getElementsByName("ad_position");
+				 var objYN;
+				 var i;
+				 objYN=false;
+				 for(var i=0;i<position.length;i++){
+				  if(position[i].checked==true){
+				   return true;
+				   break;
+				  }
+				 }
+				return objYN;
+				}
+
+            </script>
+		</div>
+	</div>
+</div>
+<!--{template ADMIN_DIRECTORY/tpl/admin_footer}-->

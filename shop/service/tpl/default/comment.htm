@@ -1,0 +1,148 @@
+  <div class="comment" id="commentArea1">
+
+    <div class="comment-post {if $gUid} hidden {/if}">
+      <label>请 <a  href="index.php?do=login" data-title="用户登录" class="btn btn-default">登录</a>
+      		   或 <a  href="index.php?do=register" data-title="用户注册"  class="btn btn-default">注册</a> 再发留言。
+      </label>
+    </div>
+    <!-- comment-post 未登录-->
+
+<div id="comment_page">
+    <div class="comment-post {if !$gUid} hidden {/if}" id="commentArea" >
+      <div class="media-object comment-avatar">
+        <!--{userpic($gUserInfo['uid'],'small')}-->
+      </div>
+      <div class="media-body">
+        <div class="media-heading">
+          <strong class="comment-name">{$gUserInfo['username']}</strong>
+          <time class="comment-time">留言不得超过100字</time>
+        </div>
+        <div class="form-group">
+          <textarea name="addcontent" class="form-control" id="addcontent" rows="1" ></textarea>
+        </div>
+        <button class="btn btn-default" type="button" id="addcomment" onclick="addComment('{$intId}','{$intId}','service',0)"><i class="fa fa-comments"></i> 发表留言</button>
+      </div>
+    </div>
+    <!-- comment-post 已登录-->
+
+	{loop $arrCommentLists $k $v}
+    <div class="media comment-item" id="replyCommentList_{$v['comment_id']}">
+      <div class="media-object comment-avatar">
+        <a href="index.php?do=space&id={$v['uid']}">
+          <!--{userpic($v['uid'],'small')}-->
+        </a>
+      </div>
+      <div class="media-body">
+
+        <div class="media-heading">
+          <strong class="comment-name">{$v['username']}</strong>
+          <time class="comment-time"><!--{eval echo date('Y-m-d H:i:s',$v['on_time'])}--></time>
+        </div>
+        <div class="comment-content">
+          <span class="caret"></span>
+          	<!--{eval echo htmlspecialchars_decode($v['content'])}-->
+        </div>
+        <div class="comment-ctrl">
+          <a href="javascript:toggleReplyArea('{$v[comment_id]}');void(0);"  class="ctrl-item"><i class="fa fa-comment"></i> 回复</a>
+          {if $v['uid'] == $gUid&&$gUid}<a href="javascript:delComment('{$v[comment_id]}');void(0);"  class="ctrl-item"><i class="fa fa-times"></i> 删除</a>{/if}
+        </div>
+
+
+        <div class="comment-post hidden" id="replyComment_{$v['comment_id']}">
+          <div class="media-object comment-avatar">
+            <!--{userpic($gUserInfo['uid'],'small')}-->
+          </div>
+          <div class="media-body">
+            <div class="media-heading">
+              <strong class="comment-name">回复 {$v['username']}</strong>
+              <time class="comment-time">不得超过100字</time>
+            </div>
+            <div class="form-group">
+              <textarea name="replyAddContent_{$v['comment_id']}" class="form-control" id="replyAddContent_{$v['comment_id']}" rows="1" ></textarea>
+            </div>
+            <button class="btn btn-default" onclick="replyAddComment('{$v[comment_id]}','{$intId}','{$intId}','service','{$v[comment_id]}');" ><i class="fa fa-comments"></i> 发表</button>
+          </div>
+         </div>
+
+		{if $arrReplyLists}
+        {loop $arrReplyLists $k1 $v1}
+
+        {if $v1['p_id'] == $v['comment_id']}
+        <div class="media comment-item {if $v1['uid'] !== $v['uid']}reply{/if}" id="replyCommentList_{$v1['comment_id']}">
+          <div class="media-object comment-avatar">
+            <a href="index.php?do=space&id={$v1['uid']}">
+          		<!--{userpic($v1['uid'],'small')}-->
+        	</a>
+          </div>
+          <div class="media-body">
+            <div class="media-heading">
+              {if $v1['uid'] === $v['uid']}
+              	<strong class="comment-name">{$v['username']} 回复 </strong>
+              {else}
+              	<strong class="comment-name">{$v1['username']} 回复 {$v['username']}</strong>
+              {/if}
+              <time class="comment-time"><!--{eval echo date('Y-m-d H:i:s',$v1['on_time'])}--></time>
+            </div>
+
+            <div class="comment-content">
+              <span class="caret"></span>
+             <!--{eval echo htmlspecialchars_decode($v1['content'])}-->
+            </div>
+            <div class="comment-ctrl">
+              <a href="javascript:toggleReplyArea('{$v1[comment_id]}');void(0);"  class="ctrl-item"><i class="fa fa-comment"></i> 回复</a>
+              {if $v1['uid'] == $gUid&&$gUid}<a href="javascript:delComment('{$v1[comment_id]}');void(0);"  class="ctrl-item"><i class="fa fa-times"></i> 删除</a>{/if}
+            </div>
+
+	         <div class="comment-post hidden" id="replyComment_{$v1['comment_id']}">
+	          <div class="media-object comment-avatar">
+	            <!--{userpic($gUserInfo['uid'],'small')}-->
+	          </div>
+	          <div class="media-body">
+	            <div class="media-heading">
+	              <strong class="comment-name">回复
+	              {if $v['uid'] === $v1['uid']}
+	              {$v['username']}
+	              {else}
+	              {$v1['username']}
+	              {/if}
+	              </strong>
+	              <time class="comment-time">不得超过100字</time>
+	            </div>
+	            <div class="form-group">
+	              <textarea name="replyAddContent_{$v1['comment_id']}" class="form-control" id="replyAddContent_{$v1['comment_id']}" rows="1" ></textarea>
+	            </div>
+	            <button class="btn btn-default" onclick="replyAddComment('{$v1[comment_id]}','{$intId}','{$intId}','service','{$v[comment_id]}');" ><i class="fa fa-comments"></i> 发表</button>
+	          </div>
+	         </div>
+
+            <!-- comment-post 已登录-->
+
+          </div>
+
+        </div>
+        {/if}
+        {/loop}
+        {/if}
+		</div>
+
+    </div>
+    {/loop}
+
+    <!-- comment-item end-->
+
+
+  <!-- comment end -->
+{if $strPage['page']}
+  <div class="list-page">
+    <div class="page-tips pull-left">
+      <!-- 显示 1~20 项 共 42 个留言 -->
+    </div>
+    <ul class="pagination pagination-sm pull-right">
+        {$strPage['page']}
+    </ul>
+  </div>
+  {/if}
+
+  </div>
+</div>
+  <script type="text/javascript" src="static/js/model/task/comment.js"></script>

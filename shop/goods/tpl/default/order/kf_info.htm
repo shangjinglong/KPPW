@@ -1,0 +1,17 @@
+<div class="modal-body">
+    
+	
+
+	<div class="media">
+	  <div class="pull-left media-object" href="#">
+	    <!--{userpic($kf_info['uid'],'middle')}-->
+	  </div>
+	  <div class="media-body">
+		<p>姓名：	 $kf_info['username']</p>
+      	<p>客服电话：{if  $kf_info['phone']} $kf_info['phone']{else}暂无{/if}</p>
+      	<p>客服邮箱: {if  $kf_info['email']}$kf_info['email']{else}暂无{/if}</p>
+      	<p>QQ:	{if  $kf_info['qq']} $kf_info['qq']{else}暂无{/if}</p>
+	  </div>
+	</div>
+
+</div>

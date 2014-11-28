@@ -1,0 +1,13 @@
+<nav class="bread-nav">
+  <div  class="container">
+    <ol class="breadcrumb">
+      <li>您的位置：</li>
+	  {loop $arrBreadcrumbs $k $v}
+      	<li><a href="$v['url']">$v['name']</a></li>
+	  {/loop}
+    </ol>
+  </div>
+</nav>
+<!-- bread-nav end -->
+
+

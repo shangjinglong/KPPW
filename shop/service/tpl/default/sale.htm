@@ -1,0 +1,45 @@
+ <ul class="nav nav-pills second-nav">
+    <li {if !$t}class="active"{/if}><a href="{$strUrl}&view={$view}#pageT">所有的</a></li>
+    <li {if $t=='today'}class="active"{/if}><a href="{$strUrl}&view={$view}&t=today#pageT">最新</a></li>
+  </ul>
+  <!-- second-nav end -->
+  <div class="record">
+    <div class="table-responsive">
+      <table class="table table-hover">
+        <thead>
+          <tr>
+            <th>买家</th>
+            <th>出价</th>
+            <th>成交时间</th>
+            <th>状态</th>
+          </tr>
+        </thead>
+        <tbody>
+        	{if $arrSaleList}
+	            {loop $arrSaleList $v}
+	          <tr>
+	            <td>{if $uid}<a href="index.php?do=seller&id={$v['order_uid']}" target="_blank">{$v['order_username']}</a>{else}
+	                   无法查看
+	            {/if}</td>
+	            <td><span class="money"><sub>￥</sub>$v['order_amount']<sub>元</sub> </span></td>
+	            <td><!--{date('Y-m-d H:i:s',$v['order_time'])}--> </td>
+	            <td>{$arrStatus[$v['order_status']]} </td>
+	          </tr>
+			   {/loop}
+		      {else}
+				<tr><td>暂无交易记录</td></Td></tr>
+			 {/if}
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="list-page">
+    <div class="page-tips pull-left">
+    <!--  显示 1~20 项 共 {$intCount} 个留言-->
+    </div>
+    <ul class="pagination pagination-sm pull-right">
+       {$pages['page']}
+    </ul>
+  </div>
+  <!-- list-page end -->

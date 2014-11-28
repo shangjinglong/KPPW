@@ -1,0 +1,104 @@
+<!--{template ADMIN_DIRECTORY/tpl/admin_header}-->
+<div class="page_title">
+    <h1>投诉建议</h1>
+    <div class="tool">
+        <a href="index.php?do={$do}&view=suggest">建议列表</a>
+		<a href="javascript:void(0);" class="here">建议回复</a>
+    </div>
+</div>
+ <div class="box post">
+  <div class="tabcon">
+   <div class="title"><h2>投诉建议#{$suggest_id}</h2></div>
+    <div class="detail">
+     <form action="index.php?do={$do}&view={$view}&suggest_id=$suggest_id" method="post" name="frm" id="frm">
+     	<input type="hidden" value="{$suggest_info['p_id']}" name="suggestid">
+		<input type="hidden" value="{$suggest_info['uid']}" name="suggest_uid">
+		<input type="hidden" value="{$suggest_info['username']}" name="suggest_username">
+      <table width="100%" border="0" cellspacing="0" cellpadding="0">
+       <tr>
+         <th scope="row" width="130">建议编号</th>
+		 <td>#{$suggest_id}</td>
+       </tr>
+	   <tr>
+         <th scope="row" width="130">建议标题</th>
+         <td>{$suggest_info['pro_title']}</td>
+      </tr>
+	   <tr>
+         <th scope="row" width="130">建议类型</th>
+         <td>{$suggest_type_arr[$suggest_info['pro_type']]}</td>
+      </tr>
+	  <tr>
+       <th scope="row" width="130">建议人</th>
+       <td>
+       		<a href="{$_K['siteurl']}/index.php?do=seller&id={$suggest_info['uid']}" target="_blank">$suggest_info['username']</a>
+			<font color="red">E-mail</font>:{$user_info['email']}&nbsp;||&nbsp;<font color="red">{$_lang['contact_tel']}</font>:{$user_info['phone']}&nbsp;||&nbsp;<font color="red">QQ</font>:{$user_info['qq']}&nbsp;||&nbsp;<font color="red">{$_lang['tel']}</font>:{$user_info['mobile']}
+	   </td>
+      </tr>
+	  <tr>
+         <th scope="row" width="130">申请建议时间</th>
+         <td><!--{date('Y-m-d H:i:s',$suggest_info['pro_time'])}--></td>
+      </tr>
+	  <tr>
+        <th scope="row" width="130">状态</th>
+        <td>{$suggest_status_arr[$suggest_info['pro_status']]}</td>
+      </tr>
+	 <tr>
+        <th scope="row" width="130">详细描述</th>
+        <td><!--{eval echo nl2br($suggest_info['pro_desc'])}--></td>
+     </tr>
+	<tr id="pass">
+       <th scope="row" width="130">回复内容</th>
+	   <td>
+	   	{if $suggest_info['pro_status']=='1'}
+	  	 <textarea cols="" rows="7" style="width:360px;" name="op_result[reply]" id="op_result"></textarea>
+		{else}
+			{$suggest_info['op_content']}
+		{/if}
+	   </td>
+	</tr>
+	{if $suggest_info['pro_status']=='2'}
+	<tr>
+         <th scope="row" width="130">回复时间</th>
+         <td><!--{date('Y-m-d H:i:s',$suggest_info['op_time'])}--></td>
+      </tr>
+	<tr>
+	{/if}
+      <th scope="row">&nbsp;</th>
+      <td>
+          <div class="clearfix padt10">
+          	<input type="hidden" name="sbt_op" value="1">
+			{if $suggest_info['pro_status']=='1'}
+				 <input type="hidden" name="op_result[process_result]" id="process_result">
+          		 <input type="hidden" name="op_result[action]" id="action">
+          		 <button class="positive primary pill button" type="submit" name="btn_report" value="回复" onclick="return report();"><span class="icon pen"></span>回复</button>
+			{/if}
+			<a class="positive primary pill button" href="javascript:history.back();">返回</a>
+          </div>
+      </td>
+   </tr>
+  </tbody>
+ </table>
+ </form>
+ </div>       
+</div>
+<script type="text/javascript">
+	var uid = parseInt($uid);
+	function report(){
+		$("#pass").show();
+		$("#nopass").hide();
+		var shtml=$("#op_result").val();		
+		if(shtml.length<10){
+			art.dialog.alert("回复不能为于10个字");return false;
+		}else{
+			art.dialog({
+   				title: "确认提示",
+  				content: "确认回复:<br>"+shtml,
+				icon: 'succeed',
+   				yesFn: function(){$("#process_result").val(shtml);$("#action").val('pass');$("#frm").submit()},
+				noFn :function(){this.close();return false;}
+			});
+			return false;
+		}
+	}
+</script>
+<!--{template ADMIN_DIRECTORY/tpl/admin_footer}-->

@@ -1,0 +1,50 @@
+<!--{template top}-->
+<!--{template seller/banner}-->
+<!--{template seller/nav}-->  
+			<div class="store_info_box">
+				{if $arrCaseLists}
+				<div class="list list-img">
+				    <ul class="list-body">
+						{loop $arrCaseLists $k $v}
+						  <li class="list-item">
+				        <a href="{$v['case_url']}" target="_blank" class="list-title" title="{$v['case_name']}">
+				         {$v['case_name']}
+				        </a>
+				        <div class="list-item-img">
+				          <a href="{$v['case_url']}" target="_blank"   title="{$v['case_name']}">
+				            <img src=" {$v['case_pic']}" alt="{$v['case_name']}">
+				          </a>
+				        </div>
+				        <div class="list-item-footer">
+				          <span class="poster">
+				            &nbsp;
+				          </span>
+				          <span class="money"><sub>&nbsp;</sub>&nbsp;</span>
+				        </div>
+				      </li>
+						{/loop}		    
+				  </ul>
+				</div>
+				{else}
+						<dd class="list-item text-center">
+			              <!--{template nodata}-->
+                        </dd>
+				{/if}
+				<!-- list-img end -->
+
+				<div class="list-page">
+				    <div class="page-tips pull-left">
+				         显示 {$strPages['st']}~{$strPages['en']} 项 共 {$intCaseCount} 个案例
+				    </div>
+				    <ul class="pagination pagination-sm pull-right">
+				      {$strPages['page']}
+				    </ul>
+				  </div>
+				  <!-- list-page end -->
+			</div>
+			<!-- store_info_box end -->
+</div><!-- store_down end-->
+</div><!-- store_detail end -->
+</div><!-- space_body end-->
+</div><!-- #space_bg end-->
+<!--{template footer}-->

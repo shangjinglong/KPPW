@@ -1,0 +1,425 @@
+<!--{template header}-->
+
+<!-- 幻灯片 -->
+<div  class="container">
+	<div class="home-top">
+		<div class="banner">
+				<div class="fotorama" data-autoplay="true" data-width="100%" data-ratio="950/300" data-fit="cover" data-stopautoplayontouch="false"  data-loop="true" data-arrows="false" data-click="false" data-swipe="true">
+					<!--{ad_show(HOME_TOP_SLIDE,1)}-->
+				</div>
+				<!-- fotorama end -->
+		</div>
+		<!-- banner end -->
+
+		<div class="site-noitce">
+			<div class="site-noitce-top">
+			{if $gUid}
+				<div class="after">
+					<ul class="nav nav-pills">
+						<li class="active mr_10">
+							<a href="#employer" data-toggle="tab">
+								<i class="fa fa-flag"></i>
+								我是雇主
+							</a>
+						</li>
+						<li>
+							<a href="#witkey" data-toggle="tab">
+								<i class="fa fa-user"></i>
+								我是威客
+							</a>
+						</li>
+					</ul>
+
+					<div class="tab-content">
+						<div class="tab-pane active" id="employer">
+							<a href="index.php?do=pubtask"  class="btn btn-info btn-sm btn-block">发布任务</a>
+						</div>
+
+						<div class="tab-pane" id="witkey">
+							<a href="index.php?do=pubgoods"  class="btn btn-info btn-sm btn-block">发布商品</a>
+						</div>
+					</div>
+				</div>
+			{else}
+
+			<div class="before ">
+				<div class="row">
+					<div class="col-xs-6">
+						<a href="index.php?do=register" class="btn btn-info btn-block">注册帐号</a>
+					</div>
+					<div class="col-xs-6">
+						<a href="index.php?do=login" class="btn btn-primary btn-block">用户登录</a>
+					</div>
+				</div>
+				<div class="site-other-login">
+					第三方帐号登录：
+					  {loop $api_open $k $v}
+						{if $weibo_list[$k.'_app_id']}
+					<a href="index.php?do=oauthlogin&type={$k}" title="{$api_name[$k]['name']}"><img src="static/img/ico/{$k}_t.gif" alt="{$api_name[$k]['name']}"></a>
+						{/if}
+					{/loop}
+				</div>
+			</div>
+
+			<!-- site-noitce-top end -->
+			{/if}
+			</div>
+			<div class="site-noitce-bottom">
+				<ul class="site-noitce-nav">
+					<li class="active"><a href="#announcement" data-toggle="tab">公告</a></li>
+					<li><a href="#notification" data-toggle="tab">中标通知</a></li>
+					<li><a href="#withdrawal" data-toggle="tab">提现</a></li>
+				</ul>
+				<div class="tab-content">
+					<div id="announcement" class="tab-pane fade in active">
+						<ul class="site-noitce-list">
+							{loop $arrBulletins $k $v}
+							<li><i>&middot;</i><a href="index.php?do=article&id=$v['art_id']" target="_blank">{$v['art_title']}</a></li>
+							{/loop}
+						</ul>
+					</div>
+					<div id="notification" class="tab-pane fade">
+						<ul class="site-noitce-list">
+							{loop $arrDynamics $v}
+							<li><i>&middot;</i>{$v[username]}成功中标 <a href="$v['event']['url']" target="_blank">$v['event']['content']</a></li>
+							{/loop}
+						</ul>
+					</div>
+					<div id="withdrawal" class="tab-pane fade">
+						<ul class="site-noitce-list">
+							{loop $arrWithdraws $v}
+							<li><i>&middot;</i>{$v['username']}成功提现<span class="money">{$v['withdraw_cash']}<sub>元</sub></span></li>
+							{/loop}
+						</ul>
+					</div>
+				</div>
+			</div>
+			<!-- site-noitce-bottom end -->
+
+		</div><!-- site-noitce end -->
+
+
+
+	</div>
+	<!-- home-top end -->
+
+
+
+
+
+	<div class="home-task">
+  		<div class="home-task-header">
+			<div class="category-list">
+		      <a href="javascript:void(0);" class="category-title"><i class="fa fa-list-ul"></i> 任务 <i class="fa fa-angle-down"></i></a>
+		      <ul class="category-down">
+		      	{loop $arrNewIndusCt $key $value}
+		        <li class="category-item">
+		          <div class="category-top">
+		          	{loop $value $k1 $v1}
+		            {if $k1<2}
+		            <a href="index.php?do=tasklist&i=$v1['indus_id']"  {if $v1['is_recommend']==1}class="hot"{/if}  tabindex="-1">$v1['indus_name']</a>、
+					{/if}
+			        {/loop}
+		            <i class="fa fa-angle-right"></i>
+		          </div>
+		          <div class="category-inner">
+		            <h3 class="category-inner-title">全部{$arrIndusPt[$key]['indus_name']}</h3>
+					  {loop $value $k2 $v2}
+		              <a href="index.php?do=tasklist&i=$v2['indus_id']" tabindex="-1" {if $v2['is_recommend']==1}class="hot"{/if}>$v2['indus_name']</a>
+					   {/loop}
+		          </div>
+		        </li>
+				{/loop}
+		      </ul>
+		  </div>
+		  <!-- category-list end -->
+
+  			<a class="more-link" href="index.php?do=tasklist" target="_blank">更多<i class="fa fa-angle-double-right"></i></a>
+  		</div>
+  		<!-- home-task-header end-->
+  		<div class="home-task-body">
+  			<ul class="home-min-list">
+  				{loop $arrRecommTaskLists $k $v}
+  				<li>
+  					<a href="index.php?do=task&id=$v['task_id']" class="home-min-list-title" title="$v['task_title']" target="_blank"><span class="money">{if $v['task_cash_coverage']}<sub>￥</sub>{$arrCashCoverage[$v['task_cash_coverage']]['start_cove']}-<sub>￥</sub>{$arrCashCoverage[$v['task_cash_coverage']]['end_cove']}{else}<sub>￥</sub>$v['task_cash']{/if}</span> $v['task_title']</a>
+  					<span class="home-min-list-meta">$v['username'] 发布</span>
+  					<span class="home-min-list-meta">$v['work_num']投标</span>
+  				</li>
+				{/loop}
+  			</ul>
+  		</div>
+  		<!-- home-task-body end -->
+  	</div>
+  	<!-- home-task end -->
+
+	<div class="home-record for-task">
+		<div class="home-record-header">
+			<div class="record-ctrl">
+				<a href="javascript:$('#jcarousel_bid').jcarousel('scroll', '-=1');void(0);" ><i class="fa fa-caret-down"></i></a>
+				<a href="javascript:$('#jcarousel_bid').jcarousel('scroll', '+=1');void(0);"><i class="fa fa-caret-up"></i></a>
+			</div>
+			<h3 class="min-title">中标动态</h3>
+		</div>
+		<!-- home-record-header end -->
+		<div id="jcarousel_bid" class="home-record-body jcarousel-vertical">
+			<ul class="record-list">
+				{loop $arrDynamicPlays $k $v}
+				<li>
+					<!--{eval $timeDesc = kekezu::time2Units(time()-$v['feed_time'],'hour');}-->
+					<p class="record-list-title">
+						<span class="time">{if $timeDesc}{$timeDesc}前{else}刚刚{/if}</span>
+						<a href="$v['feed_username']['url']">
+						<!--{userpic($v['uid'],'small')}-->{$v[username]}
+						</a>
+					</p>
+					<p class="record-list-post">
+						<a href="$v['event']['url']" title="$v['event']['content']">{if $v['event']['cash']}<span class="money"><sub>￥</sub>$v['event']['cash']</span>{/if} $v['event']['content'] </a>
+					</p>
+				</li>
+				{/loop}
+			</ul>
+		</div>
+		<!-- home-record-body end -->
+	</div>
+	<!-- home-record end -->
+
+	<div class="for-advertise">
+<!--{ad_show(HOME_CENTAL_ONE)}-->
+		 <!--<img src="" data-src="holder.js/950x50/#f8f8f8:#ddd/text:AD">-->
+	</div>
+	<!-- for-advertise end -->
+
+	<div class="home-shop">
+  		<div class="home-shop-header">
+			<div class="category-list">
+		      <a href="javascript:void(0);" class="category-title"><i class="fa fa-list-ul"></i> 商品 <i class="fa fa-angle-down"></i></a>
+		      <ul class="category-down">
+		       {loop $arrNewIndusCs $key $value}
+		        <li class="category-item">
+		          <div class="category-top">
+		          	{loop $value $k1 $v1}
+		            {if $k1<2}
+		            <a href="index.php?do=goodslist&i=$v1['indus_id']"  {if $v1['is_recommend']==1}class="hot"{/if}  tabindex="-1">$v1['indus_name']</a>、
+					{/if}
+			        {/loop}
+		            <i class="fa fa-angle-right"></i>
+		          </div>
+		          <div class="category-inner">
+		            <h3 class="category-inner-title">全部{$arrIndusPs[$key]['indus_name']}</h3>
+					  {loop $value $k2 $v2}
+		              <a href="index.php?do=goodslist&i=$v2['indus_id']" tabindex="-1" {if $v2['is_recommend']==1}class="hot"{/if}>$v2['indus_name']</a>
+					   {/loop}
+		          </div>
+		        </li>
+				{/loop}
+		      </ul>
+		  </div>
+		  <!-- category-list end -->
+
+  			<a class="more-link" href="index.php?do=goodslist" target="_blank">更多<i class="fa fa-angle-double-right"></i></a>
+  		</div>
+  		<!-- home-shop-header end-->
+  		<div class="home-shop-body">
+  			<ul class="home-min-list img">
+  				{loop $arrRecommGoodsLists $k $v}
+  				<li>
+  					<a href="index.php?do=goods&id=$v['service_id']" title="$v['title']" target="_blank">
+	  					<img src="tpl/default/img/grey.gif" class="lazy"  data-original="<!--{eval echo keke_shop_class::output_pics($v['pic'],210,1)}-->"  alt="$v['title']">
+	  					<div class="home-min-list-detail">
+							<span class="home-min-list-title">$v['title'] </span>
+		  					<span class="home-min-list-meta">$v['username'] 发布</span>
+		  					<span class="home-min-list-meta"><span class="money"><sub>￥</sub>$v['price']</span></span>
+	  					</div>
+	  				</a>
+				</li>
+				{/loop}
+  			</ul>
+
+  		</div>
+  		<!-- home-shop-body end -->
+  	</div>
+  	<!-- home-shop end -->
+
+	<div class="home-record for-shop">
+		<div class="home-record-header">
+			<h3 class="min-title">推荐店铺</h3>
+		</div>
+		<!-- home-record-header end -->
+		<div class="home-record-body">
+			<ul class="record-list img">
+				{loop $arrRecommShops $k $v}
+				<li>
+					<a href="index.php?do=seller&id=$v['uid']" class="avatar" title="$v['shop_name']">
+						<!--{userpic($v['uid'],'middle')}-->
+					</a>
+
+					<div class="avatar-detail">
+						<p class="record-list-title">
+							<a href="index.php?do=seller&id=$v['uid']" title="$v['shop_name']">
+								$v['shop_name']
+							</a>
+						</p>
+						<p class="record-list-meta">好评率 <span><!--{eval echo $v['good_rate']*100}--><sub>%</sub></span></p>
+						<p class="record-list-tags">
+							<span class="marked marked-tags">{$indus_p_arr[$v[indus_pid]][indus_name]}</span>
+							<span class="marked marked-tags">{$indus_c_arr[$v[indus_id]][indus_name]}</span>
+						</p>
+					</div>
+				</li>
+				{/loop}
+			</ul>
+		</div>
+		<!-- home-record-body end -->
+	</div>
+	<!-- home-record end -->
+
+	<div class="for-advertise">
+        <!--{ad_show(HOME_CENTAL_TWO)}-->
+		<!---->
+	</div>
+	<!-- for-advertise end -->
+
+	<div class="home-case">
+		<div class="home-case-header">
+			<h2 class="home-case-title"><i class="fa fa-thumbs-up"></i> 成功案例</h2>
+			<a class="more-link" href="index.php?do=case" target="_blank">更多<i class="fa fa-angle-double-right"></i></a>
+		</div>
+		<!-- home-case-header end -->
+		<div class="home-case-body">
+
+			<div class="home-case-first">
+
+				<a class="img-box" {if $arrCaseLists[0]['obj_type']=='task'}href="index.php?do=task&id=$arrCaseLists[0]['obj_id']" {else} href="index.php?do=goods&id=$arrCaseLists[0]['obj_id']"{/if} title="{$arrCaseLists[0]['case_title']}" title="$arrCaseLists">
+					<img class="lazy" src="tpl/default/img/grey.gif" data-original="{if file_exists($arrCaseLists[0]['case_img'])}<!--{eval echo keke_shop_class::output_pics($arrCaseLists[0]['case_img'],210,1);}-->{else}tpl/default/img/shop/shop_default_big.jpg{/if}" alt="{$arrCaseLists[0]['case_title']}">
+				</a>
+				<a title="{$arrCaseLists[0]['case_title']}" class="home-case-first-title" href="javascript:void(0);">
+                  <span class="marked marked-task">{$model_list[$arrCaseLists[0]['model_id']]['model_name']}</span> {$arrCaseLists[0]['case_title']}
+                </a>
+                <p>{if $arrCaseLists[0]['obj_type']=='task'}赏金{else}售价{/if}：<span class="money">￥{$arrCaseLists[0]['case_price']}</span></p>
+                <p>发布人：<a href="index.php?do=seller&id=$arrCaseLists[0]['uid']">$arrCaseLists[0]['username']</a></p>
+                <!-- <p>雇主评价：原本不是这个vi色系，但是没有办法，因为上面的人非要用...</p> -->
+                <p>{if $arrCaseLists[0]['obj_type']=='task'}投稿：{$arrCaseLists[0]['work_num']}{else}售出：{$arrCaseLists[0]['sale_num']}{/if} 个</p>
+			</div>
+
+
+			<ul class="home-min-list img">
+				{loop $arrCaseLists $k $v}
+				{if $k>0}
+  				<li>
+  					<a {if $v['obj_type']=='task'}href="index.php?do=task&id=$v['obj_id']" {else} href="index.php?do=goods&id=$v['obj_id']"{/if} title="{$v['case_title']}" target="_blank">
+	  					<img alt="{$v['case_title']} " class="lazy" src="tpl/default/img/grey.gif"  data-original="{if file_exists($v['case_img'])}<!--{eval echo keke_shop_class::output_pics($v['case_img'],210,1);}-->{else}tpl/default/img/shop/shop_default_big.jpg{/if}">
+	  					<div class="home-min-list-detail">
+							<span class="home-min-list-title">{$v['case_title']} </span>
+		  					<span class="home-min-list-meta">{if $v['obj_type']=='task'}投稿：{$v['work_num']}{else}售出：{$v['sale_num']}{/if}个</span>
+		  					<span class="home-min-list-meta"><span class="money"><sub>￥</sub>$v['case_price']</span></span>
+	  					</div>
+	  				</a>
+				</li>
+				{/if}
+				{/loop}
+  			</ul>
+		</div>
+		<!-- home-case-body end -->
+	</div>
+	<!-- home-case end -->
+
+
+	<div class="home-record for-news">
+		<div class="home-record-header">
+			<h3 class="min-title">资讯</h3>
+		</div>
+		<!-- home-record-header end -->
+		<div class="home-record-body">
+			<ul class="record-list">
+
+				<li>
+					<a href="index.php?do=article&id=$arrArticleTop['art_id']" class="top-img"  title="{$arrArticleTop['art_title']}">
+						<img class="lazy"  alt="{$arrArticleTop['art_title']}"   src="tpl/default/img/grey.gif"  data-original="{$arrArticleTop['art_pic']}">
+						<span class="news-title">{$arrArticleTop['art_title']}</span>
+					</a>
+				</li>
+				{loop $arrArticleLists $k $v}
+				<li>
+					<p class="record-list-title">
+						<span class="time"><!--{eval echo date('m-d',$v['pub_time']);}--></span>
+						<a href="index.php?do=article&id=$v['art_id']" class="news-title" title="$v['art_title']">
+							$v['art_title']
+						</a>
+					</p>
+				</li>
+				{/loop}
+			</ul>
+		</div>
+		<!-- home-record-body end -->
+	</div>
+	<!-- home-record end -->
+
+
+
+	<div class="home-stats">
+		<div class="home-stats-inner">
+			<div class="home-stats-ctrl">
+				<a href="javascript:$('#jcarousel_stats').jcarousel('scroll', '-=1');void(0);" ><i class="fa fa-caret-down"></i></a>
+				<a href="javascript:$('#jcarousel_stats').jcarousel('scroll', '+=1');void(0);" ><i class="fa fa-caret-up"></i></a>
+			</div>
+			<div id="jcarousel_stats" class="home-stats-list jcarousel-vertical">
+				<ul>
+					<li>
+						所有：
+						<div class="home-stats-meta">任务总数 <span>{$arrPubAll['0']['count']}</span> 个</div>
+						<div class="home-stats-meta">威客人数 <span>{$arrAcceptAll}</span> 人</div>
+						<div class="home-stats-meta">成交总额 <span>{c:$arrCashAll['0']['cash']}</span> </div>
+					</li>
+					<li>
+						今日：
+						<div class="home-stats-meta">发布任务 <span>{$arrPubToday['0']['count']}</span> 个</div>
+						<div class="home-stats-meta">成交任务 <span>{$arrAcceptToday}</span> 个</div>
+						<div class="home-stats-meta">成交金额 <span>{c:$arrCashToday['0']['cash']}</span> </div>
+					</li>
+				</ul>
+			</div>
+		</div>
+	</div>
+	<!-- home-stats end -->
+    <div class="home-other">
+    	<p>我对 {$_K['sitename']} 有意见或建议，现在就<a href="javascript:sendSuggest();void(0);">提交</a></p>
+
+	</div>
+	<div class="for-advertise">
+		<!--{ad_show(HOME_CENTAL_THREE)}-->
+		<!--<img src="" data-src="holder.js/950x50/#f8f8f8:#ddd/text:AD">-->
+	</div>
+	<!-- for-advertise end -->
+
+</div>
+<!-- container end -->
+<script type="text/javascript">
+    $(function(){
+
+        $('#jcarousel_bid').jcarousel({
+            wrap: 'circular',
+            animation: 500,
+            vertical: true
+        }).jcarouselAutoscroll({
+            scroll: '+=1',
+            interval: 5000
+        }).mouseenter(function(){
+            $(this).jcarouselAutoscroll('stop');
+        }).mouseleave(function(){
+            $(this).jcarouselAutoscroll('start');
+        });
+
+        $('#jcarousel_stats').jcarousel({
+            wrap: 'circular',
+            vertical: true
+        }).jcarouselAutoscroll({
+            scroll: '+=1'
+        }).mouseenter(function(){
+            $(this).jcarouselAutoscroll('stop');
+        }).mouseleave(function(){
+            $(this).jcarouselAutoscroll('start');
+        });
+    });
+
+</script>
+<!--{template footer}-->

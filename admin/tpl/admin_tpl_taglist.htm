@@ -1,0 +1,117 @@
+<!--{template ADMIN_DIRECTORY/tpl/admin_header}-->
+<div class="page_title">
+    	<h1>{$_lang['tag_manage']}</h1>
+        <div class="tool">         
+            <a href="index.php?do=tpl&view=taglist&t={$t}" {if $view == 'taglist'}class="here"{/if} >{$_lang['tag_call']}</a>
+			<a href="index.php?do=tpl&view=edit_tag&tag_type=$tag_type&t={$t}" {if $view == 'edit_tag'}class="here"{/if} >{$_lang['tag_add']}</a>
+        </div>
+</div>
+<div class="box clearfix">
+	
+	{if !$t}
+	<div class="tab clearfix">			
+	    <!--   	<a href="index.php?do={$do}&view={$view}&type=1" {if !type||$type==1}class="select"{/if}>活动</a> -->
+		    <a href="index.php?do={$do}&view={$view}&type=2" {if $type==2}class="select"{/if}>协议</a>
+					
+	</div>
+	{/if}
+<form method="post" action="#" id="frm_art_search">
+	<input type="hidden" name="do" value="{$do}">
+	<input type="hidden" name="view" value="{$view}">
+	<input type="hidden" name="tag_type" value="{$tag_type}">
+	<div class="box search p_relative">
+    	<div class="title"><h2>{$_lang['search']}</h2></div>
+    	<div class="detail" id="detail"> 
+    		<table cellspacing="0" cellpadding="0">    		
+				<tbody>
+					<tr>
+						<th>{$_lang['result_order']}</th>
+						<td>
+							<select name="ord[]">
+                       			 <option value="tag_id" {if $ord['0']=='tag_id' or !isset($ord['0'])} selected="selected"{/if}>{$_lang['default_id_order']}</option>
+                       			 <option value="tagname" {if $ord['0']=='tagname' } selected="selected"{/if}>{$_lang['template_name']}</option>
+                        </select>
+                        <select name="ord[]">
+                       			 <option {if $ord['1']=='desc' or !isset($ord['1'])}selected="selected" {/if} value="desc">{$_lang['desc']}</option>
+                        		<option {if $ord['1']=='asc'}selected="selected" {/if} value="asc">{$_lang['asc']}</option>
+                        </select>
+						</td>
+						<th>{$_lang['result_order']}</th>
+						<td >
+						<select name="slt_page_size">
+                			<option value="10" {if $slt_page_size=='10'}selected="selected"{/if}>{$_lang['page_size']}10</option>
+                			<option value="20" {if $slt_page_size=='20'}selected="selected"{/if}>{$_lang['page_size']}20</option>
+                			<option value="30" {if $slt_page_size=='30'}selected="selected"{/if}>{$_lang['page_size']}30</option>
+            			</select>
+           				<button class="pill" type="submit" value={$_lang['search']} name="sbt_search">
+								<span class="icon magnifier">&nbsp;</span>{$_lang['search']}
+							</button>
+						</td>
+					</tr>          			
+           		</tbody>
+			</table>
+    	</div> 
+    </div>
+</form>
+<div class="box list clearfix">
+<form method="post" action="index.php?do=tpl&view=taglist" name="frm_taglist" id="frm_taglist">
+<div class="title"><h2>{$_lang['tag_list']}</h2></div>
+    <div class="detail"> 
+    	<table width="100%" border="0" cellspacing="0" cellpadding="0" class="tab_list">
+        	<tr class="item">
+        		<th>
+					<input type="checkbox" id="checkbox" onclick="checkall();" class="checkbox" >编号
+				</th>
+           		<th align="left">{$_lang['tag_name']}</th>
+           		<th>{$_lang['internal_calling_code']}</th>
+                <th>{$_lang['js_calling_code']}</th>
+                <th width="60">{$_lang['preview']}</th>
+                <th width="60">{$_lang['detail']}</th>
+                <th width="60">{$_lang['delete']}</th>
+            </tr>
+                {loop $tag_arr $key $value}
+                <tr class="item">
+                	<td>
+                       <input type="checkbox" name="ckb[]" class="checkbox" value="{$value['tag_id']}">
+                    </td>
+                    <td>
+                        {$value['tagname']}
+                    </td>
+                    <td>
+                        <input type="text" class="txt" value="<!--{eval echo '<!--{tag '.$value['tagname'].'}-';}-->->" size="30" onfocus="this.select();">
+                    </td>
+                    <td>
+                        <input type="text" class="txt" value="<script src='{$_K['siteurl']}/js.php?op=tag&tag_id=$value['tag_id']'></script>"  size="40" onfocus="this.select();">
+                    </td>
+                    <td>
+                        <a href="plu.php?do=previewtag&tagid={$value['tag_id']}" target="_blank" class="button dbl_target">
+                        <span class="book icon"></span>{$_lang['view']}</a>
+                    </td>
+                    <td>
+                        <a href="index.php?do=tpl&view=edit_tag&tagid=$value['tag_id']&tag_type={$tag_type}&type={$type}" class="button">
+                        <span class="pen icon"></span>{$_lang['edit']}</a>
+                    </td>
+                    <td>
+                        <a href="index.php?do=tpl&view=taglist&op=del&delid=$value['tag_id']&tag_type={$tag_type}&type={$type}" onclick="return cdel(this)"  class="button"><span class="trash icon"></span>{$_lang['delete']}</a>
+                    </td>
+                </tr>
+				{/loop}
+				<tr>
+            	<td colspan="7">                    
+                    <div class="clearfix"> 
+					     <label for="checkbox" onclick="checkall(event);">{$_lang['select_all']}</label>  
+	                     <input type="hidden" name="sbt_action" class="sbt_action" id="sbt_action"/>　                   
+                        <button class="pill negative button" type="submit" value="{$_lang['mulit_delete']}" name="sbt_action" onclick="return batch_act(this,'frm_taglist')"><span class="icon trash">&nbsp;</span>{$_lang['mulit_delete']}</button>
+						<button class="pill positive button" type="button" name="sbt_add"  onclick="document.location.href='index.php?do={$do}&view=edit_tag&tag_type={$tag_type}&type={$type}'"/><span class="check icon"></span>{$_lang['add_tag']}</button>
+                    </div>
+                 </td>
+        	</tr>
+       </table>
+	   <div class="page">
+             {$pages['page']}
+       </div>
+	  </div>
+</form>
+</div>
+</div>
+<!--{template ADMIN_DIRECTORY/tpl/admin_footer}-->

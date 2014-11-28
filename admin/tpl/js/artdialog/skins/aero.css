@@ -1,0 +1,56 @@
+@charset "gbk";
+/*
+ * artDialog skin
+ * http://code.google.com/p/artdialog/
+ * (c) 2009-2010 TangBin, http://www.planeArt.cn
+ *
+ * This is licensed under the GNU LGPL, version 2.1 or later.
+ * For details, see: http://creativecommons.org/licenses/LGPL/2.1/
+ */
+ 
+/* common start */
+body { _margin:0; _height:100%; }
+.aui_outer { text-align:left; }
+.aui_table { border:0; margin:0; border-collapse:collapse; width:auto; }
+.aui_table td { padding:0; }
+.aui_content,
+.aui_buttons span { display:inline-block; *zoom:1; *display:inline }
+.aui_dialogIcon { vertical-align:middle; _font-size:0; }
+.aui_title { overflow:hidden; text-overflow: ellipsis; }
+.aui_close { display:block; position:absolute; outline:none; }
+.aui_main { text-align:center; }
+.aui_content { text-align:left; border:none 0; }
+.aui_tdIcon { vertical-align: middle; }
+.aui_buttons { padding:5px 10px; text-align:right; white-space:nowrap; }
+.aui_buttons button { margin-left:10px; cursor:pointer; }
+.aui_contentFull{ display:block; width:100%; margin:0; padding:0!important; height:100%; }
+.aui_loading { width:96px; height:32px; text-align:left; text-indent:-999em; overflow:hidden; background:url(icons/loading.gif) no-repeat center center; }
+.aui_icon { width:48px; height:48px; margin:10px 0 10px 10px; }
+.aui_buttons button { padding: 6px 10px; line-height: 1; *padding:4px 10px; *height:2em; letter-spacing:2px; width:auto; overflow:visible; *width:1; border: solid 1px #999; border-radius: 5px; background: #DDD; filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#FFFFFF', endColorstr='#DDDDDD'); background: linear-gradient(top, #FFF, #DDD); background: -moz-linear-gradient(top, #FFF, #DDD); background: -webkit-gradient(linear, 0% 0%, 0% 100%, from(#FFF), to(#DDD)); color: #333; text-decoration: none; cursor: pointer; display: inline-block; text-align: center; text-shadow: 0px 1px 1px rgba(255, 255, 255, 1); box-shadow: 0 1px 0 rgba(255, 255, 255, .7),  0 -1px 0 rgba(0, 0, 0, .09); }
+.aui_buttons button:focus { outline:none 0; border-color:#426DC9; box-shadow:0 0 5px rgba(66, 109, 201, .9); }
+.aui_buttons button:hover { color:#000; border-color:#666; }
+.aui_buttons button:active { border-color:#666; filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#DDDDDD', endColorstr='#FFFFFF'); background: linear-gradient(top, #DDD, #FFF); background: -moz-linear-gradient(top, #DDD, #FFF); background: -webkit-gradient(linear, 0% 0%, 0% 100%, from(#DDD), to(#FFF)); box-shadow:inset 0 0 5px rgba(66, 109, 201, .9), inset 0 0 1em rgba(0, 0, 0, .3); }
+.aui_buttons button[disabled] { cursor:default; color:#666; background:#DDD; border: solid 1px #999; filter:alpha(opacity=50); opacity:.5; box-shadow:none; }
+/* common end */
+
+/* skin start */
+.aui_outer { _ie6PngFix: true; }/* javascript:art.dialog.prototype._pngFix */
+.aui_header, .aui_footer button { font: 12px/1.11 'Microsoft Yahei', Tahoma, Arial, Helvetica, STHeiti; _font-family:Tahoma,Arial,Helvetica,STHeiti; -o-font-family: Tahoma, Arial; }
+.aui_inner { background:#FFF; }
+.aui_main { min-width:9em; }
+.aui_titleWrap { width:100%; height:0; position:relative; bottom:30px; _bottom:0; _margin-top:-30px; }
+.aui_title { height:29px; line-height:29px; padding:0 16px 0 0; _padding:0; color:#FFF; font-weight:700; text-shadow:1px 1px 0 rgba(0, 0, 0, .9); }
+.aui_nw, .aui_ne, .aui_sw, .aui_se, .aui_n, .aui_s, .aui_close { background-image:url(aero/aero_s.png); background-repeat:no-repeat; }
+.aui_nw { width:14px; height:34px; background-position: 0 0; _png:aero/ie6/aui_nw.png; }
+.aui_ne { width:14px; height:34px; background-position: -14px 0; _png:aero/ie6/aui_ne.png; }
+.aui_sw { width:14px; height:14px; background-position: 0 -34px; _png:aero/ie6/aui_sw.png; }
+.aui_se { width:14px; height:14px; background-position: -14px -34px; _png:aero/ie6/aui_se.png; }
+.aui_close { top:7px; right:0; _z-index:1; width:13px; height:13px; _font-size:0; _line-height:0; text-indent:-9999em; background-position:left -96px; _background:url(aero/ie6/aui_close.png); }
+.aui_close:hover { background-position:right -96px; _background:url(aero/ie6/aui_close.hover.png); }
+.aui_n, .aui_s { background-repeat:repeat-x; }
+.aui_n { background-position: 0 -48px; _png:aero/ie6/aui_n.png; }
+.aui_s { background-position: 0 -82px; _png:aero/ie6/aui_s.png; }
+.aui_w, .aui_e { background-image:url(aero/aero_s2.png); background-repeat:repeat-y; }
+.aui_w { background-position:left top; _png:aero/ie6/aui_w.png; }
+.aui_e { background-position: right bottom; _png:aero/ie6/aui_e.png; }
+/* skin end */

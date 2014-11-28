@@ -1,0 +1,252 @@
+<!--{template ADMIN_DIRECTORY/tpl/admin_header}-->
+ <div class="page_title">
+    	<h1>{$_lang['article']}{$_lang['manage']}</h1>
+        <div class="tool">
+            <a href="index.php?do=$do&view=list&type=$type" {if $view=='list'}class="here" {/if}>{if $type=='art'}{$_lang['article']}{elseif $type=='help'}{$_lang['help']}{elseif $type=='bulletin'}{$_lang['bulletin']}{elseif $type=='about'}{$_lang['about']}{else}{$_lang['single_page']}{/if}{$_lang['list']}</a>
+            <a href="index.php?do=$do&view=edit&type=$type" {if $view=='edit'}class="here" {/if}>{if $type=='art'}{$_lang['article']}{elseif $type=='help'}{$_lang['help']}{elseif $type=='bulletin'}{$_lang['bulletin']}{elseif $type=='about'}{$_lang['about']}{else}{$_lang['single_page']}{/if}{if $art_id}{$_lang['edit']}{else}{$_lang['add']}{/if}</a>
+    	</div>
+</div>
+<!--页头结束-->
+
+<div class="box post">
+    <div class="tabcon">
+        	<div class="title"><h2>{if $art_id}{$_lang['edit']}{else}{$_lang['add']}{/if}{if $type=='art'}{$_lang['article']}{elseif $type=='help'}{$_lang['help']}{elseif $type=='bulletin'}{$_lang['bulletin']}{elseif $type=='about'}{$_lang['about']}{else}{$_lang['single_page']}{/if}</h2></div>
+            <div class="detail">
+                <form method="post" action="index.php?do={$do}&view={$view}" id="frm_art_edit" enctype="multipart/form-data">
+                <input type="hidden" name="pk[art_id]" value="{$art_info['art_id']}" id='art_id'>
+                <input type="hidden" name="type" value="{$type}">
+                    <table width="100%" border="0" cellspacing="0" cellpadding="0">
+
+                      <tr>
+                        <th scope="row" width="130">{if $type=='art'}{$_lang['article']}{elseif $type=='help'}{$_lang['help']}{elseif $type=='bulletin'}{$_lang['bulletin']}{elseif $type=='about'}{$_lang['about']}{else}{$_lang['single_page']}{/if}{$_lang['title']}{$_lang['zh_mh']}</th>
+                        <td>
+	                        <input type="text" name="fields[art_title]" id="txt_art_title"  value="{$art_info['art_title']}" maxlength="100"  class="txt" style=" width:260px;"
+	                        limit="required:true;len:3-100;general:false"
+	                        msg="{if $type=='art'}{$_lang['article']}{elseif $type=='help'}{$_lang['help']}{elseif $type=='bulletin'}{$_lang['bulletin']}{elseif $type=='about'}{$_lang['about']}{else}{$_lang['single_page']}{/if}{$_lang['some_restrictions_about_title']}"
+	                        msgArea="art_title_msg"
+	                        title='{$_lang['please_input']}{if $type=='art'}{$_lang['article']}{elseif $type=='help'}{$_lang['help']}{else}{$_lang['single_page']}{/if}{$_lang['the_title']}' />
+	                        <span id="art_title_msg"></span>
+                        </td>
+                      </tr>
+                      {if $type=='art' or $type=='help'}
+                      <tr>
+                        <th scope="row">{if $type=='art'}{$_lang['article']}{elseif $type=='help'}{$_lang['help']}{elseif $type=='bulletin'}{$_lang['bulletin']}{elseif $type=='about'}{$_lang['about']}{else}{$_lang['single_page']}{/if}{$_lang['category']}{$_lang['zh_mh']}</th>
+                        <td>
+                         <select name="fields[art_cat_id]" id="slt_cat_id" style=" width:270px;"
+                         			 limit = "required:true;type:int"
+                                     msg = '{$_lang['please_choose']}{if $type=='art'}{$_lang['article']}{elseif $type=='help'}{$_lang['help']}{else}{$_lang['single_page']}{/if}{$_lang['category']}'
+                                     title='{$_lang['choose_which_category']}{if $type=='art'}{$_lang['article']}{elseif $type=='help'}{$_lang['help']}{else}{$_lang['single_page']}{/if}{$_lang['zh_wh']}'
+                                     msgArea="msg_cat_id">
+							{if $type == 'help'}<option value="">请选择分类下的子类</option>{/if}
+	                        {loop $cat_arr $k $v}
+								{if $k>0}
+								$v
+							<!--	<optgroup {if $v['art_cat_pid'] == '0'} label="$v['cat_name']"{/if}>
+									{if $v['art_cat_pid'] == '381'}
+									<option value="$k">$v['cat_name']</option>
+									{/if}
+									{if $v['art_cat_pid'] == '294'}
+									<option value="$k">$v['cat_name']</option>
+									{/if}
+									{if $v['art_cat_pid'] == '293'}
+									<option value="$k">$v['cat_name']</option>
+									{/if}
+									{if $v['art_cat_pid'] == '291'}
+									<option value="$k">$v['cat_name']</option>
+									{/if}
+								</optgroup>
+
+								-->
+								{/if}
+	                        {/loop}
+
+	                     </select>
+	                     <span id="msg_cat_id"></span>
+						 {if $type=='help'}<span>请勿选择父级分类，添加在父级分类下的帮助会无法在帮助中心展示</span>{/if}
+	                	</td>
+
+                      </tr>
+					 {/if}
+
+                      <tr>
+                        <th scope="row">{$_lang['order']}{$_lang['zh_mh']}</th>
+                        <td>
+                         <input type="text"  class="txt" style=" width:260px;"
+						  id="txt_listorder" name="fields[listorder]"
+						   value="{if $listorder}$listorder{else}0{/if}"
+						    maxlength="5"
+								limit = "required:true;type:int"
+                                onkeyup="clearstr(this)"
+                                msg = '{$_lang['please_input']}{if $type=='art'}{$_lang['article']}{elseif $type=='help'}{$_lang['help']}{elseif $type=='bulletin'}{$_lang['bulletin']}{elseif $type=='about'}{$_lang['about']}{else}{$_lang['single_page']}{/if}{$_lang['order']}'
+                                title='{if $type=='art'}{$_lang['article']}{elseif $type=='help'}{$_lang['help']}{else}{$_lang['single_page']}{/if}{$_lang['order']}'
+                                msgArea="slt_txt_listorder"/><span id="slt_txt_listorder"></span>
+                        </td>
+                      </tr>
+
+                      <tr>
+                        <th scope="row">{$_lang['author']}{$_lang['zh_mh']}</th>
+                        <td> <input type="text" class="txt" style=" width:260px;"
+						 name="fields[username]" id="txt_username"
+						 value="{$art_info['username']}"
+                        			 limit = "required:false"
+                                     msg = '{$_lang['please_input_author']}'
+                                     title='{$_lang['please_input_your_author']}'
+                                     msgArea="msg_txt_username"/><span id="msg_txt_username"></span>
+                        </td>
+                      </tr>
+
+                      <tr>
+                        <th scope="row">{$_lang['from']}{$_lang['zh_mh']}</th>
+                        <td><input type="text" class="txt" style=" width:260px;"
+						name="fields[art_source]"
+						id="art_source"
+						value="$art_source"
+                        			 limit = "required:false"
+                                     msg = '{$_lang['choose_from']}'
+                                     title='{if $type=='art'}{$_lang['article']}{elseif $type=='help'}{$_lang['help']}{elseif $type=='bulletin'}{$_lang['bulletin']}{elseif $type=='about'}{$_lang['about']}{else}{$_lang['single_page']}{/if}{$_lang['from_where']}{$_lang['zh_wh']}'
+                                     msgArea="msg_art_source"/><span id="msg_art_source"></span>
+                       </td>
+                      </tr>
+                      {if $type!='help'}
+					  <tr>
+                        <th scope="row">{$_lang['is_recommend']}{$_lang['zh_mh']}</th>
+                        <td>
+                          <p>
+                              <label for="cbk"><input type="checkbox" name="fields[is_recommend]" id="cbk" value="1"  {if $art_info['is_recommend']==1} checked="checked"   {else} {/if}/>&nbsp;{$_lang['yes']}</label> <br />
+                          </p>
+                        </td>
+                      </tr>
+                      {/if}
+
+
+					  {if $type=='art'}
+                      <tr>
+                        <th scope="row">{$_lang['upload_image']}:</th>
+                        <td id="t_pic" class=" p_relative">
+                        	<!--<input type="file" name="art_pic"  id="art_pic" size="50" onchange="isExtName(this,1)" ext=".jpg,.png,.gif,.jpeg,.bmp">-->
+							<input type="hidden" id="fid" value="<!--{eval echo get_fid($art_info['art_pic'])}-->"/>
+                        	<input type="hidden" name="fields[art_pic]"  value="$art_info['art_pic']" id="hdn_art_pic">
+							<input type="file" class="file" name="upload" id="upload">
+						   <span id="file_span">
+								{if $art_info['art_pic']}
+								<img src="../$art_info['art_pic']" height="80" alt=''/>
+								<a title="{$_lang['delete']}" href="javascript:void(0);" onclick="del_file('$art_info['art_pic']');">
+								<strong>{$_lang['delete']}×</strong>
+								</a>
+								{/if}
+							</span>
+
+                            <div class="padt10 direct">
+                            <p>{$_lang['allowed_to_be_uploaded']}{$basic_config['max_size']}M</p>
+                            </div>
+                        </td>
+                      </tr>
+					  {/if}
+
+                      <tr>
+                        <th scope="row">{if $type=='art'}{$_lang['article']}{elseif $type=='help'}{$_lang['help']}{elseif $type=='bulletin'}{$_lang['bulletin']}{elseif $type=='about'}{$_lang['about']}{else}{$_lang['single_page']}{/if}{$_lang['content']}{$_lang['zh_mh']}</th>
+                        <td>
+                         <textarea rows="30" name="fields[content]" style="width:75%;" id="tar_content"  class="xheditor {urlBase:'$_K['siteurl']/',tools:'simple',admin:'../',html5Upload:false,emotMark:false,upImgUrl:'../index.php?do=ajax&view=upload&filename=filedata'}" cols="70"><!--{eval echo stripslashes($art_info['content'])}--></textarea>
+						</td>
+					 </tr>
+					 
+					 {if $type=='art'}
+                     <tr>
+                        <th scope="row">SEO{$_lang['title']}{$_lang['zh_mh']}</th>
+                        <td><textarea cols="70" rows="2"  name="fields[seo_title]" value="{$art_info['seo_title']}">{$art_info['seo_title']}</textarea></td>
+                     </tr>
+
+                     <tr>
+                        <th scope="row">SEO{$_lang['keywords']}{$_lang['zh_mh']}</th>
+                        <td><textarea cols="70" rows="2"  name="fields[seo_keyword]" value="{$art_info['seo_keyword']}">{$art_info['seo_keyword']}</textarea></td>
+                     </tr>
+
+                      <tr>
+                        <th scope="row">SEO{$_lang['description']}{$_lang['zh_mh']}</th>
+                        <td><textarea cols="70" rows="3" name="fields[seo_desc]" value="{$art_info['seo_desc']}">{$art_info['seo_desc']}</textarea></td>
+                     </tr>
+                     {/if}
+
+
+
+					{if $art_info['pub_time']}
+					 <tr>
+                        <th scope="row">{$_lang['last_modify']}{$_lang['zh_mh']}</th>
+                        <td><!--{date('Y-m-d H:i:s',$art_info['pub_time'])}--></td>
+                     </tr>
+                    {/if}
+
+                    <tr>
+                        <th scope="row">&nbsp;</th>
+                    	<td>
+                    	<button name="sbt_edit" value="1" onclick="return checkForm(document.getElementById('frm_art_edit'),false)" class="positive primary pill button" type="submit">
+                    	<span class="check icon"></span>{$_lang['submit']}</button>
+
+                    	</td>
+                    </tr>
+                    </table>
+                </form>
+              </div>
+       </div>
+</div>
+<!--主体结束-->
+
+<script src="../static/js/uploadify/jquery.uploadify.min.js" type="text/javascript"></script>
+<link href="../static/js/uploadify/uploadify.css" rel="stylesheet">
+<script type="text/javascript">
+var xyq = "<!--{eval echo $xyq = session_id();}-->";
+$(function(){
+    var c_id = parseInt("$art_info['art_cat_id']");
+    if (c_id) {
+        $("#slt_cat_id").val(c_id);
+    }
+
+    $("input[name='sbt_edit']").click(function(){
+        var si = $("#slt_cat_id").val();
+        if (!si) {
+            $("#msg_cat_id").html("{$_lang['choose_category']}");
+            return false;
+        }
+        else {
+            $("#msg_cat_id").html("{$_lang['category_has_been_selected']}");
+            return true;
+        }
+    })
+})
+
+$(function(){
+    uploadify({
+        auto: true,
+		hide:true,
+        size: "{$basic_config['max_size']}MB",
+        exts: '*.jpg;*.jpeg;*.gif;*.png',
+        limit: 1
+    },{
+		mode: 'back',
+		fileType:'att'
+    },uploadResponse);
+});
+
+function uploadResponse(json){
+	   $("#hdn_art_pic").val(json.msg.url);
+       $("#fid").val(json.fid);
+	   $("#file_span").html("<span id=\"file_"+json.fid+"\" > <img src='../"+json.msg.url+"' height=\"80\" /> <a title=\"{$_lang['delete']}\" href=\"javascript:void(0);\" onclick=\"del_file('"+json.msg.url+"');\"><strong>{$_lang['delete']}×</strong></a></span>");
+}
+
+//图片删除
+
+function del_file(file_path){
+	var value = file_path.split("?")['0'];
+	var url  = 'index.php?do=article&view=edit&ac=del&filepath='+value+'&pk='+$("#art_id").val();
+	$.post(url,function(json){
+        art.dialog.alert("{$_lang['del_success']}");
+		if(json.status==1){
+			 $("#file_span").children().remove();
+			 $("#hdn_art_pic").val("");
+		}
+	},'json');
+}
+
+</script>
+
+<!--{template ADMIN_DIRECTORY/tpl/admin_footer}-->

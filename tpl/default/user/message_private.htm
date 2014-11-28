@@ -1,0 +1,70 @@
+<!--{template user/header}-->
+<div class="container">
+<div class="nav-action">
+    <!--{template user/left_side}-->
+  </div>
+
+  <div class="content-panel">
+    <div class="tab">
+		<a href="javascript:void(0);"  class="selected">私人短信</a>
+    </div>
+    <div class="tab_detail">
+    	<form method="post" name="listMessageForm" id="listMessageForm" action="{$strUrl}">
+        <input type="hidden" name="action" value="" id="action">
+		<input type="hidden" name="intPage" value="{$intPage}" >
+      <div class="table-responsive">
+        <table class="table table-hover">
+        <thead>
+          <tr>
+            <th>状态</th>
+            <th>标题</th>
+            <th>发件人</th>
+            <th>时　间</th>
+            <th>操　作</th>
+          </tr>
+        </thead>
+        <tbody>
+        	{loop $arrMessageLists $k $v}
+          <tr {if $v['view_status']!=1}class="warning"{/if}>
+            <td>
+              <label>
+                  <input type="checkbox" value="$v['msg_id'],$v['msg_status']"  name="ckb[]">{if $v['view_status']==1} 已读{else} 未读{/if}
+                </label>
+            </td>
+            <td><a href="{$strUsersUrl}&op=detail&msgId=$v['msg_id']&type=private&intPage={$intPage}"><!--{eval echo kekezu::cutstr($v['title'],'40')}--></a></td>
+            <td>$v['username']</td>
+            <td><!--{eval echo date('Y-m-d',$v['on_time']);}--></td>
+            <td><a href="{$strUsersUrl}&msgId=$v['msg_id']&op=detail&type=private&intPage={$intPage}">查看</a>
+			<a href="javascript:opSingle('{$strUrl}&objId=$v['msg_id']&action=delSingle&msgStatus=$v['msg_status']&intPage={$intPage}');void(0);">删除</a></td>
+          </tr>
+		  {/loop}
+
+        </tbody>
+      </table>
+      </div>
+
+      <div class="clearfix">
+      <div class="btn-toolbar pull-left" role="toolbar">
+        <div class="btn-group">
+          <button type="button" class="btn btn-default btn-sm"  value="0" id="checkbox"><i class="fa fa-check-square-o"></i> 全选</button>
+
+        </div>
+        <div class="btn-group"><button type="button"   onclick="return opMulit('mulitView','listMessageForm');"  class="btn btn-default btn-sm">标记为已读</button>
+          </div>
+        <div class="btn-group"><button type="button"   onclick="return opMulit('mulitDel','listMessageForm');"  class="btn btn-default btn-sm">删除</button></div>
+      </div>
+
+
+
+      <ul class="pagination pagination-sm pull-right">
+        {$strPages['page']}
+      </ul>
+      </div>
+</form>
+
+    </div>
+  </div>
+  </div>
+  <!-- 我的消息 end &content-panel end -->
+      <script src="static/js/model/user/message.js"></script>
+<!--{template user/footer}-->

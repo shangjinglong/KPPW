@@ -1,0 +1,56 @@
+<!--{template header}-->
+
+
+<div class="container">
+<div class="case">
+      <div class="tab tab-darken">
+        <a href="{$strUrl}&t=1" {if $t == '1'}class="selected"{/if}>任务案例</a>
+       <a href="{$strUrl}&t=2" {if $t == '2'}class="selected"{/if}>商品案例</a>
+      </div>
+
+{if $arrCaseLists}
+  <div class="list list-img">
+    <ul class="list-body">
+    {loop $arrCaseLists $k $v}
+   		<li class="list-item">
+	        <div class="list-item-img">
+	          <a href="{$v['objurl']}" title="{$v['case_title']}">
+	            <img	alt="{$v['case_title']}"  class="lazy" src="tpl/default/img/grey.gif"  data-original="<!--{eval echo keke_shop_class::output_pics($v['case_img'],210,1);}-->">
+	          </a>
+	        </div>
+	        <a href="{$v['objurl']}" class="list-title" title="{$v['case_title']}">
+	          <span class="marked {$v['labelstyle']}">{$v['label']}</span> {$v['case_title']}
+	        </a>
+	        <div class="list-item-footer">
+	          <strong class="money"><sub>￥</sub>{$v['case_price']}</strong>
+	          <span class="nums">
+	            {$v['text']}：{$v['amount']} {$v['quantifier']}
+	          </span>
+	          <span class="poster">
+	           {$v['from']}：<a href="{$v['fromurl']}">{$v['username']}</a>
+	          </span>
+	        </div>
+       </li>
+	  {/loop}
+    </ul>
+  </div>
+    {else}
+	   <dd class="list-item text-center">
+			<!--{template nodata}-->
+       </dd>
+	  {/if}
+  <!-- list list-img  end-->
+
+  <div class="list-page">
+    <div class="page-tips pull-left">
+      显示 {$strPages['st']}~{$strPages['en']} 项 共 {$intCount} 个{if $t=='1'}任务{else}商品{/if}
+    </div>
+    <ul class="pagination pagination-sm pull-right">
+        {$strPages['page']}
+    </ul>
+  </div>
+  <!-- 商品列表 & list-page end -->
+</div>
+</div>
+<!-- container end -->
+<!--{template footer}-->

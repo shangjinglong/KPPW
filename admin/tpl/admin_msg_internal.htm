@@ -1,0 +1,81 @@
+<!--{template ADMIN_DIRECTORY/tpl/admin_header}-->
+<div class="page_title">
+  <h1>{$_lang['sms_internal_tpl_title']}</h1>
+  <div class="tool">         
+    <a href="index.php?do=msg&view=internal" {if $view == 'internal'}class="here"{/if} > {$_lang['sms_config']}</a>
+    <a href="index.php?do=msg&view=intertpl" {if $view == 'intertpl'}class="here"{/if} > {$_lang['sms_tpl_config_edit']}</a>
+  </div>
+</div>
+<div class="box post">
+	
+<div class="tab">
+       <a href="index.php?do=msg&view=internal" {if !$obj} class="select"{/if}>{$_lang['all']}</a>
+       {loop $message_send_obj $k $v}
+	   		<a href="index.php?do=msg&view=internal&obj={$k}" {if $obj==$k} class="select"{/if}>{$v}</a>
+	   {/loop}
+   </div>
+ <div class="tabcon">
+  <div class="title"><h2> <!--{$_lang['sms_send_config_manage']}--></h2></div>
+  <div style="clear:both;"></div>
+	<div class="detail">
+    <form name="frm_config_msg" action="#" method="post">
+        <input type="hidden" name="hdn_msg_config_id" value="{$msg_cofig_id}">
+        <table  border="0" cellspacing="0" cellpadding="0">
+            <tr>
+        		<th scope="row">{$_lang['config_num']}</th>
+				<th scope="row">{$_lang['config_name']}</th>
+				<th scope="row">{$_lang['basic_config']}</th>
+				<th scope="row">{$_lang['operate']}</th>
+            </tr>
+            	{loop $msg_config $k $v}
+				<tr><!--{eval $config=unserialize($v['v']);}-->
+					 <td scope="row">
+                    {$v['config_id']}
+                	</td>
+					<td>$v['desc']</td>
+                <td><!--{eval $send_type=unserialize($v['v']);$is_open=array_sum($send_type);}-->
+						<label for="send_close_{$v['config_id']}">
+						<input type="radio" name="fds[{$v['config_id']}][send_open]" value="0" id="send_close_{$v['config_id']}" onclick="hide_me($v['config_id']);" {if $is_open==0}checked="checked"{/if}>{$_lang['close']}
+						</label>
+						<label for="send_open_{$v['config_id']}">
+						<input type="radio" name="fds[{$v['config_id']}][send_open]" value="1" id="send_open_{$v['config_id']}"  onclick="show_me($v['config_id']);"{if $is_open!=0}checked="checked"{/if}>{$_lang['open']}
+                        </label>
+						<div style="display:{if $is_open==0}none{else}inline{/if}" id="show_send_type_{$v['config_id']}">
+						{loop $message_send_type['0'] $k2 $v2}
+						{if $k2!=3}
+						<label for="cbk_{$k}_{$k2}">
+							<input type="checkbox" id="cbk_{$k}_{$k2}" name="ckb[{$v['config_id']}][$v2]" value="1" {if $send_type[$v2]!=0}checked="checked"{/if}>$message_send_type['1'][$v2]&nbsp;&nbsp;&nbsp;&nbsp;
+						</label>
+						{/if}
+						{/loop}
+						</div>
+				</td>
+				<td>
+					<button type="button" class="button" value="{$_lang['edit_tpl']}" onclick="window.location.href='index.php?do=msg&view=intertpl&slt_tpl_code=$v[k]'"/>
+					<span class="pen icon"></span>{$_lang['edit_tpl']}
+						</button>
+                </td>
+            </tr>
+			{/loop}
+				<tr>
+                	<td colspan="4">
+                	
+                    <div class="clearfix">
+                            <button class="positive primary pill button" type="submit" name='sbt_edit' value="{$_lang['submit']}"><span class="check icon"></span>{$_lang['submit']}</button>
+					</div>
+				   </td>
+               </tr>	
+            
+        </table>
+		<div class="page">{$pages['page']}</div>
+    </form>
+</div></div></div>
+<script type="text/javascript">
+		function hide_me(i){
+			$("#show_send_type_"+i).hide();
+		}
+		function show_me(i){
+			$("#show_send_type_"+i).css("display","inline");
+		}
+</script>
+<!--{template ADMIN_DIRECTORY/tpl/admin_footer}-->

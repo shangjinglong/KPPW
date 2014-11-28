@@ -1,0 +1,81 @@
+<!--{template ADMIN_DIRECTORY/tpl/admin_header}-->
+<div class="page_title">
+    <h1>交付冻结处理</h1>
+    <div class="tool">
+        <a href="index.php?do=model&model_id=1&view=list">任务列表</a>
+    </div>
+</div>
+ <div class="box post">
+  <div class="tabcon">
+   <div class="title"><h2>交付冻结处理</h2></div>
+    <div class="detail">
+     <form action="index.php?do={$do}&model_id={$model_id}&task_id={$task_id}&view={$view}" method="post" name="frm" id="frm">
+      <table width="100%" border="0" cellspacing="0" cellpadding="0">
+	   <tr>
+         <th scope="row" width="130">任务编号</th>
+       	 <td><a href="{$_K['siteurl']}/index.php?do=task&id={$arrTaskInfo['task_id']}" target="_blank">#{$intTaskId}</a></td>
+       </tr>
+	   <tr>
+         <th scope="row" width="130">任务名称</th>
+         <td><a href="{$_K['siteurl']}/index.php?do=task&id={$arrTaskInfo['task_id']}" target="_blank">{$arrTaskInfo['task_title']}</a></td>
+       </tr>
+	   <tr>
+       <th scope="row" width="130">雇主</th>
+       <td>
+       		<a href="{$_K['siteurl']}/index.php?do=seller&id={$arrGinfo['uid']}" target="_blank">$arrGinfo['username']</a>
+			<font color="red">E-mail</font>:{$arrGinfo['email']}&nbsp;||&nbsp;<font color="red">电话 </font>:{$arrGinfo['phone']}&nbsp;||&nbsp;<font color="red">QQ</font>:{$arrGinfo['qq']}&nbsp;||&nbsp;<font color="red">手机</font>:{$arrGinfo['mobile']}
+	   </td>
+      </tr>
+	  <tr>
+       <th scope="row" width="130">威客</th>
+       <td>
+       		<a href="{$_K['siteurl']}/index.php?do=seller&id={$arrWinfo['uid']}" target="_blank">$arrWinfo['username']</a>
+			<font color="red">E-mail</font>:{$arrWinfo['email']}&nbsp;||&nbsp;<font color="red">电话 </font>:{$arrWinfo['phone']}&nbsp;||&nbsp;<font color="red">QQ</font>:{$arrWinfo['qq']}&nbsp;||&nbsp;<font color="red">手机</font>:{$arrWinfo['mobile']}
+	   </td>
+      </tr>
+	<tr id="pass">
+       <th scope="row" width="130">处理方案</th>
+	   <td>
+				稿件总佣金{$floatCash}，请在这个范围内分配<br>
+				雇主（{$arrGinfo['username']}）获得<input type="text" name="op_result[gz_get]" id="floatGzGet" size=4 class="txt">{$_lang['yuan']},
+				威客（{$arrWinfo['username']}）获得<input type="text" name="op_result[wk_get]" id="floatWkGet" size=4 class="txt">{$_lang['yuan']}
+		</td>
+	</tr>
+	<tr>
+      <th scope="row">&nbsp;</th>
+      <td>
+          <div class="clearfix padt10">
+          	<input name="intSbtEdit" type="hidden" value="1">
+          	 	 <button class="positive primary pill button" type="button" value="{$_lang['operate']}" onclick=" return process()"><span class="icon pen"></span>{$_lang['operate']}</button>
+          </div>
+      </td>
+   </tr>
+ </table>
+ </form>
+ </div>
+ </div>
+ </div>
+<script type="text/javascript">
+	function process(){
+				var strContent='';
+					var floatObjCash=parseFloat($floatCash)+0.00;
+					var floatWkGet  =parseFloat($("#floatWkGet").val())+0.00;
+					var floatGzGet  =parseFloat($("#floatGzGet").val())+0.00;
+
+					if(floatWkGet<0.00||floatGzGet<0.00){
+						art.dialog.alert("输入不正确");return false;
+					}else if(floatWkGet+floatGzGet!=floatObjCash){
+						art.dialog.alert("分配金额不等于总金额");return false;
+					}
+					strContent+="雇主（{$arrGinfo['username']}）获得{$_lang['zh_mh']}"+floatGzGet+"{$_lang['yuan']}，威客（{$arrWinfo['username']}）获得{$_lang['zh_mh']}"+floatWkGet+"{$_lang['yuan']}{$_lang['zh_jh']}";
+				art.dialog({
+   						title: "{$_lang['confirm_notice']}",
+  				 		content: "{$_lang['now_case']}{$_lang['zh_mh']}<br>"+strContent,
+   						icon: 'succeed',
+   						yesFn: function(){$("#frm").submit()},
+					    noFn :function(){this.close();return false;}
+					});
+
+	}
+</script>
+<!--{template ADMIN_DIRECTORY/tpl/admin_footer}-->

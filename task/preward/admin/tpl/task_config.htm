@@ -1,0 +1,218 @@
+<!--{template ADMIN_DIRECTORY/tpl/admin_header}--> 
+<div class="page_title">
+  <h1>{$model_info[model_name]}{$_lang['task_config']}</h1>
+    <div class="tool">
+      <a href="index.php?do={$do}&model_id={$model_id}&view={$view}&op=config" class="here">{$_lang['basic_config']}</a>
+      <a href="index.php?do={$do}&model_id={$model_id}&view={$view}&op=control">{$_lang['control_config']}</a>
+      <a href="index.php?do={$do}&model_id={$model_id}&view={$view}&op=priv">{$_lang['private_config']}</a>
+     </div>
+</div>
+<div class="box post">
+ <div class="tabcon">
+  <div class="title"><h2>{$_lang['basic_config']}</h2></div>
+	<div class="detail">
+	 <form action="{$ac_url}" method="post">
+	 	<input type="hidden" name="pk[model_id]" value="{$model_id}">
+	  <table width="100%" border="0" cellspacing="0" cellpadding="0">
+	    <tr>
+		   <th scope="row" width="200">{$_lang['model_name']}{$_lang['zh_mh']}</th>
+		    <td>
+		       <input type="text" class="txt" name="fds[model_name]" value="$model_info[model_name]">
+			</td>
+        </tr>
+		<tr>
+		   <th scope="row" width="200">{$_lang['is_open']}{$_lang['zh_mh']}</th>
+		     <td>
+		        <label for="status_yes"><input type="radio" id="status_yes" name="fds[model_status]" {if $model_info[model_status]}checked{/if} value="1"> {$_lang['yes']}</label>
+				<label for="status_no"><input type="radio" id="status_no" name="fds[model_status]" {if !$model_info[model_status]}checked{/if} value="0"> {$_lang['no']}</label>
+			</td>
+        </tr>
+		<tr>
+		  <!--<th scope="row" width="200">{$_lang['whether_private_model']}{$_lang['zh_mh']}</th>
+		   <td>
+		      <label for="hide_yes"><input type="radio" id="hide_yes" name="fds[hide_mode]" {if $model_info[hide_mode]}checked{/if} value="1"> {$_lang['yes']}</label>
+			  <label for="hide_no"><input type="radio" id="hide_no" name="fds[hide_mode]" {if !$model_info[hide_mode]}checked{/if} value="0"> {$_lang['no']}</label>
+              ({$_lang['private_models_not_task_list']})
+		   </td>
+		   -->
+        </tr>
+	<!--	<tr>
+		  <th scope="row" width="200">{$_lang['industry_binding']}{$_lang['zh_mh']}</th>
+		    <td><!--{eval $milist = explode(',',$model_info['indus_bid']);}-->
+     <!--         <select onchange="p_indus_add(this.value)" style="margin-bottom:5px;">
+			   <option value="">{$_lang['choose_industry']}</option>
+			{loop $indus_index[0] $indus}
+				<option value="$indus[indus_id]">$indus[indus_name]</option>
+			{/loop}
+			  </select>
+			 <br class="clear">
+			 <select name="p_indus_select" id="p_indus_select" multiple=multiple style="width:160px;float:left;height:200px;overflow-y:scroll;background:white;border:#ccc solid 1px" ></select>
+			<div style="width:80px;float:left;height:160px;overflow:hidden;margin-left:20px; text-align:center;padding-top:40px;">
+				<button onclick = "moveitems()" type="button" class="input_but"><<</button><br><br>
+				<button onclick = "additems()" type="button" class="input_but">>></button><br>
+			</div>
+			<select name="fds[indus_bid][]" id="s_indus_select" multiple=multiple style="width:160px;float:left;height:200px;overflow-y:scroll;background:white;border:#ccc solid 1px;margin-left:20px;">
+			{loop $milist $k $m}
+				{if !empty($m)}
+				<option id="s_indus_select_op_{$m}" value="$m" selected="selected"> $indus_arr[$m]['indus_name']</option>
+				{/if}
+			{/loop}
+			</select>
+			<br class="clear">({$_lang['industry_binding_notice']}.)
+			</td>
+         </tr>
+	<!--	 <tr>
+		    <th scope="row" width="200">{$_lang['model_about']}{$_lang['zh_mh']}</th>
+		      <td>
+		         <textarea cols=80 rows=8 name="fds[model_intro]">$model_info['model_intro']</textarea><br>({$_lang['limit_50_bytes']})
+			  </td>
+         </tr>-->
+		 <tr>
+		    <th scope="row" width="200">模型说明{$_lang['zh_mh']}</th>
+		      <td>
+		        <textarea cols=110 rows=12 name="fds[model_desc]"  style="width:75%;" id="tar_content"  class="xheditor {urlBase:'$_K[siteurl]/',tools:'simple',skin:'nostyle',admin:'../',html5Upload:false,upImgUrl:'../index.php?do=ajax&view=upload&filename=filedata'}" cols="70">$model_info['model_desc']</textarea>
+			  </td>
+         </tr>
+		 {if $on_time}
+		    <tr>
+		      <th scope="row" width="200">{$_lang['last_modify']}{$_lang['zh_mh']}</th>
+		        <td><!--{eval echo date('Y-m-d H:i:s',$on_time)}--></td>
+		    </tr>
+         {/if}
+		 <tr>
+		  <th scope="row" width="200">&nbsp;</th>
+		    <td>
+		       <div class="clearfix padt10">
+		         <button type="submit" name="sbt_edit" class="positive primary  button" value="1"><span class="check icon"></span>{$_lang['submit']}</button>
+		       
+               </div>
+             </td>
+         </tr>
+        </table>
+       </form>
+     </div>
+   </div>
+</div>
+<script type="text/javascript">
+        $(function(){
+			$("#txt_task_min_cash").keyup(function(){
+				$("#txt_task_min_cash_1").val($(this).val());
+			})
+			 $("#end_action_3").click(function(){
+			 	 if($("#end_action_3").attr("checked")==true){
+				  $("#slt").show();
+			  }else{
+				 $("#slt").hide();}	
+			 })
+			 if($("#end_action_3").attr("checked")==true){
+				  $("#slt").show();
+				  }
+			 $("#end_action_1").click(function(){
+			 	$("#slt").hide();
+			 })
+			 $("#end_action_2").click(function(){
+			 	$("#slt").hide();
+			 })
+			 
+			
+            $("#add_cash_rul").click(function(){
+                var i = parseInt($("#add_new_rul li:last-child span").html());
+                k = eval(i + 1);
+                var rul_option = '<li><span id="span_' + k + '"></span> <input type="text" class="txt" size="10" name="txt_task_min_cash_' + k + '" limit="required:true;type:float" msg="{$_lang[task_min_money_error]}"  class="input_t"/>{$_lang[yuan_over]}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{$_lang[continue]}<input type="text" class="txt" size="10" limit="require:true;type:int" msg="{$_lang[day_not_null]}"  name="txt_task_min_day_'+k+'" class="input_t"> {$_lang[day]}  </li>';
+                $("#add_new_rul").append(rul_option);
+                var lastinput = $("#add_new_rul li:last-child input");
+                $("#add_new_rul li:last-child #span_" + k).html(k);
+				$("#cash_rul_count").val(k);
+            })
+            $("#del_cash_rul").click(function(){
+               var i = parseInt($("#add_new_rul li:last-child span").html()); 
+				if(i!=1)
+				{
+				  $("#add_new_rul li:last-child").remove();	
+				  $("#cash_rul_count").attr('value',i-1);
+				}
+				else
+				{
+					alert("{$_lang['first_rule_not_delete']}");
+				}
+				
+            })
+            
+            $("#add_adjourn_rul").click(function(){
+				
+                var i = parseInt($("#new_adjourn_rul li:last-child input").eq(0).val());
+                
+				k = eval(i + 1);
+				var rul_option ='<li>{$_lang[di]}<input type="text" class="txt" size="10" name="txt_defer_times_'+k+'" value="'+k+'" readonly="true" class="input_t"/>{$_lang[times_info]}<input type="text" size="10" class="txt"  limit="type:float;required:true" msg="{$_lang[percent_not_null]}!" name="txt_defer_cash_scale_'+k+'" class="input_t">%</li>'; 
+                $("#new_adjourn_rul").append(rul_option);
+                var lastinput = $("#new_adjourn_rul li:last-child input");
+				$("#adjourn_rul_count").val(k);
+                
+            })
+            $("#del_adjourn_rul").click(function(){
+				var i = parseInt($("#new_adjourn_rul li:last-child input").eq(0).val());
+				if(i!=1)
+				{
+                	$("#new_adjourn_rul li:last-child").remove();
+					$("#adjourn_rul_count").val(i-1);
+				}
+				else
+				{
+					alert("{$_lang['first_rule_not_delete']}");
+				}
+            })
+            
+            
+        })
+
+					function p_indus_add(id){
+						mod = "";
+						{loop $indus_index $k $si}
+						if(id=='$k'){
+							{loop $si $i}
+							if(!$('#s_indus_select_op_{$i[indus_id]}').val()){
+							mod +="<option id=\"p_indus_select_op_{$i[indus_id]}\" value=\"{$i[indus_id]}\">{$i[indus_name]}</option>";
+							}
+							{/loop}
+						}
+						{/loop}
+						$('#p_indus_select').html(mod);
+					}
+					
+					function moveitems(){
+						vs = $('#s_indus_select').val()+'';
+						vs = vs.split(",");
+						var mod = '';
+						for(v=0;v<vs.length;v++){
+							
+							if(String(vs[v]) == "null"){
+								continue;
+							}
+							mod+="<option value="+vs[v]+" id=\"p_indus_select_op_"+vs[v]+"\">"+$('#s_indus_select_op_'+vs[v]).html()+"</option>";
+							$('#s_indus_select_op_'+vs[v]).remove();
+						};
+						if(mod!='')
+						$('#p_indus_select').append(mod);
+					}
+					$(function(){
+							if($("#hdn_indus_id").val()!=''){
+							p_indus_add($("#hdn_indus_id").val());
+						}
+						})
+					function additems(){
+						vs = $('#p_indus_select').val()+'';
+						vs = vs.split(",");
+						var mod = '';
+						for(v=0;v<vs.length;v++){
+							if(String(vs[v]) == "null"){
+								continue;
+							}
+							mod+="<option value="+vs[v]+" id=\"s_indus_select_op_"+vs[v]+"\" selected=\"selected\">"+$('#p_indus_select_op_'+vs[v]).html()+"</option>";
+							$('#p_indus_select_op_'+vs[v]).remove();
+						};
+						if(mod!='')
+						$('#s_indus_select').append(mod);
+					}
+					
+				</script>
+<!--{template ADMIN_DIRECTORY/tpl/admin_footer}-->

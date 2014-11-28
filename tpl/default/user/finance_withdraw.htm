@@ -1,0 +1,334 @@
+<!--{template user/header}-->
+<div class="container">
+  <div class="nav-action">
+		<!--{template user/left_side}-->
+  </div>
+  <!-- nav-action end -->
+  <div class="content-panel">
+      <div class="tab">
+        <a {if $op === 'withdraw'}class="selected"{/if} href="index.php?do=user&view=finance&op=withdraw" >帐号提现</a>
+      </div>
+      <div class="tab_detail">
+		  {if $booVerify}
+		  	 <!--{template verify}-->
+		  {else}
+
+      <div class="well well-sm">
+        账户余额{$_lang['zh_mh']}
+        <b class="money">{c:$gUserInfo['balance']}</b>
+      </div>
+
+		  <!--detail内容 start-->
+            <article class="box_detail">
+              <!--messages消息 start-->
+               <p class="text-info">
+                  <i class="fa fa-info-circle"></i>
+                     单日提现最低金额:{c:$arrPays['withdraw_min']['v']}{$_lang['zh_jh']}
+                     单日提现最高金额:{c:$arrPays['withdraw_max']['v']}{$_lang['zh_jh']}
+
+               </p>
+             <!--messages消息 end-->
+             
+                <!--step步骤 start-->
+                  <ul class="step step5">
+                    {loop $arrStepLists $k $v}
+                       <li class="step-item{if $k==$strStep||$k<$strStep} action {/if}">
+                         <span class="step-num">{$k}</span>
+                         <div class="step-text step-bottom">
+                           <p><strong class="step-title">{$v['0']}</strong></p>
+                           <p>{$v['1']}</p>
+                         </div>
+                       </li>
+                    {/loop}
+                  </ul>
+               <!--step步骤 end-->
+			   {if $strStep=='1'}
+
+
+
+                     	{if $gUserInfo['balance'] < floatval($arrPays['withdraw_min']['v'])}
+
+                     <p class="text-danger text-center">您的账户余额低于{$arrPays['withdraw_min']['v']}{$_lang['yuan']}，无法提现</p>
+
+						{else}
+                      <form action="{$strUrl}&strStep=1&ver=1" method="post"  class="form-horizontal" name="withdrawStep1Form" id="withdrawStep1Form">
+    						      <div class="form-group">
+    			              <label class="col-sm-3 control-label" for="withdraw_cash">提现金额{$_lang['zh_mh']}</label>
+    			                <div class="col-sm-4">
+                            <div class="input-group">
+                              <span class="input-group-addon">￥</span>
+      			                  <input type="text"  name="intWithdrawCash" id="intWithdrawCash"  class="form-control" >
+								  <input type="hidden"  name="intChooseCash" id="intWithdrawCash" value="1"  class="form-control" >
+                            </div>
+    			                </div>
+    			            </div>
+                      <div class="form-group">
+  						          <div class="col-sm-offset-3 col-sm-4">
+  		                       <button class="btn btn-default" type="submit" value="1" >下一步</button>
+  		                       <span class="text-success" id="tipsUser"></span>
+  		                  </div>
+                      </div>
+                      </form>
+					  {/if}
+
+
+             {elseif $strStep=='2'}
+             <div class="table-responsive">
+               <!--{eval $real_cash = keke_finance_class::get_to_cash($intWithdrawCash);}-->
+			    <!--{eval $web_cash = $intWithdrawCash - $real_cash;}-->
+                 <table class="table table-bordered">
+                  <tbody>
+                    <tr>
+                      <th>您填写的提现金额为</th>
+                      <td><b class="money">{c:$intWithdrawCash}</b></td>
+                    </tr>
+                    <tr>
+                      <th>网站手续费</th>
+                      <td><b class="money">{c:$web_cash}</b></td>
+
+                    </tr>
+                    <tr class="success">
+                      <th>实际提现金额</th>
+                      <td><b class="money">{c:$real_cash}</b></td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+
+
+
+
+         <!--页面子导航-->
+
+                <ul class="nav nav-tabs">
+                  <li  class="active">
+                  	<a href="#tab_cont_1" data-toggle="tab">第三方交易平台</a>
+  				        </li>
+                  <li >
+                  	<a  href="#tab_cont_2" data-toggle="tab">绑定银行支付</a>
+  				        </li>
+                </ul>
+
+          <!--end 页面子导航-->
+                <div class="tab-content clearfix mt_10">
+            		  <!--start 三方支付方式-->
+                 <div class="tab-pane active " id="tab_cont_1">
+
+                     <!--{eval $k=0;}-->
+				
+				{loop $arrPaymentLists $kk $v}
+				{if $v['pay_status']==1}
+        <div class="col-sm-3">
+				 <div class="form-group">
+        					  	 <label>
+                          <input type="radio" name="online" value="{$v['pay_dir']}" {if $v['pay_dir']=='alipayjs'}checked="checked"{/if}/>
+          							  <img src="include/payment/{$v['pay_dir']}/{$v['pay_dir']}.gif" align="absmiddle" title="{$v['pay_name']}">
+                       </label>
+                      </div>
+          </div>
+				{/if}
+				{/loop}
+
+            </div>
+			<!--end 三方支付方式-->
+		  <!--start 绑定银行支付方式-->
+           <div class="tab-pane" id="tab_cont_2" >
+		        {if $arrBankauthInfo}
+        					 {if $arrOfflineLists}
+        						{loop $arrBindLists $v}
+                      <div class="form-group">
+                        <label>
+                           <input type="radio" name="offline" value="{$v['bank_name']}" checked/>
+                           <img src="static/img/system/kppw_2.0_{$v['bank_name']}.png" alt="{$arrBank[$v['bank_name']]}" title="{$arrBank[$v['bank_name']]}">
+                        </label>
+                      </div>
+        						  <div class="table-responsive">
+        					  	<table class="table table-bordered">
+                        <thead>
+                          <tr>
+                             <th>单笔收费</th>
+                             <th>单笔最低收费</th>
+                             <th>单笔最高收费</th>
+                           </tr>
+                        </thead>
+                           <tbody>
+
+                              <tr>
+                                   <td>单笔$arrPays['per_charge']['v']%</td>
+                                   <td> <!--{eval echo number_format($arrPays['per_low']['v'],2)}--> {$_lang['yuan']}</td>
+                                   <td><!--{eval echo number_format($arrPays['per_high']['v'],2)}-->{$_lang['yuan']}</td>
+							               </tr>
+                           </tbody>
+						          </table>
+                      </div>
+
+					     {/loop}
+					  {else}
+					  	 <div class="text-center text-danger">  {$_lang['website_offline_notice']} </div>
+					  {/if}
+
+			{else}
+            <div class="form-group clearfix text-center mt_10 mb_30">
+                {$_lang['no_bank_auth_no_withdraw']}
+                       <a class="btn btn-default btn-lg" type="button"  href="index.php?do=user&view=account&op=auth&code=bank"><i class="fa fa-credit-card"></i> 银行认证</a>
+               </div>
+             {/if}
+			<!--end 绑定银行支付方式-->
+                 </div>
+				 </div >
+              
+			   <div class="text-center">
+            <a href="{$strUrl}&strStep=1&intReset=1">返回</a>
+		        <button class="btn btn-default" type="button" onclick="userWithdraw();"  >下一步</button>
+		      </div>
+
+
+             <div class="clear"></div>
+
+			 {elseif $strStep=='3'}
+
+               	{if $paymode=='online'}
+                  <form action="{$strUrl}&strStep=4&ver=1" method="post" name="onStep3Form" id="onStep3Form" class="form-horizontal">
+                    <input type="hidden" name="formhash" id="formhash" value="{FORMHASH}">
+					<input type="hidden" name="pay_type" value="{$pay_type}">
+					<input type="hidden" name="intWithdrawCash" value="{$intWithdrawCash}">
+
+
+                  <div class="form-group">
+                     <div class="col-sm-offset-3 col-sm-4">
+                         <img src="include/payment/{$arrPayInfo['pay_dir']}/{$arrPayInfo['pay_dir']}.gif" align="absmiddle" title="{$arrPayInfo['pay_name']}" alt="{$arrPayInfo['pay_name']}">
+                     </div>
+                  </div>
+						      <div class="form-group">
+			              <label class="col-sm-3 control-label" for="pay_account">{$arrPayInfo['pay_name']}账号{$_lang['zh_mh']}</label>
+			                <div class="col-sm-4">
+			                  <input type="text" name="pay_account" id="pay_account"  class="form-control" >
+			                </div>
+			            </div>
+						    <div class="form-group">
+			              <label class="col-sm-3 control-label" for="pay_username">{$arrPayInfo['pay_name']}用户名{$_lang['zh_mh']}</label>
+			                <div class="col-sm-4">
+			                  <input type="text"  name="pay_username" id="pay_username"  class="form-control" >
+			                </div>
+			            </div>
+
+                  <div class="form-group">
+							     <input type="hidden" name="intSbtWithdraw" value="1">
+							       <div class="col-sm-offset-3 col-sm-4">
+		                       <button class="btn btn-default" type="submit" value="1" >确认提现</button>
+		                       <span class="text-success" id="tipsUser"></span>
+		                   </div>
+                  </div>
+
+						   </form>
+                             {elseif $paymode=='offline'}
+				<form action="{$strUrl}&strStep=4&ver=1" method="post" name="offStep3Form" id="offStep3Form" class="form-horizontal">
+                    <input type="hidden" name="formhash" id="formhash" value="{FORMHASH}">
+					<input type="hidden" name="pay_type" value="{$pay_type}">
+					<input type="hidden" name="intWithdrawCash" value="{$intWithdrawCash}">
+
+
+                    <div class="form-group">
+                     <div class="col-sm-offset-3 col-sm-4">
+                        <img src="static/img/system/kppw_2.0_{$arrBankInfo['bank_name']}.png" alt="{$arrBankInfo['bank_name']}" title="{$arrBankInfo['bank_name']}"/>
+                      </div>
+                    </div>
+
+								  <div class="form-group">
+			              <label class="col-sm-3 control-label" for="pay_amount">卡号{$_lang['zh_mh']}</label>
+			                <div class="col-sm-4">
+			                  <input type="text" name="pay_account" id="pay_amount" value="{$arrBankInfo['bank_account']}"  readonly="readonly"  class="form-control" >
+			                </div>
+			            </div>
+							  <div class="form-group">
+			              <label class="col-sm-3 control-label" for="pay_username">收款户名{$_lang['zh_mh']}</label>
+			                <div class="col-sm-4">
+			                  <input type="text" name="pay_username" id="pay_username"   value="$arrUserBankInfo['0']['real_name']"    class="form-control" >
+			                </div>
+			            </div>
+                  <div class="form-group">
+   								  <input type="hidden" name="intSbtWithdraw" value="1">
+  							    <div class="col-sm-offset-3 col-sm-4">
+  		                       <button class="btn btn-default" type="submit" value="1" >确认提现</button>
+  		                       <span class="text-success" id="tipsUser"></span>
+                    </div>
+
+  						    </div>
+                      </form>
+					  	 {/if}
+
+                  {elseif $strStep=='4'}
+
+                      <div class="alert alert-success"><i class="fa fa-check-circle"></i> 提现申请已经提交，请耐心等待后台打款</div>
+
+                      <div class="table-responsive">
+                        <table class="table table-bordered">
+                          <thead>
+                            <tr>
+                              <th>提现金额</th>
+                              <th>实际可获得金额</th>
+                              <th>剩余金额</th>
+
+                            </tr>
+                          </thead>
+                          <tbody>
+                            <tr>
+                              <td>
+                                <!--{eval $real_cash = keke_finance_class::get_to_cash($intWithdrawCash);}-->
+                                <b class="money">{$intWithdrawCash}{$_lang['yuan']}</b></td>
+                              <td><b class="money">$real_cash {$_lang['yuan']}</b></td>
+                              <td><b class="money">{$gUserInfo['balance']}{$_lang['yuan']}</b></td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+
+                      新生成  1条 账户提现记录,记录已保存
+                       <a href="index.php?do=user&view=finance&op=withdrawlog">查看提现记录&gt;&gt;</a>
+				 {elseif $strStep=='5'}
+
+                      <div class="alert alert-success"><i class="fa fa-check-circle"></i> <strong>恭喜！</strong>提现成功</div>
+
+                      <div class="table-responsive">
+                        <table class="table table-bordered">
+                          <thead>
+                            <tr>
+                              <th>提现金额</th>
+                              <th>实际可获得金额</th>
+                              <th>剩余金额</th>
+
+                            </tr>
+                          </thead>
+                          <tbody>
+                            <tr>
+                              <td>
+                                <!--{eval $real_cash = keke_finance_class::get_to_cash($intWithdrawCash);}-->
+                                <b class="money">{$intWithdrawCash}{$_lang['yuan']}</b></td>
+                              <td><b class="money">$real_cash {$_lang['yuan']}</b></td>
+                              <td><b class="money">{$gUserInfo['balance']}{$_lang['yuan']}</b></td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+
+                      提现记录已保存
+                      <a href="index.php?do=user&view=finance&op=withdrawlog">查看提现记录&gt;&gt;</a>
+
+
+                  </div>
+               {/if}
+
+               <div class="clear"></div>
+           </article>
+         <!--detail内容 end-->
+		 {/if}
+
+  </div>
+  </div>
+
+<script src="static/js/model/user/finance.js"></script>
+<script type="text/javascript">
+	var strUrl = '{$strUrl}';
+    var withdrawCash = '{$intWithdrawCash}';
+</script>
+<!--{template user/footer}-->

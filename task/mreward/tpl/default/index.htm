@@ -1,0 +1,287 @@
+<!--{template header}-->
+<!--{template breadcrumb}-->
+<!-- 查看大图js -->
+<link href="static/js/jqplugins/fancybox/jquery.fancybox.min.css" rel="stylesheet">
+<script src="static/js/jqplugins/fancybox/jquery.fancybox.min.js"></script>
+<script src="static/js/uploadify/jquery.uploadify.min.js" type="text/javascript"></script>
+<link href="static/js/uploadify/uploadify.css" rel="stylesheet">
+
+<div class="container">
+<div id="main">
+  <!-- detail start-->
+  <div class="detail">
+    <div class="detail-header">
+        <a href="index.php?do=seller&id={$arrTaskInfo['uid']}" class="detail-header-pic" title="{$arrTaskInfo['username']}">
+          <!--{userpic($arrTaskInfo['uid'],'middle')}-->
+        </a>
+        <div class="detail-ctrl">
+
+              <div class="btn-group visible-xs">
+                <span class="btn btn-default btn-lg">
+                  <span class="bdsharebuttonbox">
+                    <a href="javascript:void(0);" class="bds_more" data-cmd="more"></a>
+                  </span>
+                </span>
+              </div>
+
+              <div class="btn-group">
+                     {if $arrProcess_can['work_hand']&&$gUid}
+		                <a href="index.php?do=taskhandle&op=turnaround&taskId={$arrTaskInfo['task_id']}" class="btn btn-primary btn-lg">我要交稿</a>
+		              {/if}
+		              {if $arrProcess_can['delay']&&$gUid}
+		                <a href="index.php?do=taskhandle&op=delay&taskId={$arrTaskInfo['task_id']}" class="btn btn-primary btn-lg">我要延期</a>
+		              {/if}
+
+              </div>
+
+              <div class="btn-group visible-xs">
+                {if $arrTaskInfo['favorite']}
+                      <a id="favorite{$arrTaskInfo['task_id']}" href="javascript:cancelFavorite('task',{$arrTaskInfo['task_id']});" title="取消收藏" class="action-collect on btn btn-default btn-lg"><i class="fa fa-star"></i></a>
+                {else}
+                      <a id="favorite{$arrTaskInfo['task_id']}" href="javascript:addFavorite('task',{$arrTaskInfo['task_id']});" title="收藏" class="action-collect btn btn-default btn-lg"><i class="fa fa-star"></i></a>
+               {/if}
+              </div>
+
+              <div class="btn-group visible-xs">
+                <a href="javascript:report(2,'task','{$arrTaskInfo['uid']}','{$arrTaskInfo['task_id']}','{$arrTaskInfo['task_id']}');void(0);" title="举报" class="action-report btn btn-default btn-lg"><i class="fa fa-bell"></i></a>
+              </div>
+
+
+        </div>
+        <!-- detail-ctrl end -->
+        <div class="detail-header-body">
+          <h1 class="detail-title"><span class="money">
+            <sub>￥</sub>{$arrTaskInfo['task_cash']}</span> {$arrTaskInfo['task_title']}
+           {loop $arrPayitemShow $k $v}
+            <span class="marked $v['style']">$v['abbr']</span>
+			{/loop}
+          </h1>
+          <div class="detail-obj">
+            <div class="detail-obj-item">
+              <div class="method">
+              	<a href="index.php?do=tasklist&m={$arrTaskInfo['model_id']}" class="method-type"  data-toggle="popover" data-placement="bottom"
+				data-html="true" data-trigger="hover" data-content="{$prizeDesc}">
+				{$arrModelInfo['model_name']}模式 <i class="fa fa-angle-down"></i></a>
+                <span><i class="fa fa-money"></i> {if $arrTaskInfo['task_status'] == '10'}
+								    	审核失败
+								    {else}
+								    	{if floatval($arrTaskInfo['task_cash'])}
+								    		{if $arrTaskInfo['task_status'] == '0'}
+								    			未托管
+								    		{elseif $arrTaskInfo['task_status'] == '1'}
+								    			待审核
+								    		{else}
+								    			 已托管：<sub>￥</sub>{$arrTaskInfo['task_cash']}
+								    		{/if}
+								    	{else}
+								    		{if $arrTaskInfo['task_status'] == '0'}
+								    			未托管
+								    		{elseif $arrTaskInfo['task_status'] == '1'}
+								    			待审核
+								    		{else}
+								    			免托管
+								    		{/if}
+								    	{/if}
+								    {/if}</span>
+              </div>
+
+            </div>
+              <div class="detail-obj-item">
+              <a href="index.php?do=seller&id={$arrTaskInfo['uid']}" class="btn btn-primary btn-xs">进入店铺</a>
+			 {if $gUid&&$gUid !=$arrTaskInfo['uid']}
+              <a href="javascript:sendMessage({$arrTaskInfo['uid']});void(0);"  class="btn btn-default btn-xs">联系我</a>
+			   {if $intFollow}
+			 <span class="btn-group">
+         <a href="javascript:void(0);" class="btn btn-success btn-xs disabled" role="button"><i class="fa fa-check"></i> 已关注</a>
+            <a href="javascript:cancelFollow({$arrTaskInfo[uid]});void(0);"  class="btn btn-success btn-xs" id="follow{$arrTaskInfo[uid]}">取消</a>
+          </span>
+			  {else}
+              <a href="javascript:addFollow({$arrTaskInfo[uid]});void(0);" class="btn btn-default btn-xs" id="follow{$arrTaskInfo[uid]}"><i class="fa fa-plus"></i> 加关注</a>
+			  {/if}
+            {/if}
+            </div>
+          </div>
+        </div>
+        <!-- detail-header-body end -->
+
+    </div>
+    <!-- detail-header end -->
+    <div class="detail-progress">
+        <h2 class="detail-title-min">项目进度</h2>
+      <ul class="step step5">
+        {loop $arrProjectProgress $k $v}
+	        <li class="step-item {if $arrTaskInfo['task_status']>=$v['status']} action {/if}">
+		          <span class="step-num">{if $v['status'] < $arrTaskInfo['task_status']}<i class="fa fa-check"></i>{else}{$k}{/if}</span>
+		          <div class="step-text step-bottom">
+		            <p><strong class="step-title">{$v['desc']}</strong></p>
+		            {if $v['time']&&$arrTaskInfo['task_status'] >=$v['status']}
+		            	<p><!--{eval echo date('Y-m-d',$v['time'])}--></p>
+		            {/if}
+		          </div>
+	          {if in_array($v['status'], array(2,3,5))&&$arrTaskInfo['task_status'] >=$v['status']}
+		          <div class="step-text step-top">
+		            {if $arrTaskInfo['task_status'] ==$v['status']}
+		            	<p>{$v['timedesc']}</p>
+		            	<p><span class="red d_time" ed="{$v['timeing']}" title="{$v['timedesc']}"></span></p>
+		             {/if}
+		          </div>
+	          {/if}
+	        </li>
+        {/loop}
+
+      </ul>
+
+    </div>
+    <div class="detail-body">
+      <h2 class="detail-title-min">需求描述</h2>
+      	<div class="detail-img">
+	  	{loop $arrTaskPics $k $v}
+        <a class="detail-img-item" href="$v"  rel="detail-img-group">
+          <img src="$v" alt="">
+        </a>
+		{/loop}
+      </div>
+      <div class="detail-desc">
+      	<!--{eval echo htmlspecialchars_decode($arrTaskInfo['task_desc'])}-->
+      </div>
+      <div class="detail-additional {if !$arrTaskInfo['ext_desc']} hidden {/if}">
+        <h2 class="detail-title-min">补充需求 <time datetime="<!--{eval echo date('Y-m-d H:i:s',$arrTaskInfo['ext_time'])}-->"><!--{eval echo date('Y-m-d H:i:s',$arrTaskInfo['ext_time'])}--></time></h2>
+        <!--{eval echo htmlspecialchars_decode($arrTaskInfo['ext_desc'])}-->
+      </div>
+
+	 {if $arrTaskInfo['task_file']}
+      <h2 class="detail-title-min">附件下载 <span class="label label-default"><!--{eval echo count($arrTaskFiles);}--></span></h2>
+      <ul class="detail-affix">
+      		{loop $arrTaskFiles $v}
+	         <li class="detail-affix-item">
+	        	<a href="$_K['siteurl']/{$v['save_name']}" target="_blank" >
+	        		<i class="fa fa-download"></i> {$v['file_name']}
+	        	</a>
+        	</li>
+			{/loop}
+      </ul>
+     {/if}
+
+      <!--<h2 class="detail-title-min">地图</h2>
+      <div class="detail-map">
+        <figure>
+          <figcaption>
+            <address>位置：黄浦江上的的卢浦大桥</address>
+          </figcaption>
+          <img src="http://pic.yupoo.com/shuart/Du8Agxqc/p5mT7.png" alt="">
+        </figure>
+      </div>-->
+
+      <div class="poster-ctrl">
+            {if $arrProcess_can['reqedit']}
+            <a href="javascript:reqedit();void(0);"   class="btn btn-primary btn-sm"><i class="fa fa-ellipsis-h"></i> 补充需求</a>
+          {/if}
+            <!--<a href="#" class="btn btn-default btn-sm">设为加急任务</a>
+            <a href="#" class="btn btn-default btn-sm">设为置顶任务</a>
+            <a href="#" class="btn btn-default btn-sm">标记地图</a>
+            <a href="#" class="btn btn-default btn-sm">屏蔽搜索引擎</a>-->
+      </div>
+    </div>
+    <!-- detail-body end -->
+
+    <div class="detail-footer">
+      <ul class="detail-footer-meta for-poster">
+        <li class="for-poster-item">雇主：<a href="index.php?do=seller&id={$arrTaskInfo['uid']}" title="{$arrTaskInfo['username']}">{$arrTaskInfo['username']}</a></li>
+        <li class="for-poster-item"><i class="fa fa-clock-o"></i> 发布时间：<!--{eval echo date('Y-m-d H:i:s',$arrTaskInfo['start_time'])}--></li>
+        <li class="for-poster-item">编号：#{$arrTaskInfo['task_id']}</li>
+        {if $arrProcess_can['task_report']&&$arrTaskInfo['uid'] != $gUid&&$gUid}
+        <li class="for-poster-item hidden-xs"><a href="javascript:report(2,'task','{$arrTaskInfo['uid']}','{$arrTaskInfo['task_id']}','{$arrTaskInfo['task_id']}');void(0);" class="action-report"><i class="fa fa-bell"></i> 举报</a></li>
+        {/if}
+      </ul>
+
+      <ul class="detail-footer-meta for-user">
+        <li class="for-user-item">
+          <div class="bdsharebuttonbox">
+            <a href="#" class="bds_more" data-cmd="more">分享到：</a>
+            <a title="分享到新浪微博" href="#" class="bds_tsina" data-cmd="tsina"></a>
+            <a title="分享到腾讯微博" href="#" class="bds_tqq" data-cmd="tqq"></a>
+            <a title="分享到人人网" href="#" class="bds_renren" data-cmd="renren"></a>
+            <a title="分享到微信" href="#" class="bds_weixin" data-cmd="weixin"></a>
+            <a title="分享到复制网址" href="#" class="bds_copy" data-cmd="copy"></a>
+            <a title="分享到打印" href="#" class="bds_print" data-cmd="print"></a>
+          </div>
+          <script>window._bd_share_config={"common":{"bdSnsKey":{},"bdText":"","bdMini":"2","bdMiniList":false,"bdPic":"","bdStyle":"1","bdSize":"16"},"share":{}};with(document)0[(getElementsByTagName('head')[0]||body).appendChild(createElement('script')).src='http://bdimg.share.baidu.com/static/api/js/share.js?v=89860593.js?cdnversion='+~(-new Date()/36e5)];</script>
+        </li>
+         {if $gUid!=$arrTaskInfo['uid']}
+         <li class="for-user-item" >
+          {if $intFavorite}
+          	<a id="favorite{$arrTaskInfo['task_id']}" href="javascript:cancelFavorite('task',{$arrTaskInfo['task_id']});" title="取消收藏" class="action-collect on"><i class="fa fa-star"></i></a>
+		  {else}
+          	<a id="favorite{$arrTaskInfo['task_id']}" href="javascript:addFavorite('task',{$arrTaskInfo['task_id']});" title="收藏" class="action-collect"><i class="fa fa-star"></i></a>
+		  {/if}
+		   </li>
+		 {/if}
+      </ul>
+    </div>
+    <!-- detail-footer end -->
+  </div>
+
+  <!-- detail end-->
+  <div class="for-advertise">
+    <!--{ad_show(TASKINFO_HEAD)}-->
+  </div>
+  <!-- for-advertise end -->
+  <div class="tab tab-darken" id="detail">
+    <a href="index.php?do=task&id={$arrTaskInfo['task_id']}&view=work#detail"    {if $view == 'work'}    class="selected" {/if}>稿件 <span class="badge">{if $arrTaskInfo['work_num']}$arrTaskInfo['work_num']{else}0{/if}</span></a>
+    <a href="index.php?do=task&id={$arrTaskInfo['task_id']}&view=comment#detail" {if $view == 'comment'} class="selected" {/if}>留言 <span class="badge">{if $arrTaskInfo['leave_num']}$arrTaskInfo['leave_num']{else}0{/if}</span></a>
+    <a href="index.php?do=task&id={$arrTaskInfo['task_id']}&view=mark#detail"    {if $view == 'mark'}    class="selected" {/if}>评价 <span class="badge">{$arrTaskInfo['mark']['all']}</span></a>
+  </div>
+  <!-- tab end -->
+  <!--{eval require keke_tpl_class::template ( "task/" . $arrModelInfo ['model_code'] . "/tpl/" . $_K ['template'] . "/".$view );}-->
+<div class="for-advertise">
+    <!--{ad_show(TASKINFO_BOTTOM)}-->
+  </div>
+  <!-- for-advertise end -->
+</div><!-- #main end -->
+
+
+<!-- 任务增值项目 start -->
+		 <!--{template ajax/taskside}-->
+<!-- 任务增值项目 end -->
+
+</div>
+<!-- container end -->
+<script src="static/js/model/task/common.js" charset="{CHARSET}"></script>
+<script type="text/javascript">
+	var uid = '{$uid}';
+	var strUrl = '{$strUrl}';
+    var taskId = '$arrTaskInfo[task_id]';
+	var  jsonWorkStatus = $jsonWorkStatus;
+	  $(function(){
+    $('.manuscript-img-item').fancybox({
+      openEffect  : 'none',
+      closeEffect : 'none',
+      padding : 5,
+      tpl:{
+        error    : '<p class="fancybox-error">内容无法加载。<br/>请稍后重试。</p>'
+      },
+      helpers : {
+        title : {
+          type : 'over'
+        }
+      }
+    });
+    $('.detail-img-item').fancybox({
+      openEffect  : 'none',
+      closeEffect : 'none',
+      padding : 5,
+      tpl:{
+        error    : '<p class="fancybox-error">内容无法加载。<br/>请稍后重试。</p>'
+      },
+      helpers : {
+        title : {
+          type : 'over'
+        }
+      }
+    });
+	    //弹出任务类型详细
+    $('.method-type').popover();
+  })
+</script>
+<!--{template footer}-->
+

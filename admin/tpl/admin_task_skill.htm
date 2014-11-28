@@ -1,0 +1,118 @@
+<!--{template admin/tpl/admin_header}--> 
+<div class="page_title">
+    	<h1>{$_lang['skill_manage']}</h1>
+        <div class="tool">
+        <a href="index.php?do=task&view=skill&op=list" class="here">{$_lang['skill_list']}</a>
+            <a href="index.php?do=task&view=skill_edit">{$_lang['skill']}{if $skill_id}{$_lang['edit']}{else}{$_lang['add']}{/if}</a>
+			
+    	</div>
+</div>
+
+<div class="box search p_relative">
+    	<div class="title"><h2>{$_lang['search']}</h2></div>
+        <div class="detail" id="detail">
+           
+		    <form action="" method="get">
+            	<input type="hidden" name="do" value="$do">
+				<input type="hidden" name="view" value="$view">
+				<input type="hidden" name="type" value="$type">
+				<input type="hidden" name="page" value="$page">
+                <table cellspacing="0" cellpadding="0">
+					<tbody>
+                        <tr>
+                            <th>{$_lang['by_industry']}</th>
+                            <td>
+                            	<select class="ps vm" name="w[indus_id]" id="catid">
+                            	<option value="" {if !$w[indus_id]} selected="selected"{/if}>全选</option>	
+                            	{loop $industry $v}
+								<option value="$v['indus_id']" {if $v['indus_id'] == $w[indus_id]} selected="selected"{/if}>$v['indus_name']</option>	
+								{/loop}
+								</select>
+                            </td>
+                            <th>{$_lang['skill_name']}*</th>
+                            <td><input type="text" value="{$w['skill_name']}" name="w[skill_name]" class="txt"/>*{$_lang['search_by_like']}</td>
+                             <th></th><td></td>
+						</tr>
+                        <tr>
+                            
+							<th>{$_lang['result_order']}</th>
+							<td>
+								
+								<select name="ord[]">
+                                <option value="skill_id" {if $ord['0']=='skill_id' or !isset($ord['0'])} selected="selected"{/if}>{$_lang['default_order']}</option>
+                                <option value="on_time" {if $ord['0']=='on_time' } selected="selected"{/if}>{$_lang['add_time']}</option>
+                                </select>
+                                <select name="ord[]">
+                                <option {if $ord['1']=='desc' or !isset($ord['1'])}selected="selected" {/if} value="desc">{$_lang['desc']}</option>
+                                <option {if $ord['1']=='asc'}selected="selected" {/if} value="asc">{$_lang['asc']}</option>
+                                </select>
+							</td>
+                            <th>{$_lang['list_result']}</th>
+                            <td><select name="page_size">
+									<option value="10" {if $page_size=='10'}selected="selected"{/if}>{$_lang['page_size']}10</option>
+									<option value="20" {if $page_size=='20'}selected="selected"{/if}>{$_lang['page_size']}20</option>
+									<option value="30" {if $page_size=='30'}selected="selected"{/if}>{$_lang['page_size']}30</option>
+								</select>
+                              	<button class="pill" type="submit" value={$_lang['search']} name="sbt_search">
+                            		<span class="icon magnifier">&nbsp;</span>{$_lang['search']}
+								</button></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </form>
+			
+        </div>
+    </div>
+    <!--搜索结束-->
+
+<div class="box list">
+    	<div class="title"><h2>{$_lang['skill_list']}</h2></div>
+        <div class="detail">
+        	<form method="post" id="skill_op" action="">
+              <table cellspacing="0" cellpadding="0">
+                <tbody>
+                  <tr>
+                   <th>
+	<input type="checkbox" id="checkbox" onclick="checkall();" class="checkbox" >编号
+</th>
+                    <th width="20%">{$_lang['by_industry']}</th>
+                    <th width="25%">{$_lang['skill_name']}</th>
+                    <th width="10%">{$_lang['order']}</th>
+                    <th width="15%">{$_lang['add_time']}</th>
+                    <th width="20%">{$_lang['operate']}</th>
+                  </tr>
+				  {loop $skill_arr $k $v}	
+                  <tr class="item">
+                    <td class="td25"><input type="checkbox" class="checkbox" name="ckb[]" value="$v['skill_id']">$v['skill_id']</td>
+                  
+                    <td class="td28">$indus_show_arr[$v['indus_id']]['indus_name']</td>
+					<td>$v['skill_name']</td>
+                    <td>$v['listorder']</td>
+                    <td><!--{date('Y-m-d H:i:s',$v['on_time'])}--></td>
+                    <td>
+						<a href="index.php?do={$do}&view=skill_edit&skill_id={$v['skill_id']}&page={$page}" class="button dbl_target"><span class="pen icon"></span>{$_lang['edit']}</a>
+						<a href="$url&skill_id=$v['skill_id']&ac=del&page={$page}"  onclick="return cdel(this);" class="button"><span class="trash icon"></span>{$_lang['delete']}</a>
+					</td>
+                  </tr>
+                  <tr>
+                  	{/loop}
+                    <td colspan="7">
+                    
+	                    
+	                    <div class="clearfix">
+	                  		
+	                        <label for="checkbox" onclick="checkall(event);">{$_lang['select_all']}</label>
+	                        <input type="hidden" name="sbt_action" class="sbt_action"/>
+	                        <button name="sbt_action" type="submit" value={$_lang['mulit_delete']} onclick="return batch_act(this,'skill_op');" class="pill negative" ><span class="icon trash"></span>{$_lang['mulit_delete']}</button>
+	                    	
+	                    </div>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+			  <div class="page">{$pages['page']}</div>
+        	</form>
+        </div>
+        
+    </div>           
+<!--{template admin/tpl/admin_footer}-->

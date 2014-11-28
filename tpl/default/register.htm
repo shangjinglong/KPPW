@@ -1,0 +1,150 @@
+<!--{template header}-->
+
+<div class="container">
+<div class="col-sm-7 hidden-xs">
+  <div class="welcome-img">
+    <div class="thumbnail">
+<!--{ad_show(LOGIN_LEFT)}-->
+
+
+    </div><!-- thumbnail end-->
+    <div class="caption">
+      <h3>注册用户的特色功能</h3>
+
+
+      <ul class="list-inline">
+        <li><p class="text-muted"><i class="fa fa-check-square"></i> 实名认证后，交易保障。</p></li>
+        <li><p class="text-muted"><i class="fa fa-check-square"></i> 订单记录保存，随时随地查看</p></li>
+		<li><p class="text-muted"><i class="fa fa-check-square"></i> 关键位置推荐，惊喜不断</p></li>
+      </ul>
+
+    </div>
+  </div><!-- welcome-img end -->
+</div>
+<div class="col-sm-5 col-xs-12">
+<div class="login-and-register-container show-{$do}">
+
+  <div class="register-box">
+    <div class="page-header">
+      <div class="pull-right">或 <a id="login-link" href="index.php?do=login" rel="show-login">登录</a></div>
+      <h1>注册 <small>千里之行，始于足下。</small></h1>
+    </div>
+
+    <form role="form" action="index.php?do=register" name="registerForm" id="registerForm" method="post">
+      <input type="hidden" name="formhash" id="formhash" value="{FORMHASH}">
+      <input type="hidden" name="hdn_refer" id="hdn_refer" value="{$_K['refer']}">
+	  <div class="form-group">
+        <label class="sr-only" for="exampleInputId">帐号</label>
+        <input type="text" class="form-control" id="account" name="account" placeholder="账号"  onkeyup="clearspecial(this);">
+      </div>
+
+      <div class="form-group">
+        <label class="sr-only" for="exampleInputPassword1">密码</label>
+        <input type="password" class="form-control" name="password" id="password" placeholder="密码" onKeyup="pwStrength(this.value)">
+      </div>
+      <div class="form-group" id="pwdStrength">
+        <div class="password_strength">
+          <span class="selected">弱</span>
+          <span>中</span>
+          <span>强</span>
+        </div>
+      </div>
+      <div class="form-group">
+        <label class="sr-only" for="exampleInputPassword2">确认密码</label>
+        <input type="password" class="form-control" name="confirmPassword" id="confirmPassword" placeholder="确认密码">
+      </div>
+	  <div class="form-group">
+        <label class="sr-only" for="exampleInputName">邮箱</label>
+        <input type="text" class="form-control" name="email" id="email" placeholder="邮箱">
+      </div>
+      <div class="form-group clearfix code-group">
+        <label class="sr-only" for="exampleInputCode">验证码</label>
+        <div class="col-xs-3">
+          <input type="text" class="form-control" id="code" name="code" placeholder="验证码">
+        </div>
+        <div class="col-xs-9 code-img" id="show_secode_menu_content">
+         <img id="secode_img" src="index.php?do=ajax&view=captcha" onclick="document.getElementById('secode_img').src='index.php?do=ajax&view=captcha&sid='+Math.random(); return false;">
+         <a class="font14" href="javascript:document.getElementById('secode_img').src='index.php?do=ajax&view=captcha&sid='+Math.random();void(0);" >换一组</a>
+        </div>
+      </div>
+      <div class="form-group checkbox">
+        <label>
+          <input type="checkbox"  name="agree" id="agree" value="1" checked="checked"> 我同意 <a href="index.php?do=single&id=312" target="_blank">《服务条款》</a>
+        </label>
+      </div>
+      <div class="form-group text-center">
+        <button type="submit" class="btn btn-primary btn-block">注册</button>
+        <span class="text-success" id="tipsUser"></span>
+      </div>
+    </form>
+
+
+  </div><!-- register-box end -->
+
+
+</div><!-- login-and-register-container end -->
+
+
+<div class="login-and-register-footer">
+  <p>第三方登录：
+  	{loop $api_open $k $v}
+	{if $weibo_list[$k.'_app_id']}
+    <a href="index.php?do=oauthlogin&type={$k}" title="{$api_name[$k]['name']}"><img src="static/img/ico/{$k}_t.gif" alt="{$api_name[$k]['name']}"></a>
+	 {/if}
+	{/loop}
+  </p>
+</div>
+<!-- modal-footer end -->
+</div><!-- col-xs-5 end -->
+
+</div>
+<script type="text/javascript" src="static/js/model/register/register.js"></script>
+<script type="text/javascript">
+	
+function clearspecial(inputobj){
+	inputobj.value = inputobj.value.replace(/[^a-z\d\u4e00-\u9fa5]/ig, '');
+}
+
+function checkStrong(sPW){
+	//if (sPW.length < 3){
+		//Modes=1;
+	//}else{
+		var pwLength = 	sPW.length;
+		  var patEn = /[a-zA-Z]/;
+		  var patnum = /[0-9]/;
+		  var speChar = /[`~!@#$\^&\*\(\)=\|{}':;',\/\?\[\]\.<>]/;
+		  var isEn = patEn.test(sPW);
+		  var isNum = patnum.test(sPW);
+		  var isSpe = speChar.test(sPW);
+		  Modes = getStrong(isEn,isNum,isSpe,pwLength);
+
+	//}
+	 return Modes;
+}
+
+function getStrong (isEn,isNum,isSpe,pwLength){
+	if (isEn && isNum && isSpe && (pwLength>6)){
+		var setModes = 3;
+	}else{
+		var setModes = 2;
+		if((isEn && isNum)||(isNum && isSpe)||(isEn&&isSpe)){
+			var setModes = 2;
+		}else{
+			var setModes = 1;
+		}
+	}
+	return setModes;
+}
+
+function pwStrength(pwd){
+  if (pwd==null||pwd==""){
+  	S_level = 0;
+  } else{
+	  S_level=checkStrong(pwd);
+	  $("#pwdStrength span:lt("+S_level+")").addClass('selected');
+	  $("#pwdStrength span:gt("+(S_level-1)+")").removeClass('selected');
+  }
+
+}
+</script>
+<!--{template footer}-->

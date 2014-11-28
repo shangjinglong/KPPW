@@ -1,0 +1,63 @@
+<!--{template ADMIN_DIRECTORY/tpl/admin_header}-->
+	<div class="page_title">
+    	<h1>{$_lang['currencies_manage']}</h1>
+    </div>
+<div class="box tip clearfix p_relative">
+    	<div class="control"><a href="javascript:void(0);" onclick="$(this).parent().parent().fadeOut();" title={$_lang['close']}><b>&times;</b></a></div>
+        <div class="title"><h2>{$_lang['tips']}</h2></div>
+        <div class="detail pad10">
+            <ul style='color:red'>
+                <li>{$_lang['open_currencies_info']}</li>
+            </ul>
+        </div>
+	</div>
+<div class="box list">
+ <div class="title"><h2>{$_lang['currencies_list']}</h2></div>
+  <div class="detail">
+  <div id="ajax_dom">
+      <table cellpadding="0" cellspacing="0">
+        <tbody>
+          <tr>
+          <th width="10%">{$_lang['currency_id']}</th>
+            <th width="20%">{$_lang['currency']}</th>
+            <th width="30%">{$_lang['currency_code']}</th>
+			<th width="20%">{$_lang['currencies']}</th>
+            <th width="20%">{$_lang['operate']}</th>
+          </tr>
+          {if !empty($currencies_config)}
+          {loop $currencies_config $k $v}
+              <tr class="item">
+	              <td>$v['currencies_id']</td>
+	              {if $default_currency==$v['code']}
+	              <td style='font-weight:bold'>{$v['title']}{$_lang['default']}</td>
+	              {else}
+	              <td>{$v['title']}</td>
+	              {/if}
+	              <td>$v['code']</td>
+	              <td>$v['value']</td>
+				  <td> 
+					<a href="$url&op=edit&cid=$v['currencies_id']" class="button dbl_target"><span class="cog icon"></span>{$_lang['config']}</a>
+					<a href="$url&ac=update&code=$v['code']" class="button"><span class="uparrow icon"></span>$_lang['update']</a>
+					<a href="$url&op=list&cid=$v['currencies_id']&ac=del"  class="button"><span class="negative icon"></span>{$_lang['delete']}</a>
+				  </td>
+             </tr>
+          {/loop}
+          {/if}
+          </tbody>
+		  <tfoot>
+		  	 <tr class="item">
+                <td colspan="6" align="left">
+                	 <button class="positive primary pill button t_r" type="button" value={$_lang['add']} onclick="location.href='index.php?do=config&view=currencies&op=edit'"><span class="check icon"></span>{$_lang['add']}</button>
+                	 <button class="positive primary pill button t_r" type="button" value="{$_lang['mi_update']}" onclick="location.href='index.php?do=config&view=currencies&ac=update'"><span class="uparrow icon"></span>$_lang['mi_update']</button>
+				</td>
+			 </tr>
+		  </tfoot>
+         </table>
+         <div class="page">
+         	{$pages['page']}
+         </div>
+         </div>
+     </div>   
+</div>
+
+<!--{template ADMIN_DIRECTORY/tpl/admin_footer}-->

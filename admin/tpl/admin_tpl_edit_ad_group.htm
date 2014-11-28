@@ -1,0 +1,60 @@
+<!--{template ADMIN_DIRECTORY/tpl/admin_header}-->
+<div class="page_title">
+    	<h1>{$_lang['ad_group']}{$page_tips}</h1>
+        <div class="tool">
+        	 <a href="?do={$do}&view=ad&order_type={$order_type}">{$_lang['ad_group_manage']}</a>
+        	<a href="?do={$do}&view=edit_ad&order_type={$order_type}&tag_id={$tag_id}" class="here">{$_lang['ad_group']}{$page_tips}</a>
+    	</div>
+    </div>
+<div class="box post">
+	 <div class="tabcon">
+        	<div class="title"><h2>{$_lang['ad_group']}{$page_tips}</h2></div>
+            <div class="detail">
+                <form action="index.php?do={$do}&view={$view}&order_type={$order_type}" method="post" enctype="multipart/form-data">
+                	<input type="hidden" name="hdn_tag_id" value="{$tag_id}">
+                    <table width="100%" border="0" cellspacing="0" cellpadding="0">
+                      <tr>
+                        <th scope="row" width="130">{$_lang['tag_mode']}</th>
+                        <td>{$_lang['ad_group_tag']}</td>
+                      </tr>
+					  <tr>
+					  	 <th scope="row" width="130">{$_lang['ad_group_name']}</th>
+              			  <td>
+                 			<input type="text" value="{$ad_info['tagname']}" name="fds[tagname]" class="txt" {if $ad_info['tagname']}readonly="readonly"{/if} style=" width:260px;"/>
+							 <div class="padt10 direct">
+                           	 	<p>({$_lang['ad_group_create_not_edit']})</p>
+                      		  </div>
+               			 </td>
+          			  </tr>
+					  <tr>
+                        <th scope="row" width="130">{$_lang['tag_code']}</th>
+                        <td>
+                        	<textarea style="width:560px;" name="fds[tag_code]" cols="70" rows="10">{$ad_info['tag_code']}</textarea>
+							  <div class="padt10 direct">
+                           	 	<p>（&#36;{$_lang['datalist']},&#36;{$_lang['ad_url']},&#36;{$_lang['ad_content']},&#36;{$_lang['ad_id']}&#36;{$_lang['ad_file']})</p>
+                      		  </div>
+                        </td>
+                      </tr>
+					  <tr>
+                     	 <th scope="row" width="130">{$_lang['cache_time']}</th>
+                        <td>
+                        	<input type="text" value="{$ad_info['cache_time']}" name="fds[cache_time]" class="txt" style=" width:260px;"/>
+							 <div class="padt10 direct">
+                           	 	<p>{$_lang['blank_not_cache']}</p>
+                      		  </div>
+                        </td>
+                      </tr>
+                      <tr>
+                        <th scope="row">&nbsp;</th>
+                        <td>
+                            <div class="clearfix padt10">
+                                <button class="positive primary pill button" type="submit" value="{$_lang['ad_group']}{if $ad_id}{$_lang['edit']}{else}{$_lang['add']}{/if}" name="sbt_edit"><span class="icon {if $ad_id}pen{else}check{/if}"></span>{$_lang['ad_group']}{if $ad_id}{$_lang['edit']}{else}{$_lang['add']}{/if}</button>
+                            </div>
+                        </td>
+                      </tr>
+                    </table>
+                </form>
+            </div>
+        </div>
+    </div>
+<!--{template ADMIN_DIRECTORY/tpl/admin_footer}-->

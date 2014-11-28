@@ -1,0 +1,68 @@
+<!--{template user/header}-->
+<div class="container">
+  <div class="nav-action">
+		<!--{template user/left_side}-->
+  </div>
+  <!-- nav-action end -->
+  <div class="content-panel">
+      <div class="tab">
+      <!--{template user/account_auth_nav}-->
+      </div>
+      <div class="tab_detail">
+      		<!--  start -->
+
+          <div class="media">
+            <div class="pull-left">
+                <img class="media-object" src="{$auth_item['auth_big_ico']}" alt="{$auth_item['auth_title']}">
+            </div>
+            <div class="media-body">
+                <div class="panel panel-success">
+                  <div class="panel-heading">
+                    <h3 class="panel-title">
+
+                      {$auth_item['auth_title']}
+                      <span class="label label-success"><i class="fa fa-check"></i> {$auth_tips}</span>
+                    </h3>
+                  </div>
+                  <div class="panel-body">
+                    <div class="table-responsive">
+                      <table class="table">
+                        <thead>
+                          <tr>
+                            <th>用户名</th>
+                            <th>邮箱地址</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          <tr>
+                            <td>{$arrAuthInfo['username']}</td>
+                            <td>{$arrAuthInfo['email']}</td>
+                          </tr>
+                        </tbody>
+                      </table>
+                    </div>
+
+
+                  </div>
+                </div>
+
+                <a href="index.php?do=user&view=account&op=auth&code=email&step=step1" class="btn btn-default">返回修改</a>
+
+
+            </div>
+          </div>
+
+
+
+
+
+
+
+
+
+      		<!--  end -->
+      </div>
+  </div>
+  </div>
+  <script src="static/js/model/user/auth.js"></script>
+<!--{template user/footer}-->

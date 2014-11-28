@@ -1,0 +1,93 @@
+<!--{template ADMIN_DIRECTORY/tpl/admin_header}-->
+
+<div class="page_title">
+    <h1>{$_lang['ads_manage']}</h1>
+    <div class="tool">
+        <a class="here" href="index.php?do={$do}&view=ad" >{$_lang['advertising']}</a> 
+		<!--<a href="index.php?do={$do}&view=ad_private_add" >{$_lang['add_advertising']}</a>-->  
+        <a href="index.php?do={$do}&view=ad_list" >{$_lang['ads_list']}</a>
+        
+    </div>
+</div>
+<div class="box list">
+	<div class="detail">
+		<table id="ad_details">
+			<!--{eval $i=1}-->
+			<!--{eval $size=2}--> <!-- 每一行显示的数量,这里定义  -->
+			{loop $target_arr $k $v}
+			
+		
+			
+				{if ($i-1)%$size===0}
+					<tr>
+				{/if}
+					<td>
+						<div class="fl_l">
+						<img src="../{$v['sample_pic']}">
+						</div>
+						<div style="padding-left:120px">
+						<p>广告位置：<a href="index.php?do={$do}&view=ad_list&target_id={$v['target_id']}">{$v['name']}</a></p>
+						<p>广告数量：{$v['ad_num']} 条<!--最大数量 --></p>
+						<p>已投放：{$target_ad_arr[$v['target_id']]} 条<!-- 已经添加数 --></p>
+						<p>{$_lang['ads_group_code']}:{$v['code']}</p>
+						<ul class="list_detail">
+							<li>{$_lang['ads_group_id']}:{$v['target_id']}</li>
+							<li>{$_lang['ads_group_name']}:{$v['name']}</li>
+							<li>{$_lang['ads_group_code']}:{$v['code']}</li>
+							<li>{$_lang['description']}:{$v['description']}</li>
+							<li>{$_lang['has_been_add_number']}:{$target_ad_arr[$v['target_id']]}</li>
+							<li>{$_lang['maximum_number']}:{$v['ad_num']}</li>
+						</ul>
+						</div>
+					</td>
+				
+				{if $i%$size===0}
+				</tr>
+				{/if}
+				<!--{eval $i++}-->
+			{/loop}
+		</table>
+	</div>
+</div>
+<script type="text/javascript">
+	$("#ad_details img").each(function(){
+		var p     = $(this);
+		var delay_t;
+		var next = p.parent().siblings().children().find("ul");
+		var offset;
+		var left_p;//position
+		var left_l;//length
+		var poffset = p.offset();
+		$(this).hover(function(){
+			window.clearTimeout(delay_t);
+			next.fadeIn("normal");
+			if(typeof(offset)=="undefined"){
+				offset=next.offset();
+				left_p=offset.left;//position
+				left_l=Math.abs(left_p); //length
+			}
+			next.css({"top":poffset.top+20});
+			if(offset.left>700){
+				if(BROWSER.ie){
+					next.css({"left":offset.left-280});
+				}else{
+					next.css({"left":offset.left-120});
+				}
+			}else{
+				if(BROWSER.ie){
+					next.css({"left":offset.left+80});
+				}else{
+					next.css({"left":offset.left+230});
+				}
+			}
+			
+		},function(){
+			window.clearTimeout(delay_t);
+			delay_t = window.setTimeout(function(){
+				next.hide();
+			},100);
+			
+		})
+	})
+</script>
+<!--{template ADMIN_DIRECTORY/tpl/admin_footer}-->

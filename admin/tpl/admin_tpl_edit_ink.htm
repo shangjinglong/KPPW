@@ -1,0 +1,105 @@
+<!--{template ADMIN_DIRECTORY/tpl/admin_header}-->
+<div class="page_title">
+    	<h1>{$_lang['links']}</h1>
+        <div class="tool">         
+            <a href="index.php?do={$do}&view=ink" {if $view != 'edit_ink'}class="here"{/if}>{$_lang['link_manage']}</a>
+			<a href="index.php?do={$do}&view=edit_ink" {if $view == 'edit_ink'}class="here"{/if}>{if $link_id}{$_lang['link_edit']}{else}{$_lang['link_add']}{/if}</a>
+        </div>
+</div> 
+
+<div class="box post">
+    <div class="tabcon"></div>
+	<div class="title">
+		<h2>{if $link_id}{$_lang['edit']}{else}{$_lang['add']}{/if}{$_lang['link']}</h2>
+	</div>	
+	<div class="detail">
+<form method="post" action="#" id="frm_link_edit" enctype="multipart/form-data">
+  <input type="hidden" name="hdn_link_id" value="{$link_info['link_id']}">
+        <table   height="200" border="0" cellspacing="0" cellpadding="0"  >
+        
+		    <tr>
+                <th width="150" scope="row">
+                    {$_lang['links_name']}{$_lang['zh_mh']}
+                </th>
+                <td>
+                    <input type="text" class="txt" name="txt_link_name" value="{$link_info['link_name']}" maxlength="50" limit="required:true;len:1-50" msg={$_lang['links_name_not_exists']} msgArea="link_name_msg" class="input_t"/><b style="color:red">*</b>
+                    <span id="link_name_msg"></span>
+                </td>
+            </tr>
+            <tr>
+                <th  scope="row">
+                    {$_lang['links_url']}{$_lang['zh_mh']}
+                </th>
+                <td>
+                    <input type="text" class="txt" name="txt_link_url" value="{$link_info['link_url']}" maxlength="100"  limit="required:true;type:url;len:3-100" msg={$_lang['links_url_not_exists']} msgArea="link_url_msg" class="input_t"/><b style="color:red">*</b>
+                    <span id="link_url_msg"></span>
+                </td>
+            </tr>
+     <!--       <tr>
+                <th  scope="row">
+                    {$_lang['links_img_url']}{$_lang['zh_mh']}
+                </th>
+                <td>
+                	<input type="radio" name="showMode" value="1" id="showMode1" {if $mode==1}checked{/if}>{$_lang['remote_link']}
+                	<input type="radio" name="showMode" value="2" id="showMode2" {if $mode==2}checked{/if}>{$_lang['pic_upload']}
+				  
+				  <div id="mode1" {if $mode!=1}style="display:none"{/if}>
+                    <input type="text" class="txt" name="txt_link_pic" value="{$link_info['link_pic']}" maxlength="100" size="50"/>
+               	  </div>
+				  <div id="mode2" {if $mode!=2}style="display:none"{/if}>
+                    <input type="file" name="fle_link_pic" ext=".jpg,.png,.gif,.jpeg,.bmp" onchange="isExtName(this,1)"/>
+                    <input type="hidden" name="hdn_link_pic" value="{$link_info['link_pic']}">
+					{if $link_info['link_pic']&&strpos($link_info['link_pic'],"data/")!==FALSE}
+						<a href="{$_K['siteurl']}/$link_info['link_pic']" target="_blank"><!--{eval echo substr($link_info['link_pic'],strrpos($link_info['link_pic'],"/")+1)}--></a>
+					{/if}
+			<!--	  </div>
+			    </td>
+            </tr> -->
+            <tr>
+                <th  scope="row">
+                    {$_lang['order']}{$_lang['zh_mh']}
+                </th>
+                <td>
+                    <input type="text" class="txt" name="txt_listorder" value="{$link_info['listorder']}" maxlength="6" onkeyup="clearstr(this)"/>
+                </td>
+            </tr>{if $link_info['on_time']}
+            <tr>
+                <th  scope="row">
+                    {$_lang['last_modify']}{$_lang['zh_mh']}
+                </th>
+                <td>
+                    <!--{date('Y-m-d H:i:s',$link_info['on_time'])}-->
+                </td>
+            </tr>
+            {/if}
+            <tr>
+                <th   scope="row">
+                    
+                </th>
+                <td>
+                	<button type="submit" name="sbt_edit" class="positive primary pill button" value="1" onclick="return checkForm(document.getElementById('frm_link_edit'),false)" value={$_lang['submit']}/>
+					<span class="check icon"></span>{$_lang['submit']}
+					</button>
+                
+                </td>
+            </tr>
+        </table>
+    
+</form>
+ </div>
+ </div>
+ 
+ <script type="text/javascript">
+  
+ 	$(function(){
+		$("#showMode1").click(function(){
+			$("#mode1").show();
+			$("#mode2").hide();
+		})
+		$("#showMode2").click(function(){
+			$("#mode2").show();
+			$("#mode1").hide();
+		})
+	})
+</script>
+<!--{template ADMIN_DIRECTORY/tpl/admin_footer}-->

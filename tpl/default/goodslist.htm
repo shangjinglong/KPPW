@@ -1,0 +1,254 @@
+<!--{template header}-->
+
+
+<div class="container">
+
+<div id="side">
+    <div class="category-list category-lg">
+      <a href="javascript:void(0);" class="category-title"><i class="fa fa-list-ul"></i> 分类 <i class="fa fa-angle-down"></i></a>
+      <ul class="category-down">
+        {loop $arrNewIndusC $key $value}
+        <li class="category-item">
+          <div class="category-top">
+            {loop $value $k1 $v1}
+      {if $k1<2}
+            <a href="{$strUrl}&i=$v1['indus_id']"  {if $v1['is_recommend']==1}class="hot"{/if} tabindex="-1">$v1['indus_name']</a>、
+      {/if}
+      {/loop}
+            <i class="fa fa-angle-right"></i>
+          </div>
+          <div class="category-inner">
+            <h3 class="category-inner-title">全部{$arrIndusP[$key]['indus_name']}</h3>
+        {loop $value $k2 $v2}
+       <a href="{$strUrl}&i=$v2['indus_id']" tabindex="-1" {if $v2['is_recommend']==1}class="hot"{/if}>$v2['indus_name']</a>
+       {/loop}
+          </div>
+        </li>
+    {/loop}
+      </ul>
+  </div>
+  <!-- category-list end -->
+
+  <div class="box-header">
+    <h2 class="min-title">最新发布动态</h2>
+  </div>
+   <div class="box-body">
+    <ul class="record-list">
+    	{if $arrFeedPubs}
+    	{loop $arrFeedPubs $k $v}
+        <li>
+          <p class="record-list-title">
+            <a href="$v['event']['url']"><span class="marked marked-shop">{$arrModelLabel[$v['event']['model_id']]}</span> <span class="money"><sub>￥</sub>
+			 {if $v['event']['model_id']=='4'||$v['event']['model_id']=='5'}
+               	 {$arrCashCoves[$v['event']['cash']]['start_cove']}-<sub>￥</sub>{$arrCashCoves[$v['event']['cash']]['end_cove']}
+             {else}
+               	 {$v['event']['cash']}
+             {/if}</span> $v['event']['content']</a>
+          </p>
+          <p>
+          	<!--{eval $timeDesc = kekezu::time2Units(time()-$v['feed_time'],'hour');}-->
+            <time datetime="2008-02-14">{if $timeDesc}{$timeDesc}前{else}刚刚{/if}</time>
+            <a href="$v['feed_username']['url']">{$v[username]}</a> 发布
+          </p>
+        </li>
+		{/loop}
+		{else}
+暂无数据
+		{/if}
+      </ul>
+  </div>
+  <!-- 最新发布动态 & box-body end -->
+
+
+  <div class="box-header">
+    <h2 class="min-title">推荐服务商</h2>
+  </div>
+  <div class="box-body">
+    <ul class="record-list img">
+    	{if $arrRecommShops}
+    	{loop $arrRecommShops $k $v}
+        <li>
+          <a href="index.php?do=seller&id=$v['uid']" class="avatar" title="$v['shop_name']">
+           <!--{userpic($v['uid'],'middle')}-->
+          </a>
+
+          <div class="avatar-detail">
+            <p class="record-list-title">
+              <a href="index.php?do=seller&id=$v['uid']" title="$v['shop_name']">
+               $v['shop_name']
+              </a>
+            </p>
+            <p class="record-list-meta">好评率 <span><!--{eval echo $v['good_rate']*100}--><sub>%</sub></span></p>
+            <p>
+              <span class="marked marked-tags">{$indus_p_arr[$v[indus_pid]][indus_name]}</span>
+              <span class="marked marked-tags">{$indus_c_arr[$v[indus_id]][indus_name]}</span>
+            </p>
+          </div>
+        </li>
+		{/loop}
+		{else}
+暂无数据
+		{/if}
+      </ul>
+  </div><!-- 推荐服务商 & box-body end -->
+</div>
+<!-- #side end -->
+
+
+<div id="main">
+
+  <div class="for-advertise">
+  <!--{ad_show(SHOPLIST_HEAD)}-->
+
+  </div>
+  <!-- for-advertise end -->
+
+  <div class="category-list category-xs">
+      <a href="javascript:void(0);" class="category-title"><i class="fa fa-list-ul"></i> 分类 <i class="fa fa-angle-down"></i></a>
+      <ul class="category-down">
+      	{loop $arrNewIndusC $key $value}
+        <li class="category-item">
+          <div class="category-top">
+          	{loop $value $k1 $v1}
+			{if $k1<2}
+            <a href="{$strUrl}&i=$v1['indus_id']"  {if $v1['is_recommend']==1}class="hot"{/if} tabindex="-1">$v1['indus_name']</a>、
+			{/if}
+			{/loop}
+            <i class="fa fa-angle-right"></i>
+          </div>
+          <div class="category-inner">
+          	<h3 class="category-inner-title">全部{$arrIndusP[$key]['indus_name']}</h3>
+			  {loop $value $k2 $v2}
+			 <a href="{$strUrl}&i=$v2['indus_id']" tabindex="-1" {if $v2['is_recommend']==1}class="hot"{/if}>$v2['indus_name']</a>
+			 {/loop}
+          </div>
+        </li>
+		{/loop}
+      </ul>
+  </div>
+  <!-- category-list end -->
+
+  <div class="tab tab-darken">
+    <a href="index.php?do=goodslist"  class="selected">所有服务</a>
+  </div>
+  <!-- tab end -->
+
+
+{if $pd||$i||$ky}
+
+	  <ul class="nav nav-pills second-nav">
+	  	{if $pd}<li class="active"><a href="{$strUrl}&pd=0">{$arrIndusPInfo['indus_name']} <i class="fa fa-times"></i></a></li>{/if}
+	    {if $i}<li class="active"><a href="{$strUrl}&i=0">{$arrIndusInfo['indus_name']} <i class="fa fa-times"></i></a></li>{/if}
+	    {if $ky}<li class="active"><a href="{$strUrl}&ky=0">{$ky} <i class="fa fa-times"></i></a></li>{/if}
+	    <li>共<!--{eval echo intval($intCount);}-->条类似任务</li>
+	  </ul>
+
+
+  {/if}
+  <!-- second-nav end -->
+  <!-- 商品列表 -->
+  <ul class="list-filter">
+
+    <li>
+      <label class="col-xs-1">商品种类</label>
+      <div class="col-xs-11 condition">
+        <a href="{$strUrl}&m=0" {if !$m}class="selected"{/if}>全部</a>
+        <a href="{$strUrl}&m=7" {if $m == 7}class="selected"{/if}><i class="fa fa-male"></i> 服务</a>
+        <a href="{$strUrl}&m=6" {if $m == 6}class="selected"{/if}><i class="fa fa-file"></i> 文件</a>
+      </div>
+    </li>
+
+  </ul>
+  <!-- filter end -->
+
+
+  <div class="tool-bar">
+    <div class="actions">
+      <a href="{if $o!=1}{$strUrl}&o=1{elseif $o!=2}{$strUrl}&o=2{/if}" class="tool-bar-item {if $o==1||$o==2}selected{/if}" >人气 <i class="fa {if $o==2}fa-long-arrow-up{elseif $o==1}fa-long-arrow-down{/if}"></i> </a>
+      <a href="{if $o!=3}{$strUrl}&o=3{elseif $o!=4}{$strUrl}&o=4{/if}" class="tool-bar-item {if $o==4||$o==3}selected{/if}">售价 <i class="fa {if $o==4}fa-sort-numeric-asc{elseif $o==3}fa-sort-numeric-desc{/if}" ></i></a>
+    </div>
+	<div class="actions">
+      <a href="javascript:void(0);" class="tool-bar-item" data-toggle="dropdown">{if $arrCityInfo['name']}{$arrCityInfo['name']}{else}所在地区{/if} <span class="caret"></span></a>
+      <ul class="dropdown-menu for-city" role="menu" aria-labelledby="dLabel">
+        <li {if !$p}class="active"{/if}><a href="{$strUrl}&p=0">所有地区</a></li>
+		{loop $arrDisplaypro $k $v}
+        <li {if $p==$v['id']}class="active"{/if}><a href="{$strUrl}&p=$v['id']" role="menuitem" tabindex="-1" >$v['name']</a></li>
+		{/loop}
+      </ul>
+    </div>
+  </div>
+  <!-- tool-bar end -->
+  {if $arrServices}
+  <div class="list list-img">
+    <ul class="list-body">
+
+    {loop $arrServices $k $v}
+      <li class="list-item">
+        <a href="index.php?do=goods&id=$v['service_id']" class="list-title" title="$v['title']">
+        	 {if $v['model_id']==7}
+        	 <span class="list-item-type"  title="服务"><i class="fa fa-male"></i></span>
+			 {else}
+			 <span class="list-item-type" title="文件"><i class="fa fa-file"></i></span>
+			 {/if}
+        	$v['title']
+			</a>
+        <div class="list-item-img">
+          <div class="marked-layer">
+          	{if $v['goodstop']==1}
+            <span class="marked marked-spread">置顶</span>
+			{/if}
+          </div>
+          <a href="index.php?do=goods&id=$v['service_id']" title="$v['title']">
+          	<img  onerror='$(this).attr("src","tpl/default/img/shop/shop_default_big.jpg")' alt="$v['title']"    class="lazy" src="tpl/default/img/grey.gif"  data-original="<!--{eval echo keke_shop_class::output_pics($v['pic'],210,1);}-->">
+          </a>
+
+		        <!-- 收藏  START-->
+		{if $v['favorite']}
+          	<a  href="javascript:cancelFavorite('service',{$v['service_id']});" title="取消收藏" class="action-collect on" id="favorite{$v['service_id']}"><i class="fa fa-star"></i></a>
+		  {else}
+          	<a href="javascript:addFavorite('service',{$v['service_id']});" title="收藏" class="action-collect" id="favorite{$v['service_id']}"><i class="fa fa-star"></i></a>
+		 {/if}
+        <!-- 收藏 END -->
+
+        </div>
+        <div class="list-item-footer">
+          <a href="index.php?do=seller&id={$v['uid']}" class="poster" title="$v['username']">
+            <span class="avatar">
+            	<!--{userpic($v['uid'],'small')}-->
+            </span>
+           {$v['username']}
+          </a>
+          <span class="money"><sub>￥</sub>$v['price']</span>
+        </div>
+      </li>
+	  {/loop}
+    </ul>
+  </div>
+  {else}
+	   <dd class="list-item text-center">
+			<!--{template nodata}-->
+       </dd>
+  {/if}
+  <!-- list list-img  end-->
+
+  <div class="list-page">
+    <div class="page-tips pull-left">
+      显示 {$strPages['st']}~{$strPages['en']} 项 共 {$intCount} 个商品
+    </div>
+    <ul class="pagination pagination-sm pull-right">
+        {$strPages['page']}
+    </ul>
+  </div>
+  <!-- 商品列表 & list-page end -->
+
+  <div class="for-advertise">
+    <!--{ad_show(SHOPLIST_BOTTOM)}-->
+  </div>
+  <!-- for-advertise end -->
+
+</div>
+<!-- #main end -->
+</div>
+<!-- container end -->
+
+<!--{template footer}-->

@@ -1,0 +1,88 @@
+<!--{template header}-->
+<div  class="container">
+	<div id="main">
+		<div class="buy">
+			<div class="buy-progress">
+				<ul class="step step5">
+				{loop $arrOrderProgress $k $v}
+			      <li class="step-item {if $v['step'] <= $step}action{/if}">
+			        <span class="step-num">{if $v['step'] < $step}<i class="fa fa-check"></i>{else}{$k}{/if}</span>
+			        <div class="step-text step-bottom">
+			          <p><strong class="step-title ">{if  $arrOrderInfo['order_status'] == 'arbitral'&&$v['step'] =='step6'} 仲裁中 {else} {$v['state']} {/if}</strong></p>
+			        </div>
+			      </li>
+			      {/loop}
+			    </ul>
+			</div>
+			<!-- buy-progress end -->
+				<div class="buy-user-info">
+				<div class="media">
+					<div class="avatar">
+						<!--{userpic($arrBuyerInfo['uid'],'small')}-->
+					</div>
+					<div class="media-body">
+						<strong class="meida-heading">{$arrBuyerInfo['username']} {$arrBuyerInfo['userlevel']['pic']}</strong>
+						<ul class="user-meta">
+							<li>好评率：<span class="money">{if $arrBuyerInfo['buyer_good_num']}<!--{eval echo number_format($arrBuyerInfo['buyer_good_num']/$arrBuyerInfo['buyer_total_num'],4)*100}-->{else}0{/if}<sub>%</sub></span></li>
+							{loop $arrAid $k $v}
+							<li>
+								{$v['aid_name']}
+								<span class="text-danger">{$v['avg']}分</span>
+								<!--{eval echo keke_user_mark_class::gen_star2($v['avg']);}-->
+							</li>
+							{/loop}
+						</ul>
+					</div>
+				</div>
+				<div class="user-desc">
+					<p>
+						简介：
+						{if $arrBuyerInfo['user_type'] == '2'}
+							{if $arrBuyerInfo['summary']}<!--{eval echo htmlspecialchars_decode($arrBuyerInfo['summary'])}-->{else}暂未填写{/if}
+						{else}
+							{if $arrBuyerInfo['skill_ids']}<!--{eval echo htmlspecialchars_decode($arrBuyerInfo['skill_ids'])}-->{else}暂未填写{/if}
+						{/if}
+					</p>
+				</div>
+				<ul class="user-meta">
+					<li>来自：{if $arrBuyerInfo['comefrom']}{$arrBuyerInfo['comefrom']}{else}暂未填写{/if}</li>
+					<li>QQ：{if $arrBuyerInfo['qq']} {$arrBuyerInfo['qq']} {else} 暂未填写 {/if}</li>
+					<li>电话：{if $arrBuyerInfo['phone']} {$arrBuyerInfo['phone']} {else} 暂未填写 {/if}</li>
+				</ul>
+				<div class="btn-ctrl">
+					<a class="btn btn-primary btn-xs" href="index.php?do=seller&id={$arrBuyerInfo['uid']}">进入店铺</a>
+	              	<a class="btn btn-default btn-xs" href="javascript:sendMessage({$arrBuyerInfo['uid']});void(0);">联系我</a>
+				</div>
+				</div>
+				<!-- buy-user-info end -->
+				<!-- 相关步骤  -->
+
+				<!--{eval require keke_tpl_class::template ( "shop/" . $arrModelInfo ['model_code'] . "/tpl/" . $_K ['template'] . "/order/".$reqPage."_".$step );}-->
+
+				<!-- 相关步骤  -->
+		</div>
+
+	</div>
+</div>
+<script type="text/javascript" src="shop/service/tpl/default/order/order.js"></script>
+<script type="text/javascript">
+
+	var orderId = "{$orderId}";
+	var strUrl = "{$strUrl}&step={$step}";
+
+	$(function(){
+	// $('input[type=radio].star').rating();
+	 $('.order-body .panel-heading').click(function(event) {
+	 	var obj = $(this).next('.panel-body');
+	 	var ico_tip = $(this).find('i.fa');
+	 	if(obj.is(':visible')){
+	 		obj.addClass('hidden');
+	 		ico_tip.removeClass('fa-minus').addClass('fa-plus');
+	 	}else{
+	 		obj.removeClass('hidden');
+	 		ico_tip.removeClass('fa-plus').addClass('fa-minus');
+	 	}
+	 });
+	})
+</script>
+<!--{template footer}-->

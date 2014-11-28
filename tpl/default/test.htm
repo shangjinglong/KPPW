@@ -1,0 +1,27 @@
+<!--{template header}-->
+
+<!--{tag 注册协议}-->
+
+<!--{ad_show(HOME_TOP_SLIDE,1)}-->
+
+ <!--{ad_show(HOME_CENTAL_ONE)}-->
+ 
+ <input type="file" class="file" name="upload" id="upload">
+ <input type="hidden" class="file" name="fileid" id="fileid">
+<input type="hidden"  name="case_pic" id="filepath"  class="form-control" value="{$caseInfo['case_pic']}">
+<img id="case_img" src="{$caseInfo['case_pic']}" {if !$caseInfo['case_pic']}class="hidden"{/if} width="100px;" height="100px;">
+
+<script src="static/js/model/common/base.js" type="text/javascript"></script>
+<script src="static/js/uploadify/jquery.uploadify.min.js" type="text/javascript"></script>
+<link href="static/js/uploadify/uploadify.css" rel="stylesheet">
+<script type="text/javascript">
+    $(function(){
+        uploadify({debug:false,text:'上传图片',auto:true,limit:1,hide:false},'',response);
+    })
+	function response(json){
+		$('#case_img').removeClass('hidden');
+		$('#case_img').prop('src',json.msg.url);
+	}
+</script>
+
+<!--{template footer}-->

@@ -1,0 +1,94 @@
+
+<div class="footer">
+  <div class="container">
+      {if $do=='index'}
+      <ul class="friend-link">
+        <li><strong>友情链接</strong></li>
+		{loop $arrFlink $k $v}
+        <li><a href="{$v['link_url']}" target="_blank">{$v['link_name']}</a></li>
+		{/loop}
+      </ul>
+	  {/if}
+      <!-- 只在首页显示 friend-link end  -->
+
+      <ul class="footer-link">
+        <li><a href="index.php?do=single&id=299" target="_blank">关于我们</a></li>
+        <li><a href="index.php?do=single&id=300" target="_blank">联系我们</a></li>
+        <li><a href="index.php?do=single&id=312" target="_blank">服务条款</a></li>
+        <li><a href="index.php?do=single&id=313" target="_blank">隐私政策</a></li>
+      </ul>
+      <!-- footer-link end -->
+      <div class="footer-copyright">
+        <p>{if $basic_config['company']}公司名称:{$basic_config['company']}{/if} {if $basic_config['address']}地址:{$basic_config['address']}{/if} {if $basic_config['phone']}电话:{$basic_config['phone']}{/if}</p>
+        <p>{if $basic_config['copyright']}Powered by {P_NAME}{KEKE_VERSION} {$basic_config['copyright']}{/if} {if $basic_config['filing']} <a href="http://icp.valu.cn/" target="_blank">{$basic_config['filing']}</a>{/if}</p>
+        <p>{if $basic_config['stats_code']}<!--{eval echo stripslashes(stripslashes($basic_config['stats_code']));}-->{/if}</p>
+      </div>
+      <!-- footer-copyright end -->
+  </div><!-- container end -->
+</div><!-- footer end -->
+
+
+<div id="fix-box" style="display:none;">
+  <a id="top" href="javascript:void(0);"><i class="fa fa-angle-up"></i></a>
+</div>
+<!-- #fix-box end -->
+
+
+
+
+{if $uid}
+    <!-- IM -->
+    	<!--{template im/im}-->
+    <!-- IM -->
+    
+	<!--{eval kekezu::update_oltime($uid,$username)}-->
+	{else}
+	<!--{template im/nologin}-->
+	
+{/if}
+
+
+
+
+
+
+
+<script type="text/javascript">
+$(function(){
+  $('.color-selected .nav-sub-list a').click(function() {
+    var css = $(this).attr('data-css');
+    var color = $(this).attr('data-rel');
+    $('.nav-item-link span.style-color').removeClass().addClass('style-color '+ color);
+    $('#active-style').attr('href', 'tpl/default/'+ css +'/style.css');
+    $('#active-style-user').attr('href', 'tpl/default/'+ css +'/user.css');
+    $('#active-style-store').attr('href', 'tpl/default/'+ css +'/store.css');
+    $('#active-style-home').attr('href', 'tpl/default/'+ css +'/home.css');
+  });
+})
+  
+</script>
+
+
+<script type="text/javascript">
+var uid='{$uid}';
+var UseIm= true;
+var actionDo = '{$do}';
+var username='{$username}';
+var auid = '{$oauth_user_info[account]}';
+var atype ='{$wb_type}';
+var xyq = "<!--{eval echo $xyq = session_id();}-->";
+
+$(function(){
+    $("img.lazy").lazyload({
+        effect: "fadeIn"
+    });
+});
+
+{if $exec_time_traver}
+$(function(){
+   $.get('js.php?op=time&r='+Math.random());
+})
+{/if}
+</script>
+</body>
+</html>

@@ -1,0 +1,109 @@
+<!--{template ADMIN_DIRECTORY/tpl/admin_header}-->
+<div class="page_title">
+    	<h1>{$_lang['db_mange']}</h1>
+          <div class="tool">         
+            <a href="index.php?do=tool&view=dbbackup">{$_lang['backup']}</a>
+            <a href="index.php?do=tool&view=dbrestore">{$_lang['restore']}</a>
+			<a href="index.php?do=tool&view=dboptim" {if !$op}class="here"{/if}>{$_lang['optim']}</a>
+			<a href="index.php?do=tool&view=dboptim&op=repair" {if $op=='repair'}class="here"{/if}>{$_lang['repair']}</a>
+		</div>
+</div>
+{if $op=='repair'}
+<div class="box tip clearfix p_relative">
+   <div class="control"><a href="javascript:void(0);" title={$_lang['close']}><b>&times;</b></a></div>
+   <div class="title"><h2>{$_lang['tips']}</h2></div>
+   <div class="detail pad10">
+      <ul>
+         <li>{$_lang['repair_tip1']}</li>
+         <li>{$_lang['repair_tip2']}</li>
+      </ul>
+   </div>
+</div>
+<div class="box post">
+  <div class="tabcon">
+    <div class="title"><h2>{$_lang['db_repair']}</h2></div>
+	 <div class="detail t_c">
+		<form method="post" action="#" id="frm_art_search">
+ 			<input type="hidden" name="op" value="repair">
+ 			<input type="hidden" name="is_submit" value="1">
+      		<button class="primary positive pill button" type="submit">
+      			<span class="check icon"></span>{$_lang['start']}{$_lang['repair']}
+			</button> 
+   		</form>
+	</div>	
+</div>
+</div>
+{else}
+<div class="box post">
+        <div class="tabcon">
+        	<div class="title"><h2>{$_lang['db_optim']}</h2></div>
+			<div class="detail">
+			<form method="post" action="#" id="frm_art_search">
+   			
+ 			<input type="hidden" name="is_submit" value="1">
+      <table width="100%" border="0" cellspacing="0" cellpadding="0">
+			{if $table_free_list}
+                <tr>
+                    <th class="100" align="left">
+                       	{$_lang['db_table']}
+                    </th>
+                    <th width="200">
+                       {$_lang['type']}
+                    </th>
+                    <th width="60">
+                        {$_lang['record']}
+                    </th>
+   
+                    <th width="60">
+                       {$_lang['data']}
+                    </th>
+					<th width="60">
+                       {$_lang['home']}
+                    </th>
+					 <th width="60">
+                       {$_lang['chip']}
+                    </th>
+                </tr>
+                {loop $table_free_list $k $v}
+                <tr>
+                    <td align="left">
+	                    <label>
+	                      <input  type="checkbox" name="optimizetables[]" value="$v['Name']" checked="checked"> $v['Name']
+	                    </label>
+					</td>
+                    <td>
+                        $v['Engine']
+                    </td>
+                    <td>
+                      $v['Rows']
+                    </td>
+                 	 <td>
+                   		<!--{eval echo kekezu::get_format_size($v['Data_length'])}-->
+				     </td>
+					  <td>
+                   		$v['Index_length']
+				     </td>
+					  <td>
+					  	<!--{eval echo kekezu::get_format_size($v['Data_free'])}-->
+                   	 </td>
+                </tr>
+				{/loop}
+                <tr>
+                	<th  align="left">
+                		<button class="primary positive pill button" original-title="" type="submit"><span class="check icon"></span>{$_lang['submit']}</button> 
+                	</th>
+                  
+                </tr>
+				{else}
+                <tr>
+                	<th align="center">{$_lang['no_optimizations']}</th>
+                </tr>
+				
+				{/if}
+            </table>
+  </form>
+	</div>	
+</div>
+</div>
+{/if}
+<!--{template ADMIN_DIRECTORY/tpl/admin_footer}-->

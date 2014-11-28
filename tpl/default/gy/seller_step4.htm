@@ -1,0 +1,36 @@
+<div class="order-body">
+			<div class="panel-heading">
+              <h3 class="panel-title">
+              	<div class="pull-right"><i class="fa fa-minus"></i></div>
+
+                  <span class="money"><sub>￥</sub>{$arrServiceOrderInfo['price']}</span>
+                  {$arrServiceOrderInfo['title']}
+              </h3>
+            </div>
+            <div class="panel-body ">
+                <ul class="release-meta">
+                  <li class="release-meta-item">类型：购买服务</li>
+                  <li class="release-meta-item">行业分类：{$arrTopIndustrys[$arrServiceOrderInfo['indus_pid']]['indus_name']}-{$arrAllIndustrys[$arrServiceOrderInfo['indus_id']]['indus_name']}</li>
+                </ul>
+                <div class="release-detail">
+                <h2 class="min-title">描述</h2>
+	               <div class="ws_break">
+                	<!--{eval echo htmlspecialchars_decode($arrServiceOrderInfo['content'])}-->
+                	</div>
+                <h2 class="min-title">附件 <span class="label label-default"><!--{eval echo intval(count($arrFileLists))}--></span></h2>
+				<ul class="detail-affix {if !$arrFileLists}hidden{/if}" >
+					{loop $arrFileLists $k $v}
+			        	<li class="detail-affix-item"><a href="{$v['save_name']}"><i class="fa fa-download"></i> {$v['file_name']}</a></li>
+			        {/loop}
+			    </ul>
+                </div>
+                <!-- release-detail end -->
+
+            </div>
+
+			<p class="lead text-center text-success mt_20"><i class="fa fa-check-circle"></i> 您已接受该订单，请立即开始！</p>
+			<div class="text-center mt_20">
+				<a class="btn btn-success" href="javascript:void(0);" id="sellerStartWorking" >确定开始工作</a>
+			</div>
+
+		</div>

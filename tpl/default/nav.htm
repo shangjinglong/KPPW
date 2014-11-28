@@ -1,0 +1,28 @@
+<nav class="site-nav">
+<div class="container">
+  <div role="navigation" class="navbar navbar-primary">
+    <div class="navbar-header">
+      <button data-target=".navbar-collapse" data-toggle="collapse" class="navbar-toggle" type="button">
+        <span class="sr-only">切换导航</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <span class="navbar-actived">网站导航</span>
+    </div>
+    <div class="navbar-collapse collapse">
+      <ul class="nav navbar-nav nav-primary">
+      		{loop $nav_arr $k $v}
+			 <li {if isset($strNavActive) && $v['nav_style']==$strNavActive}class="active"{/if} ><a href="{$v['nav_url']}" {if $v['newwindow']}target="_blank"{/if}><span>{$v['nav_title']}</span></a></li>
+              <li class="line"></li>
+			{/loop}
+      </ul>
+      <!--<ul class="nav navbar-nav navbar-right">
+        <li><a href="#">诚信保障</a></li>
+        <li><a href="#">VIP特权</a></li>
+        <li><a href="#">增值工具</a></li>
+      </ul>-->
+    </div><!--/.nav-collapse -->
+  </div>
+</div>
+</nav>

@@ -1,0 +1,91 @@
+<!--{template user/header}-->
+<div class="container">
+  <div class="nav-action">
+		<!--{template user/left_side}-->
+  </div>
+  <!-- nav-action end -->
+  <div class="content-panel">
+      <div class="tab">
+      <!--{template user/account_auth_nav}-->
+      </div>
+      <div class="tab_detail">
+	      	{if !$intAuthStatus}
+		      	<ul class="nav nav-pills second-nav">
+		          <li {if $code === 'realname'} class="active" {/if}><a href="index.php?do=user&view={$view}&op={$op}&code=realname">实名认证</a></li>
+		          <li {if $code === 'enterprise'} class="active" {/if}><a href="index.php?do=user&view={$view}&op={$op}&code=enterprise">企业认证</a></li>
+		        </ul>
+		      {/if}
+      		<!-- start -->
+          <div class="media">
+              <div class="pull-left">
+                  <img class="media-object" src="{$auth_item['auth_big_ico']}" alt="{$auth_item['auth_title']}">
+              </div>
+              <div class="media-body">
+                  <div class="panel
+                        {if $arrAuthInfo&&$arrAuthInfo['auth_status']==2}
+                          panel-danger
+                        {elseif $arrAuthInfo&&$arrAuthInfo['auth_status']==1}
+                          panel-success
+                        {else}
+                          panel-info
+                        {/if}
+                     ">
+                      <div class="panel-heading">
+                        <h3 class="panel-title">
+                          {$auth_item['auth_title']}
+
+                          {if $arrAuthInfo&&$arrAuthInfo['auth_status']==2}
+                          <span class="label label-danger"><i class="fa fa-ban"></i> 未通过</span>
+                          {elseif $arrAuthInfo&&$arrAuthInfo['auth_status']==1}
+                          <span class="label label-success"><i class="fa fa-check"></i> 已通过</span>
+                          {else}
+                          <span class="label label-info"><i class="fa fa-info"></i> 审核中</span>
+                          {/if}
+                        </h3>
+                      </div>
+                      <div class="panel-body">
+                          <div class="table-responsive">
+                            <table class="table">
+                              <thead>
+                                <tr>
+                                  <th>用户昵称</th>
+                                  <th>企业名</th>
+                                  <th>登记注册号码</th>
+                                  <th>营业执照图片</th>
+                                </tr>
+                              </thead>
+                              <tbody>
+                                <tr>
+                                  <td>$arrAuthInfo['username']</td>
+                                  <td>$arrAuthInfo['company']</td>
+                                  <td>{$arrAuthInfo['licen_num']}</td>
+                                  <td>
+                                    {if file_exists($arrAuthInfo['licen_pic'])}
+                                      <img src="{$_K[siteurl]}/{$arrAuthInfo[licen_pic]}" width="100px" style="vertical-align:top;">
+                                    {else}
+                                      图片不存在
+                                    {/if}
+                                  </td>
+                                </tr>
+                              </tbody>
+                            </table>
+                          </div>
+
+                      </div>
+                  </div>
+
+                {if $arrAuthInfo&&$arrAuthInfo['auth_status']==2}
+                  <a href="{$strUrl}&step=step1" class="btn btn-default">重新认证</a>
+                  <!-- <a href="javascript:void(0);" class="btn btn-default">联系客服</a> -->
+                {else}
+                  <a href="{$strUrl}&step=step1" class="btn btn-default">返回修改</a>
+                {/if}
+
+              </div>
+          </div>
+      		<!-- end -->
+      </div>
+  </div>
+  </div>
+  <script src="static/js/model/user/auth.js"></script>
+<!--{template user/footer}-->

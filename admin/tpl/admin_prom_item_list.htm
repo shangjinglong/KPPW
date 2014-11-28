@@ -1,0 +1,126 @@
+<!--{template ADMIN_DIRECTORY/tpl/admin_header}-->
+<div class="page_title">
+    <h1>{$_lang['prom_material_manage']}</h1>
+    <div class="tool">
+    	 <a {if $op=="reg"||!$op}class="here"{/if} href="index.php?do=$do&view=$view&op=reg" id="tab_cont_1" onclick="swaptab('cont','here','',2,1)">{$_lang['prom_material']}</a>
+    </div>
+</div>
+<div class="box search p_relative">
+    <div class="title">
+        <h2>{$_lang['search']}</h2>
+    </div>
+    <div class="detail">
+        <form method="post" action="index.php?do={$do}&view={$view}" id="frm_art_search">
+        <input type="hidden" name="page" value="{$page}">
+        <table cellspacing="0" cellpadding="0">
+         <tbody>
+           <tr>
+             <th>
+          编号
+             </th>
+              <td>
+                <input type="text" size='10' class="txt" name="w[item_id]" value="{$w['item_id']}" onkeyup="clearstr(this);">
+              </td>
+               <th>
+                        {$_lang['item_name']}*
+              </th>
+                <td>
+                  <input type="text" size="20" class="txt" name='w[item_name]' value="{$w['item_name']}">
+                </td>
+            </tr>
+             <tr>
+             	<th>
+                         {$_lang['item_type']}
+               </th>
+                <td>
+                  <select name="w[item_type]">
+                      <option value="">--{$_lang['all']}--</option>
+					  <option value="text" {if $w['item_type']=='text'}selected="selected"{/if}>{$_lang['text']}</option>
+					  <option value="img" {if $w['item_type']=='img'}selected="selected"{/if}>{$_lang['img']}</option>
+				 </select>
+               </td>
+             	<th>
+                     {$_lang['result_order']}
+                 </th>
+                  <td>
+                     <select name="w[ord]">
+                       <option {if $w['ord']=='item_id desc' or !isset($w['ord'])}selected="selected" {/if}  value="item_id desc">{$_lang['order_id_desc']}</option>
+                       <option {if $w['ord']=='item_id asc'}selected="selected" {/if}  value="item_id asc">{$_lang['order_id_asc']}</option>
+                       <option {if $w['ord']=='on_time desc'}selected="selected" {/if}  value="on_time desc">{$_lang['pub_time_desc']}</option>
+                        <option {if $w['ord']=='on_time asc'}selected="selected" {/if}  value="on_time asc">{$_lang['pub_time_asc']}</option>
+                      </select>
+                   </td>
+              <th>
+                         {$_lang['list_result']}
+               </th>
+                   <td>
+                     <select name="w[page_size]">
+                          <option value="10" {if $w['page_size']=='10'}selected="selected"{/if}>{$_lang['page_size']}10</option>
+                          <option value="20" {if $w['page_size']=='20'}selected="selected"{/if}>{$_lang['page_size']}20</option>
+                          <option value="30" {if $w['page_size']=='30'}selected="selected"{/if}>{$_lang['page_size']}30</option>
+                     </select>
+                    <button class="pill" type="submit" value="{$_lang['search']}" name="sbt_search"><span class="icon magnifier">&nbsp;</span>{$_lang['search']}</button>
+                 </td>
+                 
+             </tr>
+          </tbody>
+        </table>　
+     </form>
+   </div>
+</div>
+<div class="box post" id="div_cont_1" style="display:{if $op=='reg'||!$op}block{else}none{/if}">
+	 	<div class="title"><h2>{$_lang['invited_register_manage']}</h2></div>
+		  <div class="detail">
+	<form method="post" action="index.php?do={$do}&view={$view}&op={$op}" id="reg_prom">
+        <input type="hidden" name="page" value="{$page}">
+		<input type="hidden" name="w[page_size]" value="{$page_size}">
+		  	<table cellpadding="0" cellspacing="0">
+               <tbody>
+                <tr>
+					<th class="td25">
+	<input type="checkbox" id="checkbox" onclick="checkall();" class="checkbox" >编号
+</th>
+					<th class="td28">{$_lang['type']}</th>
+					<th>{$_lang['prom_name']}</th>
+                    <th>{$_lang['code_and_content']}</th>
+					<th>{$_lang['add_time']}</th>
+                    <th>{$_lang['operate']}</th>
+                </tr>
+                {loop $prom_item_arr $key $v}
+                <tr class="item">
+                    <td class="td25">
+                    	<input type="checkbox"  class="checkbox" name="ckb[]" id="ckb" value="{$v['item_id']}">
+						{$v['item_id']}
+					</td>
+					<td class="td28">
+                  	  {if $v['item_type']=='img'}{$_lang['img']}{/if}
+                   	 {if $v['item_type']=='text'}{$_lang['text']}{/if}
+                    </td>
+                    <td><!--{eval echo kekezu::cutstr($v['item_name'],20)}--></td>
+					
+                    <td><!--{eval echo kekezu::cutstr($v['item_content'],70)}-->&nbsp;</td>
+					<td><!--{date('Y-m-d H:i:s',$v['on_time'])}--></td>
+                    <td>
+                       <a  href='index.php?do={$do}&view=item_edit&item_id={$v['item_id']}&op={$op}'><span class="trash icon"></span>{$_lang['edit']}</a>
+                       <a  onclick="return cdel(this);" href="{$ac_url}&ac=del&item_id={$v['item_id']}"><span class="trash icon"></span>{$_lang['delete']}</a>
+                    </td>
+                </tr>
+                {/loop}
+                <tr>
+                	<td colspan="6">
+                	<div class="page fl_right">{$pages['page']}</div>
+                    <div class="clearfix">
+                            <label for="checkbox" onclick="checkall(event);">{$_lang['select_all']}</label>
+							<input type="hidden" name="sbt_action" value="{$_lang['mulit_delete']}" />
+							<button type="submit" name="sbt_action" value="{$_lang['mulit_delete']}" class="pill negative" onclick="return pdel('reg_prom')"/><span class="cross icon"></span>{$_lang['mulit_delete']}</button>&nbsp;&nbsp;&nbsp;
+							<button type="button" name="sbt_add" value="{$_lang['add_prom_item']}" class="primary pill positive"  onclick="location.href='index.php?do={$do}&view=item_edit&op={$op}'" /><span class="icon plus"></span>{$_lang['add_prom_item']}</button>
+				   </div>
+				   </td>
+               </tr>
+              <tbody>	  
+			</table>
+			</form>
+		  </div>
+	 </div>			
+</div>
+<!--{template ADMIN_DIRECTORY/tpl/admin_footer}-->

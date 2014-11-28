@@ -1,0 +1,133 @@
+<!--{template header}-->
+<link href="static/js/jqplugins/fancybox/jquery.fancybox.min.css" rel="stylesheet">
+<script src="static/js/jqplugins/fancybox/jquery.fancybox.min.js"></script>
+<script src="static/js/uploadify/jquery.uploadify.min.js" type="text/javascript"></script>
+<link href="static/js/uploadify/uploadify.css" rel="stylesheet">
+<div  class="container">
+  <div id="main">
+
+    <div class="buy-user-info">
+      <div class="media">
+        <div class="avatar">
+         <!--{userpic($arrTaskInfo['uid'],'small')}-->
+        </div>
+        <div class="media-body">
+          <strong class="meida-heading"> <span class="money"><sub>￥</sub>{$arrTaskInfo['task_cash']}</span>
+		  {$arrTaskInfo['task_title']}</strong>
+
+          <ul class="user-meta">
+            <li>{$arrModelInfo['model_name']}模式</li>
+            <li>
+              <i class="fa fa-money"></i> 已托管：￥{$arrTaskInfo['cash_cost']}
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div><!-- buy-user-info end -->
+
+
+  <div class="manuscript-detail">
+    <h2 class="manuscript-title">
+      稿件详细
+    </h2>
+    <div class="manuscript-body">
+      <div class="manuscript-status">
+      	 {if $arrWorkFlag[$arrWorkInfo['work_status']]['id']}
+		      <div class="status-item status-{$arrWorkFlag[$arrWorkInfo['work_status']]['id']}">
+		      		<i class="fa {$arrWorkFlag[$arrWorkInfo['work_status']]['style']}"></i> {$arrWorkFlag[$arrWorkInfo['work_status']]['name']}
+		      </div>
+		 {/if}
+      </div>
+
+      <div class="manuscript-img">
+      	     {if $arrWorkInfo['work_pic']}
+				<!--{eval $pic = explode(',',$arrWorkInfo['work_pic']);}-->
+	          <div class="manuscript-img">
+	          	{loop $pic $vc}
+
+	            <a href="{$vc}" class="manuscript-img-item" rel="manuscript-img-group"><img src="{$vc}" alt=""></a>
+				{/loop}
+	          </div>
+			{/if}
+          </div>
+
+          <div class="manuscript-desc">
+             <!--{eval echo htmlspecialchars_decode($arrWorkInfo['work_desc'])}-->
+          </div>
+        {if $arrWorkFiles}
+          <h2 class="detail-title-min">附件下载 <span class="label label-default"><!--{eval echo count($arrWorkFiles);}--></span></h2>
+          <ul class="detail-affix">
+          	{loop $arrWorkFiles $v}
+				<!--{eval $v['file_name_ext']=urlencode($v['file_name']);}-->
+            <li class="detail-affix-item"><a href="{$_K['siteurl']}/{$v['save_name']}#file" target="_blank"><i class="fa fa-download"></i> {$v['file_name']}</a></li>
+			{/loop}
+          </ul>
+		  {/if}
+    </div>
+    <div class="manuscript-item-footer">
+          <ul class="manuscript-meta">
+            <li class="manuscript-meta-item">投稿人：<a href="index.php?do=seller&id=$arrWorkInfo['uid']">$arrWorkInfo['username']</a> </li>
+            <li class="manuscript-meta-item">编号 #{$arrWorkInfo['work_id']} </li>
+            <li class="manuscript-meta-item">投稿时间：<!--{eval echo date('Y-m-d H:i:s',$arrWorkInfo['work_time'])}--></li>
+            <li class="manuscript-meta-item"><span class="marked marked-see">
+            	{if $arrWorkInfo['is_view']||$gUid==$arrTaskInfo['uid']}
+					雇主已浏览
+				{else}
+					雇主未浏览
+				{/if}</span></li>
+            {if  $arrProcess_can['work_report']&&$gUid!=$v['uid']}
+		            <li class="manuscript-meta-item">
+		            	<a href="javascript:report(2,'work','{$arrWorkInfo[uid]}','{$arrWorkInfo[task_id]}','{$arrWorkInfo[work_id]}');void(0);"  class="action-report">
+		            		<i class="fa fa-bell"></i> 举报
+		            	</a>
+		            </li>
+		            {/if}
+
+
+          </ul>
+		  {if $uid!=$arrWorkInfo['uid']}
+          <ul class="manuscript-meta for-user">
+          <li class="manuscript-meta-item"  >
+          	{if $intFavorite}
+
+          		<a id="favorite{$arrWorkInfo['work_id']}" href="javascript:cancelFavorite('work',{$arrWorkInfo['work_id']});" title="取消收藏" class="action-collect on"><i class="fa fa-star"></i></a>
+			{else}
+            	<a id="favorite{$arrWorkInfo['work_id']}" href="javascript:addFavorite('work',{$arrWorkInfo['work_id']});" title="收藏" class="action-collect"><i class="fa fa-star"></i> </a>
+
+			{/if}
+			</li>
+		  </ul>
+		  {/if}
+        </div>
+
+  </div><!-- manuscript end -->
+
+
+
+
+  </div><!-- main end -->
+</div><!-- container end -->
+
+
+
+
+
+
+<script type="text/javascript">
+$(function(){
+    $('.manuscript-img-item').fancybox({
+      openEffect  : 'none',
+      closeEffect : 'none',
+      padding : 5,
+      tpl:{
+        error    : '<p class="fancybox-error">内容无法加载。<br/>请稍后重试。</p>'
+      },
+      helpers : {
+        title : {
+          type : 'over'
+        }
+      }
+    });
+ })
+</script>
+<!--{template footer}-->

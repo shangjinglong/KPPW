@@ -1,0 +1,125 @@
+<!DOCTYPE HTML>
+<!--[if lt IE 7]> <html dir="ltr" lang="zh-cn" id="ie6"> <![endif]--><!--[if IE 7]>    <html dir="ltr" lang="zh-cn" id="ie7"> <![endif]--><!--[if IE 8]>    <html dir="ltr" lang="zh-cn" id="ie8"> <![endif]-->
+<!--[if gt IE 8]><!-->
+    <html dir="ltr" lang="zh-cn">
+    <!--<![endif]-->
+    <head>
+        <title>{$strPageTitle}</title>
+        <meta charset="{CHARSET}">
+        <meta http-equiv="X-UA-Compatible" content="IE=9; IE=8; IE=7; IE=EDGE" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta name="keywords" content="{$strPageKeyword}">
+        <meta name="description" content="{$strPageDescription}">
+        <meta name="generator" content="客客出品专业威客{KEKE_VERSION}" />
+        <meta name="viewport" content="width=device-width,initial-scale=1">
+        <meta name="apple-mobile-web-app-capable" content="yes" />
+        <meta name="apple-mobile-web-app-status-bar-style” content=black" />
+        <meta name="author" content="kekezu" />
+        <meta name="copyright" content="{$basic_config['copyright']}" />
+		  <meta property="qc:admins" content="1220311574763007636" />
+		<meta property="wb:webmaster" content="6b685cd5f06ba5f1" />
+        <link rel="shortcut icon" href="favicon.ico" />
+        <link rel="apple-touch-icon" href="favicon.ico"/>
+		<!--{template include}-->
+        <script type="text/javascript">
+            var SITEURL = '{$_K[siteurl]}', SKIN_PATH = '{SKIN_PATH}', LANG = '{$language}', INDEX = '{$do}', CHARSET = '{CHARSET}';
+        </script>
+    </head>
+    <body id="{$do}">
+        <div class="header-top">
+            <div class="container">
+                <ul class="left-nav">
+                    {if $do!='index'||!$do}
+                    <li class="nav-item">
+                        <a href="index.php" class="nav-item-link active">回到首页</a>
+                    </li>
+                    {/if}
+                    {if $uid}
+                    <li class="nav-item nav-static">
+                        欢迎您，
+                    </li>
+                    <li class="nav-item has-sub">
+                        <a href="index.php?do=user" class="nav-item-link">{$username} <span class="caret"></span></a>
+                        <ul class="nav-item-sub nav-sub-list">
+                            <li>
+                                <a href="index.php?do=user&view=message&op=notice">{if $messagecount}<span class="badge">{$messagecount}</span>{/if} 消息提醒</a>
+                            </li>
+                            <li>
+                                <a href="index.php?do=user">用户中心</a>
+                            </li>
+                            <li>
+                                <a href="index.php?do=seller&id={$uid}">我的店铺</a>
+                            </li>
+                            <li class="line">
+                            </li>
+                            <li>
+                                <a href="index.php?do=logout">退出</a>
+                            </li>
+                        </ul>
+                    </li>
+                    <li class="nav-item">
+                        <a href="index.php?do=logout" class="nav-item-link active">退出</a>
+                    </li>
+                    {else}
+                    <li class="nav-item">
+                        欢迎您，<a href="index.php?do=login" class="nav-item-link active">请登录</a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="index.php?do=register" class="nav-item-link active">免费注册</a>
+                    </li>
+                    {/if}
+                </ul>
+                <ul class="right-nav">
+                    <li class="nav-item">
+                        <a href="index.php?do=pubtask"  class="nav-item-link active">发布任务</a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="index.php?do=pubgoods" class="nav-item-link active">发布商品</a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="index.php?do=single&id=299" class="nav-item-link">关于我们</a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="index.php?do=help" class="nav-item-link">帮助中心</a>
+                    </li>
+                    <li class="nav-item has-sub">
+                        <a href="javascript:void(0);" class="nav-item-link">分类导航 <span class="caret"></span></a>
+                        <div class="nav-item-sub">
+                            <dl>
+                                <dt>
+                                    任务
+                                </dt>
+                                <dd>
+                                    <ul>
+                                        {loop $indus_task_arr $k $v}
+                                        <li>
+                                            <a href="index.php?do=tasklist&pd=$v['indus_id']">$v['indus_name']</a>
+                                        </li>
+                                        {/loop}
+                                    </ul>
+                                </dd>
+                            </dl>
+                            <div class="line">
+                            </div>
+                            <dl>
+                                <dt>
+                                    商品
+                                </dt>
+                                <dd>
+                                    <ul>
+                                        {loop $indus_goods_arr $k $v}
+                                        <li>
+                                            <a href="index.php?do=goodslist&pd=$v['indus_id']">$v['indus_name']</a>
+                                        </li>
+                                        {/loop}
+                                    </ul>
+                                </dd>
+                            </dl>
+                        </div>
+                    </li>
+                    <li class="nav-item">
+                        <a href="javascript:spread({if $do=='article'}true{else}false{/if});void(0);" class="nav-item-link">推广</a>
+                    </li>
+                </ul>
+            </div>
+        </div>

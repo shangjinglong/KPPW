@@ -1,0 +1,85 @@
+<!--{template ADMIN_DIRECTORY/tpl/admin_header}-->
+<script type="text/javascript" src="../static/js/system/keke.js"></script>
+ <script type="text/javascript" src="../static/js/system/ajaxfileupload.js"></script>
+ <div class="page_title">
+    	<h1>关键词{$_lang['manage']}</h1>
+        <div class="tool">
+        	 <a href="index.php?do=$do&view=keyword_list">关键字列表</a>
+            <a href="index.php?do=$do&view=keyword_edit" class="here">关键字{if $keyword_id}编辑{else}添加{/if}</a>
+    	</div>
+</div>
+<!--页头结束-->    
+
+<div class="box post">
+    <div class="tabcon">
+        	<div class="title"><h2>关键字{if $keyword_id}编辑{else}添加{/if}</h2></div>       	
+            <div class="detail">
+                <form method="post" action="index.php?do={$do}&view={$view}" id="frm_art_edit" enctype="multipart/form-data">
+                <input type="hidden" name="pk[keyword_id]" value="{$keyword_info['keyword_id']}" id='art_id'>
+                    <table width="100%" border="0" cellspacing="0" cellpadding="0">
+                    
+                      <tr>
+                        <th scope="row" width="130">关键字名称</th>
+                        <td>
+	                        <input type="text" name="fields[word]" id="txt_word"  value="{$keyword_info['word']}" maxlength="100"  class="txt" style=" width:260px;"
+	                        limit="required:true;len:2-100;general:false" 
+	                        msg="名称不正确" 
+	                        msgArea="word_msg" >
+	                        <span id="word_msg"></span>
+                        </td>
+                      </tr>
+					    <tr>
+                        <th scope="row" width="130">链接</th>
+                        <td>
+	                        <input type="text" name="fields[url]" id="txt_url"  value="{$keyword_info['url']}" maxlength="100"  class="txt" style=" width:260px;"
+	                        limit="required:true;len:3-100;general:false" 
+	                        msg="链接不正确" 
+	                        msgArea="url_msg" >
+	                        <span id="url_msg"></span>
+                        </td>
+                      </tr>
+                    <tr>
+                        <th scope="row">&nbsp;</th>
+                    	<td>
+                    	<button name="sbt_edit" value="1" onclick="return checkForm(document.getElementById('frm_art_edit'),false)" class="positive primary pill button" type="submit">
+                    	<span class="check icon"></span>{$_lang['submit']}</button>
+                    	
+                    	</td>
+                    </tr>
+                    </table>
+                </form>
+              </div>
+       </div>           
+</div>
+<!--主体结束-->
+
+
+<script type="text/javascript">
+    $(function()
+            {
+                var c_id = parseInt("$art_info['art_cat_id']");
+                if (c_id) 
+                {
+                    $("#slt_cat_id").val(c_id);
+                }
+                
+                $("input[name='sbt_edit']").click(function(){
+                    var si = $("#slt_cat_id").val();
+                    if (!si) 
+                    {
+                        $("#msg_cat_id").html("{$_lang['choose_category']}");
+                        return false;
+                    }
+                    else 
+                    {
+                        $("#msg_cat_id").html("{$_lang['category_has_been_selected']}");
+                        return true;
+                    }
+                })
+            })
+			function uploadResponse(){
+				
+			}
+</script>
+
+<!--{template ADMIN_DIRECTORY/tpl/admin_footer}-->

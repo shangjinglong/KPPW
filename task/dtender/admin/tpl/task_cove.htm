@@ -1,0 +1,70 @@
+<!--{template ADMIN_DIRECTORY/tpl/admin_header}-->
+<div class="box post">
+    <div class="tabcon">
+        <div class="title">
+            <h2>{if $rule_id}{$_lang['edit_tender_interval']}{else}{$_lang['add_new_cove']}{/if}</h2>
+        </div>
+<div class="detail">
+    <form method="get" action="index.php" id="frm_cat_edit" name="frm_cat_edit">
+        <input type="hidden" name="do" value="model">
+		<input type="hidden" name="model_id" value="$model_id">
+		<input type="hidden" name="view" value="$view">
+		<input type="hidden" name="op" value="$op">
+		<input type="hidden" name="ac" value="$ac">
+		<input type="hidden" name="pk[cash_rule_id]" value="{$rule_id}">
+        <table width="100%" border="0" cellspacing="0" cellpadding="0">
+            <tr>
+                <th scope="row" width="130">
+                    {$_lang['cash_interval']}
+                </th>
+                <td>
+                    <input type="text" value="{$start_cove}" name="fds[start_cove]" class="txt" size="15"
+					 onkeyup="clearstr(this)" limit="required:true;type:int;between:1-" msg="{$_lang['start_cove_can_not_be_null']}" 
+					  title="{$_lang['enter_start_cove']}" msgArea="span_cove" id="start_cove"/>{$_lang['y']}
+					——<input type="text" class="txt" name="fds[end_cove]" value="<!--{eval echo intval($cove_info[end_cove])}-->"
+					 size="15" limit="required:true;type:int;between:1-;bigger:start_cove" msg="{$_lang['end_cove_can_not_be_null']}"
+					  id="end_cove" title="{$_lang['enter_end_cove']}" msgArea="span_cove" onkeyup="clearstr(this)"/>{$_lang['y']}
+					  <span id="span_cove"></span>
+                    {if $cove_info[cove_desc]}
+					<div class="padt10 direct">
+                        <p>
+                            {$_lang['interval_description']}{$_lang['zh_mh']}{$cove_info[cove_desc]}
+                        </p>
+                    </div>
+					 {/if}
+                </td>
+            </tr> 
+			{if $cove_info[on_time]}
+			 <tr>
+                <th scope="row">
+                    {$_lang['last_modify']}
+                </th>
+                <td>
+                     <!--{date('Y-m-d H:i:s',$cove_info[on_time])}-->
+                </td>
+            </tr>
+			     {/if}
+
+            <tr>
+                <th scope="row">
+                    &nbsp;
+                </th>
+                <td>
+                    <div class="clearfix padt10">
+                        <button class="positive primary pill button" type="submit" name="sbt_edit"
+						 onclick="return checkForm(document.getElementById('frm_cat_edit'));" value="{$_lang['submit']}"><span class="check icon"></span>
+                            {$_lang['submit']}
+                        </button>
+                        <button class="pill button" type='reset' name="rst_edit" value="{$_lang['reset']}"><span class="reload icon"></span>
+                         {$_lang['reset']}
+                        </button>
+                       
+                    </div>
+                </td>
+            </tr>
+        </table>
+    </form>
+</div>
+    </div>
+</div>
+<!--{template ADMIN_DIRECTORY/tpl/admin_footer}-->

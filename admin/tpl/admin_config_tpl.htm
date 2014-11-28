@@ -1,0 +1,130 @@
+<!--{template ADMIN_DIRECTORY/tpl/admin_header}-->
+<div class="page_title">
+    	<h1>{$_lang['tpl_manage']}</h1>
+          <div class="tool">
+			<a href="index.php?do=config&view=tpl" {if $view == 'tpl'}class="here"{/if} >{$_lang['tpl_edit']}</a>
+
+        </div>
+</div>
+<div class="box list">
+<div class="detail">
+    <form name="frm_config_msg" id="frm_config_msg" action="#" method="post" enctype="multipart/form-data">
+        <input type="hidden" name="intTplId" id="intTplId" value="">
+		<input type="hidden" name="strSbtEdit" id="strSbtEdit" value="">
+        <div class="color_select">
+            <div class="title"><h2>颜色选择</h2></div>
+			{loop $arrColors  $v}
+            <a href="index.php?do=config&view=tpl&ac=ccolor&obj={$v['title']}" onclick="return  confirm('确认启用此颜色？');" class="theme-color {if $v['title']==$strSelectColor}selected{/if}" title="$v['title']" style="background: {$v['color']};">√</a>
+            {/loop}
+
+        </div>
+       {if $intDirTheme}
+       <div class="title"><h2>首页模版选择</h2></div>
+
+        <div class="albums ab_col3 clearfix">
+
+
+
+        {loop $skins $k $v}
+        <dl class="album_item">
+          <dt class="ab_title"> $v {if $v==$strSelectTheme}(正在使用){/if}</dt>
+          <dd class="ab_fream">
+            <ul>
+              <li><img src="../tpl/default/theme/{$v}/screenshot.png" alt="默认首页"></li>
+            </ul>
+          </dd>
+
+          <dd class="ab_info ws_break">
+
+            <div class="ab_ctrl">
+            	 {if  $v==$strSelectTheme}
+				  <button type="button"  name="sbtEdit" id="sbtEdit" class="button" value="{$_lang['use']}"><span class="check icon"></span>已{$_lang['use']} </button>
+				 {else}
+                  <a type="button" class="button" href='index.php?do=config&view=tpl&ac=ctheme&obj={$v}' onclick="return  confirm('确认启用此模板？');" value="{$_lang['use']}"> {$_lang['use']} </a>
+				 {/if}
+
+                 <a type="button" class="button" value="{$_lang['preview']}" onclick="window.open('http://www.kekezu.com/app_store-view-app_tpl.html#holder')"><span class="book icon"></span>{$_lang['view']}</a>
+
+                <!-- <a type="button" class="button" value="{$_lang['export']}" href='index.php?do=tpl&view=export&tplname={$v}'>{$_lang['backup']}</a>-->
+            </div>
+          </dd>
+        </dl>
+		{/loop}
+
+      </div>
+    {/if}
+
+        <!--<table  height="auto" border="0" cellspacing="0" cellpadding="0" >
+            <tr>
+            	<th>{$_lang['tpl_name']}</th>
+				<th width="150">{$_lang['tpl_img']}</th>
+				<th>{$_lang['explain']}</th>
+				<th>{$_lang['open_status']}</th>
+				<th>{$_lang['current_skin']}</th>
+				<th>{$_lang['author']}</th>
+				<th>{$_lang['operate']}</th>
+            </tr>
+			{loop $tpl_arr $key $value}
+
+			<tr class="item">
+
+                <td>
+                	{$_lang[$value['tpl_title']]}
+                </td>
+				<td>
+                    <img src="../tpl/$value['tpl_title']/img/style/{$value['tpl_title']}.jpg" alt={$_lang['preview']} width="110px;" height="120px;" />
+				</td>
+				<td>$value['tpl_desc']</td>
+                <td>
+                	<label for="rdo_temp_{$value['tpl_id']}">
+                         <input type="radio" value="{$value['tpl_id']}"
+						 id="rdo_temp_{$value['tpl_id']}" name="rdo_is_selected"
+						 {if $value['is_selected']==1}checked="checked"{/if}/>
+                    </label>
+                </td>
+                <td>
+                	{loop $skins $k $v}
+						<input type="radio" value="{$k}" id="rdo_tpl_{$value['tpl_id']}"
+						 name="skin[{$value[tpl_title]}]" {if $value['tpl_pic']==$k}checked{/if}/>{$_lang[$v]}</br>
+					{/loop}
+                </td>
+				<td>$value['develop']</td>
+                <td>
+                	<button type="submit"  name="sbt_edit" id="sbt_edit" class="button" value="{$_lang['use']}"> {$_lang['use']} </button>
+                	 <a type="button" class="button" value="{$_lang['preview']}" onclick="window.open('http://www.kekezu.com/app_store-view-app_tpl.html#holder')"><span class="book icon"></span>{$_lang['view']}</a>
+
+					 <a type="button" class="button" value="{$_lang['export']}" href='index.php?do=tpl&view=export&tplname={$value['tpl_path']}'>{$_lang['backup']}</a>
+					 {if $value['tpl_path']!='default'}
+                        <a href="index.php?do=config&view=tpl&delid=$value['tpl_id']"
+						type="button" class="button" value="{$_lang['uninstall']}" onclick="return confirm({$_lang['comfirm_want_del']})">{$_lang['uninstall']}</a>
+                     {/if}
+                </td>
+
+            </tr>
+			{/loop}
+			  <tr>
+                <td scope="row">
+
+                </td>
+                <td colspan="6">
+                	{$_lang['enter_dir_name']}
+					<input name="txt_newtplpath" type="text" class="txt" >
+					<button type="submit" name="sbt_edit" class="button" value={$_lang['from_dir_install']}>{$_lang['from_dir_install']}</button>
+
+                </td>
+             </tr>
+        </table>-->
+    </form>
+</div>
+</div>
+<script type="text/javascript">
+function confirmUse(o){
+    art.dialog.confirm('确定启用？', function() {
+			window.location.href = o.href;
+		});
+	}
+function simg(url){
+		art.dialog.through({title:{$_lang['view']},content:"<img src='"+url+"'>"});
+	}
+</script>
+<!--{template ADMIN_DIRECTORY/tpl/admin_footer}-->

@@ -1,0 +1,82 @@
+<div class="order-body">
+			<div class="panel-heading">
+              <h3 class="panel-title">
+              	<div class="pull-right"><i class="fa fa-minus"></i></div>
+
+                  <span class="money"><sub>￥</sub>{$arrServiceOrderInfo['price']}</span>
+                  {$arrServiceOrderInfo['title']}
+              </h3>
+            </div>
+            <div class="panel-body ">
+                <ul class="release-meta">
+                  <li class="release-meta-item">类型：购买服务</li>
+                  <li class="release-meta-item">行业分类：{$arrTopIndustrys[$arrServiceOrderInfo['indus_pid']]['indus_name']}-{$arrAllIndustrys[$arrServiceOrderInfo['indus_id']]['indus_name']}</li>
+                </ul>
+                <div class="release-detail">
+                <h2 class="min-title">描述</h2>
+	                <div class="ws_break">
+                	<!--{eval echo htmlspecialchars_decode($arrServiceOrderInfo['content'])}-->
+                	</div>
+                <h2 class="min-title">附件 <span class="label label-default"><!--{eval echo intval(count($arrFileLists))}--></span></h2>
+				<ul class="detail-affix {if !$arrFileLists}hidden{/if}" >
+					{loop $arrFileLists $k $v}
+			        	<li class="detail-affix-item"><a href="{$v['save_name']}"><i class="fa fa-download"></i> {$v['file_name']}</a></li>
+			        {/loop}
+			    </ul>
+                </div>
+                <!-- release-detail end -->
+
+            </div>
+
+			{if $arrOrderInfo['order_status'] == 'confirm_complete'}
+			<p class="lead text-center text-success mt_20"><i class="fa fa-check-circle"></i> 工作已完成，等待买家验收！</p>
+			<p class="lead text-center text-success mt_20"><a href="javascript:report(1,'gy_order','$arrBuyerInfo[uid]','{$arrSellerInfo[uid]}','{$orderId}');void(0);" class="btn btn-default">
+	    			<i class="fa fa-bell"></i> 申请仲裁
+	   		 	</a>
+	   		 	</p>
+			{else}
+			<!-- <p class="lead text-center text-success mt_20"><i class="fa fa-check-circle"></i> 工作已完成，请确认！</p> -->
+			<div class="clearfix form-horizontal">
+				<label class="col-xs-4 control-label">
+					上传文件
+				</label>
+				<div class="col-xs-8">
+					<input type="file" id="uploadfiles" name="uploadfiles">
+	              	<input type="hidden"  name="file_ids" id="file_ids"  class="form-control" value="0">
+	              	最多5个附件，每个附件不得超过20M
+					<ul class="affix-list" id="fileList"></ul>
+
+				</div>
+			</div>
+			<div class="text-center mt_20">
+				<a class="btn btn-success" href="javascript:void(0);" id="sellerCompleteWork" >确认完成工作</a>
+			</div>
+			{/if}
+
+		</div>
+		<script src="static/js/uploadify/jquery.uploadify.min.js" type="text/javascript"></script>
+						<link href="static/js/uploadify/uploadify.css" rel="stylesheet">
+						<script type="text/javascript">
+                                $(function(){
+                                    uploadify({
+                                    	debug:false,
+                                    	text:'上传附件',
+                                    	auto:true,
+                                    	hide:false,
+                                    	resText:'file_ids',
+                                    	exts:'{$strExtTypes}',
+                                    	limit:5,
+										 file: 'uploadfiles'
+                                    	},{
+											fileType:'service'
+                                    	},uploadResponse);
+                                })
+								function uploadResponse(json){
+                                	if($("#file_ids").val()){
+                    					$("#file_ids").val($("#file_ids").val()+','+json.msg.fileid);
+                    				}else{
+                    					$("#file_ids").val(json.msg.fileid);
+                    				}
+									$("#fileList").append('<li class="affix-list-item">'+json.msg.name+'</li>');
+								}
+                        </script>

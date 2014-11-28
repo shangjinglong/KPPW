@@ -1,0 +1,64 @@
+<!--{template admin/tpl/admin_header}--> 
+<div class="page_title">
+    	<h1>{$_lang['skill_manage']}</h1>
+        <div class="tool">
+       		 <a href="index.php?do=task&view=skill&op=list">{$_lang['skill_list']}</a>
+            <a href="index.php?do=task&view=skill_edit" class="here">{$_lang['add_skill']}</a>
+		</div>
+</div>
+<div class="box post">
+    <div class="tabcon">
+        	<div class="title"><h2>{if $skill_id}{$_lang['edit_skill']}{else}{$_lang['add_skill']}{/if}</h2></div>       	
+            <div class="detail">
+                <form method="post" action="index.php?do={$do}&view={$view}" id="frm_skill_edit" enctype="multipart/form-data">
+                <input type="hidden" name="pk[skill_id]" value="{$skill_info['skill_id']}">              
+                    <table width="100%" border="0" cellspacing="0" cellpadding="0">
+                      <tr>
+                        <th scope="row" width="130">{$_lang['by_industry']}{$_lang['zh_mh']}</th>
+                         <td>
+                            	<select class="ps vm" name="w[indus_id]" id="catid">
+                            	{loop $industry $v}
+								<option value="$v['indus_id']" {if $v['indus_id'] == $w[indus_id]} selected="selected"{/if}>$v['indus_name']</option>	
+								{/loop}
+								</select>
+                            </td>
+                      </tr>
+                      <tr>
+                        <th scope="row">{$_lang['skill_name']}{$_lang['zh_mh']}</th>
+                        <td><input type="text" maxlength="100"  class="txt" style=" width:260px;"
+						name="fs[skill_name]" id="skill_name"
+						value="{$skill_info['skill_name']}"
+                        			 limit = "required:false" 
+                                     msg ={$_lang['write_skill_name']} 
+                                     title={$_lang['write_skill_name']}  
+                                     msgArea="msg_indus_name"/><span id="msg_indus_name"></span>
+                       </td>
+                      </tr>
+					  <tr>
+                        <th scope="row"> {$_lang['order']}{$_lang['zh_mh']}</th>
+                        <td>
+                        	<input type="text"  class="txt" id="txt_listorder" name="fs[listorder]"
+						   		value="{if $listorder}$listorder{else}0{/if}"
+						    	maxlength="5" 
+								limit = "required:true;type:int" 
+                                onkeyup="clearstr(this)"
+                                msg ={$_lang['write_skill_order']} 
+                                title={$_lang['quick_skill_order']} 
+                                msgArea="slt_txt_listorder"/><span id="slt_txt_listorder"></span>   
+                        </td>
+                      </tr>
+					<tr>
+						<th scope="row">&nbsp;</th>
+						<td>
+						<button name="sbt_edit" value="1" onclick="return checkForm(document.getElementById('frm_skill_edit'),false)" class="positive primary pill button" type="submit">
+						<span class="check icon"></span>{$_lang['submit']}</button>
+						
+						</td>
+						</tr>
+                    </table>
+                </form>
+              </div>
+       </div>           
+</div>
+<!--主体结束-->
+<!--{template admin/tpl/admin_footer}-->

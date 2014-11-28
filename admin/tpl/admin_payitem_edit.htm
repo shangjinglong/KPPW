@@ -1,0 +1,107 @@
+<!--{template ADMIN_DIRECTORY/tpl/admin_header}-->
+<div class="page_title">
+    <h1>{$payitem['item_name']}{$_lang['edit']}</h1>
+</div>
+<div class="box post">
+    <div class="tabcon">
+        <div class="title">
+            <h2>{$_lang['edit_service']}</h2>
+        </div>
+        <div class="detail">
+            <form method="post" action="index.php?do={$do}&view={$view}&item_code={$item_code}"  enctype="multipart/form-data" name="frm" id="frm">
+                <input type="hidden" name="pk[item_id]" value="{$payitem['item_id']}">
+                <table width="100%" border="0" cellspacing="0" cellpadding="0">
+                    <tr>
+                        <th scope="row" width="130">
+                                                                   工具名称
+                        </th>
+                        <td>
+                            <input type="text" value="{$payitem['item_name']}" name="fds[item_name]" id="title" class="txt" style=" width:260px;" limit="required:true;len:1-50" title="{$_lang['input_item_name']}" msg="{$_lang['itme_name_msg']}0" msgArea="item_title_msg"/><b style="color:red">*</b>
+                            <span id="item_title_msg"></span>
+                        </td>
+                    </tr>
+					<tr>
+                        <th scope="row" width="130">
+                                                                     工具费用
+                        </th>
+                        <td>
+                            <input type="text" value="{$payitem['item_cash']}" name="fds[item_cash]" id="item_cash" class="txt" style=" width:260px;" limit="required:true;type:float" title="{$_lang['input_item_cash_title']}" msg="{$_lang['input_item_cash_msg']}" msgArea="item_cash_msg"/>元/{$payitem['item_standard']}<b style="color:red">*</b>
+                        	<span id="item_cash_msg"  style=" width:260px;"></span>  
+							<div class="padt10 direct">
+                                <p>
+                                    {$_lang['item_notice']}
+                                </p>
+                            </div>
+						</td>
+                    </tr>
+                   
+                    <tr>
+                        <th scope="row">
+                                                                        工具说明
+                        </th>
+                        <td>
+                            <textarea id="system-create-location_1" class="xheditor {urlBase:'{$_K['site_url']}',html5Upload:false,upImgUrl:'../../index.php?do=ajax_upload'}" rows="15" style="width:65%; display: none;" name="fds[item_desc]">{$payitem['item_desc']}</textarea>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th scope="row" width="130">
+                            {$_lang['is_open']}
+                        </th>
+                        <td>
+                            <p>
+                                <label for="rdo_is_open_1">
+                                    <input type="radio" name="fds[is_open]" value="1" id="rdo_is_open_1" {if !$payitem['is_open']||$payitem['is_open']=='1'}checked="checked"{/if}/> {$_lang['yes']}
+                                </label>
+                                <label for="rdo_is_open_2">
+                                    <input name="fds[is_open]" type="radio" id="rdo_is_open_2" value="2" {if $payitem['is_open']=='2'}checked="checked"{/if} /> {$_lang['no']}
+                                </label>
+                            </p>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th scope="row">
+                            &nbsp;
+                        </th>
+                        <td>
+                            <div class="clearfix padt10">
+                                <button class="positive primary pill button" type="submit" name="sbt_edit" value="{$_lang['submit']}" onclick="return checkForm(document.getElementById('frm'))">
+                                    <span class="check icon"></span>{$_lang['submit']}
+                                </button>
+								<button class="pill button" onclick="history.go(-1);" value="{$_lang['return']}" type="button"><span class="icon uparrow"></span>{$_lang['return']}</button>
+                            </div>
+                        </td>
+                    </tr>
+                </table>
+            </form>
+        </div>
+    </div>
+</div>
+<script type="text/javascript"  src="../../resource/js/system/ajaxfileupload.js"></script>
+<script type="text/javascript">
+/**
+ * 上传完成后的页面响应
+ * @param json json数据
+ */
+function uploadResponse(json){
+	var id = json.filename;
+	var hf = $("#hdn_"+id);
+	var hf_fid = $("#hdn_"+id+"_fid");
+    $(hf).val(json.msg.up_file+"?fid="+json.fid);
+    $(hf_fid).val(json.fid);
+    $("#span_"+id).html("<img src='../../"+json.msg.up_file+"'width='80px' height='80px' />").append("<a href=';' onclick='return del(\"hdn_"+id+"\",\"span_"+id+"\")'>"+L.del+"</a>");
+}
+    function del(str,span){//删除的时候,必须要同时提供filepath和fid才能够删除
+		var value = $("#"+str).val().split("?")['0'];
+		var fid=$("#"+str+"_fid").val();
+    	var url  = '../../index.php?do=ajax&view=file&ajax=del&filepath='+value+"&fid="+fid;
+				$.post(url,function(json){
+					if(json.status==1){ 
+						 $("#"+str).val("");
+						 $("#"+span).children().remove();
+					}
+					
+				},'json');
+		return false;
+	}
+</script>
+<!--{template ADMIN_DIRECTORY/tpl/admin_footer}-->

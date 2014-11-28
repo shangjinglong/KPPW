@@ -1,0 +1,41 @@
+<!--{template ADMIN_DIRECTORY/tpl/admin_header}-->
+<link href="../static/css/base.css" rel="stylesheet" type="text/css" />
+<div class="page_title">
+    	<h1>{$_lang['global_config']}</h1>
+         <div class="tool">         
+            <a href="index.php?do=config&view=basic&op=info" {if $op == 'info'}class="here"{/if} > {$_lang['website_config']}</a>
+            <a href="index.php?do=config&view=basic&op=conf" {if $op == 'conf'}class="here"{/if} >	{$_lang['basic_config']}</a>
+			<a href="index.php?do=config&view=basic&op=seo" {if $op == 'seo'}class="here"{/if} >{$_lang['seo_config']}</a>
+			<a href="index.php?do=config&view=mail" {if $view == 'mail'}class="here"{/if} >{$_lang['mail_config']}</a>
+    	</div>
+</div>
+
+<div class="box post">
+        <div class="tabcon">
+        	<div class="title"><h2>{if $op == 'info'}{$_lang['website_config']}{elseif $op == 'conf'}{$_lang['basic_config']}{/if}</h2></div>
+            <div class="detail">
+                 <form name="frm_config_basic" id="frm_config_basic" action="index.php?do=config&view=basic&op={$op}" method="post" accept-charset="{$_K['charset']}" enctype='multipart/form-data'>
+                    <table width="100%" border="0" cellspacing="0" cellpadding="0">
+                     
+			{loop $rule_arr $k $v}	
+            <tr>
+                <th scope="row">
+                    {$k}
+                </th>
+                <td><a href="javascript:setCopy($('#pre_$k').text(),'copy_success','admin');">copy</a>
+                    <pre id="pre_$k">{$v}</pre>
+                </td>
+            </tr>
+            {/loop}
+            </table>
+                    
+                      
+                    
+        </form>
+            </div>
+        </div>
+        
+        
+    </div>
+  
+<!--{template ADMIN_DIRECTORY/tpl/admin_footer}-->

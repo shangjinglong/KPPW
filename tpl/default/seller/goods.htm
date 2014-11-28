@@ -1,0 +1,69 @@
+<!--{template top}-->
+<!--{template seller/banner}-->
+<!--{template seller/nav}-->
+            <div class="store_info_box">
+            	{if $arrServiceLists}
+            	<div class="list list-img">
+				    <ul class="list-body">
+				    	
+						{loop $arrServiceLists $k $v}
+				      <li class="list-item">
+
+				        <a href="index.php?do=goods&id=$v['service_id']" class="list-title" title="{$v['title']}">
+				          <span class="list-item-type" title="{if $v['model_id']==6}文件{else}服务{/if}"><i class="{if $v['model_id']==6}fa fa-file{else}fa fa-male{/if}"></i></span>
+				         {$v['title']}
+				        </a>
+				        <div class="list-item-img">
+				         <!-- <div class="marked-layer">
+				            <span class="marked marked-spread">推广</span>
+				          </div>-->
+				          <a href="index.php?do=goods&id=$v['service_id']" title="{$v['title']}">
+				            <img src="<!--{eval echo keke_shop_class::output_pics($v['pic'],210,1);}-->" onerror='$(this).attr("src","tpl/default/img/shop/shop_default_big.jpg")'alt="$v['title']">
+				          </a>
+				         {if $v['favorite']}
+
+				          	<a  href="javascript:cancelFavorite('service',{$v['service_id']});" title="取消收藏" class="action-collect on" id="favorite{$v['service_id']}"><i class="fa fa-star"></i></a>
+
+						  {else}
+
+				          	<a href="javascript:addFavorite('service',{$v['service_id']});" title="收藏" class="action-collect" id="favorite{$v['service_id']}"><i class="fa fa-star"></i></a>
+
+						 {/if}
+				        </div>
+				        <div class="list-item-footer">
+				          <span class="poster">
+				            售出：$v['sale_num'] 次
+				          </span>
+				          <span class="money"><sub>￥</sub>$v['price']</span>
+				        </div>
+				      </li>
+					  {/loop}
+					 
+
+
+				    </ul>
+				  </div>
+				   {else}
+					   <dd class="list-item text-center">
+			              <!--{template nodata}-->
+                       </dd>
+					  {/if}
+				  <!-- list list-img  end-->
+
+				  <div class="list-page">
+				    <div class="page-tips pull-left">
+				      显示 {$strPages['st']}~{$strPages['en']} 项 共 {$intGoodsCount} 个商品
+				    </div>
+				    <ul class="pagination pagination-sm pull-right">
+				       {$strPages['page']}
+				    </ul>
+				  </div>
+				  <!-- list-page end -->
+
+            </div><!-- store_info_box end -->
+
+</div><!-- store_down end-->
+</div><!-- store_detail end -->
+</div><!-- space_body end-->
+</div><!-- #space_bg end-->
+<!--{template footer}-->

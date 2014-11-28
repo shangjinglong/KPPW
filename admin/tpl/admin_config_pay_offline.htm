@@ -1,0 +1,114 @@
+<!--{template ADMIN_DIRECTORY/tpl/admin_header}-->
+	<div class="page_title">
+    	<h1>{$_lang['pay_manage']}</h1>
+        <div class="tool">
+            <a href="index.php?do=config&view=pay&op=config" {if $op=='config' || !isset($op)}class="here"{/if}>{$_lang['pay_config']}</a>
+            <a href="index.php?do=config&view=pay&op=online" {if $op=='online'}class="here"{/if}>{$_lang['online_pay_interface']}</a>
+			<a href="index.php?do=config&view=pay&op=offline" {if $op=='offline'}class="here"{/if}>{$_lang['line_pay_interface']}</a>
+			 
+    	</div>
+    </div>
+<div class="box post">
+	<div class="tabcon">
+        	<div class="title"><h2>{$pay['payment']}{$_lang['pay_interface_config']}</h2></div>
+            <div class="detail">
+                <form name="frm_config_basic" id="frm_config_basic" action="index.php?do=config&view=$view&op=$op&payment={$payment}" method="post" >    
+                   <input type="hidden" name="ac"   value="{$ac}">
+				    <table width="100%" border="0" cellspacing="0" cellpadding="0">
+                      <tr>
+                        <th scope="row" width="160">{$_lang['bank_name']}{$_lang['zh_mh']}</th>
+                        <td>
+                        	<select name="payment" {if $pay['payment']} disabled="disabled" {/if}>
+                        		
+                        		{loop $bank_arr $k $v} 
+									{if $payment}
+										{if $payment_list[$k]}
+										 <option value="{$k}" {if $payment==$k}selected="selected"{/if}>{$v}</option>
+										{/if}
+									{else}
+										{if !$payment_list[$k]}
+										 <option value="{$k}" {if $payment==$k}selected="selected"{/if}>{$v}</option>
+										{/if} 
+									{/if} 
+								{/loop}
+                        	</select>
+						</td>
+                      
+					  </tr>
+                      <tr>
+                        <th scope="row"> {$_lang['bank_deposit']}{$_lang['zh_mh']}</th>
+                        <td>
+                        	<input type="text" name="conf[pay_name]" id="pay_name" value="{$pay_config['pay_name']}" class="txt" style="width:260px;" msgArea="span_pay_name"
+							limit="required:true;len:2-50" title="&nbsp;&nbsp;&nbsp;&nbsp;{$_lang['bank_deposit_name']}" msg="&nbsp;&nbsp;&nbsp;&nbsp;{$_lang['bank_deposit_name_not_empty']}"/> 
+							<span id="span_pay_name"></span>
+						 
+						</td>
+                      </tr>
+                      <tr>
+                        <th scope="row"> {$_lang['is_enable']}{$_lang['zh_mh']}</th>
+                        <td>
+                        	<label for="rdo_pay_status1"><input type="radio" id="rdo_pay_status1" name="conf[pay_status]" {if $pay_config['pay_status']} checked="checked" {/if}  value="1">{$_lang['open']}</label>
+                            <label for="rdo_pay_status2"><input type="radio" id="rdo_pay_status2" name="conf[pay_status]" {if !$pay_config['pay_status']} checked="checked" {/if} value="0">{$_lang['close']}	</label></td>
+                      </tr>
+					 	  
+					  <tr>
+                        <th scope="row">{$_lang['account']}{$_lang['zh_mh']}</th>
+                        <td>
+                        	<input type="text" name="conf[pay_account]" id="pay_account" value="{$pay_config['pay_account']}" class="txt" style=" width:260px;" msgArea="span_pay_account"
+							limit="required:true;len:16-19" title="&nbsp;&nbsp;&nbsp;&nbsp; {$_lang['bank_id']}" msg="&nbsp;&nbsp;&nbsp;&nbsp; {$_lang['bank_car_id_not_empty']}" onkeyup="clearstr(this)"/> 
+							<span id="span_pay_account"></span>
+						</td>
+                      </tr>	
+			  		  <tr>
+                        <th scope="row">{$_lang['username']}{$_lang['zh_mh']}</th>
+                        <td>
+                        	<input type="text" name="conf[pay_user]" id="pay_user" value="{$pay_config['pay_user']}"  class="txt" style=" width:260px;" msgArea="span_pay_user"
+							limit="required:true;len:2-50" title="&nbsp;&nbsp;&nbsp;&nbsp; {$_lang['account_legal']}" msg="&nbsp;&nbsp;&nbsp;&nbsp; {$_lang['account_legal_not_empty']}"/> 
+							<span id="span_pay_user"></span>
+						</td>
+                      </tr>
+						<!--<tr>
+		                   <th scope="row">{$_lang['single_tariff']}{$_lang['zh_mh']}</th>
+			               <td>
+			                    <input type="text" name="conf[per_charge]" value="{$pay_config['per_charge']}" class="txt" style=" width:260px;"/>
+								<div class="padt10 direct"><p>({$_lang['user_a_single_charge_ratio']} )</p></div>
+						   </td>
+					   </tr>
+						<tr>
+		                   <th scope="row">{$_lang['single_minimum_charge']}{$_lang['zh_mh']}</th>
+			               <td>
+			                    <input type="text" name="conf[per_low]" value="{$pay_config['per_low']}" class="txt" style=" width:260px;"/>
+								<div class="padt10 direct"><p>({$_lang['user_single_charge_minimum_amount']})</p></div>
+						  </td>
+					   </tr>
+						<tr>
+		                   <th scope="row">{$_lang['single_highest_fees']}{$_lang['zh_mh']}</th>
+			               <td>
+			                    <input type="text" name="conf[per_high]" value="{$pay_config['per_high']}" class="txt" style=" width:260px;"/>
+								<div class="padt10 direct"><p>({$_lang['user_single_charge_highest_amount']})</p></div>
+						  </td>
+					   </tr>
+					   <tr>-->
+                        <th scope="row">{$_lang['contact_tel']}{$_lang['zh_mh']}</th>
+                        <td>
+                        	<input type="text" name="conf[pay_phone]" class="txt" id="pay_phone" value="{$pay_config['pay_phone']}"  style=" width:260px;" msgArea="span_pay_phone"
+							limit="required:true;type:tel" title="&nbsp;&nbsp;&nbsp;&nbsp; {$_lang['contact_the_car_as']}" msg="&nbsp;&nbsp;&nbsp;&nbsp; {$_lang['contact_the_car']}"/> 
+							<span id="span_pay_phone"></span> 
+						</td>
+                      </tr>
+                      <tr>
+                        <th scope="row">&nbsp;</th>
+                        <td>
+                            <div class="clearfix padt10">
+                                <button class="positive pill primary button" type="submit" name="confirm" onclick="return checkForm(document.getElementById('frm_config_basic'),false)" value="{$_lang['submit']}" ><span class="pen icon"></span>{$_lang['submit']}</button>
+                            </div>
+                        </td>
+                      </tr>
+                    </table>
+                    
+                </form>
+            </div>
+        </div>
+</div>
+
+<!--{template ADMIN_DIRECTORY/tpl/admin_footer}-->

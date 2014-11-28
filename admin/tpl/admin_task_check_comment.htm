@@ -1,0 +1,77 @@
+<!--{template ADMIN_DIRECTORY/tpl/admin_header}-->
+ <div class="page_title">
+    	<h1>{$_lang['task_miscellaneous']}</h1>
+        <div class="tool">
+           <a href="index.php?do=$do&view=comment" {if !$ac}class="here" {/if}>{$_lang['task_comment_list']}</a>
+            <a href="index.php?do=$do&view=comment&ac=comment_info" {if $ac=='comment_info'}class="here" {/if}>{$_lang['task_comment_info']}</a>
+    	</div>
+</div>
+<!--页头结束-->    
+
+<div class="box post">
+    <div class="tabcon">
+        	<div class="title"><h2>{$_lang['view_tack_comment']}</h2></div>       	
+            <div class="detail">
+                <form method="post" action="#" id="frm_art_edit">
+                    <table width="100%" border="0" cellspacing="0" cellpadding="0">
+                     
+                      <tr>
+                        <th scope="row" width="9%">{$_lang['task_type']}{$_lang['zh_mh']}</th>
+                        <td> 
+							{$model_list[$comment_info['model_id']]['model_name']}
+                        </td>
+                      </tr>
+					  
+					   <tr>
+                        <th scope="row">{$_lang['task_name']}{$_lang['zh_mh']}</th>
+                        <td> 
+							{$comment_info['task_title']}
+                        </td>
+                      </tr>
+					  
+					   <tr>
+                        <th scope="row">{$_lang['task_comment']}{$_lang['zh_mh']}</th>
+                        <td> 
+							{$comment_info['content']}
+                        </td>
+                      </tr>
+					  
+					   <tr>
+                        <th scope="row">{$_lang['commenter']}{$_lang['zh_mh']}</th>
+                        <td> 
+							{$comment_info['username']}
+                        </td>
+                      </tr>
+					  
+					   <tr>
+                        <th scope="row">{$_lang['comment_time']}{$_lang['zh_mh']}</th>
+                        <td> 
+							{if $comment_info['on_time']}<!--{eval echo date("Y-m-d H:i",$comment_info['on_time']);}-->{/if}
+                        </td>
+                      </tr>
+                        <th scope="row">&nbsp;</th>
+						<td>
+                    	 	<button class="pill button" type="button" value="{$_lang['delete']}"
+							 onclick="del({$comment_id})"><span class="cross icon"></span>{$_lang['delete']}</button>
+                    		
+                    	</td>
+                    </tr>
+                    </table>
+                </form>
+              </div>
+       </div>           
+</div>
+<!--主体结束-->
+<script type="text/javascript">
+	function del(comment_id){
+		art.dialog({
+   			title: "{$_lang['delete_task_comment']}",
+  			content: "{$_lang['confirm_delete_comment']}",
+			icon: 'succeed',
+   			yesFn: function(){location.href='index.php?do=task&view=comment&comment_id='+comment_id+'&ac=del';},
+			noFn :function(){this.close();return false;}
+	})
+	}
+</script>
+ 
+<!--{template ADMIN_DIRECTORY/tpl/admin_footer}-->

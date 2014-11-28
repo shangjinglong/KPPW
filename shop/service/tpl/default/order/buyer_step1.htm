@@ -1,0 +1,100 @@
+<div class="buy-body">
+		<form class="form-horizontal" role="form" action="{$strUrl}&step={$step}" method="post"  id="submitOrderForm{$step}" name="submitOrderForm{$step}">
+  			<input type="hidden" name="{$step}" value="{$step}">
+  			<input type="hidden" name="formhash" id="formhash" value="{FORMHASH}">
+
+
+		<div class="form-group">
+			<label class="min-title" for="title">请一句话描述您需要的服务：</label>
+			<input type="text" id="title" name="title" class="form-control"  placeholder="需求标题不得超过50字" value="{$arrServiceInfo['title']}">
+		</div>
+
+		<div class="form-group">
+			<label class="min-title">您需要的服务类型：</label>
+			<div class="row">
+			<div class="col-sm-3">
+				<select class="form-control" name="indus_pid" id="indus_pid" onchange="getIndustry(this.value,'indus_id')">
+                     <option value="">请选择父行业</option>
+                     {loop $arrTopIndustrys $v}
+                     	<option value="{$v['indus_id']}" {if $arrServiceInfo['indus_pid'] ==$v['indus_id']} selected="selected"{/if}>{$v['indus_name']}</option>
+                     {/loop}
+                   </select>
+                   </div>
+                   <div class="col-sm-3">
+				  <select class="form-control" name="indus_id" id="indus_id">
+                     <option value="">请选择子行业</option>
+                     {if $arrServiceInfo['indus_id']}
+                      {loop $arrAllIndustrys $v}
+							<option value="{$v['indus_id']}" {if $arrServiceInfo['indus_id'] == $v['indus_id']} selected="selected"{/if}>{$v['indus_name']}</option>
+                      {/loop}
+                     {/if}
+                   </select>
+                   </div>
+			</div>
+		</div>
+
+		<div class="form-group">
+			<label class="min-title" for="content">详细描述您的要求：</label>
+			<textarea rows="10" id="content" name="content" class="form-control xheditor-simple {urlBase:'$_K['siteurl']/',html5Upload:false,upImgUrl:'index.php?do=ajax&view=upload&file_type=att&filename=filedata',skin:'nostyle'}" placeholder="需求描述不得超过1000字">{$arrServiceInfo['content']}</textarea>
+		</div>
+
+		<div class="form-group">
+			<label class="min-title">添加附件：</label>
+			<div class="">
+					<input type="file" id="upload" name="upload">
+	              <input type="hidden"  name="file_ids" id="file_ids"  class="form-control" value="">
+			</div>
+			<ul class="affix-list" id="fileList">
+              </ul>
+			<p class="help-block">最多可添加五个附件，每个大小不超过10M.</p>
+		</div>
+
+		<div class="form-group">
+			<label class="min-title">您的预算：</label>
+			<div class="input-group">
+  				<span class="input-group-addon">￥</span>
+				<input type="text" id="price" name="price" class="form-control"  placeholder="输入您的预算" value="{$arrServiceInfo['price']}">
+			</div>
+		</div>
+
+		<div class="form-group">
+			<button type="submit" class="btn btn-primary">下一步</button>
+		</div>
+
+		</form>
+</div>
+<script type="text/javascript" src="static/js/xheditor/xheditor.js">
+                </script>
+                <script type="text/javascript">
+                    $(function(){
+                        editor = $("#content").xheditor();
+
+                    })
+
+                </script>
+<script src="static/js/uploadify/jquery.uploadify.min.js" type="text/javascript"></script>
+						<link href="static/js/uploadify/uploadify.css" rel="stylesheet">
+						<script type="text/javascript">
+                                $(function(){
+                                    uploadify({
+                                    	debug:false,
+                                    	text:'上传附件',
+                                    	auto:true,
+                                    	hide:false,
+                                    	resText:'file_ids',
+                                    	exts:'{$strExtTypes}',
+                                    	limit:5,
+										 file: 'upload'
+                                    	},{
+											fileType:'service'
+                                    	},uploadResponse);
+                                })
+								function uploadResponse(json){
+                                	if($("#file_ids").val()){
+                    					$("#file_ids").val($("#file_ids").val()+','+json.msg.fileid);
+                    				}else{
+                    					$("#file_ids").val(json.msg.fileid);
+                    				}
+									$("#fileList").append('<li class="affix-list-item">'+json.msg.name+'</li>');
+								}
+                        </script>

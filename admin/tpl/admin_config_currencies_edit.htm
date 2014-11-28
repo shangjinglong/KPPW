@@ -1,0 +1,104 @@
+<!--{template ADMIN_DIRECTORY/tpl/admin_header}-->
+	<div class="page_title">
+    	<h1>{$_lang['currencies_manage']}</h1>
+    </div>
+<div class="box post">
+	<div class="tabcon">
+        	<div class="title"><h2>{$_lang['currencies_conf']}</h2></div>
+            <div class="detail">
+                <form name="frm_config_basic" id="frm_config_basic" action="index.php?do=config&view=$view&op=$op" method="post" >    
+				    <input type="hidden" name="pk[currencies_id]" value="{$currency_config['currencies_id']}">
+				    <table width="100%" border="0" cellspacing="0" cellpadding="0">
+                      <tr>
+                         <th scope="row" width="160">{$_lang['currency_name']}{$_lang['zh_mh']}</th>
+                     	 <td>
+                        	<input type="text" name="conf[title]" id="currency_name" value="{$currency_config['title']}" class="txt" style="width:260px;" limit="required:true;len:1-50" 
+	                         msg="{$_lang['name_error']}" msgArea="obj_name_msg" title="$_lang['name_desc']" />
+	                        <span id="obj_name_msg"></span>
+						 </td>
+					  </tr>
+                      <tr>
+                         <th scope="row" width="160">{$_lang['currency_code']}{$_lang['zh_mh']}</th>
+                     	 <td>
+                        	<input type="text" name="conf[code]" id="currency_code" value="{$currency_config['code']}" class="txt" style="width:260px;" limit="required:true;len:1-10" onkeyup="onlyen(this)"
+                        	msg="{$_lang['code_error']}" msgArea="obj_code_msg" title="$_lang['code_desc']" />
+                        	<span id="obj_code_msg"></span> 
+						 	<input type="checkbox" value="" {if $default_currency == $currency_config['code']}checked {/if} name="default_cur" id="default_cur" /><label for='default_cur'>$_lang['set_default']</label>
+						 </td>
+					  </tr>
+					  <tr>
+                         <th scope="row" width="160">{$_lang['left_symbol']}{$_lang['zh_mh']}</th>
+                     	 <td>
+                        	<input type="text" name="conf[symbol_left]" id="left_symbol" title="$_lang['symbol_left_desc']" value="{$currency_config['symbol_left']}" class="txt" style="width:260px;"/>
+						 </td>
+					  </tr>
+					  <tr>
+                         <th scope="row" width="160">{$_lang['right_symbol']}{$_lang['zh_mh']}</th>
+                     	 <td>
+                        	<input type="text" name="conf[symbol_right]" id="right_symbol" title="$_lang['symbol_right_desc']" value="{$currency_config['symbol_right']}" class="txt" style="width:260px;" />
+						 </td>
+					  </tr>
+					  <tr>
+                         <th scope="row" width="160">{$_lang['decimal_point']}{$_lang['zh_mh']}</th>
+                     	 <td>
+                        	<input type="text" name="conf[decimal_point]" id="decimal_point" value="{$currency_config['decimal_point']}" class="txt" style="width:260px;" limit="required:true;len:1-50"
+                        	msg="{$_lang['decimal_point_error']}" msgArea="obj_decimal_point_msg" title="$_lang['decimal_point_desc']" /> 
+						 	<span id="obj_decimal_point_msg"></span> 
+						 </td>
+					  </tr>
+					  <tr>
+                         <th scope="row" width="160">{$_lang['thousands_point']}{$_lang['zh_mh']}</th>
+                     	 <td>
+                        	<input type="text" name="conf[thousands_point]" id="thousands_point" value="{$currency_config['thousands_point']}" class="txt" style="width:260px;" limit="required:true;len:1-50"
+                        	msg="{$_lang['thousands_point_error']}" msgArea="obj_thousands_point_msg" title="$_lang['thousands_point_desc']" /> 
+						 	<span id="obj_thousands_point_msg"></span>
+						 </td>
+					  </tr>
+					  <tr>
+                         <th scope="row" width="160">{$_lang['decimal_places']}{$_lang['zh_mh']}</th>
+                     	 <td>
+                        	<input type="text" name="conf[decimal_places]" id="decimal_places" value="{$currency_config['decimal_places']}" class="txt" style="width:260px;" limit="required:true;len:1-50"
+                        	msg="{$_lang['decimal_places_error']}" msgArea="obj_decimal_places_msg" title="$_lang['decimal_places_desc']" /> 
+						 	<span id="obj_decimal_places_msg"></span> 
+						 </td>
+					  </tr>
+					  <tr>
+                         <th scope="row" width="160">{$_lang['currencies_value']}{$_lang['zh_mh']}</th>
+                     	 <td>
+                        	<input type="text" name="conf[value]" id="currencies_value" value="{$currency_config['value']}" class="txt" style="width:260px;"  limit="required:true;len:1-50"
+                        	msg="{$_lang['currencies_value_error']}" msgArea="obj_currencies_value_msg" title="$_lang['currencies_value_desc']" /> 
+						 	<span class="red" id="obj_currencies_value_msg"></span> 
+						 </td>
+					  </tr>
+                      <tr>
+                        <th scope="row">&nbsp;</th>
+                        <td>
+                            <div class="clearfix padt10">
+                                <button class="positive pill primary button" type="submit" name="sbt_edit" onclick="return checkForm(document.getElementById('frm_config_basic'),false)" value="{$_lang['submit']}" ><span class="pen icon"></span>{$_lang['submit']}</button>
+                               
+                            </div>
+                        </td>
+                      </tr>
+                    </table>
+                    
+                </form>
+            </div>
+        </div>
+</div>
+<script type="text/javascript">
+$('#default_cur').click(function(){
+	$(this).attr('value',$('#currency_code').val());
+});
+/**
+ * * 清除输入框的字符,只限制数据输入
+ * 
+ * @param {Object}
+ *            inputobj
+ */
+function onlyen(inputobj){
+    inputobj.value = inputobj.value.replace(/[^a-zA-Z]/g, '');
+    
+}
+</script>
+
+<!--{template ADMIN_DIRECTORY/tpl/admin_footer}-->

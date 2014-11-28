@@ -1,0 +1,75 @@
+<!--{template user/header}-->
+<div class="container">
+<div class="nav-action">
+    <!--{template user/left_side}-->
+  </div>
+
+  <div class="content-panel">
+    <div class="tab">
+    	<a href="index.php?do=user&view=transaction&op=service" {if $op == 'service'} class="selected" {/if}>我的商品</a>
+        <a href="index.php?do=user&view=transaction&op=works" {if $op == 'works'} class="selected" {/if}>我的稿件</a>
+    </div>
+    <div class="tab_detail">
+    <div class="action-bar">
+    <form action="{$strUrl}" method="post" name="searchWorksForm" id="searchWorksForm">
+        <div class="action-item">
+        <input type="text" placeholder="请输入编号" class="form-control" name="intId" id="intId" value="{$intId}">
+        </div>
+        <div role="toolbar" class="action-item btn-toolbar">
+          <div class="btn-group">
+            <button class="btn btn-default" type="submit">搜索</button>
+          </div>
+        </div>
+      </form>
+      </div>
+      <div class="table-responsive">
+        <table class="table table-hover">
+        <thead>
+          <tr>
+           	<th>稿件编号</th>
+           <!-- 	<th>稿件名称</th> -->
+           	<th>所属任务编号</th>
+           	<th>发布时间</th>
+           	<th>操作</th>
+          </tr>
+        </thead>
+        <tbody>
+        {if $arrLists}
+        {loop $arrLists $k $v}
+          <tr>
+            <td>{$v['id']}</td>
+            <!-- <td><a href="#">{$v['title']}</a></td> -->
+            <td>#{$v['task_id']}</td>
+            <td><!--{eval echo date('Y-m-d',$v['ontime'])}--></td>
+            <td>
+            	 <a  href="index.php?do=taskhandle&op=workinfo&taskId={$v['task_id']}&workId={$v['id']}" data-title="查看">查看</a>
+		     {if $v[task_status]==9||$v[task_status]==8}
+ <a href="javascript:editWork('{$v[id]}','{$v[task_id]}');void(0);" >编辑并出售</a>
+			 {else}
+ <span class="text-muted">编辑并出售</span>
+			 {/if}
+
+            <a href="javascript:opSingle('{$strUrl}&objId={$v['id']}&intTaskId={$v['task_id']}&action=delSingle&intPage={$intPage}');void(0);">删除</a>
+            </td>
+          </tr>
+         {/loop}
+         {else}
+         	<tr>
+         		<td colspan="5" class="text-center">暂无相关稿件</td>
+         	</tr>
+         {/if}
+        </tbody>
+      </table>
+      </div>
+      <div class="clearfix">
+      	{if $strPages}
+	      <ul class="pagination pagination-sm pull-right">
+	       {$strPages}
+	      </ul>
+	    {/if}
+      </div>
+    </div>
+  </div>
+  </div>
+  <!-- 我的消息 end &content-panel end -->
+<!--{template user/footer}-->

@@ -1,0 +1,156 @@
+<!--{template header}-->
+<div  class="container">
+  <div id="main">
+
+  <div class="for-advertise">
+    <!--{ad_show(NEWSLIST_HEAD)}-->
+  </div>
+  <!-- for-advertise end -->
+
+  <div class="tab tab-darken">
+  	{loop $arrArtCats $k $v}
+    <a href="index.php?do=articlelist&catid=$v['art_cat_id']" {if $intCatid==$v['art_cat_id']}class="selected"{/if}>$v['cat_name']</a>
+	{/loop}
+  </div>
+  <!-- tab end -->
+
+  <div class="list list-dl">
+    <dl class="list-body">
+    {loop $arrArticleLists $k $v}
+      <dd class="list-item">
+        <ul class="list-item-body">
+          <li class="w8">
+            <a href="index.php?do=article&id=$v['art_id']" class="list-title"  title="$v['art_title'] ">
+             $v['art_title']
+            </a>
+          </li>
+          <li class="w2 text-right">
+            <time class="mr_10"><!--{eval echo date('Y-m-d H:i:s',$v['pub_time'])}--></time>
+          </li>
+        </ul>
+      </dd>
+	  {/loop}
+
+    </dl>
+  </div>
+  <!-- list list-dl end -->
+
+  <div class="list-page">
+    <div class="page-tips pull-left">
+      显示 {$strPages['st']}~{$strPages['en']} 项 共 {$intCount} 条新闻
+    </div>
+    <ul class="pagination pagination-sm pull-right">
+        {$strPages['page']}
+    </ul>
+  </div>
+  <!-- list-page end -->
+
+  <div class="for-advertise">
+    <!--{ad_show(NEWSLIST_BOTTOM)}-->
+  </div>
+  <!-- for-advertise end -->
+
+  </div><!-- main end -->
+
+<div id="side">
+    <div class="box-body site-security">
+      <h2 class="min-title">诚信威客网站，服务更放心</h2>
+      <ul>
+          <li class="col3">
+            <p>
+              <span class="fa-stack fa-2x">
+                <i class="fa fa-circle fa-stack-2x text-success"></i>
+                <i class="fa fa-yen fa-stack-1x fa-inverse"></i>
+              </span>
+            </p>
+            <p>担保交易</p>
+          </li>
+          <li class="col3">
+            <p>
+              <span class="fa-stack fa-2x">
+                <i class="fa fa-circle fa-stack-2x text-success"></i>
+                <i class="fa fa-shield fa-stack-1x fa-inverse"></i>
+              </span>
+            </p>
+            <p>诚信保障</p>
+          </li>
+          <li class="col3">
+            <p>
+              <span class="fa-stack fa-2x">
+                <i class="fa fa-circle fa-stack-2x text-success"></i>
+                <i class="fa fa-user fa-stack-1x fa-inverse"></i>
+              </span>
+            </p>
+            <p>威客认证</p>
+          </li>
+      </ul>
+    </div>
+    <!-- site-security end -->
+
+
+    <div class="box-header">
+      <h2 class="min-title">热门新闻</h2>
+    </div>
+    <div class="box-body same-type">
+      <ul class="min-list">
+      	{if $arrHotNews}
+		{loop $arrHotNews $k $v}
+        <li><a href="index.php?do=article&id=$v['art_id']" title="$v['art_title']"> $v['art_title']</a></li>
+        {/loop}
+		{else}
+暂无数据
+		{/if}
+      </ul>
+    </div>
+
+    <div class="box-header">
+      <h2 class="min-title">推荐服务商</h2>
+    </div>
+    <div class="box-body">
+      <ul class="record-list img">
+         {if $arrRecommShops}
+          {loop $arrRecommShops $k $v}
+          <li>
+            <a href="index.php?do=seller&id=$v['uid']" class="avatar" title="$v['shop_name']">
+              <!--{userpic($v['uid'],'middle')}-->
+            </a>
+
+            <div class="avatar-detail">
+              <p class="record-list-title">
+                <a href="index.php?do=seller&id=$v['uid']" title="$v['shop_name']">
+                  $v['shop_name']
+                </a>
+              </p>
+              <p class="record-list-meta">好评率 <span><!--{eval echo $v['good_rate']*100}--><sub>%</sub></span></p>
+              <p>
+                <span class="marked marked-tags">{$indus_p_arr[$v[indus_pid]][indus_name]}</span>
+                <span class="marked marked-tags">{$indus_c_arr[$v[indus_id]][indus_name]}</span>
+              </p>
+            </div>
+          </li>
+		  {/loop}
+		  {else}
+暂无数据
+		  {/if}
+
+        </ul>
+    </div><!-- 推荐服务商 & box-body end -->
+</div><!-- side end -->
+
+
+
+
+
+</div><!-- container end -->
+
+
+
+
+
+
+<script type="text/javascript">
+
+
+
+</script>
+<!--{template footer}-->

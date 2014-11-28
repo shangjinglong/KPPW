@@ -1,0 +1,196 @@
+<!--{template ADMIN_DIRECTORY/tpl/admin_header}-->
+	<div class="page_title">
+    	<h1>{$_lang['pay_manage']}</h1>
+        <div class="tool">
+            <a href="index.php?do=config&view=pay&op=config" {if $op=='config' || !isset($op)}class="here"{/if}>{$_lang['pay_config']}</a>
+            <a href="index.php?do=config&view=pay&op=online" {if $op=='online'}class="here"{/if}>{$_lang['online_pay_interface']}</a>
+			<a href="index.php?do=config&view=pay&op=offline" {if $op=='offline'}class="here"{/if}>{$_lang['line_pay_interface']}</a>
+			<!--
+				<a href="index.php?do=config&view=pay&op=trust" {if $op=='trust'}class="here"{/if}>{$_lang['trust_pay_interface']}</a>
+    		-->
+		</div>
+    </div>
+{if $op == 'online'||$op=='trust'}
+<div class="box tip clearfix p_relative">
+    	<div class="control"><a href="javascript:void(0);" onclick="$(this).parent().parent().fadeOut();" title={$_lang['close']}><b>&times;</b></a></div>
+        <div class="title"><h2>{$_lang['tips']}</h2></div>
+        <div class="detail pad10">
+            <ul>
+            	{if $op=='online'}
+                	<li>{$_lang['open_pay_info']}</li>
+			 
+              	  
+				{/if}
+            </ul>
+        </div>
+	</div>
+<div class="box list">
+ <div class="title"><h2>{$_lang['pay_interface']}</h2></div>
+  <div class="detail">
+     <form action="" method="post">
+     	<input type="hidden" value="$do" name="do">
+		<input type="hidden" value="$view" name="view">
+      <table cellpadding="0" cellspacing="0">
+        <tbody>
+          <tr>
+            <th width="120">{$_lang['pay_interface_name']}</th>
+            <th >{$_lang['correspond_dir']}</th>
+            <th>{$_lang['author']}</th>
+            <th width="260">{$_lang['explain']}</th>
+            <th>{$_lang['application_status']}</th>
+            <th>{$_lang['operate']}</th>
+          </tr>
+		  {loop $payment_list $v}
+              <tr class="item">
+                <td><a href="index.php?do=config&view=editpay&payname={$v['pay_dir']}">$v['pay_name']</a></td>
+                <td>$v['pay_dir']</td>
+                <td>$v['pay_dev'] </td>
+                <td><a href="#">$v['pay_desc']</a></td>
+                <td class="td25"><!--{eval $pay_config=unserialize(stripslashes($v['config']))}-->{if $pay_config['pay_status']}{$_lang['open']}{else}{$_lang['close']}{/if}</td>
+                <td>
+            	{if $pay_config['pay_status']}
+					<a href="index.php?do=config&view=pay&op=disable&payname={$v['pay_dir']}&ac={$op}"  class="button"><span class="cross icon"></span>{$_lang['disable']}</a>
+				{else} 
+					<a href="index.php?do=config&view=pay&op=allow&payname={$v['pay_dir']}&ac={$op}" class="button" ><span class="check icon"></span>{$_lang['use']}</a>
+				{/if} 
+					<a href="index.php?do=config&view=editpay&payname={$v['pay_dir']}&type={$op}" class="button"><span class="cog icon"></span>{$_lang['config']}</a>
+				{if $v['pay_dir']=='alipayjs'}
+					<a href="http://act.life.alipay.com/systembiz/keke/" class="button"><span class="user icon"></span>{$_lang['application_interface']}</a>
+				{elseif $v['pay_dir']=='alipaydual'}
+					<a href="http://act.life.alipay.com/systembiz/keke/" class="button"><span class="user icon"></span>{$_lang['application_interface']}</a>
+				{elseif $v['pay_dir']=='chinabank'}
+					<a href="http://www.chinabank.com.cn/" class="button"><span class="user icon"></span>{$_lang['application_interface']}</a>	
+				{elseif $v['pay_dir']=='paypal'}
+					<a href="https://www.paypal.com/c2?&locale.x=zh_XC&kw=PPC-BD-KWd002423&mpch=ads&mplx=3484-39238-9395-106" class="button"><span class="user icon"></span>{$_lang['application_interface']}</a>	
+				{elseif $v['pay_dir']=='tenpay'}
+					<a href="http://union.tenpay.com/mch/mch_register.shtml?sp_suggestuser=1212087301" class="button"><span class="user icon"></span>{$_lang['application_interface']}</a>	
+				{elseif $v['pay_dir']=='alipay_trust'}
+					<a href="https://b.alipay.com/support/helperApply.htm?action=supportHome" class="button"><span class="user icon"></span>{$_lang['application_interface']}</a>		
+				{/if}
+				</td>
+               </tr>
+          {/loop}
+                </tbody>
+              </table>
+        	</form>
+        </div>
+        
+</div>
+{elseif $op == 'offline'}
+<div class="box tip clearfix p_relative">
+    	<div class="control"><a href="javascript:void(0);" onclick="$(this).parent().parent().fadeOut();" title={$_lang['close']}><b>&times;</b></a></div>
+        <div class="title"><h2>{$_lang['tips']}</h2></div>
+        <div class="detail pad10">
+            <ul>
+                <li>{$_lang['open_pay_info']}</li>
+            </ul>
+        </div>
+	</div>
+<div class="box list">
+ <div class="title"><h2>{$_lang['line_pay_interface']}</h2></div>
+  <div class="detail">
+     <form action="" method="post">
+     	<input type="hidden" value="$do" name="do">
+		<input type="hidden" value="$view" name="view">
+      <table cellpadding="0" cellspacing="0">
+        <tbody>
+          <tr>
+            <th width="150">{$_lang['bank_name']}</th>
+            <th width="170">{$_lang['account']}</th>
+			<th width="170">{$_lang['username']}</th>
+            <th>{$_lang['contact_tel']}</th>
+            <th>{$_lang['application_status']}</th>
+            <th>{$_lang['operate']}</th>
+          </tr>
+		  <!--{loop $payment_list $v}-->
+			{if $v['type']=='offline'}
+			<!--{eval $pay_config=unserialize(stripslashes($v['config']))}-->
+              <tr class="item">
+                <td>{$bank_arr[$v['payment']]}</td>
+                <td>$pay_config['pay_account']</td>
+                <td>$pay_config['pay_user']</td>
+				<td>$pay_config['pay_phone']</td>
+                <td class="td25">{if $pay_config['pay_status']}{$_lang['open']}{else}{$_lang['close']}{/if}</td>
+                <td> 
+                {if $pay_config['pay_status']}
+					<a href="index.php?do=config&view=pay&op=disable&payname={$v['payment']}&ac=offline"  class="button"><span class="cross icon"></span>{$_lang['disable']}</a>
+				{else} 
+					<a href="index.php?do=config&view=pay&op=allow&payname={$v['payment']}&ac=offline" class="button" ><span class="check icon"></span>{$_lang['use']}</a>
+				{/if} 
+					<a href="index.php?do=config&view=pay&op=$op&ac=edit&payment={$v['payment']}" class="button"><span class="cog icon"></span>{$_lang['config']}</a>
+					<a href="index.php?do=config&view=pay&op=$op&ac=del&payment={$v['payment']}" onclick="return cdel(this);"  class="button"><span class="negative icon"></span>{$_lang['delete']}</a>
+				</td>
+               </tr>
+			{/if}
+          <!--{/loop}-->
+          </tbody>
+		  <tfoot>
+		  	 <tr class="item">
+                <td colspan="6" align="left">
+                	 <button class="positive primary pill button t_r" type="button" value={$_lang['add']} onclick="location.href='index.php?do=config&view=pay&op=$op&ac=add'"><span class="check icon"></span>{$_lang['add']}</button>
+				</td>
+			 </tr>
+		  </tfoot>
+         </table>
+       </form>
+     </div>   
+</div>
+{elseif $op=='config' || !isset($op)}
+<div class="box post">
+	<div class="tabcon">
+        	<div class="title"><h2>{$_lang['recharge_Ment_config']}</h2></div>
+            <div class="detail">
+                <form name="frm_config_pay" id="frm_config_pay" action="#" method="post">
+                    <table width="100%" border="0" cellspacing="0" cellpadding="0">
+                      <tr>
+                        <th scope="row" width="160">{$_lang['recharge_mini_money']}{$_lang['zh_mh']}</th>
+                        <td><input type="text"  name="fds[recharge_min]" id="txt_recharge_min" value="{$pay_config['recharge_min']['v']}" limit='type:float' title='{$_lang['recharge_mini_money']}{$pay_config['recharge_min']['v']}{$_lang['yuan']}' msg="{$_lang['recharge_big_money']}{$pay_config['recharge_min']['v']}{$_lang['yuan']}" msgArea="recharge_min_msg" class="txt" style=" width:260px;"/><span id="recharge_min_msg"></span>{$_lang['umit']}</td>
+                      </tr>
+                      <tr>
+                        <th scope="row">{$_lang['ment_mini_value']}{$_lang['zh_mh']}</th>
+                        <td><input type="text" name="fds[withdraw_min]" id="txt_withdraw_min" value="{$pay_config['withdraw_min']['v']}" limit="type:float" title="{$_lang['a_ment_mini_value']}{$pay_config['withdraw_min']['v']}{$_lang['yuan']}" msg="{$_lang['ment_big_money']}{$pay_config['withdraw_min']['v']}{$_lang['yuan']}" msgArea="withdraw_min_msg"  class="txt" style=" width:260px;"/><span id="withdraw_min_msg"></span>{$_lang['umit']}</td>
+                      </tr>
+                      <tr>
+                        <th scope="row">{$_lang['date_ment_hight']}{$_lang['zh_mh']}</th>
+                        <td><input type="text" name="fds[withdraw_max]" id="txt_withdraw_max"  value="{$pay_config['withdraw_max']['v']}" limit="type:int" title="{$_lang['day_ment_hight']}{$pay_config['withdraw_max']['v']}{$_lang['yuan']}，{$_lang['excess_not_ment']}" msg={$_lang['date_ment_big_zero']} msgArea="withdraw_max_msg" maxlength="10" class="txt" style=" width:260px;"/><span id="withdraw_max_msg"></span>{$_lang['umit']}</td>
+                      </tr>
+					  <tr>
+		                   <th scope="row">{$_lang['single_tariff']}{$_lang['zh_mh']}</th>
+			               <td>
+			                    <input type="text" name="fds[per_charge]" value="{$pay_config['per_charge']['v']}" class="txt" style=" width:260px;"/>
+								<div class="padt10 direct"><p>({$_lang['user_a_single_charge_ratio']} )</p></div>
+						   </td>
+					   </tr>
+						<tr>
+		                   <th scope="row">{$_lang['single_minimum_charge']}{$_lang['zh_mh']}</th>
+			               <td>
+			                    <input type="text" name="fds[per_low]" value="{$pay_config['per_low']['v']}" class="txt" style=" width:260px;"/>
+								<div class="padt10 direct"><p>({$_lang['user_single_charge_minimum_amount']})</p></div>
+						  </td>
+					   </tr>
+						<tr>
+		                   <th scope="row">{$_lang['single_highest_fees']}{$_lang['zh_mh']}</th>
+			               <td>
+			                    <input type="text" name="fds[per_high]" value="{$pay_config['per_high']['v']}" class="txt" style=" width:260px;"/>
+								<div class="padt10 direct"><p>({$_lang['user_single_charge_highest_amount']})</p></div>
+						  </td>
+					   </tr>
+					   <tr>
+                      <tr>
+                        <th scope="row">&nbsp;</th>
+                        <td>
+                            <div class="clearfix padt10">
+                                <button class="positive pill primary button" type="submit" onclick="return checkForm(document.getElementById('frm_config_pay'),false)"  name="sbt_edit" value="{$_lang['edit']}"><span class="check icon"></span>{$_lang['submit']}</button>
+                               
+                            </div>
+                        </td>
+                      </tr>
+                    </table>
+                    
+                </form>
+            </div>
+        </div>
+</div>
+{/if}
+
+<!--{template ADMIN_DIRECTORY/tpl/admin_footer}-->

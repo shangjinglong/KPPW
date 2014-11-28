@@ -1,0 +1,138 @@
+<!--{template ADMIN_DIRECTORY/tpl/admin_header}-->
+<div class="page_title">
+    	<h1>{$_lang['dns_manage']}</h1>
+        <div class="tool">         
+			
+            <a href="index.php?do={$do}&view=feed" {if $type == ''}class="here"{/if}>{$_lang['dns_list']}</a>
+		
+        </div>
+</div> 
+
+<form method="get" action="index.php" id="frm_search">
+	<input type="hidden" name="do" value="{$do}">
+	<input type="hidden" name="view" value="{$view}">
+	<input type="hidden" name="page" value="{$page}">
+	<input type="hidden" name="type" value="{$type}">
+	<div class="box search p_relative">
+    	<div class="title"><h2>{$_lang['search']}</h2></div>
+    	<div class="detail"  id="detail"> 
+    		<table cellspacing="0" cellpadding="0">    		
+				<tbody>
+					<tr>
+		                <th>{$_lang['tag_id']}</th>
+		                <td>
+		                  <input type="text" class="txt" size="12" name="txt_tag_id" value="{$txt_tag_id}" onkeyup="clearstr(this);">
+						</td>
+	                 
+		                <th>{$_lang['tag_name']}</th>
+		                <td>
+		                 <input type="text" class="txt" name="txt_tagname" id="txt_tagname" value="{$txt_tagname}">
+						 *{$_lang['search_by_like']}
+						 </td>
+	                </tr>
+					<tr>
+						<th>{$_lang['result_order']}</th>
+						<td>
+							<select name="ord[]">
+                        <option value="tag_id" {if $ord['0']=='tag_id' or !isset($ord['0'])} selected="selected"{/if}>{$_lang['default_id_sort']}</option>
+                        <option value="tagname" {if $ord['0']=='tagname' } selected="selected"{/if}>{$_lang['tag_names']}</option>
+						  
+                        </select>
+                        <select name="ord[]">
+                        <option {if $ord['1']=='desc' or !isset($ord['1'])}selected="selected" {/if} value="desc">{$_lang['desc']}</option>
+                        <option {if $ord['1']=='asc'}selected="selected" {/if} value="asc">{$_lang['asc']}</option>
+                        </select>
+						</td>
+						<th>{$_lang['list_result']}</th>
+						<td >
+						<select name="slt_page_size">
+                			<option value="10" {if $slt_page_size=='10'}selected="selected"{/if}>{$_lang['page_size']}10</option>
+                			<option value="20" {if $slt_page_size=='20'}selected="selected"{/if}>{$_lang['page_size']}20</option>
+                			<option value="30" {if $slt_page_size=='30'}selected="selected"{/if}>{$_lang['page_size']}30</option>
+            			</select>
+           				<button class="pill" type="submit" value={$_lang['search']} name="sbt_search">
+								<span class="icon magnifier">&nbsp;</span>{$_lang['search']}
+							</button>
+						</td>
+					</tr>          			
+           		</tbody>
+			</table>
+    	</div> 
+</div>
+
+
+<div class="box list">
+
+<div class="title"><h2>{$_lang['dns_tag_list']}</h2></div>
+    <div class="detail"> 	
+	
+	     <table width="100%" border="0" cellspacing="0" cellpadding="0"  >
+                <tr>
+                	<th>
+						<input type="checkbox" id="checkbox" onclick="checkall();" class="checkbox" >编号
+					</th>
+                    <th width="10%">
+                        {$_lang['tag_names']}
+                    </th>
+                    
+                    <th width="10%">
+                        {$_lang['page_call_code']}
+                    </th>
+                    <th  width="10%">
+                        {$_lang['js_call_code']}
+                    </th>
+                    <th width="15%">
+                        {$_lang['preview']}
+                    </th>
+                    <th width="15%">
+                        {$_lang['edit']}
+                    </th>
+                    <th width="15%">
+                        {$_lang['delete']}
+                    </th>
+                </tr>
+                {loop $feed_arr $key $value}
+				<!--{eval $code=unserialize($value['code']);}-->
+                <tr class="item">
+                	<td><input type="checkbox" name="ckb[]" class="checkbox" value="{$value['tag_id']}"> {$value['tag_id']}
+                	</td>
+                    
+                    <td>
+                        {$value['tagname']}
+                    </td>
+                  
+                    <td>
+                        <input type="text"  size="45" class="txt"  value="<!--{eval echo '<!--{loadfeed(\''.$code['load_num'].'\',\''.$code['feed_type'].'\',\''.$code['user_id'].'\',\''.$code['obj_id'].'\', \''.$value['tagname'].'\',\''.$code['cache_name'].'\',\''.$value['cache_time'].'\'}-';}-->->">
+                    </td>
+                    <td>
+                        <input type="text" size="45" class="txt"  value="<script src='{$_K['siteurl']}/js.php?op=tag&tag_id=$value['tag_id']'></script>">
+                    </td>
+                    <td>
+                        <a href="plu.php?do=previewtag&tag_id={$value['tag_id']}" target="_blank" class="button"><span class="book icon"></span>{$_lang['view']}</a>
+                    </td>
+                    <td>
+                        <a href="index.php?do=tpl&view=editfeed&tag_id=$value['tag_id']&type={$type}" class="button"><span class="pen icon"></span>{$_lang['edit']}</a>
+                    </td>
+                    <td>
+                        <a href="index.php?do=tpl&view=feed&op=del&delid=$value['tag_id']&type={$type}" onclick="return cdel(this)" class="button"> <span class="trash icon"></span>{$_lang['delete']}</a>
+                    </td>
+                </tr>
+				{/loop}
+                <tr>
+                    <td colspan="3" align="left">
+                        <label for="checkbox" onclick="checkall(event);">{$_lang['select_all']}</label>
+							<button type="submit" name="sbt_action" value={$_lang['mulit_delete']} class="button pill negative" onclick="return confirm({$_lang['comfirm_want_delete_select']})" >
+							<span class="trash icon"></span>{$_lang['mulit_delete']}
+							</button>
+							<a type="button" name="sbt_add" value={$_lang['create_tag']} class="pill positive button"  href='index.php?do={$do}&view=editfeed&type={$type}' >
+								<span class="check icon"></span>{$_lang['create_tag']}
+							</a>
+
+                   </td>
+
+                </tr>
+      </table>
+	  <div class="page">{$pages['page']}</div>
+</div> 
+</form>
+ <!--{template ADMIN_DIRECTORY/tpl/admin_footer}-->

@@ -1,0 +1,114 @@
+<!--{template user/header}-->
+<div class="container">
+  <div class="nav-action">
+		<!--{template user/left_side}-->
+  </div>
+  <!-- nav-action end -->
+  <div class="content-panel">
+      <div class="tab">
+       <a {if $op === 'basic'}class="selected"{/if} href="index.php?do=user&view=finance&op=basic">账户信息</a>
+       <a {if $op === 'details'}class="selected"{/if} href="index.php?do=user&view=finance&op=details">收支明细</a>
+       <a {if $op === 'rechargelog'}class="selected"{/if} href="index.php?do=user&view=finance&op=rechargelog">充值记录</a>
+       <a {if $op === 'withdrawlog'}class="selected"{/if} href="index.php?do=user&view=finance&op=withdrawlog">提现记录</a>
+      </div>
+      <div class="tab_detail">
+        <div class="well well-sm">
+      	 成功充值总金额:
+            <span class="cc00 mr_10">
+              {if $floatCountCashs['ok']['cash']}
+			   {c:$floatCountCashs['ok']['cash']}
+			  {else}0{/if}
+            </span>
+
+          待确认金额{$_lang['zh_mh']}
+            <span class="c690">
+               {if $floatCountCashs['wait']['cash']}
+			  {c:$floatCountCashs['wait']['cash']}
+			   {else}0{/if}
+            </span>
+        </div>
+    	 <div class="action-bar">
+    <form action="{$strUrl}" method="post" name="searchEventForm" id="searchEventForm">
+        <div class="action-item">
+        <input type="text" placeholder="请输入订单编号" class="form-control" name="intOrderId" id="intOrderId" value="{$intOrderId}">
+        </div>
+        <div class="action-item">
+           <select class=" form-control" name="strOrderType">
+            	<option value="" {if !$strOrderType}selected="selected"{/if}>{$_lang['all']}</option>
+                {loop $arrOrderType $k $v}<option value="{$k}" {if $strOrderType==$k}selected="selected"{/if}>{$v} </option>
+                {/loop}
+            </select>
+        </div>
+		<div class="action-item">
+          <select class="form-control" name="strOrder">
+                {loop $arrOrder $k $v}
+					<option value="$k" {if $k==$strOrder}selected="selected"{/if}>{$v} </option>
+                {/loop}
+            </select>
+        </div>
+		<div class="action-item">
+            <select class="form-control" name="intPagesize">
+                <option value="10" {if $intPagesize=='10'}selected="selected"{/if}>{$_lang['page_size']}10{$_lang['tiao']}</option>
+                <option value="20" {if $intPagesize=='20'}selected="selected"{/if}>{$_lang['page_size']}20{$_lang['tiao']}</option>
+                <option value="30" {if $intPagesize=='30'}selected="selected"{/if}>{$_lang['page_size']}30{$_lang['tiao']}</option>
+            </select>
+        </div>
+        <div role="toolbar" class="action-item btn-toolbar">
+          <div class="btn-group">
+            <button class="btn btn-default" type="submit">搜索</button>
+          </div>
+        </div>
+      </form>
+      </div>
+      <div class="table-responsive">
+        <table class="table table-hover">
+        <thead>
+          <tr>
+            <th> 编号</th>
+			<th>订单类型</th>
+            <th>收款类型</th>
+			<th>充值金额</th>
+			<th>充值状态</th>
+            <th>充值时间</th>
+          </tr>
+        </thead>
+        <tbody>
+        	{loop $arrChargeLists $k $v}
+          <tr>
+            <td>
+                 $v['order_id']
+            </td>
+
+            <td> $arrOrderType[$v['order_type']]</td>
+			<td >	{if $v['order_type']=='online_charge'}
+                       		$v['pay_type']
+						{else}
+							$arrBank[$v['pay_type']]
+						{/if}
+			</td>
+			<td> <b class="money">{c:$v['pay_money']}</b></td>
+            <td>$arrStatus[$v['order_status']]</td>
+			<td>
+                <!--{date('Y-m-d H:i:s',$v['pay_time'])}-->
+            </td>
+          </tr>
+		  {/loop}
+
+        </tbody>
+      </table>
+      </div>
+
+      <div class="clearfix">
+
+      <ul class="pagination pagination-sm pull-right">
+        {$strPages['page']}
+      </ul>
+      </div>
+
+    </div>
+  </div>
+  </div>
+
+<script src="static/js/model/user/finance.js"></script>
+
+<!--{template user/footer}-->

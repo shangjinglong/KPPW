@@ -1,0 +1,164 @@
+
+  <ul class="nav nav-pills second-nav">
+    <li {if !$st&&!$ut}class="active"{/if}><a href="{$strUrl}&view=work#detail">所有的</a></li>
+    <li {if $ut=='noview'}class="active"{/if}><a href="{$strUrl}&view=work&ut=noview#detail">未浏览的</a></li>
+    <li {if $st==6}class="active"{/if}><a href="{$strUrl}&view=work&st=6#detail">中标的</a></li>
+    <li {if $st==7}class="active"{/if}><a href="{$strUrl}&view=work&st=7#detail">淘汰的</a></li>
+    <li {if $ut=='my'}class="active"{/if}><a href="{$strUrl}&view=work&ut=my#detail">我的</a></li>
+  </ul>
+  <!-- second-nav end -->
+
+  <div class="manuscripts">
+  	<div  id="gj_summery">
+  	<input type="hidden" value="{if $page}{$page}{else}1{/if}" id="worklist-curpage">
+  	{if $arrWorkInfo}
+	{loop $arrWorkInfo $k $v}
+    <div id="{$v['work_id']}" class="manuscript-item" >
+      <div class="manuscript-status">
+      	 {if $v['work_status']}
+		      <div class="status-item status-{$arrWorkFlag[$v['work_status']]['id']}">
+		      		<i class="fa {$arrWorkFlag[$v['work_status']]['style']}"></i> {$arrWorkFlag[$v['work_status']]['name']}
+		      </div>
+		      {/if}
+      </div>
+
+      <div class="manuscript-item-pic">
+        <a href="index.php?do=seller&id=$v['uid']" title="$v['username']"><!--{userpic($v['uid'],'larger')}--></a>
+        <a href="index.php?do=seller&id=$v['uid']" class="btn btn-default btn-xs btn-block">进入店铺</a>
+		{if $gUid!=$v['uid']}
+        <a href="javascript:sendMessage({$v['uid']});void(0);" class="btn btn-default btn-xs btn-block">联系我</a>
+		{/if}
+		{if $v['workhide']!=1||$gUid==$arrTaskInfo['uid']||$gUid==$v['uid']||$v['work_status']!=8}
+		<a href="index.php?do=taskhandle&op=workinfo&taskId={$v['task_id']}&workId=$v['work_id']" class="btn btn-default btn-xs btn-block" target="_blank">稿件详情</a>
+       {/if}
+	  </div>
+      <div class="manuscript-item-content">
+        <div class="manuscript-item-body">
+          <h2 class="manuscript-item-title">
+            <i class="fa fa-user"></i> 投稿人:
+            <a href="index.php?do=seller&id=$v['uid']" title="$v['username']">$v['username']</a>
+			<!--{eval $arrUserLeve=unserialize($v[seller_level])}-->
+            {$arrUserLeve['pic']}
+          </h2>
+		  {if $v['work_status']==8||($v['workhide']==1&&$gUid!=$arrTaskInfo['uid']&&$gUid!=$v['uid'])}
+		      	<div class="no-data">
+				<p class="lead text-warning"><i class="fa fa-ban fa-2x"></i> 您无权查看 ！</p>
+				</div>
+		{else}
+			{if $v['work_pic']}
+				<!--{eval $pic = explode(',',$v['work_pic']);}-->
+	          <div class="manuscript-img">
+	          	{loop $pic $vc}
+
+	            <a href="{$vc}" class="manuscript-img-item" rel="manuscript-img-group"><img src="{$vc}" alt=""></a>
+				{/loop}
+	          </div>
+			{/if}
+					{if !empty($v['attachment'])}  附件：
+			          <div class="manuscript-img">
+			          	{loop $v['attachment'] $vfile}
+			          	<a href="{$vfile['save_name']}" class="manuscript-img-item" rel="manuscript-img-group">{$vfile['file_name']}</a>&nbsp;
+						{/loop}
+			          </div>
+					{/if}
+          <div class="manuscript-desc">
+            <!--{eval echo htmlspecialchars_decode($v['work_desc'])}-->
+          </div>
+
+          <div class="manuscript-ctrl">
+          	 {if $arrProcess_can['work_choose']}
+            {if !in_array($v['work_status'],array('6','7','8'))}<a href="javascript:chooseWork('{$v[work_id]}','6',this);void(0);"  class="btn btn-success btn-sm"><i class="fa fa-check-circle"></i> 设为合格</a>{/if}
+            {if !in_array($v['work_status'],array('6','7','8'))} <a href="javascript:chooseWork('{$v[work_id]}','7',this);void(0);"  class="btn btn-default btn-sm"><i class="fa fa-times-circle"></i> 设为淘汰</a>{/if}
+            {/if}
+			{if !$arrMark[$v[work_id]]||($arrMark[$v[work_id]][mark_status]!=1&&$arrMark[$v[work_id]][mark_count]<2)}
+          	 	{if $arrProcess_can['work_mark']&&$v['work_status']=='6'&&$uid==$arrTaskInfo['uid']} <a href="javascript:mark(2,'{$v[work_id]}','{$id}');void(0);"  class="btn btn-success btn-sm" >{if $arrMark[$v[work_id]][mark_status]}修改评价{else}稿件评价{/if}</a></span>{/if}
+				{if $arrProcess_can['task_mark']&&$v['work_status']=='6'&&$uid==$v['uid']} <a href="javascript:mark(1,'{$v[work_id]}','{$id}');void(0);"  class="btn btn-success btn-sm" >{if $arrMark[$v[work_id]][mark_status]}修改评价{else}评价雇主{/if}</a></span>{/if}
+				{/if}
+          </div>
+
+
+           <div class="manuscript-comment" >
+           	<div id="div_comment{$v['work_id']}">
+            {if $gUid == $arrTaskInfo['uid']||$v['comment']}<h2 class="manuscript-item-title">稿件点评</h2>{/if}
+			{loop $v['comment'] $v1}
+            <dl class="manuscript-comment-item">
+              <dt class="manuscript-comment-item-title"><a href="index.php?">$v1['username']</a> 于<!--{eval echo date('Y-m-d',$v1['on_time'])}-->
+			  <!--{eval $h = date('H',$v1['on_time'])}-->
+			  {if $h>0&&$h<12}上午{elseif $h>=12&&$h<19}下午{else}晚上{/if}<!--{eval echo date('h:i:s',$v1['on_time'])}-->点评:</dt>
+              <dd class="manuscript-comment-item-body">
+                $v1['content']
+              </dd>
+            </dl>
+			{/loop}
+			</div>
+			{if $gUid == $arrTaskInfo['uid']}
+		    <div class="manuscript-comment-post">
+              <div class="form-group">
+                <textarea class="form-control" rows="3" name="strTarComment" id="strTarComment{$v['work_id']}" placeholder="点评不得超过100字"></textarea>
+              </div>
+              <div class="form-group">
+                <button type="button" onclick="workComment('{$v[task_id]}','{$v[work_id]}');"  class="btn btn-default btn-sm"><i class="fa fa-comment"></i> 点评稿件</button>
+				<span class="text-success" id="tipsUser"></span>
+              </div>
+            </div>
+            {/if}
+            <!-- manuscript-comment-post end -->
+          </div>
+{/if}
+        </div>
+        <div class="manuscript-item-footer">
+          <ul class="manuscript-meta">
+            <li class="manuscript-meta-item">编号 #{$v[work_id]} </li>
+            <li class="manuscript-meta-item">投稿时间：<!--{date('Y-m-d H:i:s',$v[work_time])}--></li>
+            <li class="manuscript-meta-item">
+            	<span class="marked marked-see">
+            	{if $v['is_view']||$uid==$task_info['uid']}
+					雇主已浏览
+				{else}
+					雇主未浏览
+				{/if}
+				</span>
+			</li>
+        	{if  $arrProcess_can['work_report']&&$gUid!=$v['uid']&&$v['work_status']!=6&&$v['work_status']!=7&&$gUid}
+	            <li class="manuscript-meta-item">
+	            	<a href="javascript:report(2,'work','{$v[uid]}','{$arrTaskInfo[task_id]}','{$v[work_id]}');void(0);"  class="action-report">
+	            		<i class="fa fa-bell"></i> 举报
+	            	</a>
+	            </li>
+	            {/if}
+          </ul>
+		   {if $gUid!=$v['uid']}
+          <ul class="manuscript-meta for-user">
+          	<li class="manuscript-meta-item"  >
+          	{if $v['favorite']}
+
+          		<a id="favorite{$v['work_id']}" href="javascript:cancelFavorite('work',{$v['work_id']});" title="取消收藏" class="action-collect on"><i class="fa fa-star"></i></a>
+			{else}
+            	<a id="favorite{$v['work_id']}" href="javascript:addFavorite('work',{$v['work_id']});" title="收藏" class="action-collect"><i class="fa fa-star"></i> </a>
+
+			{/if}
+			</li>
+          </ul>
+		  {/if}
+        </div>
+      </div>
+      <!-- manuscript-item-content end -->
+    </div>
+	{/loop}
+	{/if}
+    <!-- manuscript-item end-->
+
+
+  <div class="list-page">
+    <div class="page-tips pull-left">
+      显示 {$strPages['st']}~{$strPages['en']} 项 共 {$arrWorkArrs['count']} 个投稿
+    </div>
+    <ul class="pagination pagination-sm pull-right">
+        {$strPages[page]}
+    </ul>
+  </div>
+
+  </div>
+  </div>
+  <!-- list-page end -->
+

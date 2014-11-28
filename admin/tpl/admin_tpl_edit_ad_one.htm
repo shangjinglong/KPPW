@@ -1,0 +1,81 @@
+<!--{template ADMIN_DIRECTORY/tpl/admin_header}-->
+<div class="page_title">
+    	<h1>{$_lang['a_ad']}{if $ad_id}{$_lang['edit']}{else}{$_lang['add']}{/if}</h1>
+        <div class="tool">
+        	 <a href="?do={$do}&view=ad&order_type={$order_type}">{$_lang['a_ad_manage']}</a>
+        	<a href="?do={$do}&view=edit_ad&order_type={$order_type}&ad_id={$ad_id}" class="here">{$_lang['a_ad']}{if $ad_id}{$_lang['edit']}{else}{$_lang['add']}{/if}</a>
+    	</div>
+    </div>
+<div class="box post">
+	 <div class="tabcon">
+        	<div class="title"><h2>{$_lang['a_ad']}{if $ad_id}{$_lang['edit']}{else}{$_lang['add']}{/if}</h2></div>
+            <div class="detail">
+                <form action="index.php?do={$do}&view={$view}&order_type={$order_type}" method="post" enctype="multipart/form-data">
+                	<input type="hidden" name="hdn_ad_id" value="{$ad_id}">
+                    <table width="100%" border="0" cellspacing="0" cellpadding="0">
+                      <tr>
+                        <th scope="row" width="130">{$_lang['ad_name']}</th>
+                        <td>
+                        	<input type="text" value="{$ad_info['ad_name']}" {if $ad_info['ad_name']}readonly="readonly"{/if} name="fds[ad_name]" class="txt" style=" width:260px;"/>
+							  <div class="padt10 direct">
+                           	 	<p>({$_lang['ad_group_add_not_edit']})</p>
+                      		  </div>
+                        </td>
+                      </tr>
+					  <tr>
+                        <th scope="row" width="130">{$_lang['ad_link_url']}</th>
+                        <td>
+                        	<input type="text" value="{$ad_info['ad_url']}" name="fds[ad_url]" class="txt" style=" width:260px;"/>
+                        </td>
+                      </tr>
+
+					  <tr>
+                        <th scope="row" width="130">{$_lang['upload_file']}</th>
+                        <td>
+                        	 <input type="file" class="input_t" name="fle_ad_file" maxlength="100" class="txt"/><br>
+                   			 {if $ad_info['ad_file']}<a href="{$_K['siteurl']}/$ad_info['ad_file']" target="_blank">{$_lang['click_view']}</a>{/if}
+                        </td>
+                      </tr>
+					  <tr>
+                        <th scope="row" width="130">{$_lang['width']}</th>
+                        <td>
+                        	<input type="text" value="{$ad_info['width']}" name="fds[width]" class="txt" style=" width:260px;"/>
+                        </td>
+                      </tr>
+					  <tr>
+                     	 <th scope="row" width="130">{$_lang['height']}</th>
+                        <td>
+                        	<input type="text" value="{$ad_info['height']}" name="fds[height]" class="txt" style=" width:260px;"/>
+                        </td>
+                      </tr>
+					  <tr>
+                        <th scope="row">{$_lang['ad_content']}</th>
+                        <td>
+                        	<textarea style="width:260px;" name="fds[ad_content]" cols="50" rows="6">{$ad_info['ad_content']}</textarea>
+							  <div class="padt10 direct">
+                           	 	<p>({$_lang['text_ad_enter']})</p>
+                      		  </div>
+						</td>
+                      </tr>
+					   <tr>
+                     	 <th scope="row" width="130">{lang:order}</th>
+                        <td>
+                        	<input type="text" value="{$ad_info['listorder']}" onkeyup="clearstr(this)" name="fds[listorder]" class="txt" style=" width:260px;"/>
+                        </td>
+                      </tr>
+					  <tr>
+
+                      <tr>
+                        <th scope="row">&nbsp;</th>
+                        <td>
+                            <div class="clearfix padt10">
+                                <button class="positive primary pill button" type="submit" value="{$_lang['a_ad']}{if $ad_id}{$_lang['edit']}{else}{$_lang['add']}{/if}" name="sbt_edit"><span class="icon post"></span>{$_lang['a_ad']}{if $ad_id}{$_lang['edit']}{else}{$_lang['add']}{/if}</button>
+                            </div>
+                        </td>
+                      </tr>
+                    </table>
+                </form>
+            </div>
+        </div>
+    </div>
+<!--{template ADMIN_DIRECTORY/tpl/admin_footer}-->

@@ -1,0 +1,82 @@
+<!--{template header}-->
+<div  class="container">
+  <div id="main">
+      <div class="buy-user-info">
+      <div class="media">
+        <div class="avatar">
+          <!--{userpic($arrTaskInfo['uid'],'middle')}-->
+        </div>
+        <div class="media-body">
+          <strong class="meida-heading"> <span class="money"><sub>￥</sub>{$arrTaskInfo['task_cash']}</span> {$arrTaskInfo['task_title']}</strong>
+          <ul class="user-meta">
+            <li>{$arrModelInfo['model_name']}模式</li>
+            <li>
+              <i class="fa fa-money"></i>已支付网站服务费用：￥{$arrTaskInfo['real_cash']}
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+<div class="turnaround">
+    <h2 class="min-title">
+      托管赏金
+    </h2>
+    <div class="turnaround-body">
+      <div class="col-xs-8">
+
+        <form role="form" class="turnaround-form"
+		    action="index.php?do=taskhandle&op=consign&taskId={$taskId}" method="post"
+        	id = "editConsignForm" name = "editConsignForm"
+        	enctype="application/x-www-form-urlencoded">
+          <input type="hidden" name="formhash" id="formhash" value="{FORMHASH}">
+		  
+          <div class="form-group">
+            <label for="exampleInputPrice1">总共需要托管</label>
+            <div class="input-group">
+              <span class="input-group-addon">$arrBidInfo['quote']</span>
+            </div>
+          </div>
+		   <div class="form-group">
+            <label for="exampleInputPrice2">已经托管</label>
+            <div class="input-group">
+              <span class="input-group-addon">￥$arrTaskInfo['real_cash']</span>
+            </div>
+          </div>
+		<div class="form-group">
+            <label for="exampleInputPrice3">还需要托管</label>
+            <div class="input-group">
+              <span class="input-group-addon">￥$cash</span>
+            </div>
+          </div>
+
+          <div class="text-center">
+            <a href="javascript:history.back();">返回</a>
+            <button type="submit" class="btn btn-default">立即托管</button>
+			<span class="text-success" id="tipsUser"></span>
+          </div>
+        </form>
+      </div>
+
+    </div>
+  </div>
+    </div>
+  </div>
+
+<script type="text/javascript">
+$(function(){
+//基本资料
+	$('#editConsignForm').scojs_valid({
+	    wrapper:'.form-group'
+	    ,onSuccess: function(response, validator, form) {
+	    	  tipsUser(response.data,response.status);
+	    	  if(response.url){
+					window.location.href=response.url;
+	    	  }
+	    }
+	});
+	
+});
+
+
+</script>
+<!--{template footer}-->

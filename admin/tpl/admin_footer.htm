@@ -1,0 +1,114 @@
+
+
+</div>
+<script type="text/javascript" src="../lang/$language/script/lang.js"></script>
+<script type="text/javascript" src="../static/js/xheditor/xheditor.js"></script>
+<script type="text/javascript" src="tpl/js/form_and_validation.js"></script>
+<script type="text/javascript" src="tpl/js/script_calendar.js"></script>
+<script type="text/javascript" src="tpl/js/artdialog/artDialog.js"></script>
+<script type="text/javascript" src="tpl/js/artdialog/jquery.artDialog.js?skin=default"></script>
+<script type="text/javascript" src="tpl/js/artdialog/artDialog.iframeTools.source.js"></script>
+<script type="text/javascript" src="tpl/js/jquery.mousewheel.min.js"></script>
+<script type="text/javascript" src="tpl/js/styleswitch.js"></script>
+<script type="text/javascript" src="tpl/js/table.js"></script>
+<script type="text/javascript">
+	function cdel(o, s) {
+		d = art.dialog;
+		var c = "{$_lang['you_comfirm_delete_operate']}";
+		if (s) {
+			c = s;
+		}
+		d.confirm(c, function() {
+			window.location.href = o.href;
+		});
+		return false;
+	}
+	function cpass(o, s, type) {
+		d = art.dialog;
+		if (type == 1) {
+			var c = "确认审核通过？";
+		} else {
+			var c = "确认审核失败？";
+		}
+		if (s) {
+			c = s;
+		}
+		d.confirm(c, function() {
+			window.location.href = o.href;
+		});
+		return false;
+	}
+	function cfreeze(o, s, type) {
+		d = art.dialog;
+		if (type == 1) {
+			var c = "确认冻结？";
+		}
+		if (s) {
+			c = s;
+		}
+		d.confirm(c, function() {
+			window.location.href = o.href;
+		});
+		return false;
+	}
+	function crecomm(o, s, type) {
+		d = art.dialog;
+		if (type == 1) {
+			var c = "确认推荐？";
+		} else {
+			var c = "确认取消推荐？";
+		}
+		if (s) {
+			c = s;
+		}
+		d.confirm(c, function() {
+			window.location.href = o.href;
+		});
+		return false;
+	}
+	function pdel(frm) {
+		d = art.dialog;
+		var frm = frm;
+		var c = "{$_lang['you_comfirm_delete_operate']}";
+		d.confirm(c, function() {
+			$("#" + frm).submit();
+		});
+		return false;
+	}
+	function fdel(frm) {
+		d = art.dialog;
+		var frm = frm;
+		var c = "{$_lang['you_comfirm_delete_operate']}";
+		d.confirm(c, function() {
+			$("#" + frm).submit();
+		});
+		return false;
+	}
+	function batch_act(obj, frm) {
+		d = art.dialog;
+		var frm = frm;
+		var c = $(obj).val();
+		var conf = $(":checkbox[name='ckb[]']:checked").length;
+		if (conf > 0) {
+			d.confirm("{$_lang['confirm']}" + c + '?', function() {
+				$(".sbt_action").val(c);
+				$("#" + frm).submit();
+			});
+		} else {
+			d.alert("{$_lang['has_none_being_choose']}");
+		}
+		return false;
+	}
+</script>
+{if KEKE_DEBUG}
+<div
+	style="background-color: red; color: #fff; width: 400px; text-align: center;">
+	querys:
+	<!--{eval echo db_factory::create()->get_query_num()}-->
+	&nbsp; times:
+	<!--{eval echo kekezu::execute_time()}-->
+</div>
+
+{/if}
+</body>
+</html>

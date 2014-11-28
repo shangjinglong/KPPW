@@ -1,0 +1,107 @@
+<!--{template ADMIN_DIRECTORY/tpl/admin_header}-->
+ <div class="page_title">
+    	<h1>{$_lang['witkey_goods']}</h1>
+        <div class="tool">
+		   {loop $ops $v}
+				<a href="index.php?do=$do&model_id={$model_id}&view=edit&service_id={$service_id}&op={$v}" class="{if $op==$v}here{/if}">{$_lang['b_shop_'.$v]}</a>
+       		{/loop}
+        </div>
+</div>
+<!--页头结束-->
+
+<div class="box post">
+    <div class="tabcon">
+        	<div class="title"><h2>{$_lang['edit_witkey_goods']}</h2></div>
+            <div class="detail">
+                <form method="post" action="index.php?do=model&view=edit&model_id=6" id="frm_art_edit" enctype="multipart/form-data">
+                     <input type="hidden" name="pk[service_id]" value="{$service_id}">
+                    <table width="100%" border="0" cellspacing="0" cellpadding="0">
+						<tr>
+							<th scope="row" width="130">{$_lang['shopkeeper']}{$_lang['zh_mh']}</th>
+							<td>
+								{$username}
+							</td>
+						</tr>
+                      <tr>
+                        <th scope="row" width="130">{$_lang['goods_name']}{$_lang['zh_mh']}</th>
+                        <td>
+	                         <input type="text" class="txt" name="fds[title]" value="$title" size="50" limit="required:true" msg="{$_lang['goods_name_is_null']}" tips="{$_lang['please_input_goods_name']}" msgArea="title_msg">
+							 &nbsp;&nbsp;&nbsp;
+                        </td>
+                      </tr>
+					  <tr>
+                        <th scope="row">{$_lang['goods_quotation']}{$_lang['zh_mh']}</th>
+                        <td>
+                        	<input type="text" class="txt" name="fds[price]" id="txt_price" size="5" value="{$price}" limit="type:float;required:true" msg="{$_lang['goods_single_price_input_error']}" title="{$_lang['goods_single_price_allow_decimal']}"  msgArea="price_msg"/>
+                        	{$_lang['yuan']}<span id="price_msg"></span>
+						</td>
+                      </tr>
+					  <tr>
+					  	<th scope="row" >{$_lang['goods_status']}{$_lang['zh_mh']}</th>
+						<td>
+							<select name="fds[service_status]" id="slt_service_status">
+								{loop $goods_status_arr $k $v}
+									<option {if $service_status==$k}selected=selected{/if} value="{$k}">{$v}</option>
+								{/loop}
+							</select>
+						</td>
+					  </tr>
+					<tr>
+                        <th scope="row">{$_lang['pub_time']}{$_lang['zh_mh']}</th>
+                        <td><!--{date('Y-m-d H:i:s',$on_time)}--></td>
+                    </tr>
+
+					<tr>
+                        <th scope="row">{$_lang['goods_desc']}:</th>
+                        <td>
+
+							<textarea name="fds[content]" rows="15" cols="100" class="xheditor {urlBase:'$_K['siteurl']/',tools:'simple',admin:'../',html5Upload:false,emotMark:false,upImgUrl:'../index.php?do=ajax&view=upload&filename=filedata'}" >$content</textarea>
+
+						</td>
+					  </tr>
+					  <tr>
+                        <th scope="row">SEO{$_lang['title']}{$_lang['zh_mh']}</th>
+                        <td><textarea cols="70" rows="2"  name="fds[seo_title]" value="{$seo_title}">{$seo_title}</textarea></td>
+                     </tr>
+
+                     <tr>
+                        <th scope="row">SEO{$_lang['keywords']}{$_lang['zh_mh']}</th>
+                        <td><textarea cols="70" rows="2"  name="fds[seo_keyword]" value="{$seo_keyword}">{$seo_keyword}</textarea></td>
+                     </tr>
+
+                      <tr>
+                        <th scope="row">SEO{$_lang['description']}{$_lang['zh_mh']}</th>
+                        <td><textarea cols="70" rows="3" name="fds[seo_desc]" value="{$seo_desc}">{$seo_desc}</textarea></td>
+                     </tr>
+
+                    <tr>
+                        <th scope="row">&nbsp;</th>
+                    	<td>
+                    	<button name="sbt_edit" value="1" class="positive primary  button" type="submit">
+                    	<span class="check icon"></span>{$_lang['submit']}</button>
+                    	<button type="reset"  name="rst_edit" class="button" onclick="javascript:history.go(-1)"  /><span class="uparrow icon"></span>{$_lang['return']}</button>
+                    	</td>
+                    </tr>
+                    </table>
+                </form>
+              </div>
+       </div>
+</div>
+<!--主体结束-->
+<script type="text/javascript">
+	function showIndus(indus_pid){
+		var service_id = parseInt($service_id)+0;
+		if(indus_pid){
+			$.post('index.php?do=model&model_id=6&view=edit&service_id='+service_id, {ajax:"show_indus",indus_pid: indus_pid}, function(html){
+				var str_data = html;
+				if (trim(str_data) == '') {
+					$("#indus_id").html("<option value='-1'> {$_lang['please_choose_son_industry']} </option>");
+				}
+				else {
+					$("#indus_id").html(str_data);
+				}
+			},'text');
+		}
+	}
+</script>
+<!--{template ADMIN_DIRECTORY/tpl/admin_footer}-->

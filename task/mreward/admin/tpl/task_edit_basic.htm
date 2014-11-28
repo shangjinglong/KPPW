@@ -1,0 +1,141 @@
+<!--{template ADMIN_DIRECTORY/tpl/admin_header}-->
+ <div class="page_title">
+    	<h1>{$model_info['model_name']}{$_lang['manage']}</h1>
+
+</div>
+<!--页头结束-->
+<div class="box post">
+    <div class="tabcon">
+        	<div class="title"><h2>{if $task_id}{$_lang['edit']}{else}{$_lang['add']}{/if}{$model_info['model_name']}{$_lang['task']}</h2></div>
+            <div class="detail">
+                <form method="post" action="index.php?do=$do&model_id={$model_id}&view=edit&task_id={$task_id}" id="frm_art_edit" name="frm_art_edit" enctype="multipart/form-data">
+                <input type="hidden" name="task_id" value="$task_info[task_id]">
+                    <table width="100%" border="0" cellspacing="0" cellpadding="0">
+                    	<tr>
+                      		<th colspan="2">
+                      			该任务于<span style="color:red"><!--{eval echo date('Y-m-d  H:i:s',$task_info[start_time])}--></span>发布，目前状态为：<span style="color:red">{$status_arr[$task_info['task_status']]}</span>
+                      		</th>
+                      	</tr>
+						<tr>
+                      		<th >
+                      			任务可进行如下操作:
+                      		</th>
+							<td>
+								{if $process_arr}
+								{loop $process_arr $k $v}
+								<button type="submit" name="sbt_act" class="positive primary button"  value="{$k}" onclick="return confirm('{$_lang['confirm']}{$v}?')"><span class="lock icon"></span>{$v}</button>
+							{/loop}
+							{else}
+							无
+							{/if}
+							</td>
+                      	</tr>
+						<tr>
+							<th colspan="2">
+								{loop $ops $v}
+							    <a href="index.php?do=$do&model_id={$model_id}&view=edit&task_id={$task_id}&op={$v}" class="button {if $op==$v}here{/if}">{$_lang['b_task_'.$v]}</a>
+       		                   {/loop}
+							</th>
+						</tr>
+                      <tr>
+                        <th scope="row" width="130">{$_lang['task_title']}{$_lang['zh_mh']}</th>
+                        <td>
+	                         <input type="text" class="txt" name="task_title" value="$task_info[task_title]" size="80" id="task_title" msgArea="span_task_title"
+							 limit="required:true;len:5-50" msg="{$_lang['title_is_not_null']}" title="{$_lang['title_is_not_null']}"><span id="span_task_title"></span>
+							&nbsp;&nbsp;&nbsp;
+						</td>
+                      </tr>
+                      <tr>
+                        <th scope="row">{$_lang['pub_name']}{$_lang['zh_mh']}</th>
+                        <td><b>{$task_info[username]}</b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+							<b>{$_lang['mobile']}：{$task_info['contact']}</b></td>
+					  </tr>
+					   <tr>
+                        <th scope="row">
+                        	{if $task_info[task_status]==1||$task_info['task_status']==0}
+							发布时间
+							{else}
+							开始时间
+							{/if}{$_lang['zh_mh']}</th>
+                        <td><!--{date('Y-m-d H:i:s',$task_info['start_time'])}-->&nbsp;&nbsp;</td>
+					  </tr>
+					    <tr>
+                        <th scope="row">投稿截止时间{$_lang['zh_mh']}</th>
+                        <td>
+							 <input name="txt_task_day"   onclick="showcalendar(event, this, 0)" size="30" value="{$task_sub_time}" type="text" id="txt_task_day"   msgArea="span_task_day" onkeyup="clearstr(this)"
+			   	limit="required:true;type:date" msg="{$_lang['task_round_msg']}" max=""/>
+
+				 <span id="span_task_day" class="ml_5"></span>
+						</td>
+						 </tr>
+                      <tr>
+                        <th scope="row">{$_lang['task_status']}{$_lang['zh_mh']}</th>
+                        <td>{$status_arr[$task_info[task_status]]}</td>
+                      </tr>
+                      <tr>
+                        <th scope="row">{$_lang['industry']}{$_lang['zh_mh']}</th>
+                        <td> <select name="slt_indus_id">
+					        	<option value="0">{$_lang['top']}</option>
+								{loop $indus_option_arr $v}
+								 $v
+								{/loop}
+							</select>　
+                        </td>
+                      </tr>
+
+                     <tr>
+                        <th scope="row">{$_lang['task_attchment']}{$_lang['zh_mh']}</th>
+					    <td>
+					    	{if $file_list}
+					        	{loop $file_list $file}
+					    			<a target="_blank" href="../{$file[save_name]}">{$file[file_name]}</a>&nbsp;&nbsp;&nbsp;
+					    		{/loop}
+							{else}{$_lang['no_attachment']}{/if}
+					   </td>
+					</tr>
+					<tr>
+                        <th scope="row">{$_lang['task_cash']}{$_lang['zh_mh']}</th>
+                        <td>
+						<span>{$task_info[task_cash]}元</span>
+						</td>
+                    </tr>
+					 <tr>
+                        <th scope="row">{$_lang['task_description']}{$_lang['zh_mh']}</th>
+                        <td>
+                         <textarea rows="18" name="task_desc" style="width:75%;" id="tar_content"  class="xheditor {urlBase:'$_K[siteurl]/',tools:'mfull',admin:'../',html5Upload:false,upImgUrl:'../index.php?do=ajax&view=upload&filename=filedata'}" cols="70">{$task_info[task_desc]}</textarea>
+						</td>
+					</tr>
+					<tr>
+                        <th scope="row">SEO{$_lang['title']}{$_lang['zh_mh']}</th>
+                        <td><textarea cols="70" rows="2"  name="fields[seo_title]" value="{$task_info['seo_title']}">{$task_info['seo_title']}</textarea></td>
+                     </tr>
+
+                     <tr>
+                        <th scope="row">SEO{$_lang['keywords']}{$_lang['zh_mh']}</th>
+                        <td><textarea cols="70" rows="2"  name="fields[seo_keyword]" value="{$task_info['seo_keyword']}">{$task_info['seo_keyword']}</textarea></td>
+                     </tr>
+
+                      <tr>
+                        <th scope="row">SEO{$_lang['description']}{$_lang['zh_mh']}</th>
+                        <td><textarea cols="70" rows="3" name="fields[seo_desc]" value="{$task_info['seo_desc']}">{$task_info['seo_desc']}</textarea></td>
+                     </tr>
+                    <tr>
+                        <th scope="row">&nbsp;</th>
+                    	<td>
+                    	<button name="sbt_edit" value="1" class="positive primary  button" type="submit" onclick="return checkForm(document.getElementById('frm_art_edit'))">
+                    		<span class="check icon"></span>{$_lang['submit']}</button>
+
+
+                    	</td>
+                    </tr>
+                    </table>
+                </form>
+              </div>
+       </div>
+</div>
+<!--主体结束-->
+
+
+
+
+<!--{template ADMIN_DIRECTORY/tpl/admin_footer}-->

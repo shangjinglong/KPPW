@@ -1,0 +1,47 @@
+<div class="buy-body">
+			<p class="lead text-center text-info mt_20"><i class="fa fa-info-circle"></i> 请核对订单，并支付！</p>
+
+			<div class="table-responsive">
+	          <table class="table table-hover">
+	            <thead>
+	              <tr>
+	                <th>编号</th>
+	                <th>您需要的商品</th>
+	                <th>类型</th>
+	                <th>支付金额</th>
+	              </tr>
+	            </thead>
+	            <tbody>
+	              <tr>
+	                <td>#{$arrOrderInfo['order_id']}</td>
+	                <td>{$arrOrderInfo['order_name']} </td>
+	                <td>商品</td>
+	                <td><span class="money"><sub>￥</sub>{$arrOrderInfo['order_amount']}</span></td>
+	              </tr>
+	            </tbody>
+	            <tfoot>
+	              <tr class="warning">
+	                <td>&nbsp;</td>
+	                <td>&nbsp;</td>
+	                <td class="text-right">合计</td>
+	                <td><strong class="money"><sub>￥</sub>{$arrOrderInfo['order_amount']}</strong></td>
+	              </tr>
+	              <tr>
+	                <td>&nbsp;</td>
+	                <td>&nbsp;</td>
+	                <td class="text-right">账户余额</td>
+	                <td><strong class="money"><sub>￥</sub><!--{eval echo number_format($gUserInfo['balance'], 2);}--></strong>
+	                </td>
+	              </tr>
+	            </tfoot>
+	          </table>
+	          </div>
+	          
+	          <div class="text-center">
+	            <a class="btn btn-primary" href="javascript:void(0);" id="confirmPay">现在去支付</a>
+	            <a href="index.php?do=user&view=transaction&op=orders&intModelId=6" class="btn btn-default">稍后再支付</a>
+	          </div>
+		</div><!-- buy-body end-->
+
+		
+		

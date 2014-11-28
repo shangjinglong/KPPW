@@ -1,0 +1,30 @@
+<div class="modal-body form-horizontal">
+    <p class="text-info mb_20"><i class="fa fa-info-circle"></i> 您可以直接复制当前页面的推广代码，将代码粘贴到QQ群、论坛、博客、微博等地方，或通过QQ、MSN和邮箱发给好友，当有人通过您的推广链接注册，就可以得到相应的现金和积分奖励。</p>
+    <div class="form-group">
+      <div class="col-sm-10">
+        <input type="text" class="form-control" placeholder="链接" value="{$spreadUrl}" id="spreadurl" readonly="readonly">
+      </div>
+      <div class="col-sm-2">
+        <button class="btn btn-default btn-block" id="copybtn">复制链接</button>
+      </div>
+    </div>
+	<div class="form-group">
+      <div class="col-sm-12">
+	<span class="text-success" id="tipsUser"></span>
+	</div>
+	</div>
+</div>
+
+{if $js!='true'}
+<script type="text/javascript" src="static/js/zclip/jquery.zclip.min.js"></script>
+{/if}
+<script type="text/javascript">
+$(function(){
+    $("#copybtn").zclip({
+        path:'static/js/zclip/ZeroClipboard.swf', //记得把ZeroClipboard.swf引入到项目中 
+        copy:function(){
+            return $('#spreadurl').val();
+        }
+    });
+});
+</script>

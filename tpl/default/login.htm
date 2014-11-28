@@ -1,0 +1,87 @@
+<!--{template header}-->
+
+<div class="container">
+<div class="col-sm-7 hidden-xs">
+  <div class="welcome-img">
+    <div class="thumbnail">
+		 <!--{ad_show(LOGIN_LEFT)}-->
+    </div><!-- thumbnail end-->
+    <div class="caption">
+      <h3>注册用户的特色功能</h3>
+
+
+      <ul class="list-inline">
+        <li><p class="text-muted"><i class="fa fa-check-square"></i> 实名认证后，交易保障。</p></li>
+        <li><p class="text-muted"><i class="fa fa-check-square"></i> 订单记录保存，随时随地查看</p></li>
+		<li><p class="text-muted"><i class="fa fa-check-square"></i> 关键位置推荐，惊喜不断</p></li>
+      </ul>
+
+    </div>
+  </div><!-- welcome-img end -->
+</div>
+<div class="col-sm-5 col-xs-12">
+<div class="login-and-register-container">
+
+  <div class="login-box">
+    <div class="page-header">
+      <div class="pull-right">或 <a id="register-link" href="index.php?do=register" rel="show-register">注册账户</a></div>
+      <h1>登录 <small>赚钱之路，从这里开始！</small></h1>
+    </div>
+
+    <form action="index.php?do=login" role="form"  name="loginForm" id="loginForm" method="post">
+    	<input type="hidden" name="formhash" id="formhash" value="{FORMHASH}">
+		<input type="hidden" name="hdn_refer" id="hdn_refer" value="{$_K['refer']}">
+      <div class="form-group">
+        <label class="sr-only" for="account">帐号</label>
+        <input type="email" class="form-control" id="account" name="account" placeholder="帐号">
+      </div>
+      <div class="form-group">
+        <label class="sr-only" for="password">密码</label>
+        <input type="password" class="form-control" id="password" name="password" placeholder="请填写登录密码">
+      </div>
+	 {if $intLoginTimes}
+    <input type="hidden" name="logins" id="logins" value='0'>
+      <div class="form-group clearfix code-group">
+        <label class="sr-only" for="code">验证码</label>
+        <div class="col-xs-3">
+          <input type="text" class="form-control" id="code" name="code" placeholder="验证码">
+        </div>
+        <div class="col-xs-9 code-img">
+          <img id="secode_img" src="index.php?do=ajax&view=captcha" onclick="document.getElementById('secode_img').src='index.php?do=ajax&view=captcha&sid='+Math.random(); return false;">
+           <a  href="javascript:document.getElementById('secode_img').src='index.php?do=ajax&view=captcha&sid='+Math.random(); void(0);"  >换一组</a>
+        </div>
+      </div>
+	  {/if}
+      <div class="form-group ">
+        <div class="checkbox">
+	        <label>
+	          <input type="checkbox"  name="autoLogin" value="1"> 记住我
+	        </label>
+	        <a href="index.php?do=retrieve" class="pull-right">忘记密码？</a>
+      </div>
+      </div>
+
+      <div class="form-group text-center">
+        <button type="submit" class="btn btn-primary btn-block">登录</button>
+      </div>
+    </form>
+  </div><!-- login-box end -->
+
+</div><!-- login-and-register-container end -->
+
+
+<div class="login-and-register-footer">
+  <p>第三方登录：
+  {loop $api_open $k $v}
+	{if $weibo_list[$k.'_app_id']}
+    <a href="index.php?do=oauthlogin&type={$k}" title="{$api_name[$k]['name']}"><img src="static/img/ico/{$k}_t.gif" alt="{$api_name[$k]['name']}"></a>
+	{/if}
+{/loop}
+  </p>
+</div>
+<!-- modal-footer end -->
+</div><!-- col-xs-5 end -->
+
+</div>
+<script type="text/javascript" src="static/js/model/register/register.js"></script>
+<!--{template footer}-->

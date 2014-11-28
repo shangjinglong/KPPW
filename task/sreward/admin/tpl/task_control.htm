@@ -1,0 +1,266 @@
+<!--{template ADMIN_DIRECTORY/tpl/admin_header}-->
+
+<style type="text/css">
+	table tr .t_r{text-align:right}
+</style>
+<div class="page_title">
+  <h1>{$model_info['model_name']}{$_lang['task_config']}</h1>
+    <div class="tool">
+      <a href="index.php?do={$do}&model_id={$model_id}&view={$view}&op=config">{$_lang['basic_config']}</a>
+      <a href="index.php?do={$do}&model_id={$model_id}&view={$view}&op=control" class="here">{$_lang['control_config']}</a>
+      <a href="index.php?do={$do}&model_id={$model_id}&view={$view}&op=priv">{$_lang['private_config']}</a>
+    </div>
+</div>
+<div class="box post">
+<div class="tabcon">
+ <div class="title"><h2>{$_lang['control_config']}</h2></div>
+  <form name="frm_config_reward" action="{$ac_url}" method="post" id="frm_config_reward">
+  <input type="hidden" name="pk[model_id]" value="{$model_id}">
+	<table width="100%" border="0" cellspacing="0" cellpadding="0">
+  	
+	<tr>
+		 <th scope="row" width="200"> <b>{$_lang['task_conmission_tactic']}</b>{$_lang['zh_mh']}{$_lang['task_rule_and_money_set']}
+</th><td>&nbsp;</td>
+	</tr>
+	<tr>
+		<th scope="row" width="200" class="t_r">{$_lang['task_auditing_cash_set']}{$_lang['zh_mh']}</th>
+		 <td>
+			<input type="text" size="10"   name="conf[audit_cash]" id="audit_cash" value="{$audit_cash}"  limit="required:true;type:float;between:0-" msg="{$_lang['txt_task_auditing_cash_msg']}" title="{$_lang['txt_task_auditing_cash_title']}" msgArea="audit_moeny_msg"  class="txt"> {$_lang['yuan']}
+				{$_lang['task_cash_notice']}<span id="audit_moeny_msg"></span>
+		</td>
+    </tr>
+	<tr>
+		<th scope="row" width="200" class="t_r">{$_lang['set_task_min_cash']}{$_lang['zh_mh']}</th>
+		 <td>
+			<input type="text" size="10"   name="conf[min_cash]" id="min_cash" value="{if $min_cash}{$min_cash}{else}1{/if}" limit="type:float;required:true;between:0-" msg=" {$_lang['task_min_cash_msg']}" title="{$_lang['task_min_cash_title']}"  msgArea="task_min_cash_msg" class="txt"/>{$_lang['yuan']}
+			(设置任务最小金额不得小于0元)<span id="task_min_cash_msg"></span>
+		 </td>
+	</tr>
+	<tr>
+		<th scope="row" width="200" class="t_r">{$_lang['task_deduct_rate']}{$_lang['zh_mh']}</th> 
+		<td>
+			<input type="text" size="10" name="conf[task_rate]" value="{$task_rate}" id="task_rate" limit="required:true;type:int;len:1-3;between:0-100" msg="{$_lang['task_deduct_rate_msg']}" title="{$_lang['task_deduct_rate_title']}" msgArea="deduct_scale_msg" class="txt"/>%{$_lang['task_deduct_rate_title']}<span id="deduct_scale_msg"></span>
+		</td>
+	</tr>
+	<tr>
+		<th scope="row" width="200" class="t_r">{$_lang['deduct_rate_from_fail_task']}{$_lang['zh_mh']}</th> 
+		<td>
+			<input type="text" size="10" name="conf[task_fail_rate]" id="task_fail_rate" value="{$task_fail_rate}" limit="required:true;type:int;len:1-3;between:0-100" msg="{$_lang['fail_task_deduct_rate_msg']}" title="{$_lang['fail_task_deduct_rate_title']}" msgArea="fail_rate_msg" class="txt"/>%{$_lang['fail_task_deduct_rate_title']}<span id="fail_rate_msg"></span>
+		</td>
+	</tr>
+	
+    
+  	<tr><th scope="row" width="200">{$_lang['set_task_time_rule']}{$_lang['zh_mh']}{$_lang['time_rule_and_join_time_set']}</th><td>&nbsp;</td></tr>
+	<tr>
+	 <th scope="row" width="200" class="t_r">{$_lang['time_rule']}{$_lang['zh_mh']}</th>
+	 <td id="td_cash_rul" class="td_cash_rul">
+	  <ul id="add_new_rul" style="list-style:none">
+	  	{loop $time_rule $k $v}
+			<li>
+				<span id="span_{$k}"><!--{eval echo $k+1;}--></span>
+				<input type="hidden" name="">
+				 <input type="text" size="10" name="timeOld[{$v['day_rule_id']}][rule_cash]" id="rule_cash_{$k}" value="<!--{eval echo  floatval($v['rule_cash'])}-->" limit="required:true;type:float"          msg="{$_lang['task_min_cash_msg']}"    title="{$_lang['check_min_cash_rule']}," msgArea="span_time_{$k}"  class="txt"/>{$_lang['yuan_over']} &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+				 <input type="text" size="10" name="timeOld[{$v['day_rule_id']}][rule_day]"  id="rule_day_{$k}"  value="{$v['rule_day']}"  limit="required:true;type:int;between:1-" msg="{$_lang['time_rule_day_msg']}" title="{$_lang['time_rule_day_title']}" msgArea="span_time_{$k}"  class="txt"> {$_lang['day']} 
+				<span id="span_time_{$k}"></span>
+				{if $k>0}<a href="javascript:;" class="del_time_rule" rel="{$v['day_rule_id']}">{$_lang['delete_rule']}</a>{/if}
+			</li>
+		{/loop}
+		</ul>
+		<a href="javascript:;" id="add_time_rule">{$_lang['add_rule']}</a>
+		</td>
+	</tr>
+	<tr>
+		<th scope="row" width="200" class="t_r">{$_lang['task_public_time']}{$_lang['zh_mh']}</th>
+		 <td>
+			<input type="text" size="10" id="notice_period"  name="conf[notice_period]"  value="{$notice_period}" limit="type:int;required:true;between:0-" msg="{$_lang['task_public_time_msg']}" title="{$_lang['task_public_time_title']}" msgArea="span_notice_period" class="txt">{$_lang['task_public_time_notice']}
+			<span id="span_notice_period"></span>
+		 </td>
+	</tr>
+	<tr>
+		<th scope="row" width="200" class="t_r">{$_lang['task_min_day']}{$_lang['zh_mh']}</th>
+		 <td>
+			<input type="text" size="10" id="min_day"  name="conf[min_day]"  value="{$min_day}" limit="type:int;required:true;between:1-" msg="{$_lang['task_min_day_msg']}" title="{$_lang['task_min_day_title']}" msgArea="span_min_day" class="txt">{$_lang['task_sub_time_title']}
+			<span id="span_min_day"></span>
+		 </td>
+	</tr>
+	<tr>
+		<th scope="row" width="200" class="t_r">{$_lang['task_vote_time']}{$_lang['zh_mh']}</th> 
+			<td>
+				<input type="text" size="10" id="vote_period" name="conf[vote_period]"  value="{$vote_period}" limit="type:int;required:true;between:1-" msg="{$_lang['task_vote_time_msg']}" title="{$_lang['task_vote_time_title']}" msgArea="span_vote_period" class="txt">{$_lang['task_vote_time_notice']}<br>
+				<span id="span_vote_period"></span>
+			</td>
+	</tr>
+	<tr>
+		<th scope="row" width="200" class="t_r">{$_lang['limit_new_register_user_vote_time']}{$_lang['zh_mh']}</th> 
+		  <td>
+			 <input type="text" size="10" id="reg_vote_limit"  name="conf[reg_vote_limit]"  value="{$reg_vote_limit}" limit="type:int;required:true" msg="{$_lang['new_register_user_vote_time_msg']}" title="{$_lang['new_register_user_vote_time_title']}" msgArea="reg_vote_limit_time_msg" class="txt">{$_lang['new_register_user_vote_time_notice']}
+			<br><span id="reg_vote_limit_time_msg"></span>
+		 </td>
+	</tr>
+	<tr>
+		<th scope="row" width="200" class="t_r">{$_lang['set_choose_time']}{$_lang['zh_mh']}</th> 
+		 <td>
+			<input type="text" size="10" name="conf[choose_time]" id="choose_time" value="{$choose_time}"  limit="required:true;type:int;between:1-20" msg="{$_lang['choose_time_msg']}" title="{$_lang['choose_time_title']}"  msgArea="span_draft_time" class="txt">{$_lang['choose_time_notice']}<span id="span_draft_time"></span>
+		</td>
+	</tr>
+	<tbody id="agree_is_open_tbody">
+		
+		<tr>
+			<th scope="row" width="200" class="t_r">{$_lang['confirm_default_agreement_time']}{$_lang['zh_mh']}</th> 
+			<td>
+				 <input type="text" class="txt" id="txt_agree_complete_time" name="conf[agree_complete_time]" value="$agree_complete_time"
+				   limit="required:true;type:int;between:2-" msg="{$_lang['agree_complete_2']}" title="{$_lang['agree_complete_2']}"
+				  msgArea="span_agree_complete">{$_lang['day']} &nbsp;{$_lang['confrim_agreement_time_notice']}
+				 <span id="span_agree_complete"></span>
+			</td>
+		</tr>
+	<!--	<tr>
+			<th scope="row" width="200" class="t_r">{$_lang['sign_default_agreement_time']}{$_lang['zh_mh']}</th> 
+			<td>
+				 <input type="text" class="txt" id="txt_agree_sign_time" name="conf[agree_sign_time]" value="$agree_sign_time"
+				  limit="required:true;type:int;between:1-" msg="{$_lang['agree_time_more_than_1']}" title="{$_lang['agree_time_more_than_1']}"
+				  msgArea="span_agree_sign">{$_lang['day']} &nbsp;{$_lang['default_agreement_time_notice']}
+				  <span id="span_agree_sign"></span>
+			</td>
+		</tr>-->
+	</tbody>
+	
+
+	<tr>
+		 <th scope="row" width="200"><h4>{$_lang['set_delay_rule']}{$_lang['zh_mh']}{$_lang['task_delay_set_intro']}</h4><td>
+</td></th>  
+	</tr>
+	<tr>
+		<th scope="row" width="200" class="t_r">{$_lang['delay_min_cash']}{$_lang['zh_mh']}</th> 
+		<td>
+			<input type="text" size="10"  name="conf[min_delay_cash]" id="min_delay_cash" value="{$min_delay_cash}" limit="required:true;type:int;between:1-" msg="{$_lang['delay_min_cash_msg']}" title="{$_lang['delay_min_cash_title']}" msgArea="span_min_delay_cash" class="txt"/><b style="color:red">*</b>{$_lang['yuan']}<span id="span_min_delay_cash"></span>
+		</td>
+	</tr>
+	<tr>
+		<th scope="row" width="200" class="t_r">{$_lang['limit_delay_day']}{$_lang['zh_mh']}</th> 
+		<td>
+			<input type="text" size="10"  name="conf[max_delay]" id="max_delay" value="{$max_delay}" limit="type:int;required:true;between:2-" msg="{$_lang['delay_day_msg']}" title="{$_lang['delay_day_title']}" msgArea="span_min_delay" class="txt"/><b style="color:red">*</b>{$_lang['day']}<span id="span_min_delay"></span>
+		</td>
+	</tr>
+	<tr>	
+	 <th scope="row" width="200" class="t_r">{$_lang['set_delay']}{$_lang['zh_mh']}</th> 
+	 <td>
+		<ul id="new_delay_rule" class="new_delay_rule" style="list-style:none">
+		{loop $delay_rule $k $v}
+			<li>
+				{$_lang['di']}<input type="text" size="10" name="delayOld[{$v['defer_rule_id']}][defer_times]" id="defer_times_{$k}"  value="{$v['defer_times']}" readonly="true" class="txt"/>{$_lang['times']}
+				 {$_lang['delay_rule_notice']}<input type="text" name="delayOld[{$v['defer_rule_id']}][defer_rate]" id="defer_rate_{$k}" value="<!--{eval echo floatval($v['defer_rate'])}-->" size="10"  limit="required:true;type:int;between:0-100"
+				 msg="{$_lang['delay_rule_msg']}" title="{$_lang['delay_rule_title']}" msgArea="span_delay_{$k}" class="txt">%<span id="span_delay_{$k}"></span>
+				<a href="javascript:;" class="del_delay_rule" rel="{$v['defer_rule_id']}">{$_lang['delete_rule']}</a>
+	 		</li>
+		{/loop}
+	   </ul>
+		<a href="javascript:;" id="add_delay_rule">{$_lang['add_rule']}</a>
+		</td>
+	</tr>
+	
+	<tr>
+		<th scope="row" width="200" class="t_r"><b>{$_lang['set_choose_rule']}{$_lang['zh_mh']}{$_lang['choose_fault_rule_add']}</b>:<td>&nbsp;</td></th> 
+	</tr>
+	<!--
+		<tr>
+		<th scope="row" width="200" class="t_r">{$_lang['choose_in_doing']}{$_lang['zh_mh']}</th> 
+		<td>
+			<label for="open_select_yes"><input type="radio" name="conf[open_select]"  {if !$open_select||$open_select =='open'} checked {/if} id="open_select_yes" value="open">{$_lang['open']}</label>
+			<label for="open_select_no"><input type="radio" name="conf[open_select]" {if $open_select =='close'} checked {/if} id="open_select_no" value="close">{$_lang['close']}</label>
+			{$_lang['choose_period_go_into_sp']}
+		</td>
+	</tr>-->
+	<tr>
+		<th scope="row" width="200" class="t_r">{$_lang['task_automate_choose']}{$_lang['zh_mh']}{$_lang['auto_choose_set_notice']}</th> 
+		 <td>
+			<label for="end_action_1"><input type="radio"  {if $end_action =='refund'||!$end_action}checked="checked"{/if} name="conf[end_action]" id="end_action_1" value="refund">{$_lang['close']}</label>
+			<label for="end_action_2"><input type="radio" {if $end_action =='split' }checked="checked"{/if} name="conf[end_action]" id="end_action_2" value="split">{$_lang['open']}</label>
+			<label id="slt" style="display:none"><input type="text" name="conf[witkey_num]" value="{$witkey_num}" id="witkey_num" limit="type:int;between:1-" msg="{$_lang['task_automate_choose_msg']}" title="{$_lang['task_automate_choose_title']}" class="txt">{$_lang['task_automate_choose_notice']}</label>
+		
+		 </td>
+	</tr>
+	<tr id="slt_choose_rule" style="display:none">
+		<th scope="row" width="200" class="t_r">{$_lang['task_automate_choose_rule']}{$_lang['zh_mh']}</th> 
+		 <td>
+	         <select name="conf[auto_choose_rule]" id="auto_choose_rule">
+	         	<option value="work_time" {if !$auto_choose_rule||$auto_choose_rule=='work_time'}selected="selected"{/if} >{$_lang['early_hand']}</option>
+				<option value="seller_credit" {if $auto_choose_rule=='seller_credit'}selected="selected"{/if}>{$_lang['highest_ability']}</option>
+				<option value="take_num" {if $auto_choose_rule=='take_num'}selected="selected"{/if}>{$_lang['hand_times_most']}</option>
+				<option value="master_choose" {if $auto_choose_rule=='master_choose'}selected="selected"{/if}>{$_lang['stationmaster_choose']}</option>
+	         </select>
+		{$_lang['auto_choose_rule_notice']}
+		 </td>
+	</tr>
+	<tr>
+		<th scope="row" width="200">&nbsp;</th>
+		<td>
+            <div class="clearfix padt10">
+            <input type="hidden" name="sbt_edit" value="1">
+			 <button type="button" name="sbt_edit" class="positive primary  button" value="1" onclick="confirm_sub()"><span class="check icon"></span>{$_lang['submit']}</button>
+			</div>
+		</td>
+	</tr>
+  </table>
+  </form>
+   </div>
+ </div>
+<script type="text/javascript">
+
+$(function(){
+		
+	if($("#end_action_1").attr("checked")==true){
+		$("#slt").hide();
+		$("#slt_choose_rule").hide();
+	}
+	if($("#end_action_2").attr("checked")==true){
+		 $("#slt").show();
+		  $("#slt_choose_rule").show();
+	 }
+	$("#end_action_1").click(function(){
+		$("#slt").hide();
+		$("#slt_choose_rule").hide();
+	})
+	$("#end_action_2").click(function(){
+		  $("#slt").show();
+		 $("#slt_choose_rule").show();
+	})
+	
+	$("#add_time_rule").click(function(){
+		var ruleNum=parseInt($("#add_new_rul").find("li").length)+1;
+		var newRule=$("<li><span id='span_"+ruleNum+"'>"+ruleNum+"</span><input type='text' size='10' name='timeNew["+ruleNum+"][rule_cash]' class='txt'/>元以上 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"+
+				 "&nbsp;&nbsp;<input type='text' size='10' name='timeNew["+ruleNum+"][rule_day]' class='txt'> 天<br></li>");
+			newRule.appendTo($("#add_new_rul"));
+	})	
+	$(".del_time_rule").click(function(){
+		var timeRuleId=parseInt($(this).attr("rel"));
+			if(!isNaN(timeRuleId)){
+				$.getJSON("{$ac_url}",{ac:'del_time_rule',rule_id:timeRuleId},function(){});
+			}
+		$(this).parent().remove();
+	})	
+	$("#add_delay_rule").click(function(){
+		var delayNum=parseInt($("#new_delay_rule").find("li").length)+1;
+		var newRule=$("<li>{$_lang['di']}<input type='text' size='10' name='delayNew["+delayNum+"][defer_times]' value="+delayNum+" class='txt'/>{$_lang['times']}"+
+				 "{$_lang['delay_rule_notice']}&nbsp;<input type='text' size='10' name='delayNew["+delayNum+"][defer_rate]' class='txt'>%"+
+				 "</li>");
+			newRule.appendTo($("#new_delay_rule"));
+	})
+	$(".del_delay_rule").click(function(){
+		var delayRuleId=parseInt($(this).attr("rel"));
+			if(!isNaN(delayRuleId)){
+				$.getJSON("{$ac_url}",{ac:'del_delay_rule',rule_id:delayRuleId},function(){});
+			}
+		$(this).parent().remove();
+	})
+  })
+  function confirm_sub(){
+  	var i = checkForm(document.getElementById('frm_config_reward'));
+	if(i){
+		$("#frm_config_reward").submit();
+	}else{
+		return false;
+	}
+  }
+</script>
+<!--{template ADMIN_DIRECTORY/tpl/admin_footer}-->

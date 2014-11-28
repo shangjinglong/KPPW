@@ -1,0 +1,55 @@
+<!--{template ADMIN_DIRECTORY/tpl/admin_header}-->
+<div class="page_title">
+    	<h1>{$_lang['update_cache']}</h1>
+          <div class="tool">         
+            <a href="index.php?do=tool&view=cache" {if $view == 'cache'}class="here"{/if} > {$_lang['cache']}{$_lang['list']}</a> 
+    	</div>
+</div>
+<div class="box post">
+<div class="detail">
+<form method="post" action="#" id="frm_cat_edit">
+    <input type="hidden" name="do" value="{$do}"><input type="hidden" name="view" value="{$view}"> 
+       <table width="100%" border="0" cellspacing="0" cellpadding="0">
+            <tbody>
+            <tr>
+
+                <td>
+                    <label for="ckb_tpl_cache">
+                        <input checked="checked" type="checkbox" id="ckb_tpl_cache" name="ckb_tpl_cache" value="1" class="checkbox"><b>{$_lang['update_template_cache']}</b>
+                    </label>
+                    <div class="pad10">
+                    {$_lang['template_cache_notice']}
+					</div>
+                </td>
+            </tr>
+			
+            <tr>
+
+                <td>
+                    <label for="ckb_obj_cache">
+                        <input checked="checked" type="checkbox" id="ckb_obj_cache" name="ckb_obj_cache" value="1" class="checkbox"><b>{$_lang['update_object_cache']}</b>
+                    </label>
+                    <div class="pad10">
+                   {$_lang['object_cache_notice']}
+				   </div>
+                </td>
+            </tr>
+			</tbody>
+			<tfoot>
+            <tr>
+                <td>
+                    <div class="t_c">
+                        <button type="submit" name="sbt_edit" class="primary positive pill button" ><span class="check icon"></span>{$_lang['update_cache_now']}</button>
+					
+                    </div>
+                </td>
+            </tr>
+			</tfoot>
+        </table>
+   
+</form>
+
+</div>
+</div>
+ 
+<!--{template ADMIN_DIRECTORY/tpl/admin_footer}-->

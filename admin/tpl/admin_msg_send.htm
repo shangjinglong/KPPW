@@ -1,0 +1,106 @@
+<!--{template ADMIN_DIRECTORY/tpl/admin_header}-->
+<div class="page_title">
+    	<h1>{$_lang['interface_config_manage']}</h1>
+         <div class="tool">       
+		   <a href="index.php?do=$do&view=config&op=config" >{$_lang['change_account']}</a>
+		   <a href="index.php?do=$do&view=send" {if $view=='send'}class="here"{/if}>{$_lang['send_sms']}</a>
+         </div>
+</div>
+
+<div class="box post">
+   <div class="tabcon">
+      <div class="title"><h2>{$_lang['send_sms']}</h2></div>
+         <div class="detail">
+         	<form name="frm" id="frm" action="index.php?do=$do&view=$view&ac=send" method="post">
+           	  <table width="100%" border="0" cellspacing="0" cellpadding="0">
+              <tr>
+              	 <th scope="row" width="130">{$_lang['select_user_group']}{$_lang['zh_mh']}</th>
+				<td>
+					<select name="slt_type" id="slt_type" onchange="search(this.value)">
+						<option value="normal">{$_lang['comm_user']}</option> 
+						<option value="specify">{$_lang['named_user']}</option>
+					</select>
+				</td>
+			</tr>
+			<tbody id="specify" style="display:none">
+				 <tr>
+				 	<th scope="row" width="130">{$_lang['find_user']}{$_lang['zh_mh']}</th>
+						<td>
+							<input type="text" name="txt_u" id="txt_u" class="txt">
+							<select name="u_type" id="u_type">
+								<option value="uid">{$_lang['user']}ID</option>
+								<option value="username">{$_lang['username']}*</option>
+							</select>
+							<button class="positive primary  button" type="button" id='ser_user_phone' value="{$_lang['click_and_find']}"><span class="magnifier icon"></span>{$_lang['click_and_find']}</button>
+                        </td>
+				</tr>
+					<tr>
+						<th scope="row" width="130">{$_lang['mobile']}{$_lang['zh_mh']}</th>
+                        <td>
+                        	 <input type="txt" name="txt_tel" id="txt_tel" size="100" class="txt">
+							 <div class="padt10 direct">
+                            <p>{$_lang['separated_by_commas']}133123456,144123456</p>
+                        </div>
+                       </td>
+                    </tr>
+			</tbody>
+			<tr>
+				<th scope="row" width="130">{$_lang['sms_content']}{$_lang['zh_mh']}</th>
+              <td>
+                  <textarea cols=80 rows=3 name="tar_content" id="tar_content">$model_info['model_desc']</textarea>
+			 	<br><span>{$_lang['tips_about_send_sms']}</span>
+			  </td>
+           </tr>
+		    <tr>
+						<th scope="row">&nbsp;</th>
+						<td>
+							<div class="clearfix padt10">
+                        		 <button class="positive primary pill button" type="submit" id="sbt_edit" name='sbt_edit' value="{$_lang['send_sms']}"><span class="check icon"></span>{$_lang['send_sms']}</button>
+                        	
+                			</div>
+						</td>
+					</tr>
+					
+           		 </form>
+				</table>
+</div>
+</div>
+</div>
+<script type="text/javascript">
+	function search(type){
+		if(type=='specify'){
+			$("#specify").show();
+			$("#ser_user_phone").click(function(){
+				var txt_u=$("#txt_u").val();
+				  var u_type=$("#u_type").val();
+				 if(!txt_u){
+					art.dialog.alert("{$_lang['first_enter_username_or_ids']}");return false;
+				}else{
+					$.post("index.php?do=$do&view=$view&ac=ser",
+						{u:txt_u,type:u_type},function(json){
+						if(json.status==1){
+							$("#txt_tel").val(json.msg);
+						}else if(json.status==2){
+							art.dialog.alert(json.msg);return false;
+						}else if(json.status==3){
+							art.dialog.alert(json.msg);return false;
+						}
+					},'json')
+			 	 }
+			})
+		}else{
+			$("#specify").hide();
+		}
+	}
+	$(function(){
+		$("#sbt_edit").click(function(){
+			var shtml=$("#tar_content").val();
+			if(shtml.length<2){
+				art.dialog.alert("{$_lang['at_least_two_words']}");return false;
+			}else{
+				$("#frm").submit();
+			}
+		})
+	})
+</script>
+<!--{template ADMIN_DIRECTORY/tpl/admin_footer}-->

@@ -1,0 +1,104 @@
+
+<link href="static/js/jqplugins/starrating/jquery.rating.css" rel="stylesheet" type="text/css">
+<div class="modal-body">
+		 <form role="form" action="index.php?do=mark" method="post" class="form-horizontal" name="markForm" id="markForm">
+            <input type="hidden" name="formhash" id="formhash" value="{FORMHASH}">
+			<input type="hidden" name="markId"  value="{$markInfo[mark_id]}">
+			<input type="hidden" name="taskId"  value="{$taskId}">
+			<input type="hidden" name="strJumpUrl"  value="{$strJumpUrl}">
+		  	{if $markInfo['mark_count']== 1}
+			<div class="rowElem clearfix">
+				<p>修改好评</p>
+				<span>修改评价提醒</span></br>
+				<span>1.您只有一次修改评价的机会，请珍惜。</span></br>
+				<span>2.只有在评价期内的差评，中评才有修改机会。</span>
+		    </div>
+			{/if}
+			 <div class="form-group">
+         		<label class="col-sm-2 control-label">{$_lang['mark_type']}</label>
+				{if $markInfo['mark_status'] == 0 }
+                 <input type="radio" name="mark_status" value="1" {if $markInfo['mark_status']==1||!$markInfo['mark_status']}checked=checked{/if}/><label>{$_lang['good_value']}<img src="static/img/ico/ico_mark_1.gif" alt=''></label>
+                 <input type="radio" name="mark_status" value="2" {if $markInfo['mark_status']==2}checked=checked{/if}/><label>{$_lang['middle_value']}<img src="static/img/ico/ico_mark_2.gif" alt=''></label>
+                <input type="radio" name="mark_status" value="3" {if $markInfo['mark_status']==3}checked=checked{/if}/><label>{$_lang['bad_value']}<img src="static/img/ico/ico_mark_3.gif" alt=''></label>
+		    {/if}
+			{if $markInfo['mark_status'] == 3}
+			<input type="radio" name="mark_status" value="1"><label>{$_lang['good_value']}<img src="static/img/ico/ico_mark_1.gif" alt=''></label>
+            <input type="radio" name="mark_status" value="2"><label>{$_lang['middle_value']}<img src="static/img/ico/ico_mark_2.gif" alt=''></label>
+			{/if}
+			{if $markInfo['mark_status'] == 2}
+			<input type="radio" name="mark_status" value="1"><label>{$_lang['good_value']}<img src="static/img/ico/ico_mark_1.gif" alt=''></label>
+			{/if}
+			</div>
+          <div class="form-group">
+            <label for="tar_content" class="col-sm-2 control-label">评价内容</label>
+			<div class="col-sm-8 row">
+            <textarea id="tar_content" name="tar_content" class="form-control">{if $markInfo['mark_content']}{$markInfo['mark_content']}{/if}</textarea>
+            <p class="help-block">最多可以输入:100字符(50个汉字)</p>
+			</div>
+          </div>
+		   <div class="form-group">
+        <label for="" class="col-xs-2 control-label">辅助评价</label>
+        <div class="col-xs-10">
+        	{loop $aidInfo $k $v}
+			<input type="hidden" name="star[$k]" id="star_{$k}">
+          <div class="form-control-static clearfix">
+            <div class="pull-left mr_5">{$v['aid_name']}</div>
+           <!--{eval echo keke_user_mark_class::gen_star($v[avg],$k,0);}-->
+          </div>
+		  	{/loop}
+
+        </div>
+      </div>
+
+            <div class="form-group">
+              <div class="col-sm-offset-2 col-sm-10">
+                <button class="btn btn-default" type="submit" value="1" >保存</button>
+                <span class="text-success" id="tipsUser"></span>
+              </div>
+            </div>
+          </form>
+</div>
+<script type="text/javascript" src="static/js/jqplugins/starrating/jquery.MetaData.js"></script>
+<script type="text/javascript" src="static/js/jqplugins/starrating/jquery.rating.js"></script>
+
+<script type="text/javascript">
+$(function(){
+    $('#markForm').scojs_valid({
+	    rules: {
+	    	tar_content: ['not_empty',{'min_length': 5},{'max_length': 100}]
+	    },
+	    messages: {
+	    	tar_content: {
+				not_empty: "请输入评价内容",
+				min_length: "最少输入5字符",
+				max_length: "最多可以输入:100字符(50个汉字)"
+			}
+	    },
+	    wrapper:'.form-group'
+	    ,onSuccess: function(response, validator, form) {
+	    	
+	    	//关闭举报弹窗，延迟提示
+	    	$('.close').trigger('click');
+	    	var stt = setTimeout(function(){
+	    		tipsOp(response.data,response.status);
+	    		clearTimeout(stt);
+	    		if(response.url){
+	    			setTimeout(function(){window.location.href=response.url;},2000);
+	      	  	}
+	    	},1000);
+	    	
+	    }
+	});
+	$("div[class*='star_']").click(function(event){
+		var classStr = this.className;
+		var showId   = classStr.match(new RegExp("(star_[0-9]+)","g"));
+		var point    = $(this).find("a:first").attr("tt");
+			point	 = parseFloat(point/2).toFixed(1);
+		$("#"+showId).val(point);
+		$("#span_"+showId).html("<font color=\"red\">"+point+"{$_lang['fen']}</font>");
+		event.stopPropagation();
+	})
+	})
+
+</script>
+

@@ -1,0 +1,160 @@
+<!--{template ADMIN_DIRECTORY/tpl/admin_header}-->
+<div class="page_title">
+    	<h1>{$model_info['model_name']}{$_lang['manage']}</h1>
+
+    </div>
+	 <div class="box post">
+        <div class="tabcon">
+        	<div class="title"><h2>{$_lang['edit_task']}</h2></div>
+            <div class="detail">
+                <form method="post" action="index.php?do=model&view=edit&model_id=$model_id&task_id=$task_id" enctype="multipart/form-data" id="frm1">
+					<input type="hidden" name="pk[task_id]" value="{$task_id}">
+						 <table width="100%" border="0" cellspacing="0" cellpadding="0">
+					<tr>
+                      		<th colspan="2">
+                      			该任务于<span style="color:red"><!--{eval echo date('Y-m-d  H:i:s',$task_info[start_time])}--></span>发布，目前状态为：<span style="color:red">{$status_arr[$task_info['task_status']]}</span>
+                      		</th>
+                      	</tr>
+						<tr>
+                      		<th >
+                      			任务可进行如下操作:
+                      		</th>
+							<td>
+								{if $operate}
+								{loop $operate $k $v}
+								<button type="submit" name="sbt_act" class="positive primary button"  value="{$k}" onclick="return confirm('{$_lang['confirm']}{$v}?')"><span class="lock icon"></span>{$v}</button>
+							{/loop}
+							{else}
+							无
+							{/if}
+							</td>
+                      	</tr>
+						<tr>
+							<th colspan="2">
+								{loop $ops $v}
+							    <a href="index.php?do=$do&model_id={$model_id}&view=edit&task_id={$task_id}&op={$v}" class="button {if $op==$v}here{/if}">{$_lang['b_task_'.$v]}</a>
+       		                   {/loop}
+							</th>
+						</tr>
+                      <tr>
+                        <th scope="row" width="130">{$_lang['task_name']}</th>
+                        <td>
+                        <input type="text" value="{$task_info['task_title']}" name="fds[task_title]" id="title" class="txt" style=" width:260px;"
+						 limit='required:true;len:3-50' msg={$_lang['title_err']} msgarea='msg_title' tips={$_lang['username_3_12_characters']}>
+						 <span id='msg_title'></span>
+						 	&nbsp;&nbsp;&nbsp;
+						 </td>
+                      </tr>
+					  <tr>
+                        <th scope="row">
+                        	发布者
+						</th>
+                        <td>
+                        	<b>{$task_info['username']}</b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+							<b>{$_lang['mobile']}：{$task_info['contact']}</b>
+						</td>
+					  </tr>
+					   <tr>
+                        <th scope="row">
+                        	{if $task_info[task_status]==1||$task_info['task_status']==0}
+							发布时间
+							{else}
+							开始时间
+							{/if}{$_lang['zh_mh']}</th>
+                        <td><!--{date('Y-m-d H:i:s',$task_info['start_time'])}-->&nbsp;&nbsp;</td>
+					  </tr>
+					   <tr>
+                        <th scope="row">竞标截止时间{$_lang['zh_mh']}</th>
+                        <td>
+							 <input name="txt_task_day"   onclick="showcalendar(event, this, 0)" size="30" value="{$task_sub_time}" type="text" id="txt_task_day"   msgArea="span_task_day" onkeyup="clearstr(this)"
+			   	limit="required:true;type:date" msg="{$_lang['task_round_msg']}" max=""/>
+
+				 <span id="span_task_day" class="ml_5"></span>
+						</td>
+						   </tr>
+					   <tr>
+                        <th scope="row" width="130">{$_lang['task_type']}</th>
+                        <td>
+                       		 $model_list[$model_id][model_name]
+                        </td>
+                      </tr>
+					     <tr>
+                        <th scope="row" width="130">{$_lang['task_status']}</th>
+                        <td>
+                       		$task_status[$task_info['task_status']]
+                        </td>
+                      </tr>
+					     <tr>
+                        <th scope="row" width="130">{$_lang['industry']}</th>
+                        <td>
+                        	<select name="fds[indus_id]">
+        						<option value="0">{$_lang['top']}</option>
+									{loop $indus_option_arr $v}
+										 {$v}
+									{/loop}
+							</select>　
+                        </td>
+                      </tr>
+
+					    <tr>
+                        <th scope="row" width="130">{$_lang['attachment_task']}</th>
+                        <td>
+                         {if $file_list}
+        					{loop $file_list $file}
+    							<a target="_blank" href="../{$file[save_name]}">{$file[file_name]}</a>&nbsp;&nbsp;&nbsp;
+    						{/loop}
+						{else}
+							{$_lang['no_attachment']}
+						{/if}
+                        </td>
+                      </tr>
+                      <tr>
+                        <th scope="row">{$_lang['description']}</th>
+                        <td>
+                        	<textarea id="system-create-location_1" class="xheditor {urlBase:'$_K[siteurl]/',tools:'mfull',admin:'../',html5Upload:false,upImgUrl:'../index.php?do=ajax&view=upload&filename=filedata'}" rows="15" style="width:65%; display: none;" name="fds[task_desc]">{$task_info['task_desc']}</textarea>
+						</td>
+                      </tr>
+
+
+                      <tr>
+                        <th scope="row">{$_lang['task_cash']}</th>
+                        <td>
+                        	<select name='fds[task_cash_coverage]'>
+        						{loop $cash_rule_arr $value}
+									<option {if $task_info[task_cash_coverage]==$value['cash_rule_id']}selected="selected"{/if} value="$value['cash_rule_id']">{c:$value['start_cove']}-{c:$value['end_cove']}</option>
+								{/loop}
+							</select>
+                        </td>
+                      </tr>
+                       <tr>
+                        <th scope="row">SEO{$_lang['title']}{$_lang['zh_mh']}</th>
+                        <td><textarea cols="70" rows="2"  name="fields[seo_title]" value="{$task_info['seo_title']}">{$task_info['seo_title']}</textarea></td>
+                     </tr>
+
+                     <tr>
+                        <th scope="row">SEO{$_lang['keywords']}{$_lang['zh_mh']}</th>
+                        <td><textarea cols="70" rows="2"  name="fields[seo_keyword]" value="{$task_info['seo_keyword']}">{$task_info['seo_keyword']}</textarea></td>
+                     </tr>
+
+                      <tr>
+                        <th scope="row">SEO{$_lang['description']}{$_lang['zh_mh']}</th>
+                        <td><textarea cols="70" rows="3" name="fields[seo_desc]" value="{$task_info['seo_desc']}">{$task_info['seo_desc']}</textarea></td>
+                     </tr>
+                      <tr>
+                        <th scope="row">&nbsp;</th>
+                        <td>
+                            <div class="clearfix padt10">
+                            	<button class="positive primary pill button" type="submit" name="sbt_edit" value={$_lang['submit']} onclick="return checkForm(document.getElementById('frm1'))"><span class="check icon"></span>{$_lang['submit']}</button>
+
+
+                            </div>
+                        </td>
+                      </tr>
+                    </table>
+
+                </form>
+            </div>
+        </div>
+
+    </div>
+<!--{template ADMIN_DIRECTORY/tpl/admin_footer}-->

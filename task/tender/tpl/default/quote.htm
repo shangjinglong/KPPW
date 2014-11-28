@@ -1,0 +1,130 @@
+<!--{template header}-->
+<div  class="container">
+  <div id="main">
+      <div class="buy-user-info">
+      <div class="media">
+        <div class="avatar">
+          <!--{userpic($arrTaskInfo['uid'],'middle')}-->
+        </div>
+        <div class="media-body">
+          <strong class="meida-heading"> <span class="money"><sub>￥</sub>{$arrCoverCash[$arrTaskInfo['task_cash_coverage']]['start_cove']}-<sub>￥</sub>{$arrCoverCash[$arrTaskInfo['task_cash_coverage']]['end_cove']}</span> {$arrTaskInfo['task_title']}</strong>
+          <ul class="user-meta">
+            <li>{$arrModelInfo['model_name']}模式</li>
+            <li>
+              <i class="fa fa-money"></i> 已托管：<sub>￥</sub>{$arrTaskInfo['real_cash']}
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+<div class="turnaround">
+    <h2 class="min-title">
+      我来报价
+    </h2>
+    <div class="turnaround-body">
+      <div class="col-sm-8">
+
+        <form role="form" class="turnaround-form"
+		    action="index.php?do=taskhandle&op=quote&taskId={$taskId}" method="post"
+        	id = "editQuoteForm" name = "editQuoteForm"
+        	enctype="application/x-www-form-urlencoded">
+          <input type="hidden" name="formhash" id="formhash" value="{FORMHASH}">
+          <div class="form-group">
+            <label for="exampleInputPrice1">报价</label>
+            <div class="input-group">
+              <span class="input-group-addon">￥</span>
+              <input type="text" id="price" name="price" class="form-control" placeholder="0.00">
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="exampleInputDate1">工作周期</label>
+            <div class="input-group">
+              <input type="text" id="cycle" name="cycle" class="form-control" placeholder="0">
+              <span class="input-group-addon">天</span>
+            </div>
+          </div>
+
+
+          <div class="form-group">
+            <label for="exampleInputDate1">所在地</label>
+                <div class="form-inline">
+                  <select class="form-control" name="province" id="province" onchange="getZone(this.value,'city');">
+                  	<option value="-1">选择省份</option>
+					{loop $arrProvinces $k $v}
+					<option value="{$v['id']}" {if $gUserInfo['province']==$v[id]}selected="selected"{/if}>{$v['name']}</option>
+					{/loop}
+                  </select>
+
+                  <select class="form-control" name="city" id="city" onchange="getZone(this.value,'area');">
+                  	<option value="-1">选择城市</option>
+					{if $gUserInfo['city']}
+					<option value="{$arrCity['id']}" selected="selected">{$arrCity['name']}</option>
+					{/if}
+                  </select>
+
+                  <select class="form-control" name="area" id="area" >
+                  	<option value="-1">选择区域</option>
+					{if $gUserInfo['area']}
+					<option value="{$arrArea['id']}" selected="selected">{$arrArea['name']}</option>
+					{/if}
+                  </select>
+               </div>
+          </div>
+
+          <div class="form-group">
+            <label for="exampleInputDesc">描述</label>
+            <textarea name="tar_content" id = "tar_content" class="form-control" rows="5"></textarea>
+            <p class="help-block">最多可以输入:100字</p>
+          </div>
+
+          <div class="text-center">
+            <a href="javascript:history.back();">返回</a>
+            <button type="submit" class="btn btn-default">交稿</button>
+          </div>
+        </form>
+      </div>
+
+    </div>
+  </div>
+    </div>
+  </div>
+
+<script type="text/javascript">
+$(function(){
+	//基本资料
+	$('#editQuoteForm').scojs_valid({
+	    rules: {
+			price:['not_empty','decimal'],
+			cycle:['not_empty','digit'],
+	    	tar_content: ['not_empty',{'min_length': 10},{'max_length': 1000}]
+	    },
+	    messages: {
+			price: {
+				not_empty: "请输入您的报价",
+				decimal:'请输入有效的打款金额'
+			},
+            cycle: {
+				not_empty: "请输入工作周期",
+				decimal:'请输入有效的工作周期'
+			},
+	    	tar_content: {
+				not_empty: "请输入稿件描述",
+				min_length: "最少输入10字符",
+				max_length: "最多可以输入:1000个字）"
+			}
+	    },
+	    wrapper:'.form-group'
+	    ,onSuccess: function(response, validator, form) {
+	    	  tipsOp(response.data,response.status);
+	    	  if(response.url){
+					window.location.href=response.url;
+	    	  }
+	    }
+	});
+});
+
+</script>
+
+  </body>
+</html>

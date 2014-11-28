@@ -1,0 +1,141 @@
+ <!--{template admin/tpl/admin_header}-->
+<div class="page_title">
+    	<h1>{$_lang['tag_manage']}</h1>
+        <div class="tool">         
+            <a href="index.php?do={$do}&view=taglist&tag_type={$tag_type}&t={$t}">{$_lang['tag_manage']}</a>
+			<a href="#" class="here">$tag_type_arr[$tag_type]['1']</a>
+        </div>
+</div>
+<div class="box post">
+    <div class="tabcon"></div>
+	<div class="title">
+		<h2>$tag_type_arr[$tag_type]['1']{$_lang['tag']}</h2>
+	</div>	
+	<div class="detail">
+		<form method="post" action="index.php?do={$do}&view={$view}&tag_type={$tag_type}&rdo_cat_type=2&tagid=$tagid">
+		 <table width="100%" border="0" cellspacing="0" cellpadding="0">
+		  
+		  <tr>
+            <th scope="row" width="130">
+            	{$_lang['tag_name']}{$_lang['zh_mh']}
+			</th>
+            <td>
+             	<input type="text" class="txt" name="txt_tagname" value="{$taginfo['tagname']}">
+				{$_lang['tag_change_notice']}
+            </td>
+          </tr>
+		   <tr>
+            <th scope="row" width="130">
+            	  {$_lang['call_class']}{$_lang['zh_mh']}
+			</th>
+            <td>
+             	 <select name="slt_art_cat_id">
+                       <option value="0">{$_lang['please_choose']}</option>
+                       <!--{eval echo articlefenglei_select(0,0,$taginfo['art_cat_id']);}-->
+                 </select>{$_lang['multi_class_input_number']}
+            </td>
+          </tr>
+		   <tr>
+            <th scope="row"  >
+            	     {$_lang['multi_sort']}{$_lang['zh_mh']}
+			</th>
+            <td>
+             	 <input type="text" class="txt" name="txt_cat_cat_ids" value="{$taginfo['cat_cat_ids']}">
+				 {$_lang['drop_down_list_fail_notice']}
+            </td>
+          </tr>
+		   <tr>
+            <th scope="row"  >
+            	      {$_lang['pub_time']}{$_lang['zh_mh']}
+			</th>
+            <td>
+             	<input type="text" onclick="showcalendar(event, this, 0)" class="txt" name="txt_art_time1" value="{if $taginfo['art_time1']}<!--{date('Y-m-d',$taginfo['art_time1'])}-->{/if}">{$_lang['after']}
+				<input type="text" onclick="showcalendar(event, this, 0)" class="txt" name="txt_art_time2" value="{if $taginfo['art_time2']}<!--{date('Y-m-d',$taginfo['art_time2'])}-->{/if}">{$_lang['before']}
+            </td>
+          </tr>
+		   <tr>
+            <th scope="row"  >
+            	      {$_lang['article_id']}{$_lang['zh_mh']}
+			</th>
+            <td>
+             	 <input type="text" name="txt_art_ids" class="txt" value="$taginfo['art_ids']">
+				 {$_lang['query_fail_notice']}
+            </td>
+          </tr>
+		   <tr>
+            <th scope="row"  >
+            	  {$_lang['article_attribute']}{$_lang['zh_mh']}
+			</th>
+            <td>
+             	 <input type="checkbox" {if $taginfo['art_iscommend']}checked="checked"{/if}  name="ckb_art_iscommend" value="1"> 
+				 {$_lang['is_recommend']}
+				 <input type="checkbox" {if $taginfo['art_hasimg']}checked="checked"{/if}  name="ckb_art_hasimg" value="1"> 
+				 {$_lang['is_picture']}
+            </td>
+          </tr>
+		   <tr>
+            <th scope="row"  >
+            	   {$_lang['result_order']}{$_lang['zh_mh']}
+			</th>
+            <td>
+             	 <select name="slt_art_order">
+                                    <option {if !$taginfo['listorder']}selected="selected"{/if}  value="0">{$_lang['default_order']}</option>
+                                    <option {if $taginfo['listorder']==1}selected="selected"{/if}  value="1">{$_lang['order_id_desc']}</option>
+                                    <option {if $taginfo['listorder']==2}selected="selected"{/if}  value="2">{$_lang['order_id_asc']}</option>
+                                    <option {if $taginfo['listorder']==3}selected="selected"{/if}  value="3">{$_lang['pub_time_desc']}</option>
+                                    <option {if $taginfo['listorder']==4}selected="selected"{/if}  value="4">{$_lang['pub_time_asc']}</option>
+                                </select>
+            </td>
+          </tr>
+		   <tr>
+            <th scope="row"  >
+            	    {$_lang['read_number']}{$_lang['zh_mh']}
+			</th>
+            <td>
+             	 <input type="text"  class="txt" name="txt_loadcount" value="$taginfo['loadcount']">{$_lang['default_read_number']}
+            </td>
+          </tr>
+       
+		   <tr>
+            <th scope="row"  >
+            	         {$_lang['tag_code']}{$_lang['zh_mh']}
+			</th>
+            <td>
+             	<textarea name="tag_code" cols="70" rows="10" class="eg_editor">{$taginfo['tag_code']}</textarea>
+					<ul class="eg_code">
+						<li>1、{$_lang['eg_code_patten']}
+						</li>
+						<li>2、{$_lang['param_detail']}:</br>
+							<div class="fl_l magl_30">{$_lang['article_tag_code']}</div>
+						</li>
+					</ul>
+            </td>
+          </tr>
+		  <tr>
+            <th scope="row"  >
+            	       {$_lang['cache_time']}{$_lang['zh_mh']}
+			</th>
+            <td>
+             	<input type="text" size="3" class="txt"  name="txt_cache_time" value="$taginfo['cache_time']">
+				{$_lang['seconds_notice']}
+            </td>
+          </tr>
+		 
+		   <tr>
+            <th scope="row"  >
+            	      
+			</th>
+            <td> 
+                 <button type="submit" name="submit" value={$_lang['submit']} id="submit_save" class="positive primary pill button">
+                 	<span class="check icon"></span>{$_lang['submit']}
+				 </button>
+				 
+                
+            </td>
+          </tr>
+		  </table>
+		
+		</form>
+    </div>
+</div>	
+<!--{template admin/tpl/admin_footer}-->

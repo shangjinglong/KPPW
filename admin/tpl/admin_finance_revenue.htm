@@ -1,0 +1,317 @@
+{if $op=='in'}
+<!--{template ADMIN_DIRECTORY/tpl/admin_header}-->
+<div class="page_title">
+    <h1>{$_lang['financial_model']}</h1>
+    <div class="tool">
+    	 <a href="index.php?do={$do}&view=revenue" class="here">财务概况</a>
+		<a href="index.php?do={$do}&&view=budget">网站收支</a>
+		<a href="index.php?do={$do}&view=all">{$_lang['flow_record']}</a>
+	    <a href="index.php?do={$do}&view=recharge">{$_lang['recharge_audit']}</a>
+	   <a href="index.php?do={$do}&view=withdraw">{$_lang['withdraw_audit']}</a>
+    </div>
+</div>
+<div class="box search p_relative">
+    <div class="title">
+        <h2>{$_lang['search']}</h2>
+    </div>
+    <div>
+        <form action="index.php?do={$do}&view={$view}" method="post" id=frm_search name='frm_search'>
+        	 <table cellspacing="0" cellpadding="0">
+                <tbody>
+                    <tr>
+                    	<th width="100">{$_lang['time_coverage']} </th>
+						<td>
+                            <input type="text" value="{$st}" name="st" class="txt"
+							  onclick="showcalendar(event, this, 0)" limit='required:false;type:date;less:{$today}'
+							   msg="{$_lang['time_tips']}" msgArea='span_notice' id='start_time'/>~
+                            <input type="text" value="{$ed}" name="ed" class="txt"
+							  onclick="showcalendar(event, this, 0)"  limit='required:false;type:date;less:{$today};than:start_time'
+							   msg="{$_lang['time_tips']}" msgArea='span_notice' id='end_time'/>
+							  
+                             <button class="pill" type="submit" value="{$_lang['search']}" name="sbt_search" onclick="return checkForm(document.getElementById('frm_search'));">
+                                <span class="icon magnifier">&nbsp;</span>{$_lang['search']}
+                              </button>
+							  <span id='span_notice' style='color:#ff0000'></span>
+                        </td>   
+				   </tr>
+                  </tbody>
+            </table>
+        </form>
+    </div>
+ </div>
+<!--搜索结束-->
+<div class="box list">
+    <div class="title" style="margin-bottom:10px;">
+        <h2>{$_lang['fina_overview']}({$desc})</h2>
+    </div>
+	
+	<div class="tab">
+        	<a class="select" href="#" onclick="swaptab('cont','select','','4','1',{mpre:'td_',spre:'tb_',hide:1});" class='select' id='td_cont_1' style="width:23%;"><strong>流水统计</strong> </a>
+            <a href="#" onclick="swaptab('cont','select','','4','4',{mpre:'td_',spre:'tb_',hide:1,ajax:1,url:'index.php?do={$do}&view={$view}&op=charge&st={$st}&ed={$ed}'});" id='td_cont_4' style="width:23%;"><strong>充值总计</strong></a>
+			<a href="#" onclick="swaptab('cont','select','','4','3',{mpre:'td_',spre:'tb_',hide:1,ajax:1,url:'index.php?do={$do}&view={$view}&op=withdraw&st={$st}&ed={$ed}'});" id='td_cont_3' style="width:23%;"><strong>提现总计</strong></a>
+			<a href="#" onclick="swaptab('cont','select','','4','2',{mpre:'td_',spre:'tb_',hide:1,ajax:1,url:'index.php?do={$do}&view={$view}&op=profit&st={$st}&ed={$ed}'});" id='td_cont_2' style="width:23%;"><strong>网站纯利</strong></a>
+			
+    		
+    </div>
+	<div class="tabcon">
+		
+		<table id='tb_cont_1' class='t_sub clear_l clear_b'>
+						<thead align="center">
+							<th> {$_lang['category']} </th>
+							<th> {$_lang['detail']} </th>
+							<th> {$_lang['cash']} </th>
+							<th> {$_lang['total']} </th>
+						</thead>
+						<tbody>
+							<tr>
+								<td>{$_lang['reward_host']}</td>
+								<td>
+									{if $task}
+									  <ul>
+										{loop $task $v}
+											<li>{$model_list[$v['model_id']]['model_name']}({$v['count']}{$_lang['ci']})</li>
+										{/loop}
+									  </ul>
+									{else}
+										{$_lang['no_data']}
+									{/if}
+								</td>
+								<td>
+									{if $task}
+									  <ul>
+										<!--{eval $t = 0;}-->
+										{loop $task $v}
+										<!--{eval $tc = $v['cash']+$v['credit'];}-->
+											<!--{eval $t+=$tc;}-->
+											<li>{c:$tc}</li>
+										{/loop}
+									  </ul>
+									{else}
+										{$_lang['no_data']}
+									{/if}
+								</td>
+								<td>{c:$t}</td>
+							</tr>
+							<tr>
+								<td>{$_lang['payitem']}</td>
+								<td>
+									<!--{eval $p = $payitem['cash']+$payitem['credit'];}-->
+									{if $p}
+										{$p}{$_lang['ci']}
+									{else}
+										{$_lang['no_data']}
+									{/if}
+								</td>
+								<td>
+									{if $p}
+										{c:$p}
+									{else}
+										{$_lang['no_data']}
+									{/if}
+								</td>
+								<td>{c:$p}</td>
+							</tr>
+							<tr>
+								<td>{$_lang['sal_service']}</td>
+								<td>
+									{if $service}
+									  <ul>
+										{loop $service $v}
+											
+											<li>{$model_list[$v['model_id']]['model_name']}({$v['count']}{$_lang['ci']})</li>
+										{/loop}
+									  </ul>
+									{else}
+										{$_lang['no_data']}
+									{/if}
+								</td>
+								<td>
+									{if $service}
+									  <ul>
+										<!--{eval $s = 0;}-->
+										{loop $service $v}
+											<!--{eval $sc = $v['cash']+$v['credit'];}-->
+											<!--{eval $s+=$sc;}-->
+											<li>{c:$sc}</li>
+										{/loop}
+									  </ul>
+									{else}
+										{$_lang['no_data']}
+									{/if}
+								</td>
+								<td>{c:$s}</td>
+							</tr>
+							
+						</tbody>
+					
+					</table>
+			<div class='tip'><div class='title'>{$desc}{$_lang['in_description']}</div></div>
+					
+			<table id='tb_cont_2' class='t_sub hidden clear_l clear_b'></table>
+			<div class='tip hidden'><div class='title'>{$desc}{$_lang['profit_description']}</div></div>
+			
+			<table id='tb_cont_3' class='t_sub hidden clear_l clear_b'></table>
+			<div class='tip hidden'><div class='title'>{$desc}{$_lang['withdraw_description']}</div></div>	
+			<table id='tb_cont_4' class='t_sub hidden clear_l clear_b'></table>
+			<div class='tip hidden'><div class='title'>{$desc}{$_lang['charge_description']}</div></div>	
+					
+	</div>
+        
+    </div>
+
+    <!--{template ADMIN_DIRECTORY/tpl/admin_footer}-->
+{elseif $op=='profit'}
+		<thead align="center">
+			<th> {$_lang['from']} </th>
+			<th> {$_lang['cash']} </th>
+		</thead>
+		<tbody>
+			<tr>
+				<td >任务佣金</td>
+				<td >{c:$task}</td>
+			</tr>
+			<tr>
+				<td >商品抽成</td>
+				<td>{c:$service}</td>
+			</tr>
+			<tr>
+				<td >{$_lang['payitem']}</td>
+				<td>{c:$payitem}</td>
+			</tr>
+			<tr>
+				<td >{$_lang['user_auth']}</td>
+				<td>{c:$auth}</td>
+			</tr>
+			<tr>
+				<td >{$_lang['user_withdraw']}</td>
+				<td>{c:$withdraw}</td>
+			</tr>
+			
+		</tbody>
+	<tfoot>
+			<tr>
+				<td></td>
+				<td ><strong>{$_lang['total']}</strong> <strong style="color:red"> {c:$p_all}</strong></td>
+			</tr>
+		</tfoot>
+{elseif $op=='withdraw'}
+<thead align="center">
+	<th> {$_lang['category']} </th>
+	<th> {$_lang['cash']} </th>
+	<th> {$_lang['profit']} </th>
+</thead>
+<tbody>
+	<tr>
+		<td >{$_lang['third_party']}</td>
+		<td>
+			<ul>
+				<!--{eval $w_c=0;}-->
+				{if sizeof($list)>0}
+					{loop $pay_online $k $v}
+					  {if $list[$k]}
+						<!--{eval $w_c+=$list[$k]['cash'];}-->
+						<li>
+							{$v['pay_name']}
+								(<!--{eval echo intval($list[$k]['count'])}-->
+								{$_lang['ci']}){$_lang['zh_mh']}{c:$list[$k]['cash']}
+						</li>
+					   {/if}
+					{/loop}
+				{else}
+					{$_lang['no_data']}
+				{/if}
+			</ul>
+		</td>
+		<td>
+			<ul>
+				<!--{eval $w_f=0;}-->
+				{if sizeof($list)>0}
+					{loop $pay_online $k $v}
+					  {if $list[$k]}
+						<!--{eval $w_f+=$list[$k]['fee'];}-->
+						<li>
+							{c:$list[$k]['fee']}
+						</li>
+					   {/if}
+					{/loop}
+				{else}
+					{$_lang['no_data']}
+				{/if}
+			</ul>
+		</td>
+	</tr>
+	<tr>
+		<td >{$_lang['offline_bank']}</td>
+		<td>
+			<ul>
+				{if sizeof($list)>0}
+					{loop $bank_arr $k $v}
+					  {if $list[$k]}
+						<!--{eval $w_c+=$list[$k]['cash'];}-->
+						<li>
+							{$v}
+								(<!--{eval echo intval($list[$k]['count'])}-->
+								{$_lang['ci']}){$_lang['zh_mh']}{c:$list[$k]['cash']}
+						</li>
+					   {/if}
+					{/loop}
+				{else}
+					{$_lang['no_data']}
+				{/if}
+			</ul>
+		</td>
+		<td>
+			<ul>
+				{if sizeof($list)>0}
+					{loop $bank_arr $k $v}
+					  {if $list[$k]}
+						<!--{eval $w_f+=$list[$k]['fee'];}-->
+						<li>
+							{c:$list[$k]['fee']}
+						</li>
+					   {/if}
+					{/loop}
+				{else}
+					{$_lang['no_data']}
+				{/if}
+			</ul>
+		</td>
+	</tr>
+</tbody>
+<tfoot>
+	<tr>
+		<td><strong>{$_lang['total']}</strong></td>
+		<td><strong style="color:red">{c:$w_c}</strong></td>
+		<td ><strong style="color:red">{c:$w_f}</strong></td>
+	</tr>
+</tfoot>
+{elseif $op=='charge'}
+<thead align="center">
+	<th> {$_lang['charge_type']} </th>
+	<th> {$_lang['charge_ci']}({$_lang['ci']}) </th>
+	<th> {$_lang['charge_cash']} </th>
+</thead>
+<tbody>
+		<!--{eval $d = 0;}-->
+		{loop $fina_type $k $v}
+	<tr>
+	<td>{$v}</td>
+	<td>
+		{if $charge[$k]['count']}{$charge[$k]['count']}{else}{$_lang['no_data']}{/if}
+	</td>
+	<td>
+		<!--{eval $ca = $charge[$k]['cash'];}-->
+		<!--{eval $d+=abs($ca);}-->
+		{if $ca}{c:$ca}{else}{$_lang['no_data']}{/if}
+	</td>
+	</td>
+</tr>
+{/loop}
+</tbody>
+<tfoot>
+	<tr>
+		<td><strong>{$_lang['total']}</strong></td>
+		<td colspan=2><strong style="color:red">{c:$d}</strong></td>
+	</tr>
+</tfoot>
+{/if}

@@ -1,0 +1,137 @@
+<!--{template ADMIN_DIRECTORY/tpl/admin_header}-->
+ 	<div class="page_title">	
+    	<h1>{$_lang['task_communication']}</h1>
+         <div class="tool">
+            <a href="index.php?do=task&view=custom" class="here" >{$_lang['comment_list']}</a>
+      	</div>	
+	</div>
+
+    <div class="box search p_relative">
+		<div class="title"><h2>{$_lang['search']}</h2></div>
+        <div class="detail" id="detail">
+			 <form action="" method="get">
+			 	<input type="hidden" name="do" value="$do">
+				<input type="hidden" name="view" value="$view">
+				<input type="hidden" name="page" value="$page">
+				
+				<table cellspacing="0" cellpadding="0">
+					<tbody>
+						<tr>
+							<th>{$_lang['id']}</th>
+							<td><input type="text" value="$w['comment_id']" name="w[comment_id]" class="txt"/></td>
+							<th>{$_lang['username']}</th>
+							<td><input type="text" value="$w['username']" name="w[username]" class="txt"/></td>
+						</tr>
+						<tr>
+						
+							<th>{$_lang['result_order']}</th>
+							<td>
+								<select name="ord[]">
+                                <option value="comment_id" {if $ord['0']=='comment_id' or !isset($ord['0'])} selected="selected"{/if}>{$_lang['default_order']}</option>
+                                <option value="on_time" {if $ord['0']=='on_time' } selected="selected"{/if}>{$_lang['pub_time']}</option>
+                                </select>
+                                <select name="ord[]">
+                                <option {if $ord['1']=='desc' or !isset($ord['1'])}selected="selected" {/if} value="desc">{$_lang['desc']}</option>
+                                <option {if $ord['1']=='asc'}selected="selected" {/if} value="asc">{$_lang['asc']}</option>
+                                </select>
+								
+							</td>
+							
+							<th>{$_lang['list_result']}</th>
+								<td>	
+								<select name="slt_page_size">
+	                				<option value="10" {if $slt_page_size=='10'} selected="selected"{/if}>{$_lang['page_size']}10</option>
+	               		 			<option value="20" {if $slt_page_size=='20'} selected="selected"{/if}>{$_lang['page_size']}20</option>
+	               					<option value="30" {if $slt_page_size=='30'} selected="selected"{/if}>{$_lang['page_size']}30</option>
+	          					 </select>
+								<button class="pill" type="submit" value={$_lang['search']} name="sbt_search">
+                            		<span class="icon magnifier">&nbsp;</span>{$_lang['search']}
+								</button></td>
+							</td>
+						</tr>
+					</tbody>
+				</table>	
+				</form>
+		</div>
+    </div>
+	
+<div class="box list">
+    	<div class="title"><h2>{$_lang['comment_list']}</h2></div>
+        <div class="detail">
+  		<form action="" id='frm_list' method="post">
+  		<div id="ajax_dom">
+  			<table  cellpadding="0" cellspacing="0">
+  				<thead>
+  				<tr>
+  					<th>
+	<input type="checkbox" id="checkbox" onclick="checkall();" class="checkbox" >编号
+</th>
+                    <th width="100">
+                        {$_lang['username']}
+                    </th>
+                    <th>
+                        {$_lang['proposal']}
+                    </th>
+                    <th width="90">
+                        {$_lang['time']}
+					</th>
+                    <th width="25%">
+                        {$_lang['operate']}
+                    </th>
+                </tr>
+				</thead>
+				<tbody>
+                {loop $comment_arr $key $value}
+                <tr>
+                	<td>
+                		<input type="checkbox" name="ckb[]" value="{$value['comment_id']}">{$value['comment_id']}
+                	</td>
+                   
+                    <td>
+                        {$value['username']}
+                    </td>
+                    <td class="wraphide" title="{$value['content']}">
+                        <p style="width:300px;height:20px;overflow:hidden;" title="{$value['content']}">
+                            {$value['content']}
+                        </p>
+                    </td>
+                    <td>
+                        <!--{date('Y-m-d H:i:s',$value['on_time'])}-->
+                    </td>
+                    <td>
+                        <a href="index.php?do=task&view=custom&ac=del&comment_id={$value['comment_id']}" onclick="return cdel(this);" class="button"><span class="trash icon"></span>{$_lang['delete']}</a>
+						<a href="javascript:void(0);" onclick="reply('{$value['comment_id']}','{$value['uid']}')">{$_lang['reply']}</a>
+                    </td>
+                </tr>
+				{/loop}
+				</tbody>
+				<tfoot>
+				 <tr>
+                    <td colspan="4">
+	                    	<label for="checkbox" onclick="checkall(event);">{$_lang['select_all']}</label>
+	                        <input type="hidden" name="sbt_action" class="sbt_action"/>
+	                        <button name="sbt_action" type="submit" value={$_lang['mulit_delete']} onclick="return batch_act(this,'frm_list');" class="pill negative" >
+	                        <span class="icon trash"></span>{$_lang['mulit_delete']}</button>
+					</td>	
+				</tr>		
+				</tfoot>
+  			</table>
+			<div class="page">{$pages['page']}</div>
+			</div>
+		</form>
+      </div>
+</div>	 
+<script type="text/javascript">
+	function reply(comm_id,to_uid){
+		var title ="{$_lang['reply_msg']}";
+	
+	   art.dialog.open(
+	   	  'index.php?do=task&view=custom&by='+comm_id+'&to_uid='+to_uid+'&title='+title,
+	   	{
+			width:'500px',
+			height:'400px',
+		} 
+	   );
+	}
+</script>
+<!--{template ADMIN_DIRECTORY/tpl/admin_footer}-->

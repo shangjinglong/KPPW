@@ -1,0 +1,210 @@
+<!--{template ADMIN_DIRECTORY/tpl/admin_header}--> 
+<style type="text/css">
+	table tr .t_r{text-align:right}
+</style>
+<div class="page_title">
+  <h1>{$model_info[model_name]}{$_lang['task_config']}</h1>
+    <div class="tool">
+      <a href="index.php?do={$do}&model_id={$model_id}&view={$view}&op=config">{$_lang['basic_config']}</a>
+      <a href="index.php?do={$do}&model_id={$model_id}&view={$view}&op=control" class="here">{$_lang['control_config']}</a>
+      <a href="index.php?do={$do}&model_id={$model_id}&view={$view}&op=priv">{$_lang['private_config']}</a>
+    </div>
+</div>
+<div class="box post">
+<div class="tabcon">
+ <div class="title"><h2>{$_lang['control_config']}</h2></div>
+  <form name="frm_config_reward" action="{$ac_url}" method="post" id="frm_config_reward">
+  <input type="hidden" name="pk[model_id]" value="{$model_id}">
+	<table width="100%" border="0" cellspacing="0" cellpadding="0">
+  	
+	<tr>
+		 <th scope="row" width="200"> <b>{$_lang['task_commission_strategy']}</b>{$_lang['zh_mh']}任务规则设置和异常任务资金分配</th><td>&nbsp;</td>
+	</tr>
+	<tr>
+		<th scope="row" width="200" class="t_r">{$_lang['task_audit_money_set']}{$_lang['zh_mh']}</th>
+		 <td>
+			<input type="text" size="10"   name="conf[audit_cash]" id="audit_cash" value="{$audit_cash}"  limit="required:true;type:float;between:0-" msg={$_lang['fill_in_right_audit_money']} title={$_lang['task_audit_money_allow_decimal']} msgArea="audit_moeny_msg"  class="txt"> {$_lang['yuan']}
+				({$_lang['greater_money_not_audit_notice']})<span id="audit_moeny_msg"></span>
+		</td>
+    </tr>
+	<tr>
+		<th scope="row" width="200" class="t_r">{$_lang['task_min_money']}{$_lang['zh_mh']}</th>
+		 <td>
+			<input type="text" size="10"   name="conf[min_cash]" id="min_cash" value="{if $min_cash}{$min_cash}{else}1{/if}" limit="type:float;required:true;between:0-" msg={$_lang['task_min_money_input_error']} title={$_lang['task_min_money_allow_decimal']}  msgArea="task_min_cash_msg" class="txt"/>{$_lang['yuan']}
+			(设置任务最小金额不得小于0元)<span id="task_min_cash_msg"></span>
+		 </td>
+	</tr>
+	<tr>
+		<th scope="row" width="200" class="t_r">{$_lang['task_royalty_rate']}{$_lang['zh_mh']}</th> 
+		<td>
+			<input type="text" size="10" name="conf[task_rate]" value="{$task_rate}" id="task_rate" limit="required:true;type:int;len:1-3;between:0-100" msg={$_lang['task_royalty_rate_notice']} title={$_lang['task_royalty_rate_title']} msgArea="task_rate_msg" class="txt"/>%({$_lang['task_royalty_rate_title']})<span id="task_rate_msg"></span>
+		</td>
+	</tr>	
+
+	<tr>
+		<th scope="row" width="200" class="t_r">{$_lang['task_fail_returned_smoke_scale']}{$_lang['zh_mh']}</th> 
+		<td>
+			<input type="text" id="task_fail_rate" size="10" name="conf[task_fail_rate]" value="{$task_fail_rate}" limit="required:true;type:int;len:1-3;between:0-100" msg={$_lang['task_royalty_rate_notice']} title={$_lang['task_royalty_rate_title']} msgArea="task_fail_rate_msg" class="txt"/>%({$_lang['task_royalty_rate_mount']})<span id="task_fail_rate_msg"></span>
+		</td>
+	</tr>
+  	<tr><th scope="row" width="200">{$_lang['task_time_rule_set']}{$_lang['zh_mh']}{$_lang['task_time_rule_set_info']}
+</th><td>&nbsp;</td></tr>
+	<tr>
+	 <th scope="row" width="200" class="t_r">{$_lang['time_rule']}{$_lang['zh_mh']}</th>
+	 <td id="td_cash_rul" class="td_cash_rul">
+	  <ul id="add_new_rul" style="list-style:none">
+	  	{loop $time_rule $k $v}
+			<li>
+				<span id="span_{$k}"><!--{eval echo $k+1;}--></span>
+				<input type="hidden" name="">
+				 <input type="text" size="10" name="timeOld[{$v[day_rule_id]}][rule_cash]" id="rule_cash_{$k}" value="<!--{eval echo  floatval($v['rule_cash'])}-->" limit="required:true;type:float"          msg={$_lang['task_min_money_error']}   title={$_lang['please_carefully_input_min_money']} msgArea="span_time_{$k}"  class="txt"/>{$_lang['yuan_over']} &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+				 <input type="text" size="10" name="timeOld[{$v[day_rule_id]}][rule_day]"  id="rule_day_{$k}"  value="{$v['rule_day']}"  limit="required:true;type:int;between:1-" msg={$_lang['day_must_greater_one']} title={$_lang['please_carefully_input_day']} msgArea="span_time_{$k}"  class="txt"> {$_lang['day']} 
+				<span id="span_time_{$k}"></span>
+				{if $k>0}<a href="javascript:;" class="del_time_rule" rel="{$v[day_rule_id]}">{$_lang['delete_rule']}</a>{/if}
+			</li>
+		{/loop}
+		</ul>
+		<a href="javascript:;" id="add_time_rule">{$_lang['add_rule']}</a>
+		</td>
+	</tr>
+	<tr>
+		<th scope="row" width="200" class="t_r">{$_lang['task_min_day']}{$_lang['zh_mh']}</th>
+		 <td>
+			<input type="text" size="10" id="min_day"  name="conf[min_day]"  value="{$min_day}" limit="type:int;required:true;between:1-" msg={$_lang['task_least_one_day']} title={$_lang['task_min_time_one_day']} msgArea="span_min_day" class="txt">{$_lang['days']}
+			<span id="span_min_day"></span>
+		 </td>
+	</tr>	
+	<tr>
+		<th scope="row" width="200" class="t_r">{$_lang['choose_time_set']}{$_lang['zh_mh']}</th> 
+		 <td>
+			<input type="text" size="10" name="conf[choose_time]" id="choose_time" value="{$choose_time}"  limit="required:true;type:int;between:1-" msg={$_lang['choose_time_input_error']} title={$_lang['choose_time_notice']}  msgArea="span_draft_time" class="txt">{$_lang['day']}{$_lang['choose_time_notice']}<span id="span_draft_time"></span>
+		</td>
+	</tr>
+	<tr>
+		<th scope="row" width="200" class="t_r">{$_lang['largest_evaluation_delayed_days_set']}{$_lang['zh_mh']}</th> 
+		<td>
+			<input type="text" size="10"  name="conf[mark_day]" id="mark_day" value="{$mark_day}" limit="type:int;required:true;between:1-" msg={$_lang['auto_evaluation_not_correct']} title={$_lang['auto_evaluation_not_one_day']} msgArea="mark_day_delay" class="txt"/><b style="color:red">*</b>{$_lang['day']}($_lang['max_mark_info'])<span id="mark_day_delay"></span>
+
+		</td>
+	</tr>
+	<!--
+	<tr>
+		<th scope="row" width="200" class="t_r">{$_lang['in_selecting_manuscripts']}{$_lang['zh_mh']}</th> 
+		<td>
+			<label for="open_select_yes"><input type="radio" name="conf[open_select]"  {if !$open_select||$open_select =='open'} checked {/if} id="open_select_yes" value="open">{$_lang['open']}</label>
+			<label for="open_select_no"><input type="radio" name="conf[open_select]" {if $open_select =='close'} checked {/if} id="open_select_no" value="close">{$_lang['close']}</label>
+		</td>
+	</tr>	-->
+	<tr>
+		 <th scope="row" width="200"><h4>{$_lang['extension_set_rules']}{$_lang['zh_mh']}{$_lang['task_delay_set_info']}
+</h4><td>&nbsp;</td></th>  
+	</tr>
+	<tr>
+		<th scope="row" width="200" class="t_r">{$_lang['min_amount_delay']}{$_lang['zh_mh']}</th> 
+		<td>
+			<input type="text" size="10"  name="conf[min_delay_cash]" id="min_delay_cash" value="{$min_delay_cash}" limit="required:true;type:int;between:1-" msg={$_lang['each_extension_least_money_err']} title={$_lang['task_extension_least_1_yuan']} msgArea="span_min_delay_cash" class="txt"/><b style="color:red">*</b>{$_lang['yuan']}<span id="span_min_delay_cash"></span>
+		</td>
+	</tr>
+	<tr>
+		<th scope="row" width="200" class="t_r">{$_lang['extension_day_limit']}{$_lang['zh_mh']}</th> 
+		<td>
+			<input type="text" size="10"  name="conf[max_delay]" id="max_delay" value="{$max_delay}" limit="type:int;required:true;between:2-" msg={$_lang['each_extension_maximum_day_err']} title={$_lang['task_extension_maximun_least_2day']} msgArea="span_min_delay" class="txt"/><b style="color:red">*</b>{$_lang['day']}<span id="span_min_delay"></span>
+		</td>
+	</tr>
+	<tr>	
+	 <th scope="row" width="200" class="t_r">{$_lang['extension_rule']}{$_lang['zh_mh']}</th> 
+	 <td>
+		<ul id="new_delay_rule" class="new_delay_rule" style="list-style:none">
+		{loop $delay_rule $k $v}
+			<li>
+				{$_lang['di']}<input type="text" size="10" name="delayOld[{$v[defer_rule_id]}][defer_times]" id="defer_times_{$k}"  value="{$v['defer_times']}" readonly="true" class="txt"/>{$_lang['times']}
+				{$_lang['not_less_reward_total_money']}<input type="text" name="delayOld[{$v[defer_rule_id]}][defer_rate]" id="defer_rate_{$k}" value="<!--{eval echo floatval($v['defer_rate'])}-->" size="10"  limit="required:true;type:int;between:0-100"
+				 msg={$_lang['proportional_error_fill']} title={$_lang['task_delay_ratio_for']} msgArea="span_delay_{$k}" class="txt">%<span id="span_delay_{$k}"></span>
+				<a href="javascript:;" class="del_delay_rule" rel="{$v[defer_rule_id]}">{$_lang['delete_rule']}</a>
+	 		</li>
+		{/loop}
+	   </ul>
+		<a href="javascript:;" id="add_delay_rule"><img src="../../static/img/ico/add.gif" align="absmiddle" alt=''/>{$_lang['add_rule']}</a>
+		</td>
+	</tr>
+	<tr>
+		<th scope="row" width="200"><b>{$_lang['task_set_manuscripts']}</b>{$_lang['zh_mh']}{$_lang['task_set_manuscripts_info']}</th>
+	</tr>
+	<tr>
+		<th scope="row" width="200" class="t_r">{$_lang['set_manuscripts']}{$_lang['zh_mh']}</th>
+		<td>
+			<input type="text" name="conf[work_percent]" value="{$work_percent}" limit="type:int;required:true;between:0-" msg={$_lang['ratio_number_incorrect_manuscripts']} tips={$_lang['input_manuscript_number_proportion']} msgArea="span_work_percent" class="txt"/><b style="color:red">*</b>% &nbsp;({$_lang['not_more_required_number_manuscripts']})<span id="span_work_percent"></span>
+		</td>		
+	</tr>
+	<tr>
+		<th scope="row" width="200" class="t_r">{$_lang['automatic_selection']}{$_lang['zh_mh']}</th> 
+		<td>
+			<label for="is_auto_adjourn_yes"><input type="radio" name="conf[is_auto_adjourn]"  {if $is_auto_adjourn =='1'} checked {/if} id="is_auto_adjourn_yes" value="1">{$_lang['open']}</label>
+			<label for="is_auto_adjourn_no"><input type="radio" name="conf[is_auto_adjourn]" {if !$is_auto_adjourn||$is_auto_adjourn =='2'} checked {/if} id="is_auto_adjourn_no" value="2">{$_lang['close']}</label>
+			({$_lang['automatic_selection_info']})
+		</td>
+	</tr>
+	<!--
+	<tr>
+		<th scope="row" width="200" class="t_r">{$_lang['automatic_selection_former_N']}{$_lang['zh_mh']}</th> 
+		<td>
+			<input type="text" name="conf[adjourn_num]" value="{$adjourn_num}" limit="type:int;required:true;between:0-" msg={$_lang['manuscript_number_input_not_correct']} tips={$_lang['enter_manuscript_number']} msgArea="span_adjourn_num" class="txt"/><b style="color:red">*</b>{$_lang['ge']} &nbsp;({$_lang['if_open_automatic_info']})<span id="span_adjourn_num"></span>
+		</td>
+	</tr>-->
+	<tr>
+		<th scope="row" width="200">&nbsp;</th>
+		<td>
+            <div class="clearfix padt10">
+			 <button type="submit" name="sbt_edit" class="positive primary  button" value="1" onclick="return checkForm(document.getElementById('frm_config_reward'))"><span class="check icon"></span>{$_lang['submit']}</button>
+			</div>
+		</td>
+	</tr>
+  </table>
+  </form>
+   </div>
+ </div>
+<script type="text/javascript">
+$(function(){
+	if($("#end_action_1").attr("checked")==true){
+		$("#slt").hide();
+	}
+	if($("#end_action_2").attr("checked")==true){
+		 $("#slt").show();
+	 }
+	$("#end_action_1").click(function(){
+		$("#slt").hide();
+	})
+	$("#end_action_2").click(function(){
+		  $("#slt").show();
+	})
+	
+	$("#add_time_rule").click(function(){
+		var ruleNum=parseInt($("#add_new_rul").find("li").length)+1;
+		var newRule=$("<li><span id='span_"+ruleNum+"'>"+ruleNum+"</span><input type='text' size='10' name='timeNew["+ruleNum+"][rule_cash]' class='txt'/>{$_lang['yuan_over']}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"+
+				 "&nbsp;&nbsp;<input type='text' size='10' name='timeNew["+ruleNum+"][rule_day]' class='txt'> {$_lang['day']}<br></li>");
+			newRule.appendTo($("#add_new_rul"));
+	})	
+	$(".del_time_rule").click(function(){
+		var timeRuleId=parseInt($(this).attr("rel"));
+			if(!isNaN(timeRuleId)){
+				$.getJSON("{$ac_url}",{ac:'del_time_rule',rule_id:timeRuleId},function(){});
+			}
+		$(this).parent().remove();
+	})	
+	$("#add_delay_rule").click(function(){
+		var delayNum=parseInt($("#new_delay_rule").find("li").length)+1;
+		var newRule=$("<li>{$_lang['di']}<input type='text' size='10' name='delayNew["+delayNum+"][defer_times]' value="+delayNum+" class='txt'/>{$_lang['times']}"+
+				 "{$_lang['not_less_total_money_reward']}&nbsp;<input type='text' size='10' name='delayNew["+delayNum+"][defer_rate]' class='txt'>%"+
+				 "</li>");
+			newRule.appendTo($("#new_delay_rule"));
+	})
+	$(".del_delay_rule").click(function(){
+		var delayRuleId=parseInt($(this).attr("rel"));
+			if(!isNaN(delayRuleId)){
+				$.getJSON("{$ac_url}",{ac:'del_delay_rule',rule_id:delayRuleId},function(){});
+			}
+		$(this).parent().remove();
+	})
+  })
+</script>
+<!--{template ADMIN_DIRECTORY/tpl/admin_footer}-->

@@ -1,0 +1,73 @@
+
+
+<div class="modal-body">
+	<form role="form" action="index.php?do=suggest" method="post" id = "subSuggest" name = "subSuggest">
+	<input type="hidden" name="formhash" id="formhash" value="{FORMHASH}">
+	  <div class="form-group">
+	    <label for="exampleInputTitle">建议标题</label>
+	    <input type="text" name="txt_title" id="txt_title" class="form-control" id="exampleInputTitle" placeholder="建议标题">
+	  </div>
+	  <div class="form-group">
+	    <label for="exampleSelect">建议类型</label>
+	    <select name="slt_type" id="exampleSelect" class="form-control">
+		  	<option value="1">我的建议</option>
+			<option value="2">我的问题</option>
+		</select>
+	  </div>
+
+	  <div class="form-group">
+	    <label for="exampleTextarea">详细描述</label>
+	    <textarea  name="tar_content" id="tar_content"  class="form-control" cols="30" rows="10" placeholder="不得超过100个字符"></textarea>
+	  </div>
+
+	  <div class="form-group clearfix code-group">
+	    <label for="exampleInputCode"  class="col-xs-12">验证码</label>
+        <div class="col-xs-3">
+          <input type="text" class="form-control" id="code" name="code" placeholder="验证码">
+        </div>
+        <div class="col-xs-9 code-img">
+         <img id="secode_img" src="index.php?do=ajax&view=captcha" onclick="document.getElementById('secode_img').src='index.php?do=ajax&view=captcha&sid='+Math.random(); return false;">
+           <a  href="javascript:document.getElementById('secode_img').src='index.php?do=ajax&view=captcha&sid='+Math.random();void(0);" >换一组</a>
+        </div>
+      </div>
+
+	  <div class="form-group text-center">
+	    <button type="submit" class="btn btn-primary">提交</button>
+	  </div>
+	</form>
+
+</div>
+<script type="text/javascript">
+$(function(){
+	$('#subSuggest').scojs_valid({
+	    rules: {
+			txt_title: ['not_empty',{'min_length': 2},{'max_length': 20}],
+	    	tar_content: ['not_empty',{'min_length': 10},{'max_length': 100}],
+			code:['not_empty']
+	    },
+	    messages: {
+			txt_title: {
+				not_empty: "请输入标题",
+				min_length: "最少输入2字符",
+				max_length: "最多可以输入:20字"
+			},
+	    	tar_content: {
+				not_empty: "请输入意见建议描述",
+				min_length: "最少输入10字符",
+				max_length: "最多可以输入:100字"
+			},
+			code:{
+				not_empty: "请输入验证码",
+			}
+	    },
+	    wrapper:'.form-group'
+	    ,onSuccess: function(response, validator, form) {
+
+	    	  tipsOp(response.data,response.status);
+	    	  if(response.url){
+					window.location.href=response.url;
+	    	  }
+	    }
+	});
+   });
+</script>

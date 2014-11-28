@@ -1,0 +1,111 @@
+<!--{template user/header}-->
+<div class="container">
+  <div class="nav-action">
+		<!--{template user/left_side}-->
+  </div>
+  <!-- nav-action end -->
+  <div class="content-panel">
+      <div class="tab">
+      <!--{template user/account_auth_nav}-->
+      </div>
+      <div class="tab_detail">
+      		<!-- start -->
+          <div class="media">
+              <div class="pull-left">
+                  <img class="media-object" src="{$auth_item['auth_big_ico']}" title="{$auth_item['auth_title']}">
+              </div>
+              <div class="media-body">
+                <div class="panel
+                    {if $arrAuthInfo['pay_to_user_cash']>0}
+                      panel-success
+                    {else}
+                      panel-info
+                    {/if}
+                ">
+                  <div class="panel-heading">
+                        <h3 class="panel-title">
+                          {$auth_item['auth_title']}
+
+                          {if $arrAuthInfo['pay_to_user_cash']>0}
+                          <span class="label label-success"><i class="fa fa-check"></i> 已打款</span>
+                          {else}
+                          <span class="label label-info"><i class="fa fa-info"></i> 打款中</span>
+                          {/if}
+                        </h3>
+                  </div>
+                  <div class="panel-body">
+                      {if $arrAuthInfo['pay_to_user_cash']>0}
+                      <p class="text-info">
+                        <i class="fa fa-info-circle"></i>
+                        银行已经向你的账户中支付了一笔款项，请查清后填入下面的输入框中，输入错误将会导致此次认证失败
+                      </p>
+                      <form role="form" action="{$strUrl}&step=step2&intBankAid={$arrAuthInfo['bank_a_id']}" method="post" class="form-horizontal" name="editBankForm" id="editBankForm">
+                          <input type="hidden" name="formhash" id="formhash" value="{FORMHASH}">
+
+                          <div class="form-group">
+                            <label class="col-sm-3 control-label" for="user_get_cash">输入打款金额：</label>
+                              <div class="col-sm-4">
+                                <input type="text"  name="user_get_cash" id="user_get_cash"  class="form-control">
+                              </div>
+                          </div>
+
+                          <div class="form-group">
+                            <div class="col-sm-offset-3 col-sm-10">
+                              <button class="btn btn-default" type="submit" value="1" >提交</button>
+                              <span class="text-success" id="tipsUser"></span>
+                            </div>
+                          </div>
+
+                        </form>
+                      {else}
+                        <div class="alert alert-success">
+                          <p>
+                            <i class="fa fa-check-circle"></i>
+                            <b>资料提交成功</b>,请等待{$_K['sitename']}向您的银行卡汇款
+                          </p>
+                          <p>{$_K['sitename']}会在{$auth_item[auth_day]}个工作日内给您的账户中支付一笔款项</p>
+                          <p>您需要查询银行卡的收支明细单，正确输入这笔金额才能通过认证。</p>
+                        </div>
+
+                        <div class="table-responsive">
+                          <table class="table table-bordered">
+                            <thead>
+                              <tr>
+                                <th>认证银行</th>
+                                <th>认证银行卡号</th>
+
+                              </tr>
+                            </thead>
+                            <tbody>
+                              <tr>
+                                <td><img src="static/img/system/kppw_2.0_{$arrUserBankInfo[bank_name]}.png"></td>
+                                <td><!--{eval echo kekezu::set_star($arrUserBankInfo['card_num'],3,3);}--></td>
+                              </tr>
+                            </tbody>
+                          </table>
+                        </div>
+
+
+
+                        <p class="text-info">
+                          <i class="fa fa-info-circle"></i>
+                          友情提示：当前认证状态为“打款中”，您无法进行任何输入操作，请耐心等待.
+                        </p>
+
+
+                      {/if}
+                  </div>
+
+                </div>
+              </div>
+          </div>
+
+
+
+
+      		<!-- end -->
+      </div>
+  </div>
+  </div>
+  <script src="static/js/model/user/auth.js"></script>
+<!--{template user/footer}-->

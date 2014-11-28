@@ -1,0 +1,146 @@
+<!--{template ADMIN_DIRECTORY/tpl/admin_header}-->
+
+<div class="page_title">
+    	<h1>{$_lang['goods_order_manage']}</h1>
+        <div class="tool">
+		   {loop $ops $v}
+				<a href="index.php?do=$do&model_id={$model_id}&view=edit&service_id={$service_id}&op={$v}" class="{if $op==$v}here{/if}">{$_lang['b_shop_'.$v]}</a>
+       		{/loop}
+        </div>
+</div>
+<!--页头结束-->
+
+<!--提示结束-->
+
+<div class="box search p_relative">
+    	<div class="title"><h2>{$_lang['search']}</h2></div>
+        <div class="detail" id="detail">
+		  <form method="post" action="" id="frm_art_search">
+			<input type="hidden" name="page" value="{$page}">
+			   <table cellpadding="0" cellspacing="0">    		
+					<tbody>
+						<tr>
+							<th>{$_lang['id']}</th>
+							<td>
+								<input type="text" class="txt" name="w[order_id]" id="order_id" value="{$w['order_id']}" onkeyup="clearstr(this);">
+							</td>
+							<th>{$_lang['give_order_people']}</th>
+							<td><input type="text" class="txt" name="w[order_username]" id="title" value="{$w['order_username']}"></td>
+							<th>{$_lang['order_status']}</th>
+							<td>
+ 							 <select name="w[order_status]">
+ 							 	<option value="">{$_lang['please_choose_order_status']}</option>
+								{loop $order_status_arr $k $v}
+                     		 	 <option {if $w['order_status']==$k}selected="selected" {/if}  value="$k">$v</option> 
+								{/loop}                    		 	 
+                     		 </select>
+							</td>
+						</tr>
+						<tr>
+							<th>{$_lang['result_order']}</th>
+						    <td>
+							
+								<select name="ord[]">
+                                	<option value="order_id" {if $ord['0']=='order_id' or !isset($ord['0'])} selected="selected"{/if}>{$_lang['default']}{$_lang['order']}</option>
+                                	<option value="order_time" {if $ord['0']=='order_time' } selected="selected"{/if}>{$_lang['order_time']}</option>
+                                </select>
+                                <select name="ord[]">
+                               		 <option {if $ord['1']=='desc' or !isset($ord['1'])}selected="selected" {/if} value="desc">{$_lang['desc']}</option>
+                                	<option {if $ord['1']=='asc'}selected="selected" {/if} value="asc">{$_lang['asc']}</option>
+                                </select>
+							</td>
+							<th>{$_lang['list_result']}</th>
+							<td colspan="3">
+								<select name="w[page_size]">
+	                			<option value="10" {if $w['page_size']=='10'}selected="selected"{/if}>{$_lang['page_size']}10</option>
+	                			<option value="20" {if $w['page_size']=='20'}selected="selected"{/if}>{$_lang['page_size']}20</option>
+	                			<option value="30" {if $w['page_size']=='30'}selected="selected"{/if}>{$_lang['page_size']}30</option>
+	            				</select>
+								<button class="pill" type="submit" value="{$_lang['search']}" name="sbt_search">
+									<span class="icon magnifier">&nbsp;</span>{$_lang['search']}
+								</button>
+							</td>
+						</tr>
+						<tr>
+							
+						</tr>
+					</tbody>
+			  </table>
+		  </form>
+        </div>
+</div>
+<!--搜索结束-->
+
+
+<div class="box list">
+    	<div class="title"><h2>{$_lang['order_list']}</h2></div>
+        <div class="detail">
+			<form method="post" action="" id="frm_art_search">
+			<input type="hidden" name="w[page_size]" value="{$page_size}">
+			<div id="ajax_dom">
+			<input type="hidden" name="page" value="{$page}">
+        		<table cellspacing="0" cellpadding="0">
+        			<tr> 
+            			<th width="15%">ID</th>
+                        <th width="20%">{$_lang['order_name']}</th>
+                        <th width="10%">{$_lang['order_money']}</th>
+                        <th width="10%">{$_lang['order_status']}</th>
+                        <th width="10%">{$_lang['give_order_people']}</th>
+					    <th width="20%">{$_lang['order_time']}</th>
+                        <th width="10%">{$_lang['operate']}</th>
+                	</tr>
+                	{if $order_arr}					
+                	{loop $order_arr $k $v}
+                	<tr class="item">
+                    	<td><input type="checkbox" name="ckb[]" value="{$v['order_id']}" class="checkbox">{$v['order_id']}</td>
+                    	<td class="obj_link"><!--{eval echo $v['order_body']}--></td>
+                    	<td>{c:$v['order_amount']}</td>
+                    	<td>
+                    		$order_status_arr[$v['order_status']]                           
+						</td>
+						<td>
+							{$v['order_username']}	
+						</td>
+                   		<td><!--{date('Y-m-d H:i:s',$v['order_time'])}--></td>
+						<td>
+							<a target="_blank" href="{$_K['siteurl']}/index.php?do=goods&id={$service_id}" class="button dbl_target"><span class="book icon"></span>{$_lang['view']}</a>
+							<a onclick="return cdel(this);" href="$url" class="button"><span class="trash icon"></span>{$_lang['delete']}</a>
+                    	</td>
+                	</tr>
+                	{/loop}
+                	{/if}			
+                    <tr>
+        				<td colspan="9">
+                			<div class="page fl_right">{$pages['page']}</div>
+                			<div class="clearfix">
+              					<input type="checkbox" class="checkbox" id="checkbox" onclick="checkall();"/>
+                    			<label for="checkbox">{$_lang['select_all']}</label>   
+                    			<input type="hidden" name="sbt_action" value="{$_lang['mulit_delete']}" />                  
+                    			<button class="pill negative" type="submit" value="{$_lang['mulit_delete']}" name="sbt_action" onclick="return pdel('frm_art_search');"><span class="icon trash">&nbsp;</span>{$_lang['mulit_delete']}</button>
+                			</div>
+             			</td>
+    			   </tr>
+        		</table>
+				</div>
+    		</form>        	
+        </div>
+</div>
+<!--主体结束-->
+<script type="text/javascript">	
+var url_link = "{$_K['siteurl']}/";
+	$(function(){
+		$(".obj_link a").each(function(){
+			this.href=this.href.replace(url_link+"admin/",url_link);
+			this.target="_blank";
+		})
+	})
+	function show_detail(order_id){
+		var url = 'index.php?do=model&model_id=6&view=order_detail&order_id='+order_id;
+		art.dialog.open(url,{title:"{$_lang['order']}#"+order_id+"{$_lang['number_detail']}",height:400,width:700});
+	}
+	function go_detail(order_id){
+		var url = 'index.php?do=model&model_id=6&view=order_detail&order_id='+order_id;
+		location.href = url;
+	}
+</script>
+<!--{template ADMIN_DIRECTORY/tpl/admin_footer}-->

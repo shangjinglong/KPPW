@@ -1,0 +1,151 @@
+<!--{template ADMIN_DIRECTORY/tpl/admin_header}--> 
+ 
+	<div class="page_title">	
+    	<h1>关键字管理</h1>
+         <div class="tool">
+            <a href="index.php?do=$do&view=keyword_list" class="here" >关键字列表</a>
+            <a href="index.php?do=$do&view=keyword_edit" >关键字添加</a>
+    	</div>
+	</div>
+    <!--页头结束-->
+
+    <!--提示结束-->
+     
+        <div class="box search p_relative">
+    	<div class="title"><h2>{$_lang['search']}</h2></div>
+        <div class="detail" id="detail">
+           
+		    <form action="#" method="get" name="s" id="sl">
+            	<input type="hidden" name="do" value="$do">
+				<input type="hidden" name="view" value="$view">
+				<input type="hidden" name="page" value="$page">
+                <table cellspacing="0" cellpadding="0">
+					<tbody>
+                        <tr>
+                            
+                            <th>关键字</th>
+                            <td colspan="3"><input type="text" value="$w['word']" name="w[word]" class="txt"/>*{$_lang['search_by_like']}</td>
+						</tr>
+                        <tr> 
+						
+							<th>{$_lang['order']}</th>
+							<td>
+                                <select name="ord[]">
+                                	<option value="keyword_id" {if $ord['0']=='keyword_id' or !isset($ord['0'])} selected="selected"{/if}>{$_lang['default']}{$_lang['order']}</option>
+                                	<option value="on_time" {if $ord['0']=='on_time' } selected="selected"{/if}>{$_lang['pub_time']}</option>
+                                </select>
+                                <select name="ord[]">
+                               		 <option {if $ord['1']=='desc' or !isset($ord['1'])}selected="selected" {/if} value="desc">{$_lang['desc']}</option>
+                                	<option {if $ord['1']=='asc'}selected="selected" {/if} value="asc">{$_lang['asc']}</option>
+                                </select>
+							</td> 
+                            <th>{$_lang['list_result']}</th>
+                            <td><select name="page_size">
+									<option value="10" {if $page_size=='10'}selected="selected"{/if}>{$_lang['page_size']}10</option>
+									<option value="20" {if $page_size=='20'}selected="selected"{/if}>{$_lang['page_size']}20</option>
+									<option value="30" {if $page_size=='30'}selected="selected"{/if}>{$_lang['page_size']}30</option>
+								</select>
+                              	<button class="pill" type="submit" value="{$_lang['search']}" name="sbt_search">
+                            		<span class="icon magnifier"></span>{$_lang['search']}
+								</button>
+								</td>
+                        </tr>
+                         
+                        
+                    </tbody>
+                </table>
+            </form>
+			
+        </div>
+    </div>
+    <!--搜索结束-->
+    
+    <div class="box list">
+    	<div class="title"><h2>关键字列表</h2></div>
+        <div class="detail">
+        	<form action="" id='frm_list' method="post">
+        		<div id="ajax_dom">
+        		<input type="hidden" name="page" value="{$page}">
+              <table cellpadding="0" cellspacing="0">
+                <thead>
+                  <tr>
+                    <th>
+	<input type="checkbox" id="checkbox" onclick="checkall();" class="checkbox" >编号
+</th>
+                    <th width="60">关键词</th>
+                    <th width="30%" >链接</th>
+                    <th width="60">出现次数</th>
+                    <th width="60">添加时间</th>
+					<th width="30">状态</th>
+                    <th width="25%">{$_lang['operate']}</th>
+                  </tr>
+				  </thead>
+                  <tbody>
+                  {loop $keyword_arr $k $v}
+                  <tr class="item">
+                  	<td><input type="checkbox" name="ckb[]" value="{$v['keyword_id']}" class="checkbox">{$v['keyword_id']}</td>
+                    <td>
+                    	<a href="index.php?do={$do}&view=keyword_edit&keyword_id={$v['keyword_id']}&page={$page}" >
+							<!--{eval echo(kekezu::cutstr($v['word'],50));}-->
+						</a>
+					</td>
+                    <td class="wraphide">$v['url']</td>
+                    <td class="wraphide">$v['show_count']</td>
+                    <td class="ws_break"><!--{date('Y-m-d',$v['on_time'])}--></td>
+					<td>{if $v['keyword_status']}可用{else}已禁用{/if}</td>
+                    <td>
+						<a href="index.php?do={$do}&view=keyword_edit&keyword_id={$v['keyword_id']}&page={$page}" class="button dbl_target"><span class="pen icon"></span>{$_lang['edit']}</a>
+						{if $v['keyword_status']==1}
+						<a href="index.php?do={$do}&view=keyword_list&ac=disable&keyword_id={$v['keyword_id']}&page={$page}" class="button dbl_target"><span class="pen icon"></span>禁用</a>
+						{else}
+						<a href="index.php?do={$do}&view=keyword_list&ac=open&keyword_id={$v['keyword_id']}&page={$page}" class="button dbl_target"><span class="pen icon"></span>启用</a>
+						{/if}
+						<a href="{$url}&keyword_id=$v['keyword_id']&ac=del&page={$page}"  onclick="return cdel(this);" class="button"><span class="trash icon"></span>{$_lang['delete']}</a>
+						
+					</td>
+                  </tr>
+                  {/loop}
+                  </tbody>
+				  <tfoot>
+                  <tr>
+                    <td colspan="7">
+	                    <div class="clearfix">
+	                  		<label for="checkbox" onclick="checkall(event);">{$_lang['select_all']}</label>
+	                        <input type="hidden" name="sbt_action" class="sbt_action"/>
+							<button name="sbt_action" type="submit" value="{$_lang['mulit_delete']}" onclick="return batch_act(this,'frm_list');" class="pill negative"><span class="icon trash"></span>{$_lang['mulit_delete']}</button>
+	                    </div>
+                    </td>
+                  </tr>
+                </tfoot>
+              </table>
+			  <div class="page">{$pages['page']}</div>
+			  </div>
+        	</form>
+        </div>       
+    </div>
+	<!--主体结束-->
+<script type="text/javascript">
+	function createHtml(writedir,filename){
+		var url = "index.php?do=static&view=update&sbt_edit=1&write_dir="+writedir+"&file_name="+filename;
+			ajaxDialog(url);
+	}
+ function ajaxDialog(url){
+ 	 art.dialog({
+			title: "{$_lang['static_file_update']}",
+			content: "{$_lang['start_update_static_file']}",
+			yesFn: function(){
+				var dia = this;
+				dia.content("{$_lang['static_file_update_not_operation']}").lock();
+						$.getJSON(url,function(json){
+							if(json.status==1){dia.close();
+								art.dialog({icon: 'succeed',content: json.msg,time:3});
+							}else{art.dialog.alert(json.msg);}
+							return false;
+						})
+						 return false;
+				},
+				noFn :function(){this.close();return false;}
+		})
+ }
+</script>
+<!--{template ADMIN_DIRECTORY/tpl/admin_footer}-->

@@ -1,0 +1,88 @@
+<!--{template ADMIN_DIRECTORY/tpl/admin_header}-->
+
+ <div class="page_title">
+    	<h1>店铺{$_lang['manage']}</h1>
+</div>
+<!--页头结束-->    
+<div class="box post">
+    <div class="tabcon">
+            <div class="detail">
+                <form method="post" action="index.php?do=$do&view=info&shop_id={$shop_id}" id="frm_art_edit" name="frm_art_edit" enctype="multipart/form-data">
+                <input type="hidden" name="shop_id" value="{$shop_id}">
+                    <table width="100%" border="0" cellspacing="0" cellpadding="0">
+                    	<tr>
+                        <th scope="row" width="130">用户名{$_lang['zh_mh']}</th>
+                        <td>
+	                         {$shop_info['username']}
+						</td>
+                      </tr>
+                      <tr>
+                        <th scope="row" width="130">店铺名称{$_lang['zh_mh']}</th>
+                        <td>
+	                         {$shop_info['shop_name']}
+						</td>
+                      </tr>
+                      <tr>
+                        <th scope="row">
+                        	店铺描述
+						</th>
+                        <td>
+                        	{if $shop_info['shop_desc']}
+                        	{$shop_info['shop_desc']}
+							{else}
+							{$shop_info['shop_slogans']}
+							{/if}
+						</td>
+					  </tr>
+					  <tr>
+                        <th scope="row">
+							申请时间
+							</th>
+                        <td><!--{date('Y-m-d H:i:s',$shop_info['on_time'])}-->&nbsp;&nbsp;</td>
+					  </tr>
+                      <tr>
+                        <th scope="row">店铺状态{$_lang['zh_mh']}</th>
+                        <td>{if $shop_info['shop_status']==1}审核通过{elseif $shop_info['shop_status']==2}审核失败{else}待审核{/if}</td>
+                      </tr>
+                    <tr>
+                        <th scope="row">&nbsp;</th>
+                    	<td>
+                    	{if !$shop_info['shop_status']}
+						<a href="index.php?do=store&ac=pass&shop_id={$shop_info[shop_id]}" class="button"><span class="check icon"></span>通过审核</a>
+			        	<a href="index.php?do=store&ac=nopass&shop_id={$shop_info[shop_id]}" class="button">审核不通过</a>
+						{/if}
+						{if $shop_info['shop_status']!=1}
+						<a href="index.php?do=store&view=list&ac=del&shop_id={$shop_info[shop_id]}" class="button"><span class="pen icon"></span>删除</a>
+						{/if}
+                    	</td>
+                    </tr>
+                    </table>
+                </form>
+              </div>
+       </div>           
+</div>
+<!--主体结束-->
+<!--{template ADMIN_DIRECTORY/tpl/admin_footer}-->
+
+<script type="text/javascript" >
+
+	function sbt_payitem(){ 
+		
+		if($("input[temp='payitem_map']").attr("checked")==true){ 
+			if(!$("#point").val()){
+					showDialog("{$_lang['please_choose_map_area']}","alert","{$_lang['friendly_notice']}");
+					return false;
+			}else{
+				$("#payitem_map").val("1");
+			}	
+		}else{
+			$("#payitme_map").val("");
+		}
+					
+			//$("#frm_payitem").submit();
+			//alert(23);return false;
+			formSub('frm_payitem','form',true);
+	
+	}
+	
+</script>

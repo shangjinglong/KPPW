@@ -1,0 +1,83 @@
+<!--{template ADMIN_DIRECTORY/tpl/admin_header}--> 
+
+<div class="box tip clearfix p_relative" id="msg_box">
+	<div class="control"><a href="javascript:void(0);" title="{$_lang['close']}" id="toggle"><b>△</b></a></div>
+    <div class="title"><h2>{$_lang['how_to_use']}{$_lang['zh_mh']}</h2></div>
+    <div class="detail pad10">
+        <ul>
+            <li>{$_lang['if_need_integrate_other_system']}</li>
+            <li>{$_lang['if_need_integrate_exchange_system']}</li>
+			<li>{$_lang['if_dont_need_can_uninstall']}</li>
+        </ul>
+    </div>
+</div>
+
+
+<div class="box list">
+	<div class="title"><h2>{$_lang['uc_user_integrate']}</h2></div>
+    <div class="detail">
+    	 <table cellspacing="0" cellpadding="0">
+    	 <tbody>
+    	 	
+          <tr>
+            <th width="30%">{$_lang['uc_name']}</th>
+            <th width="20%">{$_lang['uc_version']}</th>
+            <th width="30%">{$_lang['uc_author']}</th>
+            <th>{$_lang['operate']}</th>
+          </tr>
+		  
+          <tr>
+            <td>{if $basic_config['user_intergration']==2}
+            	<b class='c396'>Ucenter({$_lang['steps_has_been_install']})</b>{else}Ucenter{/if}
+            </td>
+            <td>1.5/1.6</td>
+            <td><a href="javascript:;">{$_lang['keke_official_website']}</a></td>
+            	<td>
+            	
+            	{if $basic_config['user_intergration']==2}
+            	<a href="index.php?do=config&view=integration&setting=del&by=2"  class="button">
+            	<span class="trash icon"></span>{$_lang['close']}
+            	</a>
+				 <a href="index.php?do=config&view=integration&type=uc" class="button">
+            	<span class="reload  icon"></span>{$_lang['config']}</a> 
+				{else}
+				 <a href="index.php?do=config&view=integration&type=uc" class="button">
+            	<span class="cog icon"></span>{$_lang['open']}</a> 
+            	{/if}
+            	</td>
+          </tr>
+		  
+ <!--         <tr>
+            <td>{if $basic_config['user_intergration']==3}<b class='c396'>PhpWind({$_lang['steps_has_been_install']})</b>{else}phpWind{/if}</td>
+            <td>{$_lang['up_8']}</td>
+            <td><a href="javascript:;">{$_lang['keke_official_website']}</a></td>
+            <td> 
+            {if $basic_config['user_intergration']==3}
+            	<a href="index.php?do=config&view=integration&setting=del&by=3"  class="button">
+            		<span class="trash icon"></span>{$_lang['close']}</a>
+				 <a href="index.php?do=config&view=integration&type=uc" class="button">
+            	<span class="reload  icon"></span>{$_lang['config']}</a> 
+			{else}
+				<a href="index.php?do=config&view=integration&type=pw" class="button">
+					<span class="cog icon"></span>{$_lang['open']}</a>	
+            {/if}
+            </td>
+          </tr> -->
+		  
+		  </tbody>
+        </table>
+    </div>
+</div>
+
+<script src="js/css.js" type="text/javascript"></script>
+<script type="text/javascript">
+	$(function(){
+		$("#toggle").add(".title").click(function(){
+			$("#msg_box").children().not($(".control,.title")).slideToggle('800');
+			var v=$(this).text();
+			if(v=="▽") $(this).html("<b>△</b>").andSelf().attr("title","{$_lang['close']}");
+			if(v=="△") $(this).html("<b>▽</b>").andSelf().attr("title","{$_lang['open']}");
+		});
+	})
+</script>
+<!--{template ADMIN_DIRECTORY/tpl/admin_footer}-->

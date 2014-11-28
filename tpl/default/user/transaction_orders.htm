@@ -1,0 +1,136 @@
+<!--{template user/header}-->
+<script src="static/js/uploadify/jquery.uploadify.min.js" type="text/javascript"></script>
+<link href="static/js/uploadify/uploadify.css" rel="stylesheet">
+<div class="container">
+<div class="nav-action">
+   <!--{template user/left_side}-->
+  </div>
+
+  <div class="content-panel">
+    <div class="tab">
+        <a href="index.php?do=user&view=transaction&op=orders" {if $op == 'orders'} class="selected" {/if}>我买入的商品</a>
+        <a href="index.php?do=user&view=transaction&op=sold" {if $op == 'sold'} class="selected" {/if}>我卖出的商品</a>
+    </div>
+    <div class="tab_detail">
+    <ul class="nav nav-pills second-nav">
+          <li {if $intModelId == '6'} class="active" {/if}><a href="index.php?do=user&view=transaction&op=orders&intModelId=6">文件</a></li>
+          <li {if $intModelId == '7'} class="active" {/if}><a href="index.php?do=user&view=transaction&op=orders&intModelId=7">服务</a></li>
+        </ul>
+    <div class="action-bar">
+    <form action="{$strUrl}" method="post" name="searchUndertakeForm" id="searchUndertakeForm">
+        <div class="action-item">
+        <input type="text" placeholder="请输入编号" class="form-control" name="intId" id="intId" value="{$intId}">
+        </div>
+        <div class="action-item">
+        <input type="text" placeholder="请输入名称" class="form-control" name="strTitle" id="strTitle" value="{$strTitle}">
+        </div>
+        <div class="action-item">
+          <select class="form-control" name="strStatus" id="strStatus">
+            <option value="-1">全部</option>
+             {loop $arrStatus $k $v}
+            	<option value="{$k}" {if $strStatus ==$k} selected="selected"{/if}>{$v}</option>
+            {/loop}
+          </select>
+        </div>
+        <div class="action-item">
+          <select class="form-control" name="strOrder" id="strOrder">
+            {loop $arrListOrder $k $v}
+            	<option value="{$k}" {if $strOrder ==$k} selected="selected"{/if}>{$v}</option>
+            {/loop}
+
+          </select>
+        </div>
+        <div role="toolbar" class="action-item btn-toolbar">
+          <div class="btn-group">
+            <button class="btn btn-default" type="submit">搜索</button>
+          </div>
+        </div>
+      </form>
+      </div>
+      <div class="table-responsive">
+        <table class="table table-hover">
+        <thead>
+          <tr>
+            <th>订单名称</th>
+			<th>卖家</th>
+		 	<th>单价（元）</th>
+		 	<th>状态</th>
+		 	<th>操作</th>
+          </tr>
+        </thead>
+        <tbody>
+        {loop $arrLists $k $v}
+          <tr>
+            <td>
+            	<!-- <p>购买{$arrServiceModels[$intModelId][model_name]} </p> -->
+              <p>购买{$arrServiceModels[$intModelId][model_name]} <b title="{$v['title']}"><!--{eval echo kekezu::cutstr($v['title'],16)}--></b></p>
+            	<p>编号：#{$v['order_id']}</p>
+            	<p>提交时间：<!--{eval echo date('Y-m-d H:i:s',$v['order_time'])}--></p>
+            </td>
+            <td><a href="index.php?do=seller&id={$v['seller_uid']}">{$v['seller_username']}</a> <a href="javascript:sendMessage({$v['seller_uid']});void(0);">发短信</a></td>
+            <td>
+            	<span class="money"><sub>￥</sub>{$v['price']}</span>
+            </td>
+            <td>{$arrStatus[$v['order_status']]}</td>
+
+            <td>
+              <!--{eval $arrOp = call_user_func(array($arrServiceModels[$intModelId]['model_code'].'_shop_class','userOpService'),2,$v['order_status']);}-->
+              <p>
+              	{loop $arrOp $k1 $v2}
+              		{if $v2['op']}
+              			{if $v['mark_status'] != '1'}
+              				{if $v2['op'] == 'arbitral'}
+	              				<a  {if $v['obj_type'] == 'service'}
+	              						href="javascript:report(1,'order','{$v[seller_uid]}','{$v[obj_id]}','{$v[order_id]}');void(0);"
+	              					{else}
+	              						href="javascript:report(1,'gy_order','{$v[seller_uid]}','{$v[seller_uid]}','{$v[order_id]}');void(0);"
+	              					{/if}
+	              					 class="mr_5 mb_5">
+					    			{$v2['text']}
+					   		 	</a>
+              				{else}
+              					<a class="mr_5 mb_5 UserCenterServiceApiOp" data-op="{$v2['op']}"
+	              					data-sid="<!--{eval echo intval($v['obj_id']);}-->"
+	              					data-type="{$v['obj_type']}"
+	              					data-uid="<!--{eval echo intval($v['seller_uid']);}-->"
+	              					data-orderid="{$v['order_id']}" href="javascript:void(0);" >{$v2['text']}</a><br />
+
+              				{/if}
+              			{/if}
+              		{else}
+              			{$v2['text']}<br/>
+              		{/if}
+              	{/loop}
+              </p>
+              {if $v['order_status']!='close'}
+              	{if $v['submit_method'] == 'inside'&&$v['file_path']&&($v['order_status'] == 'ok'||$v['order_status'] =='confirm')}
+              		<p><a href="{$v['file_path']}"  class="mr_5 mb_5">下载文件</a></p>
+              	{/if}
+              	{if $v['submit_method'] == 'outside'&&($v['order_status'] == 'ok'||$v['order_status'] =='confirm')}
+              		<p><a   href="javascript:showKf('{$v[obj_id]}','{$v[order_id]}');void(0);"  class="mr_5 mb_5">联系客服</a></p>
+              	{/if}
+				{if $v['mark_status'] != '1'}
+              	<p><a href="index.php?do={if $v['obj_type'] == 'service'}order&sid={$v['obj_id']}{else}gy&id={$v['seller_uid']}{/if}&orderId={$v['order_id']}" target="_blank"  class="mr_5 mb_5">查看订单</a></p>
+				{/if}
+              {/if}
+            </td>
+          </tr>
+         {/loop}
+        </tbody>
+      </table>
+      </div>
+      <div class="clearfix">
+      	{if $strPages}
+	      <ul class="pagination pagination-sm pull-right">
+	       {$strPages}
+	      </ul>
+	    {/if}
+      </div>
+    </div>
+  </div>
+  </div>
+  <!-- 我的消息 end &content-panel end -->
+    <script type="text/javascript" charset="utf-8">
+  		var strUrl = '{$strUrl}';
+  	</script>
+<!--{template user/footer}-->

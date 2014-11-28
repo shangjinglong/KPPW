@@ -1,0 +1,121 @@
+<!--{template admin/tpl/admin_header}-->
+<div class="page_title">
+    	<h1>{$_lang['tag_manage']}</h1>
+        <div class="tool">         
+            <a href="index.php?do={$do}&view=taglist&tag_type={$tag_type}&t={$t}">{$_lang['tag_call']}</a>
+		
+			<a href="#" class="here">{if $tagid}{$_lang['tag_edit']}{else}{$_lang['tag_add']}{/if}</a>
+        </div>
+</div>
+<div class="box post">
+    <div class="tabcon">
+	<div class="title">
+		<h2>{$_lang['task_tag']}</h2>
+	</div>	
+	<div class="detail">
+		 <form method="post" action="index.php?do={$do}&view={$view}&tag_type={$tag_type}&tagid=$tagid" id="frm_art_edit">
+         <table width="100%" border="0" cellspacing="0" cellpadding="0">
+		  <tr>
+            <th scope="row" width="130">
+            	  {$_lang['tag_mode']}{$_lang['zh_mh']}
+			</th>
+            <td>
+             	 {$_lang['task_tag']}
+            </td>
+          </tr>
+		  <tr>
+            <th scope="row" width="130">
+            	{$_lang['tag_name']}{$_lang['zh_mh']}
+			</th>
+            <td>
+             	<input type="text" class="txt" name="txt_tagname" value="{$taginfo['tagname']}">
+				{$_lang['tag_change_notice']}
+            </td>
+          </tr>
+		   <tr>
+            <th scope="row" width="130">
+            	{$_lang['task_type']}:
+			</th>
+            <td>
+               <select name="slt_task_type">
+                    <option value="0">--{$_lang['please_choose']}--</option>
+                   {loop $kekezu->_model_list $v}
+				   <option value="{$v['model_id']}" {if $taginfo['task_type']==$v['model_id']}selected='selected'{/if}>
+				   	{$v['model_name']}</option>
+				   {/loop}
+                </select>
+            </td>
+          </tr>
+		    <tr>
+            <th scope="row" width="130">
+            	{$_lang['task_status']}:
+			</th>
+            <td>
+               <select name="slt_task_status">
+	               {loop $task_status $k $v}
+				   <option value="{$k}" {if $taginfo['task_status']==$k}selected='selected'{/if}>{$v}</option>
+				   {/loop}
+	            </select>
+            </td>
+          </tr>
+		  <tr>
+            <th scope="row" width="130">
+            	 {$_lang['result_order']}{$_lang['zh_mh']}
+			</th>
+            <td>
+             <select name="slt_task_order">
+                <option {if !$taginfo['listorder']}selected="selected"{/if}  value="0">{$_lang['default_order']}</option>
+                <option {if $taginfo['listorder']==1}selected="selected"{/if}  value="1">{$_lang['order_id_desc']}</option>
+                <option {if $taginfo['listorder']==2}selected="selected"{/if}  value="2">{$_lang['order_id_asc']}</option>
+                <option {if $taginfo['listorder']==7}selected="selected"{/if}  value="7">{$_lang['pub_time_desc']}</option>
+                <option {if $taginfo['listorder']==8}selected="selected"{/if}  value="8">{$_lang['pub_time_asc']}</option>
+                <option {if $taginfo['listorder']==9}selected="selected"{/if}  value="9">{$_lang['end_time_desc']}</option>
+                <option {if $taginfo['listorder']==10}selected="selected"{/if}  value="10">{$_lang['end_time_asc']}</option>
+            </select>
+            </td>
+          </tr>
+		   <tr>
+            <th scope="row" width="130">
+            	 {$_lang['read_number']}{$_lang['zh_mh']}
+			</th>
+            <td>
+            <input type="text" class="txt" name="txt_loadcount" value="$taginfo['loadcount']">
+			{$_lang['default_read_number']}
+            </td>
+          </tr>
+		   <tr>
+            <th scope="row" width="130">
+            	 {$_lang['tag_code']}{$_lang['zh_mh']}
+			</th>
+            <td>
+       		 	<textarea name="tag_code" cols="70" rows="10" class="eg_editor">{$taginfo['tag_code']}</textarea>
+					<ul class="eg_code" style="">
+						<li>1、{$_lang['eg_code_patten']}
+						</li>
+						<li>2、{$_lang['param_detail']}:</br>
+							<div class="fl_l magl_30">{$_lang['task_tag_code']}</div>
+						</li>
+					</ul>
+            </td>
+          </tr>
+		   <tr>
+            <th scope="row" width="130">
+            	 {$_lang['cache_time']}{$_lang['zh_mh']}
+			</th>
+            <td>
+       		    <input type="text" class="txt" name="txt_cache_time" value="$taginfo['cache_time']">{$_lang['seconds_notice']}
+            </td>
+          </tr>
+		    <tr>
+                    <th scope="row">&nbsp;</th>
+                	<td>
+                	<button name="submit" value="1" class="positive primary pill button" type="submit"><span class="check icon"></span>{if $art_id}{$_lang['submit']}{else}{$_lang['confirm_release']}{/if}</button>
+                	
+                	</td>
+                </tr>
+                </table>
+            </form>
+            </div>
+   </div>
+</div>
+<!--{template admin/tpl/admin_footer}-->

@@ -1,0 +1,44 @@
+<div class="modal-body">
+         <form role="form" action="index.php?do=taskhandle&op=reqedit" method="post" class="form-horizontal" name="reqeditForm" id="reqeditForm">
+          	<input type="hidden" name="formhash" id="formhash" value="{FORMHASH}">
+			<input type="hidden" name="taskId"  value="{$taskId}">
+          <div class="form-group">
+            <label for="tar_content" class="col-sm-2 control-label">描述</label>
+			<div class="col-sm-8">
+            <textarea id="tar_content" name="tar_content" class="form-control">{$strExtDesc}</textarea>
+            <p class="help-block">最多可以输入:500字符(250个汉字)</p>
+			</div>
+          </div>
+            <div class="form-group">
+              <div class="col-sm-offset-2 col-sm-10">
+                <button class="btn btn-default" type="submit" value="1" >保存</button>
+                <span class="text-success" id="tipsUser"></span>
+              </div>
+            </div>
+          </form>
+</div>
+		<script type="text/javascript">
+$(function(){
+	//基本资料
+	$('#reqeditForm').scojs_valid({
+	    rules: {
+	    	tar_content: ['not_empty',{'min_length': 10},{'max_length': 500}]
+	    },
+	    messages: {
+	    	tar_content: {
+				not_empty: "请输入稿件描述",
+				min_length: "最少输入10字符",
+				max_length: "最多可以输入:500字符(250个汉字)"
+			}
+	    },
+	    wrapper:'.form-group'
+	    ,onSuccess: function(response, validator, form) {
+	    	  tipsOp(response.data);
+				if(response.url){
+					setTimeout(function(){window.location.href=response.url;},2000);
+				}
+	    }
+	});
+	})
+
+</script>

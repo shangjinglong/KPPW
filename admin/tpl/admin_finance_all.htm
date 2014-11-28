@@ -1,0 +1,186 @@
+<!--{template ADMIN_DIRECTORY/tpl/admin_header}-->
+<div class="page_title">
+    <h1>{$_lang['financial_model']}</h1>
+    <div class="tool">
+        <a href="index.php?do={$do}&view=revenue">财务概况</a>
+        <a href="index.php?do={$do}&&view=budget">网站收支</a>
+		<a href="index.php?do={$do}&view=all" class="here">{$_lang['flow_record']}</a>
+	    <a href="index.php?do={$do}&view=recharge">{$_lang['recharge_audit']}</a>
+	   <a href="index.php?do={$do}&view=withdraw">{$_lang['withdraw_audit']}</a>
+    </div>
+</div>
+<div class="box search p_relative">
+    <div class="title">
+        <h2>{$_lang['search']}</h2>
+    </div>
+    <div class="detail" id="detail">
+        <form action="index.php?do={$do}&view=all" method="post" id=frm_user_search>
+        	<input type="hidden" value="{$page}" name="page">
+        	 <table cellspacing="0" cellpadding="0">
+
+                <tbody>
+                    <tr>
+                    	 <th>
+                            {$_lang['financial_id']}
+                        </th>
+                        <td>
+                            <input type="text" value="{$w['fina_id']}" name="w[fina_id]" class="txt" onkeyup="clearstr(this);"/>
+                        </td>
+						 <th>
+                            {$_lang['username']}*
+                        </th>
+                        <td>
+                            <input type="text" value="{$w['username']}" name="w[username]" class="txt"/>
+                        </td>
+						 <th>
+                            {$_lang['financial_uses']}
+                        </th>
+                        <td>
+                            <select name="w[fina_action]">
+                                <option value="">{$_lang['all']}</option>
+                   				 {loop $fina_action_arr $key $v}
+								 	<option value="{$key}" {if $w['fina_action']==$key}selected="selected"{/if}>{$v} </option>
+                   				 {/loop}
+                           </select>
+                       </td>
+						<th>&nbsp;</th>
+						<td>&nbsp;</td>
+
+			</tr>
+			<tr>
+				 <th>
+                            {$_lang['financial_type']}
+                        </th>
+                        <td>
+                            <select name="w[fina_type]">
+                                <option value="">{$_lang['all']}</option>
+                   				<option value="out" {if $w['fina_type']=='out'}selected="selected"{/if}>{$_lang['outcome']}</option>
+                    			<option value="in" {if $w['fina_type']=='in'}selected="selected"{/if}>{$_lang['income']}</option>
+                           </select>
+                       </td>
+                        <th>
+                           {$_lang['result_order']}
+                        </th>
+                        <td>
+                        <select name="w[ord][]">
+                           <option value="fina_id" {if $w['ord']['0']=='fina_id' or !isset($w['ord']['0'])} selected="selected"{/if}>{$_lang['default']}{$_lang['order']}</option>
+                           <option value="fina_time" {if $w['ord']['0']=='fina_time' } selected="selected"{/if}>{$_lang['clearing_time']}</option>
+                      </select>
+                      <select name="w[ord][]">
+                            <option {if $w['ord']['1']=='desc' or !isset($w['ord']['1'])}selected="selected" {/if} value="desc">{$_lang['desc']}</option>
+                            <option {if $w['ord']['1']=='asc'}selected="selected" {/if} value="asc">{$_lang['asc']}</option>
+                      </select>
+                       </td>
+                        <th>
+                                                    {$_lang['list_result']}
+                         </th>
+                        <td>
+                            <select name="w[page_size]">
+                               <option value="10" {if $w['page_size']=='10'}selected="selected"{/if}>{$_lang['page_size']}10</option>
+                               <option value="20" {if $w['page_size']=='20'}selected="selected"{/if}>{$_lang['page_size']}20</option>
+                               <option value="30" {if $w['page_size']=='30'}selected="selected"{/if}>{$_lang['page_size']}30</option>
+                             </select>
+                             <button class="pill" type="submit" value="{$_lang['search']}" name="sbt_search">
+                                <span class="icon magnifier">&nbsp;</span>{$_lang['search']}
+                              </button>
+                           </td>
+                        </tr>
+                  </tbody>
+            </table>
+        </form>
+    </div>
+ </div>
+<!--搜索结束-->
+<div class="box list">
+    <div class="title">
+        <h2>{$_lang['statistical_info']}  <span style="color: red;text-align: center;">【本站所有用户最新发生的财务流水总记录。】</span></h2>
+    </div>
+     <div class="detail">
+        <form action="index.php?do={$do}&view={$view}" method="post" id=frm_art_action>
+		 	<input type="hidden" value="{$page}" name="page">
+			<input type="hidden" name="w[page_size]" value="{$page_size}">
+			<div id="ajax_dom">
+			<input type="hidden" value="{$page}" name="page"/>
+		  <table cellpadding="0" cellspacing="0">
+             <tbody>
+                 <tr>
+                 	<th>
+	<input type="checkbox" id="checkbox" onclick="checkall();" class="checkbox" >编号
+</th>
+                        <th>
+                          {$_lang['type']}
+                        </th>
+                        <th>
+                           {$_lang['financial_uses']}
+                        </th>
+                        <th>
+                          {$_lang['user']}
+                        </th>
+                        <th>
+                            {$_lang['money']}
+                        </th>
+                        <th>
+                           {$_lang['user_balance']}
+                        </th>
+                        <th>
+                            {$_lang['time']}
+						</th>
+                        <th>
+                           {$_lang['delete']}
+                        </th>
+                    </tr>
+  				 {loop $finace_arr $v}
+                    <tr class="item">
+                    	<td>
+                    		<input type="checkbox" name="ckb[]" class="checkbox" value="{$v['fina_id']}">{$v['fina_id']}
+                    	</td>
+
+                        <td>
+                            {if $v['fina_type']=="out"}{$_lang['outcome']}{else}{$_lang['income']}{/if}
+                        </td>
+                        <td>
+                        	$fina_action_arr[$v['fina_action']]
+                        </td>
+                        <td>
+                            {$v['username']}
+                        </td>
+                        <td>
+                            <font color="red">
+                                {c:$v['fina_cash']}
+                            </font>
+                        </td>
+                        <td>
+                            <font color="red">
+                                {c:$v['user_balance']}
+                            </font>
+                        </td>
+                        <td>
+                            <!--{date('Y-m-d H:i:s',$v['fina_time'])}-->
+                        </td>
+                        <td>
+                            <a href="index.php?do={$do}&view={$view}&ac=del&fina_id={$v['fina_id']}&page={$page}" onclick="return cdel(this);" class="button"><span class="trash icon"></span>{$_lang['delete']}</a>
+                        </td>
+                    </tr>
+				{/loop}
+                    <tr>
+                    <td colspan="8">
+
+                           <div class="clearfix">
+
+							<label for="checkbox" onclick="checkall(event);">{$_lang['select_all']}</label>
+								<input type="hidden" name="sbt_action" value="{$_lang['mulit_delete']}" />
+                           		<button name="sbt_action" type="submit" value="{$_lang['mulit_delete']}" onclick="return pdel('frm_art_action');" class="pill negative">
+                                      <span class="icon trash"></span>{$_lang['mulit_delete']}
+                                 </button>
+						  </div>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+			  <div class="page">{$pages['page']}</div>
+			  </div>
+        	</form>
+        </div>
+
+    </div>
+    <!--{template ADMIN_DIRECTORY/tpl/admin_footer}-->

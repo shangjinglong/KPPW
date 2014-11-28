@@ -1,0 +1,142 @@
+<!--{template ADMIN_DIRECTORY/tpl/admin_header}-->
+<div class="page_title">
+    	<h1>{$_lang['links']}</h1>
+        <div class="tool">         
+            <a href="index.php?do={$do}&view=ink" {if $view != 'edit_ink'}class="here"{/if}>{$_lang['link_manage']}</a>
+			<a href="index.php?do={$do}&view=edit_ink" {if $view == 'edit_ink'}class="here"{/if}>{$_lang['link_add']}</a>
+        </div>
+</div> 
+
+<form method="get" action="index.php" id="frm_art_search">
+	<input type="hidden" name="do" value="{$do}">
+	<input type="hidden" name="view" value="{$view}">
+	<input type="hidden" name="page" value="{$page}">
+	<div class="box search p_relative">
+    	<div class="title"><h2>{$_lang['search']}</h2></div>
+    	<div class="detail"  id="detail"> 
+    		<table cellspacing="0" cellpadding="0">    		
+				<tbody>
+					<tr>
+		               <th>{$_lang['link_id']}</th>
+		                <td>
+		                  <input type="text" class="txt" size="12" name="txt_link_id" value="{$txt_link_id}" onkeyup="clearstr(this);">
+						</td>
+	                 
+		                <th>{$_lang['link_name']}</th>
+		                <td>
+		                 <input type="text" class="txt" name="txt_link_name" id="txt_link_name" value="{$txt_link_name}">
+						 *{$_lang['search_by_like']}
+						 </td>
+	                </tr>
+					<tr>
+						<th>{$_lang['result_order']}</th>
+						<td>
+							<select name="ord[]">
+                        <option value="link_id" {if $ord['0']=='link_id' or !isset($ord['0'])} selected="selected"{/if}>{$_lang['default_id_sort']}</option>
+                        <option value="link_name" {if $ord['0']=='link_name' } selected="selected"{/if}>{$_lang['link_ids']}</option>
+						 <option value="on_time" {if $ord['0']=='on_time' } selected="selected"{/if}>{$_lang['time']}</option>
+                        </select>
+                        <select name="ord[]">
+                        <option {if $ord['1']=='desc' or !isset($ord['1'])}selected="selected" {/if} value="desc">{$_lang['desc']}</option>
+                        <option {if $ord['1']=='asc'}selected="selected" {/if} value="asc">{$_lang['asc']}</option>
+                        </select>
+						</td>
+						<th>{$_lang['list_result']}</th>
+						<td >
+						<select name="slt_page_size">
+                			<option value="10" {if $slt_page_size=='10'}selected="selected"{/if}>{$_lang['page_size']}10</option>
+                			<option value="20" {if $slt_page_size=='20'}selected="selected"{/if}>{$_lang['page_size']}20</option>
+                			<option value="30" {if $slt_page_size=='30'}selected="selected"{/if}>{$_lang['page_size']}30</option>
+            			</select>
+           				<button class="pill" type="submit" value={$_lang['search']} name="sbt_search">
+								<span class="icon magnifier">&nbsp;</span>{$_lang['search']}
+							</button>
+						</td>
+					</tr>          			
+           		</tbody>
+			</table>
+    	</div> 
+</div>
+
+
+<div class="box list">
+	 
+
+ 
+<div class="title"><h2>{$_lang['tag_list']}</h2></div>
+    <div class="detail"> 
+    <div id="ajax_dom">
+  	<input type="hidden" name="page" value="{$page}">
+            <table   border="0" cellspacing="0" cellpadding="0"  >
+                <tr>
+                	<th>
+						<input type="checkbox" id="checkbox" onclick="checkall();" class="checkbox" >编号
+					</th>
+                    <th width="150">
+                        {$_lang['link_name']}
+                    </th>
+                    <th class="motif" width="150">
+                        {$_lang['link_url']}
+                    </th>
+                    <th class="80">
+                        {$_lang['order']}
+                    </th>
+                    <th width="150">
+                        {$_lang['time']} 
+                    </th>
+                    <th width="60">
+                        {$_lang['edit']}
+                    </th>
+                    <th width="60">
+                        {$_lang['delete']}
+                    </th>
+                </tr>
+                {loop $link_arr $key $value}
+                <tr class="item">
+                	 
+                    <td>
+                        <input type="checkbox" name="ckb[]" class="checkbox" value="{$value['link_id']}"> {$value['link_id']}
+                    </td>
+					 
+                    <td>
+                        {$value['link_name']}
+                    </td>
+                    <td>
+                        <a href="{$value['link_url']}" target="_blank" >{$value['link_url']}</a>
+                    </td>
+                    <td>
+                        {$value['listorder']}
+                    </td>
+                    <td>
+                        <!--{eval echo date('Y-m-d H:i',$value['on_time'])}-->
+                    </td>
+                    <td>
+                        <a href="index.php?do={$do}&view=edit_ink&link_id={$value['link_id']}&page={$page}" class="button dbl_target"> <span class="pen icon"></span>{$_lang['edit']}</a>
+                    </td>
+                    <td>
+                       <a href="$url&ac=del&link_id={$value['link_id']}" onclick="return cdel(this);" class="button"> <span class="trash icon"></span>{$_lang['delete']}</a>
+                    </td>
+                </tr>
+				{/loop}
+			<tr>
+			    <td colspan="9">
+			    <label for="checkbox" onclick="checkall(event);">{$_lang['select_all']}</label>
+            	<input type="hidden" name="sbt_action" class="sbt_action"/>
+				<button type="submit" name="sbt_action" onclick="return batch_act(this,'frm_art_search')" value="{$_lang['mulit_delete']}" class="pill negative" >
+					<span class="trash icon"></span>{$_lang['mulit_delete']}
+				</button>
+				<a name="sbt_add" value={$_lang['links_add']} class="pill negative button"
+			 	 href="index.php?do={$do}&view=edit_ink"><span class="check icon"></span>{$_lang['links_add']} </a>
+            	</td>
+        </tr>
+        </table>
+		<div class="page ">
+                    	{$pages['page']}
+                </div>
+		</div>
+
+</div>
+</div>		
+ 
+</form>
+<!--{template ADMIN_DIRECTORY/tpl/admin_footer}-->

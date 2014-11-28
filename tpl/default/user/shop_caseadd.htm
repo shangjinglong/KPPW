@@ -1,0 +1,70 @@
+<!--{template user/header}-->
+<div class="container">
+  <div class="nav-action">
+		<!--{template user/left_side}-->
+  </div>
+  <!-- nav-action end -->
+  <div class="content-panel">
+      <div class="tab">
+        <a href="{$strUsersUrl}&op=caselist" >案例管理</a>
+		<a href="{$strUsersUrl}&op=caseadd"  class="selected"  >案例添加</a>
+
+      </div>
+      <div class="tab_detail">
+      		<!-- 店铺设置 start -->
+          <form role="form" action="{$strUrl}" method="post" class="form-horizontal" name="editCaseForm" id="editCaseForm">
+          	<input type="hidden" name="formhash" id="formhash" value="{FORMHASH}">
+			<input type="hidden" name="objId"  value="{$objId}">
+            <div class="form-group">
+              <label class="col-sm-2 control-label" for="case_name">案例名称：</label>
+                <div class="col-sm-8 row">
+                  <input type="text"  name="case_name" id="case_name"  class="form-control" value="{$caseInfo['case_name']}">
+                </div>
+            </div>
+            <div class="form-group">
+              <label class="col-sm-2 control-label" for="case_url">案例链接：</label>
+                 <div class="col-sm-8 row">
+                  <input type="text"  name="case_url" id="case_url"  class="form-control" value="{$caseInfo['case_url']}" placeholder="http://">
+                </div>
+            </div>
+			<div class="form-group">
+              <label class="col-sm-2 control-label" for="case_pic">案例图片：</label>
+                <div class="col-sm-8 row">
+                	  <input type="file" class="file" name="upload" id="upload">
+                  	 <input type="hidden"  name="case_pic" id="filepath"  class="form-control" value="{$caseInfo['case_pic']}">
+					 <img id="case_img" src="{$caseInfo['case_pic']}" {if !$caseInfo['case_pic']}class="hidden"{/if} width="100px;" height="100px;">
+
+                        <script src="static/js/uploadify/jquery.uploadify.min.js" type="text/javascript"></script>
+						<link href="static/js/uploadify/uploadify.css" rel="stylesheet">
+						<script type="text/javascript">
+                                $(function(){
+                                    uploadify({debug:false,text:'上传图片',auto:true,limit:1,hide:false},'',uploadResponse);
+                                })
+								function uploadResponse(json){
+									$('#case_img').removeClass('hidden');
+									$('#case_img').prop('src',json.msg.url);
+								}
+                        </script>
+                </div>
+            </div>
+<!-- 
+			  <div class="form-group">
+              <label class="col-sm-2 control-label" for="case_desc">案例描述：</label>
+              <div class="col-sm-8 row">
+                 <textarea id="case_desc" name="case_desc" rows="5"   class="form-control"> {$caseInfo['case_desc']}</textarea>
+              </div>
+            </div>
+  -->
+            <div class="form-group">
+              <div class="col-sm-offset-2 col-sm-10">
+                <button class="btn btn-default" type="submit" value="1" >保存</button>
+                <span class="text-success" id="tipsUser"></span>
+              </div>
+            </div>
+          </form>
+      		<!-- 基本资料 end -->
+      </div>
+  </div>
+  </div>
+<script src="static/js/model/user/shop.js"></script>
+<!--{template user/footer}-->

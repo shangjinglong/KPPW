@@ -1,0 +1,81 @@
+<?php
+/**
+ * 认证列表页语言包
+ * @version kppw2.0
+ * @author xl
+ * @2011-12-29
+ */
+$lang = array(
+/**(bank)auth_list.htm**/
+	'bank_auth_list'=>'银行认证列表',
+	'auth_num'=>'认证编号',
+	'auth_user'=>'认证用户',
+	'auth_status'=>'认证状态',
+	'wait_audit'=>'待审核',
+	'process_time'=>'处理时间',
+	'yet_deal_with'=>'暂未处理',
+	'validity'=>'有效时间',
+	'lifetime_validity'=>'终生有效',
+	'local_payment'=>'本地支付',
+	'online_payment'=>'在线支付',
+	'downline_payment'=>'线下支付',
+	'free'=>'免费',
+	'passed'=>'已通过',
+	'nopassed'=>'未通过',
+	'you_confirm'=>'你确定要',
+	'auth_not_edit'=>'已通过的认证无法被修改',
+	'confirm_pass'=>'确定要审核通过？',
+	'confirm_nopass'=>'确定要审核不通过？',
+/**(bank)auth_list.php**/
+	'bank_auth_pass'=>'银行认证通过',
+	'bank_auth_nopass'=>'银行认证不通过',
+	'bank_auth_delete'=>'银行认证被删除',
+	'mulit_delete_bank_auth'=>'批量删除了银行认证',
+	'mulit_pass_bank_auth'=>'批量审核通过银行认证',
+	'mulit_nopass_bank_auth'=>'批量设定未通过银行认证',
+/**(email)auth_list.htm**/
+	'email_auth_list'=>'邮箱认证列表',
+
+	'user_id'=>'用户编号',
+	'auth_email'=>'认证邮箱',
+	'auth_time'=>'认证时间',
+	'confirmed'=>'已确认',
+	'wait_confirm'=>'待确认',
+/**(email)auth_list.php**/
+	'email_auth_delete'=>'邮箱认证被删除',
+	'mulit_del_email_auth'=>'批量删除邮箱认证',
+/**(enterprise)auth_list.htm**/
+	'enterprise_auth_list'=>'企业认证列表',
+	'register_num'=>'注册号码',
+	'licence_pic'=>'执照图片',
+	'to'=>'至',
+/**(enterprise)auth_list.php**/
+	'enterprise_auth_pass'=>'企业认证通过',
+	'enterprise_auth_nopass'=>'企业认证不通过',
+	'enterprise_auth_delete'=>'企业认证被删除',
+	'mulit_delete_enterprise_auth'=>'批量删除了企业认证',
+	'mulit_pass_enterprise_auth'=>'批量审核通过了企业认证',
+	'mulit_nopass_enterprise_auth'=>'批量设审核企业认证未通过',
+/**(mobile)auth_list.htm**/
+	'mobile_auth_list'=>'手机认证列表',
+	'mobile_code'=>'手机验证码',
+/**(mobile)auth_list.php**/
+	'mobile_auth_pass'=>'手机认证通过',
+	'mobile_auth_nopass'=>'手机认证不通过',
+	'mobile_auth_delete'=>'手机认证被删除',
+	'mulit_delete_mobile'=>'批量删除手机认证',
+	'mulit_pass_mobile'=>'批量审核通过手机认证',
+	'mulit_nopass_mobile'=>'批量审核不通过手机认证',
+/**(realname)auth_list.htm**/
+	'realname_auth_list'=>'实名认证列表',
+	'realname'=>'真实姓名',
+	'id_card_copy'=>'身份证复印件',
+/**(realname)auth_list.php**/
+	'pass_realname_auth'=>'审核通过实名认证',
+	'nopass_realname_auth'=>'审核不通过实名认证',
+	'delete_realname_auth'=>'删除实名认证',
+	'mulit_delete_realname_auth'=>'批量删除实名认证',
+	'mulit_pass_realname_auth'=>'批量审核通过实名认证',
+	'mulit_nopass_realname'=>'批量审核不通过实名认证',
+
+);

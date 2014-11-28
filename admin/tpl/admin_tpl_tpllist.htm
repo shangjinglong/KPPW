@@ -1,0 +1,81 @@
+<!--{template ADMIN_DIRECTORY/tpl/admin_header}-->
+<div class="page_title">
+<div class="tool">
+            <a href="index.php?do=config&view=tpl" class="here">{$_lang['tpl_manage']}</a>
+</div>
+</div>
+<div class="box list">
+    	<div class="title"><h2>{$_lang['tpl_file_list']}</h2></div>
+        
+<div class="detail">
+ 
+   <table width="100%" border="0" cellspacing="0" cellpadding="0" >
+      <tr>
+        <th >{$_lang['file']}</th>
+ 		<th width="200">{$_lang['edit']} </th>
+  	 </tr>
+        {loop $tpllist $key $value}
+        	<!--{eval if(strripos($key,'.jpg')>0){continue;}/*应该对文件格式进行更加详细的过滤*/}-->
+            <tr class="$value['sub'] item " {if $value['sub']&&$value['sub']!='index'} style="display:none" {/if} id = "$key" >
+                 <td align="left" >
+                        {if $value['sub']=='index'}
+							<img src="../static/img/public/folder.png">
+							<a href="###" onclick="show_file('$key');">$key</a>
+						{elseif $value['sub']&&$value['sub']!='index'}
+						　　|- 
+							<img src="../static/img/public/file.png"> 
+							$key
+						{else}
+							<img src="../static/img/public/file.png"> 
+							$key
+						{/if} 
+                 </td>
+				 
+                  <td>
+                  	 {if $value['sub']!='index'}
+						 {if $value['sub']}
+	                      <a href="index.php?do=tpl&view=edit_tpl&tplname=$tplname&tname=$value['sub']/$key" class="button">
+						{else}
+							<a href="index.php?do=tpl&view=edit_tpl&tplname=$tplname&tname=$key" class="button">
+						{/if}
+						<span class="pen icon"></span>{$_lang['edit']}</a>
+	                     <a href="plu.php?do=deltpl&tplname=$tplname&tname=$key" onclick="return cdel(this)" class="button">
+	                     <span class="trash icon"></span>{$_lang['delete']}</a>
+                 	{else}
+						<a href="###" onclick="show_file('$key');" > <span id="show_$key">{$_lang['unfold']}</span></a>
+						
+					{/if}
+				    </td> 
+            </tr>
+		{/loop}
+		<script>
+			function show_file(key){
+				var key = key; 
+				$("."+key).toggle(); 
+			} 
+			function show_file(key){ 
+				var key = key;
+				var key_val = $("#show_"+key).html(); 
+				$("."+key).toggle(function (){  
+					if(key_val=="{$_lang['unfold']}"){ 
+					  $("#"+key).after($("."+key));
+						$("#show_"+key).html("{$_lang['fold']}"); 
+					}else{
+						$("#show_"+key).html("{$_lang['unfold']}");
+					}
+				});
+				
+			}
+			
+		</script>
+                <tr>
+                    <td colspan="2" align="left">
+                    	<button  type="button"  name="rst_edit" class="pill button" value={$_lang['return']} onclick="document.location.href='index.php?do=config&view=tpl'"><span class="uparrow icon"></span>{$_lang['return']}</button>
+                    </td>
+                </tr>
+      </table>
+ 
+ </div>
+ </div>
+
+<!--{template ADMIN_DIRECTORY/tpl/admin_footer}-->

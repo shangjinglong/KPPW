@@ -1,0 +1,149 @@
+<!--{template ADMIN_DIRECTORY/tpl/admin_header}--> 
+
+ <div class="page_title">
+    	<h1>店铺管理</h1>
+          <div class="tool">          
+			 <a href="index.php?do=store&view=list" {if $view=='list'}class="here"{/if}>店铺列表</a>
+    	</div>
+</div>
+
+
+      <div class="box search p_relative">
+    	<div class="title"><h2>{$_lang['search']}</h2></div>
+        <div class="detail" id="detail">
+			<form action="index.php?do={$do}&view={$view}" method="post" id="frm_list">
+        	<input type="hidden" name="do"   value="$do">
+			<input type="hidden" name="view" value="$view">
+			<input type="hidden" name="type" value="$type">
+			<input type="hidden" name="page" value="$page">
+			<table cellspacing="0" cellpadding="0">
+			 <tbody>
+			 	<tr>
+			 		<th>{$_lang['log']}编号</th>
+					<td><input type="text" class="txt" name="txt_shop_id" value="$txt_shop_id" onkeyup="clearstr(this);"></td>
+					<th>店铺名称</th>
+					<td><input type="text" class="txt" name='txt_name' value="{$txt_name}" onkeyup="clearspecial(this);"></td>
+			 	</tr>
+
+				<tr>
+					<th>{$_lang['show_number']}</th>
+					<td>
+						<select name="wh[page_size]" class="ps vm">
+						<option value="10" {if $wh['page_size']=='10'}selected="selected"{/if}>{$_lang['page_size']}10</option>
+						<option value="20" {if $wh['page_size']=='20'}selected="selected"{/if}>{$_lang['page_size']}20</option>
+						<option value="30" {if $wh['page_size']=='30'}selected="selected"{/if}>{$_lang['page_size']}30</option>
+						</select>
+					</td>
+					<th>{$_lang['result_order']}</th>
+					<td>
+						 <select name="w[ord][]">
+                           <option value="shop_id" {if $w['ord']['0']=='shop_id' or !isset($w['ord']['0'])} selected="selected"{/if}>{$_lang['default']}{$_lang['order']}</option>
+                           <option value="on_time" {if $w['ord']['0']=='on_time' } selected="selected"{/if}>申请时间</option>
+                      </select>
+                      <select name="w[ord][]">
+                            <option {if $w['ord']['1']=='desc' or !isset($w['ord']['1'])}selected="selected" {/if} value="desc">{$_lang['desc']}</option>
+                            <option {if $w['ord']['1']=='asc'}selected="selected" {/if} value="asc">{$_lang['asc']}</option>
+                      </select>
+					<button type="submit" name="sbt_search" value={$_lang['search']} class="pill" />
+						<span class="icon magnifier">&nbsp;</span>{$_lang['search']}</button>
+					</td>
+				</tr>
+				 
+			 </tbody>
+			</table>
+			
+        </div>
+	 </div>
+
+
+<div class="box list">
+ 	<div class="title"><h2>店铺列表</h2></div>
+      	<div class="detail">
+ 		 <!--<span style="color:red;">{$_lang['warm_prompt']}</span>-->
+		<div id="ajax_dom">
+		<input type="hidden" name="page" value="{$page}">
+  		<table width="100%" border="0" cellspacing="0" cellpadding="0" >
+          <tr>
+          	<th width="10%">店铺编号</th>
+          	<th width="10%">用户名</th>
+          	<th width="10%">店铺类型</th>
+            <th width="30%">店铺名</th>
+            <th width="10%">商品数</th>
+            <th width="10%">出售数</th>
+            <th width="30%">操作</th>
+		</tr>
+		{loop $shop_data $key $value}
+        <tr class="item">
+        	<td>
+        	<!--<input type="checkbox" name="ckb[]" class="checkbox" value="{$value['shop_id']}"> -->
+        	{$value['shop_id']}</td>
+			<td>$value['username']</td>
+			 <td>默认免费</td>
+           <td>{$value['shop_name']}</td>
+           
+           <td><!--{eval $r2 = get_good_num($value['uid']);}-->{if $r2}{$r2}{else}0{/if}</td>
+           <td><!--{eval $r1 = get_on_sale($value['uid']);}-->{if $r1}{$r1}{else}0{/if}</td>
+			<td>
+				{if !$value['shop_status']}
+				<a href="{$url}&ac=pass&shop_id={$value[shop_id]}" class="button"><span class="check icon"></span>通过审核</a>
+				<a href="{$url}&ac=nopass&shop_id={$value[shop_id]}" class="button">审核不通过</a>
+				{/if}
+				<a href="index.php?do=store&view=info&shop_id={$value[shop_id]}" class="button"><span class="pen icon"></span>查看</a>
+				{if $value['shop_status']==2}
+				<a href="{$url}&ac=del&shop_id={$value[shop_id]}" class="button" onclick="return cdel(this);"><span class="pen icon"></span>删除</a>
+				{/if}
+				{if $value['shop_status']==3}
+				<a href="{$url}&ac=open&shop_id={$value[shop_id]}" class="button" onclick="return copen(this);"><span class="pen icon"></span>开启</a>
+				{/if}
+				{if $value['shop_status']}
+					{if !$value['recommend']}
+						<a class="button" href="{$url}&ac=recommend&edituid={$value['uid']}&page={$page}" onclick="return cdel(this,'确认推荐？');">
+							<span class="uparrow icon"></span>推荐</a>
+					{else}
+						<a class="button" href="{$url}&ac=move_recommend&edituid={$value['uid']}&page={$page}" onclick="return cdel(this,'确认取消推荐？');">
+							<span class="downarrow icon"></span>取消推荐</a>
+					{/if}
+				{/if}
+			</td>
+          </tr>
+		 {/loop}
+		 <!--
+          <tr>
+            <td colspan="7">
+            	<label for="checkbox">  
+				{$_lang['select_all']}
+				</label>
+				<input type="hidden" name="sbt_action" class="sbt_action"/>　
+			<button type="submit" name="sbt_action" value="{$_lang['mulit_delete']}" class="negative pill button" onclick="return batch_act(this,'frm_list')" >
+				<span class="trash icon"></span>{$_lang['mulit_delete']}</button>
+			<button type="submit" name="sbt_action" value="{$_lang['mulit_pass']}" class="pill negative" onclick="return batch_act(this,'frm_list');" >
+				<span class="lock icon"></span>{$_lang['mulit_pass']}</button>
+			</td>
+		  </tr>-->
+        </table>
+		<div class="page">{$pages['page']}</div>
+		</div>
+	</div>
+</form>
+		
+</div>
+<!--{template ADMIN_DIRECTORY/tpl/admin_footer}-->
+<script type="text/javascript">
+	function cclose(o){
+			d = art.dialog;
+			c = '关闭店铺时将下架此店铺的商品，确定关闭吗？';
+		d.confirm(c, function() {
+			window.location.href = o.href;
+		});
+		return false;
+	}
+	function copen(o){
+		d = art.dialog;
+			c = '开启店铺时将上架此店铺的商品，确定开启吗？';
+		d.confirm(c, function() {
+			window.location.href = o.href;
+		});
+		return false;
+	}
+
+</script>

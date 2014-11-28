@@ -1,0 +1,88 @@
+<div class="buy-body">
+			
+		<form role="form" class="form-horizontal"
+        	action="{$strUrl}&step={$step}&sid={$arrServiceInfo['service_id']}" method="post"
+        	id = "submitGoodsOrderForm" name = "submitGoodsOrderForm"
+        	enctype="application/x-www-form-urlencoded">
+        	<input type="hidden" name="formhash" id="formhash" value="{FORMHASH}">
+			
+			<h2 class="min-title">商品信息</h2>
+				
+			
+			
+			<div class="form-group">
+				<label class="col-xs-2 control-label">商品名称</label>
+				<div class="col-xs-6">
+					<p class="form-control-static mb_10">{$arrServiceInfo['title']}</p>
+					<p><img src="{$arrPics[0]}" alt="{$arrServiceInfo['title']}" class="img-responsive"></p>
+				</div>
+			</div>
+
+			<div class="form-group">
+				<label class="col-xs-2 control-label">商品售价</label>
+				<div class="col-xs-6">
+					<p class="form-control-static"><span class="money"><sub>￥</sub>{$arrServiceInfo['price']}/{$arrServiceInfo['unite_price']}</span></p>
+				</div>
+			</div>
+
+			<div class="form-group">
+				<label class="col-xs-2 control-label">商品类型</label>
+				<div class="col-xs-6">
+					<p class="form-control-static">商品</p>
+				</div>
+			</div>
+
+			<div class="form-group">
+				<label class="col-xs-2 control-label">商品编号</label>
+				<div class="col-xs-6">
+					<p class="form-control-static">#{$arrServiceInfo['service_id']}</p>
+				</div>
+			</div>
+
+			<h2 class="min-title">确认购买信息</h2>
+			
+
+			<div class="form-group">
+				<label class="col-xs-2 control-label">支付金额</label>
+				<div class="col-xs-6">
+					<p class="form-control-static"><span class="money"><sub>￥</sub>{$arrServiceInfo['price']}</span></p>
+				</div>
+			</div>
+
+			<div class="form-group">
+				<label class="col-xs-2 control-label" for="desc">给卖家留言：</label>
+				<div class="col-xs-6">
+					<textarea row="10" class="form-control" placeholder="不得超过1000字" id="tar_content" name="tar_content"></textarea>
+				</div>
+			</div>
+			
+			<div class="form-group">
+				<div class="col-xs-6 col-xs-offset-2">
+					<button type="submit" class="btn btn-primary" >下一步</button>
+				</div>
+			</div>
+
+			</form>
+		</div><!-- buy-body end-->
+<script type="text/javascript">
+	
+		$('#submitGoodsOrderForm').scojs_valid({
+	    rules: {
+	    	tar_content: ['not_empty',{'min_length': 10},{'max_length': 100}]
+	    },
+	    messages: {
+	    	tar_content: {
+				not_empty: "请输入留言",
+				min_length: "最少输入10字数",
+				max_length: "最多可以输入:100字数"
+			}
+	    },
+	    wrapper:'.form-group'
+	    ,onSuccess: function(response, validator) {
+	    	  tipsOp(response.data);
+				if(response.url){
+					setTimeout(function(){window.location.href=response.url;},2000);
+				}
+	    }
+	});
+</script>	

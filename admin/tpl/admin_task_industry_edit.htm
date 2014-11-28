@@ -1,0 +1,128 @@
+<!--{template ADMIN_DIRECTORY/tpl/admin_header}-->
+<div class="page_title">
+    	<h1>{$_lang['industry_manage']}</h1>
+        <div class="tool">
+        	<a href="index.php?do=task&view=industry">{$_lang['industry_list']}</a>
+            <a href="index.php?do=task&view=industry_edit" class="here">{$_lang['industry']}{if $indus_id}{$_lang['edit']}{else}{$_lang['add']}{/if}</a> 
+        </div>
+</div>
+
+<div class="box post">
+    <div class="tabcon">
+        	<div class="title"><h2>{if $indus_id}{$_lang['edit_industry']}{else}{$_lang['add_industry']}{/if}</h2></div>       	
+            <div class="detail">
+                <form method="post" action="index.php?do={$do}&view={$view}" id="frm_indus_edit" enctype="multipart/form-data">
+                <input type="hidden" name="pk[indus_id]" value="$indus_id">              
+                    <table width="100%" border="0" cellspacing="0" cellpadding="0">
+                      <tr>
+                        <th scope="row" width="130">{$_lang['father_industry']}{$_lang['zh_mh']}</th>
+                        <td> 
+							<select name="fs[indus_pid]"id="slt_indus_id" style=" width:270px;"
+                         			 limit = "required:true;type:int" 
+                                     msg ={$_lang['choose_industry_class']} 
+                                     title={$_lang['you_choose_which_industry']}
+                                     msgArea="msg_indus_id">
+	                      <option value="0">{$_lang['top']}</option>
+	                        {loop $temp_arr $v}
+	                          $v
+	                        {/loop}
+	                    	</select>
+							 <span id="msg_indus_id" style="color:red;"></span> 
+                        </td>
+                      </tr>
+                      <tr>
+                        <th scope="row">{$_lang['industry_name']}{$_lang['zh_mh']}</th>
+                        <td><input type="text" maxlength="100"  class="txt" style=" width:260px;"
+						name="fs[indus_name]" 
+						value="{$indus_info['indus_name']}"
+                        			 limit = "required:false" 
+                                     msg ={$_lang['write_industry_name']} 
+                                     title={$_lang['write_industry_name']} 
+                                     msgArea="msg_indus_name"/><span id="msg_indus_name"></span>
+                       </td>
+                      </tr>
+					  <tr>
+                        <th scope="row">{$_lang['result_order']}{$_lang['zh_mh']}</th>
+                        <td>
+                        	<input type="text"  class="txt" id="txt_listorder" name="fs[listorder]"
+						   		value="{if $indus_info['listorder']}{$indus_info['listorder']}{else}0{/if}"
+						    	maxlength="5" 
+								limit = "required:true;type:int" 
+                                onkeyup="clearstr(this)"
+                                msg ={$_lang['write_industry_order']}
+                                title={$_lang['write_industry_order']} 
+                                msgArea="slt_txt_listorder"/><span id="slt_txt_listorder"></span>   
+                        </td>
+                      </tr>
+					  <tr>
+                        <th scope="row">{$_lang['is_recommend']}{$_lang['zh_mh']}</th>
+                        <td>
+                          <p>
+                              <label><input type="checkbox" name="fs[is_recommend]" value="1"  {if $indus_info['is_recommend']==1} checked="checked" {/if}/>&nbsp;{$_lang['yes']}</label> <br />
+                          </p>
+                        </td>
+                      </tr>
+					{if $indus_pid ==0}  
+				    <tr class="hiddenThisTr">
+                    <th scope="row">适用任务{$_lang['zh_mh']}</th>
+                    <td>
+                      <p>
+                          <label><input type="checkbox" name="fs[totask]" value="1"  {if $indus_info['totask']==1} checked="checked" {/if}/>&nbsp;{$_lang['yes']}</label> <br />
+                      </p>
+                    </td>
+                    </tr>
+
+				    <tr class="hiddenThisTr">
+                    <th scope="row">适用商品{$_lang['zh_mh']}</th>
+                    <td>
+                      <p>
+                          <label><input type="checkbox" name="fs[togoods]" value="1"  {if $indus_info['togoods']==1} checked="checked" {/if}/>&nbsp;{$_lang['yes']}</label> <br />
+                      </p>
+                    </td>
+                    </tr>
+					{/if}
+                    <tr>
+                        <th scope="row">SEO{$_lang['title']}{$_lang['zh_mh']}</th>
+                        <td><textarea cols="70" rows="2"  name="fs[seo_title]" value="{$indus_info['seo_title']}">{$indus_info['seo_title']}</textarea></td>
+                     </tr>
+                     
+                     <tr>
+                        <th scope="row">SEO{$_lang['keywords']}{$_lang['zh_mh']}</th>
+                        <td><textarea cols="70" rows="2"  name="fs[seo_keyword]" value="{$indus_info['seo_keyword']}">{$indus_info['seo_keyword']}</textarea></td>
+                     </tr>
+                     
+                      <tr>
+                        <th scope="row">SEO{$_lang['description']}{$_lang['zh_mh']}</th>
+                        <td><textarea cols="70" rows="3" name="fs[seo_desc]" value="{$indus_info['seo_desc']}">{$indus_info['seo_desc']}</textarea></td>
+                     </tr>
+				
+					 
+					<tr>
+ 
+						<th scope="row">&nbsp;</th>
+						<td>
+						<button name="sbt_edit" value="1" onclick="return checkForm(document.getElementById('frm_indus_edit'),false)" class="positive primary pill button" type="submit">
+						<span class="check icon"></span>{$_lang['submit']}</button>
+						
+						</td>
+					</tr>
+                    </table>
+                </form>
+              </div>
+       </div>           
+</div>
+<!--主体结束-->
+<!--{template ADMIN_DIRECTORY/tpl/admin_footer}-->
+<script type="text/javascript">
+	$(function(){
+		$("#slt_indus_id").change(function(){
+			var v = $(this).val();
+			if(v>0){
+				$(".hiddenThisTr").addClass('hidden');
+			}else{
+				$('.hiddenThisTr').removeClass('hidden');
+			}
+		});
+	})
+	
+</script>

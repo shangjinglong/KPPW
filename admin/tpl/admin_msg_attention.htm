@@ -1,0 +1,85 @@
+<!--{template ADMIN_DIRECTORY/tpl/admin_header}-->
+<div class="page_title">
+    	<h1>{$_lang['weibo_view']}</h1>
+         <div class="tool">         
+            <a href="index.php?do=msg&view=weibo" {if $view=='weibo'} class="here" {/if}>OAuth{$_lang['login_config']}</a>
+			<a href="index.php?do=$do&view=attention" {if $view=='attention'} class="here" {/if}>{$_lang['weibo_view']}</a>
+         </div>
+</div>
+
+<div class="box post">
+   <div class="tabcon">
+      <div class="title"><h2>{$_lang['weibo_view']}</h2></div>
+         <div class="detail">
+             <form name="frm_config_basic" id="frm_config_basic" action="index.php?do=msg&view=attention" method="post" accept-charset="{$_K['charset']}">
+                <table width="100%" border="0" cellspacing="0" cellpadding="0">
+                  <tr>
+                      <th scope="row" width="130">{$_lang['weibo_view_list']}{$_lang['zh_mh']}</th>
+                      <td>
+                        {loop $attent_list $k $v}
+								<label for="api_{$k}"><input type="checkbox" id="api_{$k}" name="api[{$k}]" rel="{$k}" value="1" class="attent_api" {if $attent_api[$k]}checked="checked"{/if}>{$v['desc']}</label>
+						{/loop}
+                      </td>
+                  </tr>
+		<tbody id="sina_attent" style="{if !$attent_api['sina_attent']}display:none{/if}">
+			 <tr>
+			 	 <th scope="row" width="130">{$_lang['sina']}{$_lang['zh_mh']}</th>
+                <td>
+                	<input name="conf[sina_attent]" value="{$attent_list['sina_attent']['v']}" class="txt">
+          			 <span>{$_lang['view_user_weibo']}(http://weibo.com/u/<font color="red">2128335227</font>){$_lang['num_part']}</span>
+                </td>
+            </tr>
+		</tbody>
+		<tbody id="ten_attent" style="{if !$attent_api['ten_attent']}display:none{/if}">
+			 <tr>
+			 	 <th scope="row" width="130">{$_lang['ten']}{$_lang['zh_mh']}</th>
+                <td>
+                	<input name="conf[ten_attent]" value="{$attent_list['ten_attent']['v']}" class="txt">
+		     		 <span>{$_lang['view_user_weibo']}(http://t.qq.com/<font color="red">shangjinglong</font>){$_lang['red_part']}</span>
+                </td>
+            </tr>
+		</tbody>
+		<tbody id="netease_attent" style="{if !$attent_api['netease_attent']}display:none{/if}">
+			 <tr>
+			 	 <th scope="row" width="130">{$_lang['wangyi']}{$_lang['zh_mh']}</th>
+                <td>
+                	<input name="conf[netease_attent]" value="{$attent_list['netease_attent']['v']}" class="txt">
+                 	 
+				 <span>{$_lang['view_user_weibo']}(http://t.163.com/<font color="red">2746053225</font>){$_lang['red_part']}</span>
+                </td>
+            </tr>
+		</tbody>
+		<tbody id="sohu_attent" style="{if !$attent_api['sohu_attent']}display:none{/if}">
+			 <tr>
+			 	 <th scope="row" width="130">{$_lang['souhu']}{$_lang['zh_mh']}</th>
+                <td>
+                	<input name="conf[sohu_attent]" value="{$attent_list['sohu_attent']['v']}" class="txt">
+				 <span>{$_lang['view_user_weibo']}(http://<font color="red">nanison</font>.blog.sohu.com){$_lang['red_part']}</span>
+                </td>
+            </tr>
+		</tbody>
+		
+			<th scope="row">&nbsp;</th>
+			<td>
+				<div class="clearfix padt10">
+                    <button class="positive primary pill button" type="submit" name='submit' value="{$_lang['submit']}"><span class="check icon"></span>{$_lang['submit']}</button>
+                  
+                </div>
+			</td>
+                    
+       </table>
+        </form>
+            </div>
+        </div>
+        
+        
+    </div>
+<script type="text/javascript">
+    $(function(){
+    	$(":checkbox.attent_api").click(function(){
+			var api_name=$(this).attr("rel");
+			$("#"+api_name).toggle();
+		})
+    })
+</script>
+<!--{template ADMIN_DIRECTORY/tpl/admin_footer}-->

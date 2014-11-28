@@ -1,0 +1,174 @@
+<!--{template ADMIN_DIRECTORY/tpl/admin_header}-->
+<div class="page_title">
+    <h1>{$action_arr[$type]['1']}{$_lang['manage']}</h1>
+    <div class="tool">
+        <a href="index.php?do=trans&view=rights&type={$type}">{$action_arr[$type]['1']}{$_lang['list']}</a>
+		<a href="javascript:void(0);" class="here">{$action_arr[$type]['1']}{$_lang['manage']}</a>
+    </div>
+</div>
+ <div class="box post">
+  <div class="tabcon">
+   <div class="title"><h2>{$trans_object[$report_info['obj']]}{$action_arr[$type]['1']}#{$report_id}</h2></div>
+    <div class="detail">
+     <form action="index.php?do={$do}&view={$view}&type={$type}&report_id={$report_id}" method="post" name="frm" id="frm">
+      <table width="100%" border="0" cellspacing="0" cellpadding="0">
+       {if !in_array($report_info['obj'],array('task','product','work'))}
+	   <tr>
+         <th scope="row" width="130">{$_lang['belong_to']}{$trans_object[$report_info['obj']]}</th>
+       	 <td>#{$obj_info['origin_id']}</td>
+       </tr>
+	   {/if}
+	   <tr>
+         <th scope="row" width="130">{$_lang['belong_to_service']}</th>
+         <td><a href="{$_K['siteurl']}/index.php?do=goods&id={$obj_info['obj_id']}" target="_blank">{$obj_info['obj_title']}</a></td>
+       </tr>
+	   <tr>
+       <th scope="row" width="130">{$action_arr[$type]['1']}{$_lang['the_promoters']}</th>
+       <td>
+       		<a href="{$_K['siteurl']}/index.php?do=seller&id={$report_info['uid']}" target="_blank">$report_info['username']</a>
+			<font color="red">E-mail</font>:{$user_info['email']}&nbsp;||&nbsp;<font color="red">{$_lang['tel']}</font>:{$user_info['phone']}&nbsp;||&nbsp;<font color="red">QQ</font>:{$user_info['qq']}&nbsp;||&nbsp;<font color="red">{$_lang['mobile']}</font>:{$user_info['mobile']}
+	   </td>
+      </tr>
+	  <tr>
+       <th scope="row" width="130">{$action_arr[$type]['1']}{$_lang['object']}</th>
+       <td>
+       		<a href="{$_K['siteurl']}/index.php?do=seller&id={$report_info['to_uid']}" target="_blank">$report_info['to_username']</a>
+			<font color="red">E-mail</font>:{$to_userinfo['email']}&nbsp;||&nbsp;<font color="red">{$_lang['tel']}</font>:{$to_userinfo['phone']}&nbsp;||&nbsp;<font color="red">QQ</font>:{$to_userinfo['qq']}&nbsp;||&nbsp;<font color="red">{$_lang['mobile']}</font>:{$to_userinfo['mobile']}
+	   </td>
+      </tr>
+	  <tr>
+         <th scope="row" width="130">{$_lang['apply']}{$action_arr[$type]['1']}{$_lang['time']}</th>
+         <td><!--{date('Y-m-d H:i:s',$report_info['on_time'])}--></td>
+      </tr>
+	  <tr>
+        <th scope="row" width="130">{$_lang['apply_status']}</th>
+        <td>{$trans_status[$report_info['report_status']]}</td>
+      </tr>
+	 <tr>
+        <th scope="row" width="130">{$action_arr[$type]['1']}{$_lang['explain']}</th>
+        <td><!--{eval echo nl2br($report_info['report_desc'])}--></td>
+     </tr>
+	 <tr>
+        <th scope="row" width="130">{$action_arr[$type]['1']}{$_lang['attachment']}</th>
+        <td>
+			<!--{eval $filename=substr($report_info['report_file'],strrpos($report_info['report_file'],'/')+1);}-->
+			{if $report_info['report_file']}<a href="index.php?do={$do}&view={$type}&ac=download&filename=$filename&filepath={$report_info['report_file']}">{$filename}</a>{else}{$_lang['no_submit_attachment']}{/if}
+		</td>
+    </tr>
+	<tr id="pass">
+       <th scope="row" width="130">{$action_arr[$type]['1']}{$_lang['process_scheme']}</th>
+	   <td>
+	 {if $report_info['report_status']=='2'}<!--处理中-->
+	   	{if $process_can['sharing']}
+			{$trans_object[$report_info['obj']]}{$_lang['total_commission']}{$obj_info['cash']}{$_lang['yuan']},{$_lang['please_distribution_in_this_range']}{$_lang['zh_jh']}<br>
+			{$_lang['buyer']}（{$gz_info['username']}）{$_lang['get']}<input type="text" name="op_result[gz_get]" id="gz_get" size=4 class="txt">{$_lang['yuan']},
+			{$_lang['seller']}（{$wk_info['username']}）{$_lang['get']}<input type="text" name="op_result[wk_get]" id="wk_get" size=4 class="txt">{$_lang['yuan']}
+		{/if}
+		{if $process_can['product_remove']}
+			<input type="radio" name="op_result[product_remove]" value="1" checked="checked">商品下架
+			<input type="radio" name="op_result[product_remove]" value="2">举报无效
+			<input type="radio" name="op_result[product_remove]" value="3">禁用账号
+		{/if}
+	{else}
+		{$report_info['op_result']}
+	{/if}
+		</td>
+	</tr>
+	<tr style="display:none;" id="nopass">
+       <th scope="row" width="130">{$_lang['untenable_reason']}</th>
+	   <td>
+	   <textarea cols="" rows="7" style="width:360px;" name="op_result[reply]" id="reply"></textarea>
+	   </td>
+	</tr>
+	<tr>
+      <th scope="row">&nbsp;</th>
+      <td>
+          <div class="clearfix padt10">
+          	{if $report_info['report_status']=='2'}
+				 <input type="hidden" name="op_result[process_result]" id="process_result">
+          		 <input type="hidden" name="op_result[action]" id="action">
+          	 	 <button class="positive primary pill button" type="submit" value="{$_lang['process']}{$action_arr[$type]['1']}" onclick="return report()"><span class="icon pen"></span>{$_lang['process']}{$action_arr[$type]['1']}</button>
+				 {if $type == 'rights'}
+				 <button class="positive primary pill button" type="submit" value="{$action_arr[$type]['1']}{$_lang['untenable']}" onclick="return nopass()"><span class="icon cross "></span>{$action_arr[$type]['1']}{$_lang['untenable']}</button>
+         		 {/if}
+			{/if}
+			 <button class="pill button" type="button" onclick="to_back();" value="{$_lang['return']}"><span class="uparrow icon"></span>{$_lang['return']}</button>
+          </div>
+      </td>
+   </tr>
+  </tbody>
+ </table>
+ </form>
+ </div>
+</div>
+<script type="text/javascript">
+	function report(){
+		$("#pass").show();
+		$("#nopass").hide();
+		var reportType='{$type}';//交易维权类型 rights 维权    report举报
+		switch(reportType){
+			case "rights":
+				var obj_cash=parseFloat($obj_info['cash'])+0.00;
+				var wk_get  =parseFloat($("#wk_get").val())+0.00;
+				var gz_get  =parseFloat($("#gz_get").val())+0.00;
+
+				if(wk_get<0.00||gz_get<0.00){
+					art.dialog.alert("{$_lang['commission_not_support_negative']}");return false;
+				}else if(wk_get+gz_get!=obj_cash){
+					art.dialog.alert("{$_lang['input_please_confirm']}{$action_arr[$type]['1']}{$_lang['commission_distribution_completely']}");return false;
+				}
+				var content="{$_lang['buyer']}（{$gz_info['username']}）{$_lang['distribution']}{$_lang['zh_mh']}"+gz_get+"{$_lang['yuan']}，{$_lang['seller']}（{$wk_info['username']}）{$_lang['distribution']}{$_lang['zh_mh']}"+wk_get+"{$_lang['yuan']}{$_lang['zh_jh']}";
+				art.dialog({
+   						title: "{$_lang['confirm_report']}",
+  				 		content: "{$_lang['your_current_process_scheme_is']}{$_lang['zh_mh']}<br>"+content,
+   						icon: 'succeed',
+   						yesFn: function(){$("#process_result").val(content);$("#action").val('pass');$("#frm").submit()},
+					    noFn :function(){this.close();return false;}
+					});
+				return false;
+				break;
+			case "report":
+		    	var content='';
+					switch($('input:radio:checked').val()){
+						case '1':
+						content+="商品下架";
+						break;
+						case '2':
+						content+="举报无效";
+						break;
+						case '3':
+						content+="账号禁用";
+						break;
+					}
+				art.dialog({
+   						title: "{$_lang['confirm_report']}",
+  				 		content: "{$_lang['your_current_process_scheme_is']}{$_lang['zh_mh']}<br>"+content,
+   						icon: 'succeed',
+   						yesFn: function(){$("#process_result").val(content);$("#action").val('pass');$("#frm").submit()},
+					    noFn :function(){this.close();return false;}
+					});
+				return false;
+				break;
+		}
+	}
+	function nopass(){
+		$("#pass").hide();
+		$("#nopass").show();
+		if($("#nopass").is(":visible")){
+			var shtml=$("#reply").val();
+			if(shtml.length<20){
+				art.dialog.alert("{$_lang['untenable_reason_input_notice']}");return false;
+			}else{
+				art.dialog({
+   				title: "{$_lang['confirm_report']}",
+  				content: "{$_lang['confirm_not_process']}{$action_arr[$type]['1']}{$_lang['record_reason_is']}:<br>"+shtml,
+				icon: 'succeed',
+   				yesFn: function(){$("#process_result").val(shtml);$("#action").val('nopass');$("#frm").submit()},
+				noFn :function(){this.close();return false;}
+			});
+			return false;
+		  }
+	  }
+	}
+</script>
+<!--{template ADMIN_DIRECTORY/tpl/admin_footer}-->

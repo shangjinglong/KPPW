@@ -1,0 +1,175 @@
+<!--{template ADMIN_DIRECTORY/tpl/admin_header}-->
+
+	<div class="page_title">
+    	<h1>{$model_info['model_name']}{$_lang['manage']}</h1>
+         <div class="tool">
+         	<a href="index.php?do=model&model_id=1&view=list&status=0" class="here">{$_lang['task_list']}</a>
+		<!--	<a href="index.php?do=model&model_id=1&view=config">{$_lang['task_config']}</a>-->
+		 </div>
+	</div>
+    <!--页头结束-->
+
+    <!--提示结束-->
+
+        <div class="box search p_relative">
+    	<div class="title"><h2>{$_lang['search']}</h2></div>
+        <div class="detail" id="detail">
+
+		    <form action="index.php?do=model&model_id=3&view=list" method="post">
+				 <input type="hidden" value="{$page}" name="page">
+				<table cellspacing="0" cellpadding="0">
+					<tbody>
+                        <tr>
+                            <th>{$_lang['task_id']}</th>
+                            <td><input type="text" value="$w[task_id]" name="w[task_id]" class="txt"/></td>
+                            <th>{$_lang['task_title']}</th>
+                            <td><input type="text" value="$w[task_title]" name="w[task_title]" class="txt"/>{$_lang['search_by_like']}</td>
+                             <th></th><td>
+                             	<button class="pill" type="submit" value={$_lang['search']} name="sbt_search">
+                            		<span class="icon magnifier">&nbsp;</span>{$_lang['search']}
+								</button></td>
+                             </td>
+						</tr>
+
+
+                        <tr>
+                            <th>{$_lang['please_choose_task_status']}</th>
+                            <td>
+                            	<select class="ps vm" name="w[task_status]" id="catid" onchange="statusJump(this.value)">
+                            		<option value="" {if !$w['task_status']} selected="selected" {/if}>全部</option>
+                            	{loop $task_status $k $v}
+								<!--{eval $k = strval($k);}-->
+									<option value="$k" {if $w[task_status]===$k} selected="selected" {/if}>$v</option>
+								{/loop}
+								</select>
+								</td>
+							<th>{$_lang['result_order']}</th>
+							<td>
+
+								<select name="ord[]" id="ord1">
+                                <option value="task_id" {if $ord[0]=='task_id' or !isset($ord[0])} selected="selected"{/if}>{$_lang['default_order']}</option>
+                                <option value="start_time" {if $ord[0]=='start_time' } selected="selected"{/if}>{$_lang['pub_time']}</option>
+                                </select>
+                                <select name="ord[]" onchange="orderJump(this.value)">
+                                <option {if $ord[1]=='desc' or !isset($ord[1])}selected="selected" {/if} value="desc">{$_lang['desc']}</option>
+                                <option {if $ord[1]=='asc'}selected="selected" {/if} value="asc">{$_lang['asc']}</option>
+                                </select>
+							</td>
+                            <th>{$_lang['list_result']}</th>
+                            <td><select name="w[page_size]" onchange="pageJump(this.value)">
+									<option value="10" {if $page_size=='10'}selected="selected"{/if}>{$_lang['page_size']}10</option>
+									<option value="20" {if $page_size=='20'}selected="selected"{/if}>{$_lang['page_size']}20</option>
+									<option value="30" {if $page_size=='30'}selected="selected"{/if}>{$_lang['page_size']}30</option>
+								</select>
+
+                        </tr>
+                    </tbody>
+                </table>
+            </form>
+
+        </div>
+    </div>
+    <!--搜索结束-->
+
+    <div class="box list">
+    	<div class="title"><h2>{$_lang['reward_task_list']}</h2></div>
+        <div class="detail">
+        	<form action="" id='frm_list' method="post">
+        	<input type="hidden" value="{$page}" name="page">
+			<input type="hidden" name="w[page_size]" value="{$page_size}">
+              <div id="ajax_dom">
+              <input type="hidden" value="{$page}" name="page" />
+              <table cellpadding="0" cellspacing="0">
+                <tbody>
+                  <tr>
+                    <th>编号</th>
+
+                    <th width="28%">{$_lang['task_title']}</th>
+
+                  <!--  <th width="15%">{$_lang['pub_time']}</th>-->
+					<th width="10%">{$_lang['task_cash']}</th>
+					<th width="10%">{$_lang['pub_name']}</th>
+					 <th width="10%">{$_lang['task_status']}</th>
+                    <th width="17%">{$_lang['operate']}</th>
+                  </tr>
+                  {loop $task_arr $k $v}
+                  <tr class="item">
+                 	<td class="td25">{$v[task_id]}</td>
+                    <td class="td28"><a href="../index.php?do=task&id={$v['task_id']}" target="_blank">
+                    	<!--{eval echo kekezu::cutstr($v[task_title],36)}--></a>
+						{if $v[is_top]==1}<font color="red">{$_lang['recommended']}</font>{/if}
+						</td>
+
+                    <td>{c:$v['task_cash']}</td>
+					<td>$v[username]</td>
+					<td>{$task_status[$v[task_status]]}</td>
+                    <td>
+                    <!--
+                       {if $v[task_status]==1||$v[task_status]==0}
+                    	<a href="index.php?do=model&model_id=$v[model_id]&view=list&task_id=$v[task_id]&ac=pass&page={$page}" onclick="return cpass(this,'',1);" class="button"><span class="check icon"></span>{$_lang['pass']}</a>
+						<a href="index.php?do=model&model_id=$v[model_id]&view=list&task_id=$v[task_id]&ac=nopass&page={$page}" onclick="return cpass(this,'',2);" class="button"><span class="cross icon"></span>审核失败</a>
+						{/if}
+                    -->
+						{if $v[task_status]==1||$v[task_status]==0}
+                    	<a href="index.php?do=model&model_id=$v[model_id]&view=list&task_id=$v[task_id]&ac=pass&page={$page}" onclick="return cpass(this,'',1);" class="button"><span class="check icon"></span>{$_lang['pass']}</a>
+						<a href="index.php?do=model&model_id=$v[model_id]&view=list&task_id=$v[task_id]&ac=nopass&page={$page}" onclick="return cpass(this,'',2);" class="button"><span class="cross icon"></span>审核失败</a>
+						{/if}
+
+						<!--
+						{if in_array($v[task_status],array('2','3'))}
+                    	<a href="index.php?do=model&model_id=$v[model_id]&view=list&task_id=$v[task_id]&ac=freeze&page={$page}" class="button"><span class="cog icon"></span>{$_lang['freeze']}</a>
+						{/if}-->
+						<a href="index.php?do=model&model_id=$v[model_id]&view=edit&task_id=$v[task_id]&page={$page}" class="button dbl_target"><span class="pen icon"></span>查看</a>
+						{if in_array($v[task_status],array('8','9','10'))}
+						<a href="index.php?do=model&model_id=$v[model_id]&view=list&ac=del&task_id=$v[task_id]&page={$page}"  onclick="return cdel(this);" class="button"><span class="trash icon"></span>{$_lang['delete']}</a>
+						{/if}
+					</td>
+                  </tr>
+                  {/loop}
+
+                  <tr>
+                    <td colspan="7">
+	                    <div class="page fl_right">{$pages[page]}</div>
+
+	                    <div class="clearfix">
+
+	                            <input type="hidden" name="sbt_action" class="sbt_action"/>
+
+							{if $w[task_status]=='0'||$w[task_status]=='1'||$w[task_status]=='8'||$w[task_status]=='9'||$w[task_status]=='10'}
+	                        <button type="submit" value="{$_lang['mulit_delete']}" onclick="return batch_act(this,'frm_list');" class="pill negative" ><span class="icon trash"></span>{$_lang['mulit_delete']}</button>
+							{/if}
+
+							{if $w[task_status]=='1'||$w[task_status]=='0'}
+	                        <button type="submit" value="{$_lang['mulit_pass']}" onclick="return batch_act(this,'frm_list');"  class="positive pill negative" ><span class="icon check">&nbsp;</span>{$_lang['mulit_pass']}</button>
+							<button type="submit" value="{$_lang['mulit_nopass']}" onclick="return batch_act(this,'frm_list');"  class="positive pill negative"><span class="icon check">&nbsp;</span>{$_lang['mulit_nopass']}</button>
+	                    	{/if}
+
+
+
+	                    	<!--<button type="submit" value="{$_lang['mulit_freeze']}" onclick="return batch_act(this,'frm_list');"    class="pill negative" ><span class="lock icon"></span>{$_lang['mulit_freeze']}</button>
+							<button type="submit" class="positive pill negative"  onclick="return batch_act(this,'frm_list');" value="{$_lang['mulit_unfreeze']}"><span class="unlock icon"></span>{$_lang['mulit_unfreeze']}</button>
+-->
+	                    </div>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+              </div>
+        	</form>
+        </div>
+    </div>
+	<!--主体结束-->
+<!--{template ADMIN_DIRECTORY/tpl/admin_footer}-->
+<script type="text/javascript">
+	var url = '{$url_str}';
+	function statusJump(task_status){
+		window.location.href = url+'&w[task_status]='+task_status;
+	}
+	function orderJump(value){
+		var ord1 = $("#ord1").children("option:selected").val();//selected的值
+		window.location.href= url+'&ord[0]='+ord1+'&ord[1]='+value;
+	}
+	function pageJump(value){
+		window.location.href = url+'&page_size='+value;
+	}
+</script>

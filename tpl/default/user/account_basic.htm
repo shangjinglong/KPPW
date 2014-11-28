@@ -1,0 +1,37 @@
+<!--{template user/header}-->
+<div class="container">
+  <div class="nav-action">
+		<!--{template user/left_side}-->
+  </div>
+  <!-- nav-action end -->
+  <div class="content-panel">
+      <div class="tab">
+        <a {if $op === 'basic'}class="selected"{/if} href="index.php?do=user&view=account&op=basic">基本资料</a>
+        <a {if $op === 'basic'}class="contact"{/if} href="index.php?do=user&view=account&op=contact">联系方式</a>
+        <a {if $op === 'basic'}class="skill"{/if} href="index.php?do=user&view=account&op=skill">技能标签</a>
+      </div>
+      <div class="tab_detail">
+      		<!-- 基本资料 start -->
+	          {if $intUserRole === 2}
+	          	<!--{template user/account_basic_enterprise}-->
+	          {else}
+	          	<!--{template user/account_basic_personal}-->
+	          		<script type="text/javascript">
+					  $('.form_datetime').datetimepicker({
+					        language:  'zh-CN',
+					        weekStart: 1,
+					        todayBtn:  1,
+					        autoclose: 1,
+					        todayHighlight: 1,
+					        startView: 2,
+					        minView: 2,
+					        forceParse: 0
+					    });
+					</script>
+	          {/if}
+      		<!-- 基本资料 end -->
+      </div>
+  </div>
+  </div>
+<script src="static/js/model/user/account.js"></script>
+<!--{template user/footer}-->

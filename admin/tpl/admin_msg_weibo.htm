@@ -1,0 +1,265 @@
+<!--{template ADMIN_DIRECTORY/tpl/admin_header}-->
+<div class="page_title">
+    	<h1>{$_lang['api_config_manage']}</h1>
+         <div class="tool">
+            <a href="index.php?do=msg&view=weibo" {if $view=='weibo'} class="here" {/if}>{$_lang['oauth_api_config']}</a>
+    <!--	<a href="index.php?do=$do&view=attention" {if $view=='attention'} class="here" {/if}>{$_lang['weibo_view']}</a> -->
+         </div>
+</div>
+
+<div class="box post">
+   <div class="tabcon">
+      <div class="title"><h2>{$_lang['oauth_api_config']}<span ><a href="#" style="font-size:small;">查看相关教程</a></span></h2></div>
+         <div class="detail">
+             <form name="frm_config_basic" id="frm_config_basic" action="index.php?do=msg&view=weibo" method="post" accept-charset="{$_K['charset']}">
+                <table width="100%" border="0" cellspacing="0" cellpadding="0">
+                  <tr>
+                      <th scope="row" width="130">{$_lang['open_which_api']}{$_lang['zh_mh']}</th>
+                      <td>
+                        {loop $oauth_type_list $k $v}
+							{if !isset($weibo_api[$k.'_is_open'])}
+							<label for="{$k}_api_open">
+								<input type="checkbox" name="api[{$k}]" rel="{$k}" value="1" id="{$k}_api_open" {if $api_open[$k]=='1'}checked="checked"{/if}>{$v['name']}
+						    </label>
+							{/if}
+					    {/loop}
+                      </td>
+                    </tr>
+		<tbody id="qq" {if !$api_open['qq']}style="display:none"{/if}>
+			<tr>
+                 <th scope="row" width="130"> QQappid{$_lang['zh_mh']}</th>
+                <td>
+                    <input type="text" size="50" name="conf[qq_app_id]" id="qq_appid" class="txt"
+					 value="{$config_arr['qq_app_id']}"
+					 limit="type:int" msg="QQappid"
+					 title="{$_lang['enter_correct_qqappid']}" msgArea="txt_qq_appid_msg"/>
+					<span id="txt_qq_appid_msg"></span>({$_lang['qq_api_num']})
+					<button id="reg" onclick="window.open('http://connect.qq.com/intro/login/')" type="button" class="pill">
+					<span class="icon plus">&nbsp;</span>{$_lang['click_apply']}</button>
+                </td>
+            </tr>
+			<tr>
+				 <th scope="row" width="130"> QQappsecret{$_lang['zh_mh']}</th>
+                <td>
+                    <input type="text" size="50" name="conf[qq_app_secret]"
+					 id="qq_appsecret" value="{$config_arr['qq_app_secret']}"
+					 limit="type:string" msg="QQappsecret" title="{$_lang['fill_right']}QQappsecret"
+					 msgArea="txt_qqsecret_msg" class="txt"/>
+				<span id="txt_qqsecret_msg"></span>(QQ{$_lang['qq_api_app_secret_num']})
+                </td>
+            </tr>
+		</tbody>
+		<tbody id="alipay" {if !$api_open['alipay']}style="display:none"{/if}>
+			<tr>
+				 <th scope="row" width="130"> {$_lang['account_from_alipay']}appid{$_lang['zh_mh']}</th>
+                <td>
+                    <input type="text" size="50" name="conf[alipay_app_id]"
+					 id="alipay_appid" value="{$config_arr['alipay_app_id']}"
+				 limit="type:int" msg="{$_lang['account_from_alipay']}appid" title="{$_lang['enter_correct_alipay_appid']}"
+				 msgArea="txt_alipay_appid_msg" class="txt"/>
+				 <span id="txt_alipay_appid_msg"></span>({$_lang['alipay_api_num']})
+					<button id="reg" onclick="window.open('https://b.alipay.com/order/productDetail.htm?productId=2011042200323155')" type="button" class="pill">
+					<span class="icon plus">&nbsp;</span>{$_lang['click_apply']}</button>
+                </td>
+            </tr>
+
+			<tr>
+			   <th scope="row" width="130"> {$_lang['account_from_alipay']}appsecret{$_lang['zh_mh']}</th>
+                <td>
+                    <input type="text" size="50" name="conf[alipay_app_secret]"
+					 id="alipay_appsecret" value="{$config_arr['alipay_app_secret']}"
+				 limit="type:string" msg="{$_lang['account_from_alipay']}appsecret" title="{$_lang['enter_alipay_api_app_secret_num']}"
+				 msgArea="txt_alipay_secret_msg" class="txt"/>
+				<span id="txt_alipay_secret_msg"></span>({$_lang['alipay_api_app_secret_num']})
+                </td>
+            </tr>
+		</tbody>
+		<tbody id="taobao" {if !$api_open['taobao']}style="display:none"{/if}>
+			<tr>
+				 <th scope="row" width="130"> {$_lang['account_from_taobao']}appid{$_lang['zh_mh']}</th>
+                <td>
+                    <input type="text" size="50" name="conf[taobao_app_id]"
+					 id="taobao_appid" value="{$config_arr['taobao_app_id']}"
+				 limit="type:int" msg="{$_lang['account_from_taobao']}appid" title="{$_lang['enter_correct_taobao_appid']}"
+				 msgArea="txt_taobao_appid_msg" class="txt"/>
+				 <span id="txt_taobao_appid_msg"></span>({$_lang['taobao_api_num']})
+					<button id="reg" onclick="window.open('http://open.taobao.com/app_access.htm')" type="button" class="pill">
+					<span class="icon plus">&nbsp;</span>{$_lang['click_apply']}</button>
+                </td>
+            </tr>
+
+			<tr>
+			   <th scope="row" width="130"> {$_lang['account_from_taobao']}appsecret{$_lang['zh_mh']}</th>
+                <td>
+                    <input type="text" size="50" name="conf[taobao_app_secret]"
+					 id="taobao_appsecret" value="{$config_arr['taobao_app_secret']}"
+				 limit="type:string" msg="{$_lang['account_from_taobao']}appsecret" title="{$_lang['enter_taobao_api_app_secret_num']}"
+				 msgArea="txt_taobao_secret_msg" class="txt"/>
+				<span id="txt_taobao_secret_msg"></span>({$_lang['taobao_api_app_secret_num']})
+                </td>
+            </tr>
+		</tbody>
+		<tbody id="sina" {if !$api_open['sina']}style="display:none"{/if}>
+			 <tr>
+			 	 <th scope="row" width="130"> Sina appid{$_lang['zh_mh']}</th>
+                <td>
+                    <input type="text" size="50" name="conf[sina_app_id]" id="sina_app_id"
+				 value="{$config_arr['sina_app_id']}" limit="type:string"
+				 msg="Sina appid" title="{$_lang['enter_sina_api_app_secret_num']}" msgArea="txt_sinaappid_msg" class="txt"/>
+				 <span id="txt_sinaappid_msg"></span>({$_lang['sina_api_num']})
+					<button id="reg" onclick="window.open('http://open.weibo.com/connect')" type="button" class="pill">
+					<span class="icon plus">&nbsp;</span>{$_lang['click_apply']}</button>
+                </td>
+            </tr>
+            <tr>
+            	<th scope="row" width="130"> Sina appsecret{$_lang['zh_mh']}</th>
+                <td>
+                    <input type="text" size="50" name="conf[sina_app_secret]"
+					 id="sina_app_secret" value="{$config_arr['sina_app_secret']}"
+					class="txt" limit="type:string" msg="{$_lang['account_from_sina_wb']}appsecret" title="{$_lang['enter_sina_api_app_secret_num']}"
+					 msgArea="txt_sinasecret_msg"/>
+					 <span id="txt_sinasecret_msg"></span>({$_lang['sina_api_app_secret_num']})
+                </td>
+            </tr>
+		</tbody>
+		<tbody id="ten" {if !$api_open['ten']}style="display:none"{/if}>
+            <tr>
+              <th scope="row" width="130"> Tencent appid{$_lang['zh_mh']}</th>
+                <td>
+                    <input type="text" size="50" name="conf[ten_app_id]" id="ten_app_id"
+					 value="{$config_arr['ten_app_id']}" limit="type:string" msg="Tencent appid"
+					  title="{$_lang['enter_tencent_api_app_secret_num']}" msgArea="txt_tenappid_msg" class="txt"/>
+					 <span id="txt_tenappid_msg"></span>({$_lang['tencent_api_num']})
+					<button id="reg" onclick="window.open('http://open.t.qq.com/develop.php')" type="button" class="pill">
+					<span class="icon plus">&nbsp;</span>{$_lang['click_apply']}</button>
+                </td>
+            </tr>
+            <tr>
+            	<th scope="row" width="130"> Tencent appsecret{$_lang['zh_mh']}</th>
+                <td>
+                    <input type="text" size="50" name="conf[ten_app_secret]" id="ten_app_secret"
+				 value="{$config_arr['ten_app_secret']}" limit="type:string" msg="Tencent appsecret"
+				  title="{$_lang['enter_tencent_api_app_secret_num']}" msgArea="txt_tensecret_msg" class="txt"/>
+				 <span id="txt_tensecret_msg"></span>({$_lang['tencent_api_app_secret_num']})
+                </td>
+            </tr>
+		</tbody>
+		<tbody id="netease" {if !$api_open['netease']}style="display:none"{/if}>
+            <tr>
+               <th scope="row" width="130"> {$_lang['wangyi']}appid{$_lang['zh_mh']}</th>
+                <td>
+                    <input type="text" size="50" name="conf[netease_app_id]" id="netease_app_id"
+					 value="{$config_arr['netease_app_id']}" limit="type:string" msg="{$_lang['wy']}appid"
+					 title="{$_lang['enter_163_api_app_secret_num']}" msgArea="txt_neteaseappid_msg" class="txt"/>
+					 <span id="txt_neteaseappid_msg"></span>({$_lang['wangyi_api_num']})
+					<button id="reg" onclick="window.open('http://open.t.163.com/developer/edit')" type="button" class="pill">
+					<span class="icon plus">&nbsp;</span>{$_lang['click_apply']}</button>
+                </td>
+            </tr>
+            <tr>
+            	<th scope="row" width="130"> {$_lang['wangyi']}appsecret{$_lang['zh_mh']}</th>
+                <td>
+                    <input type="text" size="50" name="conf[netease_app_secret]" id="netease_app_secret"
+				 value="{$config_arr['netease_app_secret']}" limit="type:string" msg="{$_lang['wy']}appsecret"
+				  title="{$_lang['enter_163_api_app_secret_num']}" msgArea="txt_neteasesecret_msg" class="txt"/>
+				  <span id="txt_neteasesecret_msg"></span>({$_lang['wangyi_api_app_secret_num']})
+                </td>
+            </tr>
+		</tbody>
+		<tbody id="sohu" {if !$api_open['sohu']}style="display:none"{/if}>
+       		 <tr>
+       		    <th scope="row" width="130"> {$_lang['sohu']}appid{$_lang['zh_mh']}</th>
+            <td>
+                <input type="text" size="50" name="conf[sohu_app_id]" id="sohu_app_id"
+				value="{$config_arr['sohu_app_id']}" class="txt" limit="type:string"
+				msg="sohu appid" title="{$_lang['enter_sohu_api_app_secret_num']}" msgArea="txt_souhuappid_msg"/>
+				<span id="txt_souhuappid_msg"></span>({$_lang['sohu_api_num']})
+					<button id="reg" onclick="window.open('http://open.t.sohu.com/apps/myapps')" type="button" class="pill">
+					<span class="icon plus">&nbsp;</span>{$_lang['click_apply']}</button>
+            </td>
+       	 </tr>
+       	 <tr>
+       	 	<th scope="row" width="130"> {$_lang['sohu']}appsecret{$_lang['zh_mh']}</th>
+            <td>
+                <input type="text" size="50" name="conf[sohu_app_secret]" id="sohu_app_secret"
+				 value="{$config_arr['sohu_app_secret']}" class="txt" limit="type:string"
+				  msg="sohu appsecret" title="{$_lang['enter_sohu_api_app_secret_num']}" msgArea="txt_souhusecret_msg"/>
+				  <span id="txt_souhusecret_msg"></span>({$_lang['sohu_api_app_secret_num']})
+            </td>
+         </tr>
+		</tbody>
+		<tbody id="renren" {if !$api_open['renren']}style="display:none"{/if}>
+			<tr>
+                 <th scope="row" width="130">人人appid{$_lang['zh_mh']}</th>
+                <td>
+                    <input type="text" size="50" name="conf[renren_app_id]" id="renren_appid" class="txt"
+					 value="{$config_arr['renren_app_id']}"
+					 limit="type:string" msg="QQappid"
+					 msgArea="txt_renren_appid_msg"/>
+					<span id="txt_renren_appid_msg"></span>(人人开发者平台提供的api编号)
+					<button id="reg" onclick="window.open('http://dev.renren.com/')" type="button" class="pill">
+					<span class="icon plus">&nbsp;</span>{$_lang['click_apply']}</button>
+                </td>
+            </tr>
+			<tr>
+				 <th scope="row" width="130"> 人人appsecret{$_lang['zh_mh']}</th>
+                <td>
+                    <input type="text" size="50" name="conf[renren_app_secret]"
+					 id="renren_appsecret" value="{$config_arr['renren_app_secret']}"
+					 limit="type:string" msg="QQappsecret"
+					 msgArea="txt_renrensecret_msg" class="txt"/>
+				<span id="txt_renrensecret_msg"></span>(人人开发者平台提供的app_secret编号)
+                </td>
+            </tr>
+		</tbody>
+		<tbody id="douban" {if !$api_open['douban']}style="display:none"{/if}>
+			<tr>
+                 <th scope="row" width="130">豆瓣appid{$_lang['zh_mh']}</th>
+                <td>
+                    <input type="text" size="50" name="conf[douban_app_id]" id="douban_appid" class="txt"
+					 value="{$config_arr['douban_app_id']}"
+					 limit="type:string" msg="QQappid"
+					 msgArea="txt_douban_appid_msg"/>
+					<span id="txt_douban_appid_msg"></span>(豆瓣开发者平台提供的api编号)
+					<button id="reg" onclick="window.open('http://developers.douban.com/')" type="button" class="pill">
+					<span class="icon plus">&nbsp;</span>{$_lang['click_apply']}</button>
+                </td>
+            </tr>
+			<tr>
+				 <th scope="row" width="130"> 豆瓣appsecret{$_lang['zh_mh']}</th>
+                <td>
+                    <input type="text" size="50" name="conf[douban_app_secret]"
+					 id="douban_appsecret" value="{$config_arr['douban_app_secret']}"
+					 limit="type:string" msg="QQappsecret"
+					 msgArea="txt_doubansecret_msg" class="txt"/>
+				<span id="txt_doubansecret_msg"></span>(豆瓣开发者平台提供的app_secret编号)
+                </td>
+            </tr>
+		</tbody>
+ 			<th scope="row">&nbsp;</th>
+			<td>
+				<div class="clearfix padt10">
+                                <button class="positive primary pill button" type="submit" name='submit' value="{$_lang['submit']}"><span class="check icon"></span>{$_lang['submit']}</button>
+
+                </div>
+			</td>
+
+                    </table>
+
+
+
+        </form>
+            </div>
+        </div>
+
+
+    </div>
+<script type="text/javascript">
+    $(function(){
+    	$(":checkbox[id*='_api_open']").click(function(){
+			var api_name=$(this).attr("rel");
+			$("#"+api_name).toggle();
+		})
+    })
+</script>
+<!--{template ADMIN_DIRECTORY/tpl/admin_footer}-->

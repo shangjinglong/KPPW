@@ -1,0 +1,60 @@
+<!--{template user/header}-->
+<div class="container">
+  <div class="nav-action">
+		<!--{template user/left_side}-->
+  </div>
+  <!-- nav-action end -->
+  <div class="content-panel">
+      <div class="tab">
+        <a class="selected"  data-toggle="tab">店铺设置</a>
+      </div>
+      <div class="tab_detail">
+      		<!-- 店铺设置 start -->
+          <form role="form" action="{$strUrl}" method="post" class="form-horizontal" name="editShopForm" id="editShopForm">
+          	<input type="hidden" name="formhash" id="formhash" value="{FORMHASH}">
+            <div class="form-group">
+              <label class="col-sm-2 control-label" for="shop_name">店铺名称：</label>
+                <div class="col-sm-8">
+                  <input type="text"  name="shop_name" id="shop_name"  class="form-control" value="{$shopInfo['shop_name']}">
+                </div>
+            </div>
+            <div class="form-group">
+              <label class="col-sm-2 control-label" for="shop_slogans">个性签名：</label>
+              <div class="col-sm-8">
+                 <textarea id="shop_slogans" name="shop_slogans" rows="5"   class="form-control">{$shopInfo['shop_slogans']}</textarea>
+				 <span class="help-block"><i class="fa"></i>您的店铺广告语直接影响到他人对您的第一印象，请慎重对待。</span>
+              </div>
+            </div>
+
+			<div class="form-group">
+              <label class="col-sm-2 control-label" for="seo_title">SEO标题：</label>
+                <div class="col-sm-8">
+                  <input type="text"  name="seo_title" id="seo_title"  class="form-control" value="{$shopInfo['seo_title']}">
+                </div>
+            </div>
+
+			<div class="form-group">
+              <label class="col-sm-2 control-label" for="seo_keyword">SEO关键词：</label>
+                <div class="col-sm-8">
+                  <input type="text"  name="seo_keyword" id="seo_keyword"  class="form-control" value="{$shopInfo['seo_keyword']}">
+                </div>
+            </div>
+			  <div class="form-group">
+              <label class="col-sm-2 control-label" for="seo_desc">SEO描述：</label>
+              <div class="col-sm-8">
+                 <textarea id="seo_desc" name="seo_desc" rows="5"   class="form-control"> {$shopInfo['seo_desc']}</textarea>
+              </div>
+            </div>
+            <div class="form-group">
+              <div class="col-sm-offset-2 col-sm-10">
+                <button class="btn btn-default" type="submit" value="1" >保存</button>
+                <span class="text-success" id="tipsUser"></span>
+              </div>
+            </div>
+          </form>
+      		<!-- 基本资料 end -->
+      </div>
+  </div>
+  </div>
+<script src="static/js/model/user/shop.js"></script>
+<!--{template user/footer}-->

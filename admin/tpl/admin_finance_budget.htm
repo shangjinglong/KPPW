@@ -1,0 +1,229 @@
+<!--{template ADMIN_DIRECTORY/tpl/admin_header}-->
+<div class="page_title">
+    <h1>网站收支列表</h1>
+    <div class="tool">
+        
+        <a href="index.php?do={$do}&view=revenue">财务概况</a>
+        <a href="index.php?do={$do}&&view={$view}" class="here">网站收支</a>
+		<a href="index.php?do={$do}&view=all">{$_lang['flow_record']}</a>
+	    <a href="index.php?do={$do}&view=recharge">{$_lang['recharge_audit']}</a>
+	   <a href="index.php?do={$do}&view=withdraw">{$_lang['withdraw_audit']}</a>
+    </div>
+</div>
+<div class="box tip clearfix p_relative">
+    <div class="title">
+        <h2>充值提示</h2>
+    </div>
+    <div class="detail pad10">
+    <strong></strong>
+        <ul>
+            <li>直接在线充值（包含针对任务托管或商品交易直接充值部分）            </li>
+            <li>线下银行充值（即用户填写线下银行汇款凭证后管理员审核通过部分） </li>
+            <li>目前网站管理员手动充值不计算在内，请管理员谨慎操作手动充值</li>
+        </ul>
+    </div>
+</div>
+<!-- 
+<div class="box tip clearfix p_relative">
+    <div class="title">
+        <h2>网站获利</h2>
+    </div>	
+    <div class="detail pad10">
+            <p>网站总收入：￥ {if $total_in}{$total_in}{else}0{/if} 元</p>
+           	<p>网站总支出：￥ {if $total_out}{$total_out}{else}0{/if} 元</p>
+            <p>网站利润：￥ {if $total_profit}{$total_profit}{else}0{/if} 元</p>
+    </div>
+</div>
+ -->
+<!--<div class="box search p_relative">
+    <div class="title">
+        <h2>搜索</h2>
+    </div>
+    <div class="detail">
+        <form method="post" action="index.php?do={$do}&view={$view}" id="frm_some_search">
+        <input type="hidden" name="page" value="{$page}">
+        <table cellspacing="0" cellpadding="0">
+         <tbody>
+           	<tr>
+	             <th>ID</th>
+	             <td><input type="text" size='10' class="txt" name="txt_fina_id" value="{$txt_fina_id}" onkeyup="clearstr(this);"></td>
+			     <th>类型</th>
+	             <td>
+	             	<select name="slt_fina_type">
+	             		<option value=" " {if !$slt_fina_type} selected="selected"{/if}>全部</option>
+	             		{loop $finance_type $k $v}
+							<option value="{$k}" {if $k == $slt_fina_type} selected="selected"{/if}>{$v}</option>
+						{/loop}
+                	</select>
+                </td>
+		   	</tr>
+           	<tr>
+				<th>结果排序</th>
+				<td>
+				<select name="ord[]">
+					<option value="fina_id" {if $ord['0']=='fina_id' or !isset($ord['0'])} selected="selected"{/if}>默认ID排序</option>
+					<option value="on_time" {if $ord['0']=='on_time' } selected="selected"{/if}>时间</option>
+                </select>
+                <select name="ord[]">
+	               	<option {if $ord['1']=='desc' or !isset($ord['1'])}selected="selected" {/if} value="desc">降序</option>
+	               	<option {if $ord['1']=='asc'}selected="selected" {/if} value="asc">升序</option>
+                </select>
+				</td>
+				<th>显示结果</th>
+				<td >
+				<select name="page_size">
+           			<option value="10" {if $page_size=='10'}selected="selected"{/if}>{$_lang['page_size']}10</option>
+           			<option value="20" {if $page_size=='20'}selected="selected"{/if}>{$_lang['page_size']}20</option>
+           			<option value="30" {if $page_size=='30'}selected="selected"{/if}>{$_lang['page_size']}30</option>
+	         	</select>
+       				<button class="pill" type="submit" value="搜索" name="sbt_search"><span class="icon magnifier">&nbsp;</span>搜索</button>
+				</td>
+			</tr>  
+          </tbody>
+        </table>　
+     </form>
+   </div>
+</div>-->
+<div class="box list">
+	<div class="title "><h2>网站收支列表管理
+				<span style="color: red;text-align: center;">【网站收支是记录网站平台每天收入和支出的流水记录，与网站的业务逻辑无关，仅对用户充值、提现进行记录。】</span>
+	</h2></div>
+	<div class="tab">
+				<a href="index.php?do={$do}&view={$view}&op=in" {if $op == 'in'||!$op}class="select"{/if}>查看收入</a>
+				<a href="index.php?do={$do}&view={$view}&op=out" {if $op == 'out'}class="select"{/if}>查看支出</a>
+	</div>
+	<div class="detail">
+		<form method="post" action="#" id="frm_some_list">
+			<input type="hidden" name="do" value="{$do}">
+			<input type="hidden" name="view" value="{$view}">
+			<input type="hidden" name="page" value="{$page}">
+			<input type="hidden" name="page_size" value="$page_size">
+			
+				<div  id="ajax_dom">
+				{if $op =='in'||!$op}
+					<table cellpadding="0" cellspacing="0">
+						<tbody>
+							<tr>
+								<th>编号</th>
+								<th>类型</th>
+								<th>财务用途 </th>
+								<th>充值用户 </th>
+								<th>金额</th>
+								<th>时间</th>
+								
+							</tr>
+							 {loop $website_in $k  $v}
+							<tr class="item">
+								<td>{$v['order_id']}</td>
+								<td>{$charge_type_arr[$v['order_type']]}</td>
+								<td>{if $v['pay_info']}$v['pay_info']{else}<span style="color: red;">未填写</span>{/if}</td>
+								<td>{$v['username']}</td>
+								<td><font color="red"> ￥{$v['pay_money']}元 </font></td>
+								<td><!--{date('Y-m-d H:i:s',$v['pay_time'])}--></td>
+							 
+							</tr>
+							{/loop}	
+							<tr>
+								<td>
+									选择时间：
+								</td>
+								<td colspan="4">
+									<input type="text" name="txt_s_time" id="txt_s_time" class="txt" onclick="showcalendar(event, this, 0);" /> To <input type="text" name="txt_e_time" id="txt_e_time" class="txt" onclick="showcalendar(event, this, 0);"/>
+									<a class="export" href="javascript:void(0)" rurl="index.php?do=finance&view=budget&export_in=excel">
+										导出Excel
+									</a>
+								</td>
+								<td>
+									收入总计：￥ {if $total_in}{$total_in}{else}0{/if} 元
+								</td>
+								<td></td>
+							</tr>
+							<tr>
+                           <td colspan="5">
+                               
+                           <div class="clearfix">
+                           	   
+						  </div>
+                        </td>
+                  </tr>
+							<tr>
+								<td colspan="6">
+									{if $pages['page']}<div class="page fl_right">{$pages['page']}</div>{/if}
+								</td>
+							</tr>	
+						</tbody>
+				</table>
+				{/if}
+				{if $op =='out'}
+					<table cellpadding="0" cellspacing="0">
+						<tbody>
+							<tr>
+								<th>编号</th>
+								<th>提现类型</th>
+								<th>金额</th>
+								<th>申请提现时间</th>
+								<th>申请人</th>
+								<th>申请提现账号</th>
+								<th>处理提现时间</th>
+								<th>提现状态</th>
+							</tr>
+							 {loop $website_out $k  $v}
+							<tr class="item">
+								<td>{$v['withdraw_id']}</td>
+								<td>{if $v['pay_type']=='alipayjs'}
+										支付宝
+									{else}
+										$bank_arr[$v['pay_type']]
+									{/if}	
+								</td>
+								<td><font color="red"> ￥{$v['withdraw_cash']}元 </font></td>
+								<td><!--{date('Y-m-d H:i:s',$v['applic_time'])}--></td>
+								<td>{$v['username']}</td>
+								<td>{$v['pay_account']}</td>
+								<td><!--{date('Y-m-d H:i:s',$v['process_time'])}--></td>
+								<td><font color="red">提现成功</font></td>
+							</tr>
+							{/loop}	
+							<tr>
+								<td>
+									选择时间：
+								</td>
+								<td colspan="6">
+									<input type="text" name="txt_s_time" id="txt_s_time" class="txt" onclick="showcalendar(event, this, 0);" /> To <input type="text" name="txt_e_time" id="txt_e_time" class="txt" onclick="showcalendar(event, this, 0);"/>
+									<a class="export" href="javascript:void(0)" rurl="index.php?do=finance&view=budget&export_out=excel" >
+										导出Excel
+									</a>
+								</td>
+								<td>
+									支出总计：￥ {if $total_out}{$total_out}{else}0{/if} 元
+								</td>
+							</tr>	
+							<tr>
+								<td colspan="7">
+									{if $pages['page']}<div class="page fl_right">{$pages['page']}</div>{/if}
+								</td>
+							</tr>	
+						</tbody>
+				</table>
+				{/if}
+			</div>
+		</form>
+	</div>
+</div>
+<script type="text/javascript">
+	$(function(){
+		$("a.export").click(function(){
+			var url = $("a.export").attr('rurl');
+			var stime = trim($("#txt_s_time").val());
+			var etime = trim($("#txt_e_time").val());
+			if(stime&&etime){
+				url = url+"&stime="+stime+"&etime="+etime;
+			}
+			location.href = url;
+		})
+		
+		
+	})
+</script>		
+<!--{template ADMIN_DIRECTORY/tpl/admin_footer}-->
+

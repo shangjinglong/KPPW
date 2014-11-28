@@ -1,0 +1,95 @@
+<!--{template header}-->
+
+<div class="container">
+
+<div class="col-xs-12">
+<div class="login-and-register-container">
+
+  <div class="login-box">
+    <div class="page-header">
+      <h1>忘记了密码？</h1>
+    </div>
+{if $strStep=='step1'}
+    <p class="mb_20 text-center text-info"><i class="fa fa-info-circle"></i> 输入您注册的帐号以发送重置密码邮件。您可能需要查看垃圾邮件文件夹查看邮件。</p>
+
+    <form role="form" action="index.php?do=retrieve&strStep=step1"  class="form-horizontal" name="getForm1" id="getForm1" method="post">
+    	  <input type="hidden" name="formhash" id="formhash" value="{FORMHASH}">
+      <div class="form-group">
+        <label class="col-xs-2 control-label" for="account">帐号</label>
+        <div class="col-xs-10">
+          <input type="text" class="form-control" name="account" id="account" placeholder="帐号">
+        </div>
+      </div>
+      <div class="form-group">
+        <label class="col-xs-2 control-label" for="email">邮箱</label>
+        <div class="col-xs-10">
+          <input type="email" class="form-control" name="email" id="email" placeholder="邮箱">
+        </div>
+      </div>
+      <div class="form-group">
+        <label class="col-xs-2 control-label" for="code">验证码</label>
+         <div class="col-xs-3">
+
+          <input type="text" class="form-control" id="getPasswordCode" name="getPasswordCode" placeholder="验证码">
+        </div>
+       <div class="col-xs-7 code-img hidden " id="show_secode_menu_content">
+          <img id="secode_img" src="index.php?do=ajax&view=captcha" onclick="document.getElementById('secode_img').src='index.php?do=ajax&view=captcha&sid='+Math.random(); return false;">
+           <a  href="javascript:document.getElementById('secode_img').src='index.php?do=ajax&view=captcha&sid='+Math.random();void(0);" >换一组</a>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <div class="col-md-offset-2 col-xs-5">
+          <button type="submit" class="btn btn-primary">下一步</button>
+        </div>
+      </div>
+    </form>
+{elseif $strStep=='step2'}
+ <form role="form" action="index.php?do=retrieve&strStep=step2"  class="form-horizontal" name="getForm2" id="getForm2" method="post">
+    	  <input type="hidden" name="formhash" id="formhash" value="{FORMHASH}">
+		  <input type="hidden" name="account" value="{$account}">
+
+
+
+      <div class="form-group">
+        <label class="col-xs-2 control-label" for="account">帐号</label>
+        <div class="col-xs-10 form-control-static">
+          {$account}
+        </div>
+      </div>
+      {if $strEmailInfo}
+      <div class="form-group">
+
+        <label class="col-xs-2 control-label" >电子邮箱</label>
+        <div class="col-xs-10 form-control-static">
+          {$strEmail}(*确认发送密码到此邮箱)
+  	    </div>
+      </div>
+      {else}
+       <p class="text-center text-warning">
+         <i class="fa fa-ban"></i> 很遗憾,您的邮箱号未填写或未通过邮箱认证，网站无法给您发送邮件,请通过网站联系电话联系客服，客服电话：{if $strKfPhone['phone']}{$strKfPhone['phone']}{else}暂无{/if}，谢谢</p>
+		  {/if}
+
+      {if $strEmailInfo}
+
+      <div class="form-group text-center">
+        <button type="button" onclick="formSubmit('getForm2','form')" class="btn btn-primary">确认找回</button>
+      </div>
+	  	{/if}
+
+
+
+    </form>
+{/if}
+  </div><!-- login-box end -->
+
+</div><!-- login-and-register-container end -->
+
+
+
+</div><!-- col-xs-5 end -->
+
+</div>
+<script type="text/javascript" src="static/js/model/register/register.js"></script>
+
+<!--{template footer}-->

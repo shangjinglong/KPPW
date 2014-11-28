@@ -1,0 +1,37 @@
+<!--{template ADMIN_DIRECTORY/tpl/admin_header}-->
+<div class="page_title">
+    	<h1>{$_lang['template_manage']}</h1>
+         
+</div>
+<div class="box list">
+<div class="detail">
+<form method="post"  action="#">
+                  {$_lang['edit_template']}
+        <table  border="0" cellspacing="0" cellpadding="0"  >
+            <tr>
+                <th scope="row" width="150">
+                   {$_lang['template_store_address']}{$_lang['zh_mh']}
+                </th>
+                <td >
+                    <input name="tname" limit="required:true" value="{if $tname}tpl/{$tplname}/{$tname}{else}{$_lang['please_enter_template_name']}.htm{/if}" size="100" 
+					class="txt" type="text">
+                </td>
+            </tr>
+            <tr>
+                <td colspan="2">
+                    <textarea name="txt_code_content" limit="required:true" cols="150" rows="25">$code_content</textarea>
+                </td>
+            </tr>
+            <tr>
+                <th scope="row" >
+                </th>
+                <td>
+                	<button type="submit" name="sbt_edit" class="pill positive button" value="{$_lang['submit']}"  onclick="return checkForm(this,false)"/><span class="check icon"></span>{$_lang['submit']}</button>
+                </td>
+            </tr>
+        </table>
+     
+</form>
+</div>
+</div>
+<!--{template ADMIN_DIRECTORY/tpl/admin_footer}-->

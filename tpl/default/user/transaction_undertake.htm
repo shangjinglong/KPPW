@@ -1,0 +1,121 @@
+<!--{template user/header}-->
+<div class="container">
+<div class="nav-action">
+    <!--{template user/left_side}-->
+  </div>
+
+  <div class="content-panel">
+
+    <div class="tab">
+      <a href="index.php?do=user&view=transaction&op=undertake" class="selected">我承接的任务</a>
+    </div>
+    <div class="tab_detail">
+
+      <ul class="nav nav-pills second-nav">
+        {loop $arrTaskNavs $v}
+            <li {if $v['model_id'] == $intModelId} class="active" {/if}>
+              <a href="index.php?do=user&view=transaction&op=undertake&model_id={$v['model_id']}">{$v['model_name']}</a>
+            </li>
+        {/loop}
+      </ul>
+
+
+    <div class="action-bar">
+    <form action="{$strUrl}" method="post" name="searchUndertakeForm" id="searchUndertakeForm">
+        <div class="action-item">
+        <input type="text" placeholder="请输入编号" class="form-control" name="intTaskId" id="intTaskId" value="{$intTaskId}">
+        </div>
+        <div class="action-item">
+        <input type="text" placeholder="请输入名称" class="form-control" name="strTaskTitle" id="strTaskTitle" value="{$strTaskTitle}">
+        </div>
+        <div class="action-item">
+          <select class="form-control" name="intTaskStatus" id="intTaskStatus">
+            <option value="-1">任务状态</option>
+             {loop $arrTaskStatus $k $v}
+            	<option value="{$k}" {if $intTaskStatus ==$k} selected="selected"{/if}>{$v}</option>
+            {/loop}
+          </select>
+        </div>
+        <div class="action-item">
+          <select class="form-control" name="strOrder" id="strOrder">
+            {loop $arrListOrder $k $v}
+            	<option value="{$k}" {if $strOrder ==$k} selected="selected"{/if}>{$v}</option>
+            {/loop}
+
+          </select>
+        </div>
+        <div role="toolbar" class="action-item btn-toolbar">
+          <div class="btn-group">
+            <button class="btn btn-default" type="submit">搜索</button>
+          </div>
+        </div>
+      </form>
+      </div>
+
+      <div class="table-responsive">
+        <table class="table table-hover ">
+        <thead>
+          <tr>
+            <th>编号</th>
+            <th>标题</th>
+            <th>金额（元）</th>
+            <th>发布时间</th>
+            <th>状态</th>
+            <th>操作</th>
+          </tr>
+        </thead>
+        <tbody>
+        {if $arrTaskLists}
+        {loop $arrTaskLists $k $v}
+          <tr>
+            <td>{$v['task_id']}</td>
+            <td><a href="index.php?do=task&id={$v['task_id']}" title="{$v['task_title']}">{$v['task_title']}</a></td>
+            <td>
+              <span class="money">
+            	{if $v['task_cash_coverage']}
+            		<sub>￥</sub>{$arrCashCoves[$v['task_cash_coverage']]['cove_desc']}
+            	{else}
+            		<sub>￥</sub>{$v['task_cash']}
+            	{/if}
+              </span>
+            </td>
+            <td><!--{eval echo date('Y-m-d',$v['start_time'])}--></td>
+            <td>{$arrTaskStatus[$v['task_status']]}</td>
+            <td>
+            	<!--{eval
+				if($v[model_id]==4||$v[model_id]==5){
+				$opera = wiki_opera($v['model_id'],$v['task_id'],$v['bid_id'],$strUrl);
+				}else{
+				$opera = wiki_opera($v['model_id'],$v['task_id'],$v['work_id'],$strUrl);
+				}}-->
+
+				{loop $opera $k $v}
+            	<a href="{$v['href']}" {if $v['click']}onclick="{$v['click']}"{/if}>{$v['desc']}</a>
+				{/loop}
+				</td>
+          </tr>
+         {/loop}
+         {else}
+         	<tr>
+         		<td colspan="6" class="text-center">暂无相关任务</td>
+         	</tr>
+         {/if}
+        </tbody>
+      </table>
+      </div>
+      <div class="clearfix">
+        我参加的{$arrTaskNavs[$intModelId]['model_name']}任务数共：<!--{eval echo intval($intCount);}-->个
+      	{if $strPages}
+	      <ul class="pagination pagination-sm pull-right">
+	       {$strPages['page']}
+	      </ul>
+	    {/if}
+      </div>
+    </div>
+  </div>
+  </div>
+  <script src="static/js/uploadify/jquery.uploadify.min.js" type="text/javascript"></script>
+<link href="static/js/uploadify/uploadify.css" rel="stylesheet">
+  <script src="task/match/tpl/default/matchtask.js" charset="{CHARSET}"></script>
+  <!-- 我的消息 end &content-panel end -->
+<!--{template user/footer}-->

@@ -1,0 +1,137 @@
+<!--{template ADMIN_DIRECTORY/tpl/admin_header}-->
+
+<div class="page_title"><h1>{$_lang['bank_auth_list']}</h1></div>
+<!--页头结束-->
+	
+	
+<div class="box search p_relative">
+	<div class="control">
+    <a href="javascript:d();"><b>&times;</b></a>
+	</div>
+	<div class="title"><h2>{$_lang['search']}</h2></div>
+	<div class="detail" id="detail">
+		<form method="post" action="index.php?do={$do}&view={$view}&code=$code&page={$page}" id="frm_art_search">
+		<table cellspacing="0" cellpadding="0">
+			<tbody>
+				<tr>
+					<th>{$_lang['auth_num']}</th>
+					<td><input type="text" class="txt" name="w[bank_a_id]" 	value="{$w[bank_a_id]}" onkeyup="clearstr(this);"></td>
+					<th>{$_lang['user']}</th>
+					<td><input type="text" class="txt" name='w[username]' value="{$w[username]}"></td>
+				</tr>
+				<tr>
+					<th>{$_lang['status']}</th>
+					<td>
+						<select name="w[auth_status]">
+						 <option value="">{$_lang['all']}</option>
+						 <option value="1" {if $w[auth_status]=='1'} selected="selected" {/if}>{$_lang['passed']}</option>
+						 <option value="0" {if $w[auth_status]==='0'} selected="selected" {/if}>{$_lang['wait_audit']}</option>
+						</select>
+					</td>
+					<th>{$_lang['list_result']}</th>
+					<td>
+						<select name="w[page_size]">
+							<option value="10" {if $w[page_size]=='10'}selected="selected"{/if}>{$_lang['page_size']}10</option>
+							<option value="20" {if $w[page_size]=='20'}selected="selected"{/if}>{$_lang['page_size']}20</option>
+							<option value="30" {if $w[page_size]=='30'}selected="selected"{/if}>{$_lang['page_size']}30</option>
+						</select>
+						<button class="pill" type="submit" value="{$_lang['search']}" name="sbt_search"><span class="icon magnifier">&nbsp;</span>{$_lang['search']}</button>
+				   </td>
+				</tr>
+			</tbody>
+		</table>
+		</form>
+	</div>
+</div>
+<!--搜索结束-->
+<div class="box list">
+    	<div class="title"><h2>{$_lang['bank_auth_list']}</h2></div>
+        <div class="detail">
+        	<form action="" id='frm_list' method="post">
+        	<div id="ajax_dom">
+        	<input type="hidden" name="page" value="{$page}" />
+		<table cellspacing="0" cellpadding="0">
+		 <tbody>
+          <tr>
+          	<th width="10"><input type="checkbox" id="checkbox" onclick="checkall();"></th>
+            <th width="30">{$_lang['id']}</th>
+            <th>{$_lang['username']}</th>
+			<!--<th>{$_lang['cash']}</th>-->
+			<th>{$_lang['validity']}</th>
+			<th>{$_lang['process_time']}</th>
+			<th>{$_lang['auth_status']}</th>
+			<!--<th>{$_lang['operate']}</th>-->
+          </tr>
+		  {loop $bank_arr $v}
+		<tr class="item">
+			<td><input type="checkbox" name="ckb[]" id="cbk_selected" value="{$v[bank_a_id]}"></td>
+			<td>{$v[bank_a_id]}</td>
+			<td>{$v[username]}</td>
+			<!--<td>{if $v[cash]}<font color="#ff7700">{c:$v[cash]}</font>{else}{$_lang['free']}{/if}</td>-->
+			<td>
+				{if $v[start_time]==$v[end_time]}
+				{$_lang['lifetime_validity']}
+				{else}
+				<!--{date('Y-m-d',$v[start_time])}-->{$_lang['to']}<!--{date('Y-m-d',$v[end_time])}-->
+				{/if}
+			</td>
+			<td>
+				{if $v[pay_time]}	
+					<!--{date('Y-m-d H:i:s',$v[pay_time])}-->
+				{else}
+					{$_lang[yet_deal_with]}
+				{/if}
+			</td>
+			<td><div>
+				{if $v[auth_status]==1}
+				<font color="grey">{$_lang['passed']}</font>
+				{elseif $v[auth_status]==2}
+					<font color="red">{$_lang['nopassed']}</font>
+				{else}
+					<font color="grey">认证中</font> 
+				{/if}
+				<a href="index.php?do={$do}&view=info&code=$code&bank_a_id={$v[bank_a_id]}" class="button dbl_target"><span class="book icon"></span>{$_lang['view']}</a>
+				<!--
+				{if $v[auth_status]==0}
+					<a  href="index.php?do={$do}&view={$view}&code=$code&ac=not_pass&bank_a_id=$v[bank_a_id]&obj=$v[username]" class="button" onclick="return cdel(this,'{$_lang[confirm_nopass]}')"><span class="cross icon"></span>{$_lang['nopass']}</a>
+				{/if}-->
+				{if $v[auth_status]!=1}
+					<a href="index.php?do={$do}&view={$view}&code=$code&ac=del&bank_a_id=$v[bank_a_id]&obj=$v[username]" onclick="return cdel(this);" class="button"><span class="trash icon"></span>{$_lang['delete']}</a>
+				{/if}
+				</div>
+			</td>
+ 
+		</tr>
+		{/loop}
+          <tr>
+            <td colspan="7">
+            	
+				<div class="clearfix">
+ 				
+            	<label for="checkbox">{$_lang['select_all']}</label>
+            	<input type="hidden" name="sbt_action" class="sbt_action"/>
+				<!--<button type="submit" name="sbt_action" value="{$_lang['mulit_pass']}"   class="pill positive button"   onclick="return batch_act(this,'frm_list');"><span class="icon check"> </span>{$_lang['mulit_pass']}</button>
+				<button type="submit" name="sbt_action" value="{$_lang['mulit_nopass']}" class="pill button"   onclick="return batch_act(this,'frm_list');"><span class="cross icon"></span>{$_lang['mulit_nopass']}</button>
+				-->
+				<button type="submit" name="sbt_action" value="{$_lang['mulit_delete']}"   class="pill negative"   onclick="return batch_act(this,'frm_list');"><span class="icon trash"></span>{$_lang['mulit_delete']}</button>
+ 
+			</div>
+			</td>
+          </tr>
+		  </tbody>
+        </table>
+		<div class="page">{$pages[page]}</div>
+		</div>
+		</form>
+        </div>
+</div>
+<!--主体结束-->
+<script language="javascript">
+function d()
+{
+		$("#frm_art_search").slideToggle('800');	  
+}
+</script>
+
+<!--{template ADMIN_DIRECTORY/tpl/admin_footer}-->
+

@@ -1,0 +1,46 @@
+<!--{template ADMIN_DIRECTORY/tpl/admin_header}-->
+<form method="post" action="plu.php?do=edittagtpl&tplname=$tplname">
+    <div class="main">
+        <div class="m_tit">
+            <ul>
+                <li class="m_tit_l">
+                </li>
+                <li class="font14">
+                    {$_lang['edit_template']}
+                </li>
+                <li class="m_tit_r">
+                </li>
+            </ul>
+        </div>
+        <table width="96%" height="200" border="0" cellspacing="0" cellpadding="0" class="tab_m t_l">
+            <tr>
+                <td class="bg1 t_r">
+                    {$_lang['template_store_address']}{$_lang['zh_mh']}
+                </td>
+                <td>
+                    admin/tpl/template_tag_{$tplname}.htm
+                </td>
+            </tr>
+            <tr>
+                <td width="30%" class="bg1 t_r">
+                    {$_lang['template_code']}{$_lang['zh_mh']}
+                </td>
+                <td>
+                    <textarea name="code_content" cols="80" rows="20">{$code_content}</textarea>
+                </td>
+            </tr>
+            <tr>
+             
+			    <td width="30%" class="bg1 t_r">
+                    <button type="submit" name="sbt_edit" class="positive primary button pill" value={$_lang['submit']}/>
+					<span class="check icon"></span>{$_lang['submit']}
+					</button>
+                </td>
+                <td>
+				  &nbsp;
+			    </td>
+            </tr>
+        </table>
+    </div>
+</form>
+<!--{template ADMIN_DIRECTORY/tpl/admin_footer}-->

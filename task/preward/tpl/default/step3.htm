@@ -1,0 +1,51 @@
+<div class="release-statistics">
+        <h2 class="statistics-title">订单详细</h2>
+        <div class="statistics-body">
+
+            <div class="panel-heading">
+              <h3 class="panel-title">
+                  <div class="pull-right">赏金：<span class="money"><sub>￥</sub>{$arrPubInfo['txt_task_cash']}</span></div>
+                  	标题：{$arrPubInfo['txt_title']}
+                  	<button type="button" class="btn btn-default" onclick="history.back();">修改</button>
+              </h3>
+            </div>
+            <div class="panel-body ">
+                <ul class="release-meta">
+                  <li class="release-meta-item">任务模式：{$arrModelInfo['model_name']}</li>
+                  <li class="release-meta-item">行业分类：{$arrTopIndustrys[$arrPubInfo['indus_pid']]['indus_name']}-{$arrAllIndustrys[$arrPubInfo['indus_id']]['indus_name']}</li>
+                  <li class="release-meta-item">附件:{$intFileCount}个</li>
+                </ul>
+                <div class="release-detail">
+
+                	<div id="partContent" {if !$strPartComment} class="hidden"{/if} >
+                		{$strPartComment}
+                	</div>
+                	<div id="fullContent" {if $strPartComment} class="hidden"{/if}>
+                		{$strTarComment}
+                	</div>
+
+                </div>
+                <!-- release-detail end -->
+                {if $strPartComment}
+                <div class="release-detail-ctrl">
+                  <a href="javascript:void(0);" id="viewMoreContent">查看更多</a>
+                </div>
+                {/if}
+            </div>
+
+        </div>
+        <!-- statistics-body end -->
+
+
+        <form class="form-horizontal" role="form" action="{$strUrl}&step={$step}" method="post"  id="pubTaskForm{$step}" name="pubTaskForm{$step}">
+			<input type="hidden" name="{$step}" value="{$step}">
+			<input type="hidden" name="formhash" id="formhash" value="{FORMHASH}">
+        		<!-- 任务增值项目 start -->
+		       		<!--{template ajax/payitempub}-->
+		       	<!-- 任务增值项目 end -->
+        <div class="statistics-footer">
+          <a href="javascript:history.back();" >返回修改</a>
+          <button type="submit" class="btn btn-primary">提交任务订单</button>
+        </div>
+	</form>
+      </div>

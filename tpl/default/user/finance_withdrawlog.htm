@@ -1,0 +1,95 @@
+<!--{template user/header}-->
+<div class="container">
+  <div class="nav-action">
+		<!--{template user/left_side}-->
+  </div>
+  <!-- nav-action end -->
+  <div class="content-panel">
+      <div class="tab">
+       <a {if $op === 'basic'}class="selected"{/if} href="index.php?do=user&view=finance&op=basic">账户信息</a>
+       <a {if $op === 'details'}class="selected"{/if} href="index.php?do=user&view=finance&op=details">收支明细</a>
+       <a {if $op === 'rechargelog'}class="selected"{/if} href="index.php?do=user&view=finance&op=rechargelog">充值记录</a>
+       <a {if $op === 'withdrawlog'}class="selected"{/if} href="index.php?do=user&view=finance&op=withdrawlog">提现记录</a>
+      </div>
+      <div class="tab_detail">
+        <div class="well well-sm">
+      	 成功提现总金额:
+        <span class="cc00 mr_10">
+        {if $floatCountCashs['2']['cash']}
+		  {c:$floatCountCashs['2']['cash']}
+		   {else} 0 {/if}
+        </span>
+        待审核金额{$_lang['zh_mh']}
+        <span class="c690">
+           {if $floatCountCashs['1']['cash']}
+		   {c: $floatCountCashs['1']['cash']} {else} 0 {/if}
+        </span>
+      </div>
+    	 <div class="action-bar">
+    <form action="{$strUrl}" method="post" name="searchEventForm" id="searchEventForm">
+        <div class="action-item">
+        <input type="text" placeholder="请输入订单编号" class="form-control" name="intWithdrawId" id="intWithdrawId" value="{$intWithdrawId}">
+        </div>
+
+		<div class="action-item">
+            <select class="form-control" name="intPagesize">
+                <option value="10" {if $intPagesize=='10'}selected="selected"{/if}>{$_lang['page_size']}10{$_lang['tiao']}</option>
+                <option value="20" {if $intPagesize=='20'}selected="selected"{/if}>{$_lang['page_size']}20{$_lang['tiao']}</option>
+                <option value="30" {if $intPagesize=='30'}selected="selected"{/if}>{$_lang['page_size']}30{$_lang['tiao']}</option>
+            </select>
+        </div>
+        <div role="toolbar" class="action-item btn-toolbar">
+          <div class="btn-group">
+            <button class="btn btn-default" type="submit">搜索</button>
+          </div>
+        </div>
+      </form>
+      </div>
+      <div class="table-responsive">
+        <table class="table table-hover">
+        <thead>
+          <tr>
+            <th> 编号</th>
+			<th>提现方式</th>
+            <th>提现账号</th>
+			<th>提现金额</th>
+			<th>提现状态</th>
+			<th>处理时间</th>
+          </tr>
+        </thead>
+        <tbody>
+        	{loop $arrWithdrawLists $k $v}
+          <tr>
+            <td>
+                 $v['withdraw_id']
+            </td>
+
+            <td> {$arrBank[$v['pay_type']]}</td>
+			<td >$v['pay_account']</td>
+			<td> <b class="money">{c:$v['withdraw_cash']}</b></td>
+            <td>{$arrStatus[$v['withdraw_status']]}</td>
+			   <td>
+                <!--{date('Y-m-d H:i:s',$v['process_time'])}-->
+            </td>
+          </tr>
+		  {/loop}
+
+        </tbody>
+      </table>
+      </div>
+
+
+      <div class="clearfix">
+
+      <ul class="pagination pagination-sm pull-right">
+        {$strPages['page']}
+      </ul>
+      </div>
+
+    </div>
+  </div>
+  </div>
+
+<script src="static/js/model/user/finance.js"></script>
+
+<!--{template user/footer}-->

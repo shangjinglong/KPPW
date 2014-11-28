@@ -1,0 +1,68 @@
+  <ul class="nav nav-pills second-nav">
+    <li {if !$st&&!$ut}class="active"{/if}><a href="{$strUrl}&view=mark#pageT">所有的</a></li>
+    <li {if $st==1}class="active"{/if}><a href="{$strUrl}&view=mark&st=1#pageT">好评</a></li>
+    <li {if $st==2}class="active"{/if}><a href="{$strUrl}&view=mark&st=2#pageT">中评</a></li>
+    <li {if $st==3}class="active"{/if}><a href="{$strUrl}&view=mark&st=3#pageT">差评</a></li>
+    <li {if $ut==2}class="active"{/if}><a href="{$strUrl}&view=mark&ut=2#pageT">来自买家</a></li>
+    <li {if $ut==1}class="active"{/if}><a href="{$strUrl}&view=mark&ut=1#pageT">来自卖家</a></li>
+  </ul>
+  <!-- second-nav end -->
+
+  <div class="evaluate">
+  <div class="table-responsive">
+    <table class="table">
+      <thead>
+        <tr>
+          <th>评价人</th>
+          <th>评价</th>
+
+        </tr>
+      </thead>
+      <tbody>
+      {if $arrMarkInfo} <!--评价-->
+		{loop $arrMarkInfo $v}
+        <tr>
+          <td>
+            <div class="evaluate-avatar">
+              <!--{userpic($v['by_uid'],'small')}-->
+            </div>
+            <p class="evaluate-username">{$v['by_username']}</p>
+          </td>
+          <td>
+            <p>对{if $v['mark_type']==2}卖家{else}买家{/if}的评价
+			  {if $v['mark_status']==1}
+              <span class="label label-danger">好评</span>
+			  <img src="static/img/ico/ico_mark_1.gif" alt="好评">
+			  {elseif $v['mark_status']==2}
+              <span class="label label-warning">中评</span>
+			  <img src="static/img/ico/ico_mark_2.gif" alt="中评">
+			  {elseif $v['mark_status']==3}
+              <span class="label label-default">差评</span>
+			  <img src="static/img/ico/ico_mark_3.gif" alt="差评">
+			  {/if}
+
+              <time class="evaluate-time"><!--{eval echo date('Y-m-d H:i:s',$v['mark_time'])}--></time>
+            </p>
+            <p class="evaluate-content">{$v['mark_content']}</p>
+
+	            <div class="evaluate-meta">
+                  {loop $v['aidinfo'] $k1 $v1}
+	              <div class="evaluate-meta-item">
+	                {$v1['aid_name']} <span class="text-danger">{$v1['avg']}分</span>
+	                <!--{eval echo keke_user_mark_class::gen_star2($v1['avg']);}-->
+	              </div>
+				  {/loop}
+	            </div>
+          </td>
+
+        </tr>
+		{/loop}
+		{else}
+			<tr><td>暂无评价</td></tr>
+		{/if}
+
+
+      </tbody>
+    </table>
+  </div>
+  </div>

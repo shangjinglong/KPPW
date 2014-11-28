@@ -1,0 +1,90 @@
+<!--{template ADMIN_DIRECTORY/tpl/admin_header}-->
+ <div class="page_title">
+    	<h1>{$model_info['model_name']}{$_lang['manage']}</h1>
+        <div class="tool">
+		   {loop $ops $v}
+				<a href="index.php?do=$do&model_id={$model_id}&view=edit&service_id={$service_id}&op={$v}" class="{if $op==$v}here{/if}">{$_lang['b_service_'.$v]}</a>
+       		{/loop}
+        </div>
+</div>
+<!--页头结束-->
+<div class="box post">
+    <div class="tabcon">
+        	<div class="title"><h2>{$_lang['edit']}{$model_info['model_name']}</h2></div>
+            <div class="detail">
+                <form method="post" action="index.php?do=$do&model_id={$model_id}&view=edit&service_id={$service_id}" id="frm_art_edit" name="frm_art_edit" enctype="multipart/form-data">
+                <input type="hidden" name="service_id" value="$service_info[service_id]">
+				<input type="hidden" name="hdn_act" value="1">
+                    <table width="100%" border="0" cellspacing="0" cellpadding="0">
+                      <tr>
+                        <th scope="row">{$_lang['shopkeeper']}{$_lang['zh_mh']}</th>
+                        <td><b>{$service_info[username]}</b>
+					  </tr>
+                    <tr>
+                        <th scope="row" width="130">{$_lang['service_name']}{$_lang['zh_mh']}</th>
+                        <td>
+	                         <input type="text" class="txt" name="service[title]" size="60" value="$service_info[title]" id="service_title" msgArea="span_service_title"
+							 limit="required:true;len:5-50" msg="{$_lang['title_not_null']}" title="{$_lang['title_not_null']}">
+							  &nbsp;&nbsp;&nbsp;
+                        </td>
+                      </tr>
+					  <tr>
+                        <th scope="row">{$_lang['quotation']}{$_lang['zh_mh']}</th>
+                        <td><input type="text" class="txt" size="5" name="service[price]" value="$service_info[price]" id="service_price" msgArea="span_service_price"
+							limit="required:true;type:float" msg="{$_lang['quotation_not_null']}" title="{$_lang['quotation_ending_decimal_notice']}s">{$_lang['yuan']}<span id="span_service_price"></span>
+						</td>
+					  </tr>
+                      <tr>
+                        <th scope="row">{$_lang['goods_status']}{$_lang['zh_mh']}</th>
+                        <td>
+                        	<select name="service[service_status]">
+                        		{loop $status_arr $k $v}
+									<option {if $service_info[service_status]==$k}selected=selected{/if} value="{$k}">{$v}</option>
+									{/loop}
+								</select>
+						</td>
+                      </tr>
+  					  <tr>
+                        <th scope="row">{$_lang['pub_time']}{$_lang['zh_mh']}</th>
+                        <td>
+							<!--{eval echo date("Y-m-d H:i:s",$service_info[on_time])}-->
+						</td>
+					  </tr>
+					   <tr>
+                        <th scope="row">{$_lang['service_desc']}</th>
+                        <td>
+							<textarea name="service[content]" rows="15" cols="100" class="xheditor {urlBase:'$_K['siteurl']/',tools:'simple',admin:'../',html5Upload:false,emotMark:false,upImgUrl:'../index.php?do=ajax&view=upload&filename=filedata'}" >$service_info[content]</textarea>
+
+						</td>
+					  </tr>
+					  <tr>
+                        <th scope="row">SEO{$_lang['title']}{$_lang['zh_mh']}</th>
+                        <td><textarea cols="70" rows="2"  name="service[seo_title]" value="{$service_info['seo_title']}">{$service_info['seo_title']}</textarea></td>
+                     </tr>
+
+                     <tr>
+                        <th scope="row">SEO{$_lang['keywords']}{$_lang['zh_mh']}</th>
+                        <td><textarea cols="70" rows="2"  name="service[seo_keyword]" value="{$service_info['seo_keyword']}">{$service_info['seo_keyword']}</textarea></td>
+                     </tr>
+
+                      <tr>
+                        <th scope="row">SEO{$_lang['description']}{$_lang['zh_mh']}</th>
+                        <td><textarea cols="70" rows="3" name="service[seo_desc]" value="{$service_info['seo_desc']}">{$service_info['seo_desc']}</textarea></td>
+                     </tr>
+                    <tr>
+                        <th scope="row">&nbsp;</th>
+                    	<td>
+                    	<button name="sbt_edit" value="1" class="positive primary  button" type="submit" onclick="return checkForm(document.getElementById('frm_art_edit'))">
+                    		<span class="check icon"></span>{$_lang['submit']}</button>
+                    	<button type="button"  name="rst_edit" class="pill button"  onclick="history.go(-1)"/><span class="uparrow icon"></span>{$_lang['return']}</button>
+                    	</td>
+                    </tr>
+                    </table>
+                </form>
+              </div>
+       </div>
+</div>
+<!--主体结束-->
+
+
+<!--{template ADMIN_DIRECTORY/tpl/admin_footer}-->

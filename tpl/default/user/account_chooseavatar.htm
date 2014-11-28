@@ -1,0 +1,56 @@
+<!--{template user/header}-->
+<div class="container">
+  <div class="nav-action">
+		<!--{template user/left_side}-->
+  </div>
+  <!-- nav-action end -->
+  <div class="content-panel">
+      <div class="tab">
+      	<a {if $op === 'chooseavatar'}class="selected"{/if} href="index.php?do=user&view=account&op=chooseavatar" >选择头像</a>
+        <a {if $op === 'uploadavatar'}class="selected"{/if} href="index.php?do=user&view=account&op=uploadavatar" >上传头像</a>
+      </div>
+      <div class="tab_detail">
+      		<!-- 基本资料 start -->
+          <form role="form" action="{$strUrl}" method="post" class="form-horizontal" name="editChooseavatarForm" id="editChooseavatarForm">
+
+          	  <div class="form-group">
+
+                  <h2 class="min-title">系统头像</h2>
+
+
+                  <div class="clearfix">
+                    {loop $arrSystemPic $k $v}
+                    <div class="col-xs-2 col-md-1">
+                      <a href="javascript:formSubmit('{$strUrl}&action=chooseAvatar&intPicId=$v','url');void(0);" class="thumbnail" title="就选这个" onclick="">
+                        <img src="data/avatar/system/{$v}_small.jpg" class="pic_small" alt="KPPW2.5系统头像"/>
+                      </a>
+                    </div>
+                    {/loop}
+                  </div>
+
+              </div>
+
+              <h2 class="min-title">头像预览</h2>
+
+
+              <ul class="clearfix">
+              	<li class="thumbnail fl_l mr_10">
+                    <!--{userpic($uid,larger)}-->
+									<p><small>150x150像素</small></p>
+								</li>
+								<li class="thumbnail fl_l mr_10">
+									<!--{userpic($uid,middle)}-->
+									<p><small>100x100像素</small></p>
+								</li>
+								<li class="thumbnail fl_l mr_10">
+									<!--{userpic($uid,small)}-->
+									<p><small>50x50像素</small></p>
+								</li>
+              </ul>
+          </form>
+      		<!-- 基本资料 end -->
+      </div>
+  </div>
+  </div>
+<script type="text/javascript" src="static/js/model/user/account.js" ></script>
+<!--{template user/footer}-->

@@ -1,0 +1,142 @@
+<!--{template header}-->
+<div  class="container">
+  <div id="main">
+      <div class="buy-user-info">
+      <div class="media">
+        <div class="avatar">
+          <!--{userpic($arrTaskInfo['uid'],'middle')}-->
+        </div>
+        <div class="media-body">
+          <strong class="meida-heading"> <span class="money"><sub>￥</sub>{$arrTaskInfo['task_cash']}</span> {$arrTaskInfo['task_title']}</strong>
+          <ul class="user-meta">
+            <li>{$arrModelInfo['model_name']}模式</li>
+            <li>
+              <i class="fa fa-money"></i> 已托管：￥{$arrTaskInfo['task_cash']}
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+<div class="turnaround">
+    <h2 class="min-title">
+      任务延期
+    </h2>
+    <div class="turnaround-body">
+      <div class="col-xs-8">
+
+        <form role="form" class="turnaround-form"
+        	action="index.php?do=taskhandle&op=delay&taskId={$taskId}" method="post"
+        	id = "editDelayForm" name = "editDelayForm"
+        	enctype="application/x-www-form-urlencoded">
+        	<input type="hidden" name="formhash" id="formhash" value="{FORMHASH}">
+          <div class="form-group">
+            <label for="exampleInputPrice1">您当前的余额是</label>
+            <strong class="money"><sub>￥</sub><!--{eval echo floatval($gUserInfo['balance'])}--> <sub>元</sub></strong>
+            <p class="help-block">赏金越高，就越能吸引威客来参加任务。</p>
+          </div>
+
+          <div class="form-group">
+            <label>您是否需要延期</label>
+            <div class="form-inline">
+              <div class="radio">
+                <label>
+                  <input type="radio" name="taskdelay" id="not_delay" value="2" >
+                  加价
+                </label>
+              </div>
+              <div class="radio">
+                <label>
+                  <input type="radio" name="taskdelay" id="delay" value="1" checked>
+                  延期加价
+                </label>
+              </div>
+            </div>
+          </div>
+
+
+          <div class="form-group" >
+            <label for="delay_cash">您希望增加赏金</label>
+            <div class="input-group">
+              <span class="input-group-addon">￥</span>
+              <input type="text" id="delay_cash" name="delay_cash" class="form-control" placeholder="请输入延期金额">
+            </div>
+            <!-- <p class="help-block">最少加价￥8.00元</p> -->
+          </div>
+
+          <div class="form-group" id="is_delay">
+            <label for="delay_day">您希望延长天数</label>
+            <div class="input-group">
+              <input type="text" id="delay_day" name="delay_day" class="form-control" placeholder="请输入延期天数">
+              <span class="input-group-addon">天</span>
+            </div>
+            <!-- <p class="help-block">最长延期2天</p> -->
+          </div>
+
+          <p class="text-info"><i class="fa fa-info-circle"></i>
+          	<a href="javascript:void(0);" id="viewDelayRuleList">查看加价延期规则 <i class="fa fa-angle-double-right"></i></a>
+          </p>
+		   <div class="form-group hidden" id="DelayRuleList">
+		   		<ul>
+			  		<li>1.单次延期最小金额为<span class="money"><sub>￥</sub>{$minDelayCash}</span>元</li>
+					<li>2.单次延期天数不得超过<span class="money">{$maxDelayday}</span>天</li>
+			  		{loop $arrDelayRule $k $v}
+						<li><!--{eval echo $k+3;}-->.第<!--{eval echo $k+1;}-->次延期不得少于任务总金额的{$v['defer_rate']}%</li>
+					{/loop}
+			  	</ul>
+          </div>
+          <div class="text-center">
+            <a href="javascript:history.back();">返回</a>
+            <button type="submit" class="btn btn-default">提交</button>
+          </div>
+
+        </form>
+        </div>
+
+    </div>
+  </div>
+    </div>
+  </div>
+<script type="text/javascript">
+$(function(){
+	//基本资料
+	$('#editDelayForm').scojs_valid({
+	    rules: {
+	    	delay_cash: ['not_empty','decimal'],
+	    	delay_day: ['not_empty','digit']
+	    },
+	    messages: {
+	    	delay_cash: {
+				not_empty: "请输入延期金额",
+				decimal: "请输入正确的金额"
+			},
+			delay_day: {
+				not_empty: "请输入延期天数",
+				digit: "请输入正确的天数"
+			}
+	    },
+	    wrapper:'.form-group'
+	    ,onSuccess: function(response, validator) {
+	    	  tipsOp(response.data);
+				if(response.url){
+					setTimeout(function(){window.location.href=response.url;},2000);
+				}
+	    }
+	});
+
+
+	$("#delay").click(function(){
+		$("#is_delay").removeClass('hidden');
+		$("#delay_day").attr('name','delay_day');
+	});
+	$("#not_delay").click(function(){
+		$("#is_delay").addClass('hidden');
+		$("#delay_day").attr('name','');
+	});
+
+	$("#viewDelayRuleList").click(function(){
+		$('#DelayRuleList').toggleClass('hidden');return false;
+	});
+});
+</script>
+
+<!--{template footer}-->

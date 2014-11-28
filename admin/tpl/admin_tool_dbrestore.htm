@@ -1,0 +1,98 @@
+<!--{template ADMIN_DIRECTORY/tpl/admin_header}-->
+<div class="page_title">
+    	<h1>{$_lang['db_mange']}</h1>
+          <div class="tool">         
+            <a href="index.php?do=tool&view=dbbackup">{$_lang['backup']}</a>
+            <a href="index.php?do=tool&view=dbrestore" class="here">{$_lang['restore']}</a>
+			<a href="index.php?do=tool&view=dboptim">{$_lang['optim']}</a>
+			<a href="index.php?do=tool&view=dboptim&op=repair">{$_lang['repair']}</a>
+		</div>
+</div>
+<div class="box post">
+        <div class="tabcon">
+        	<div class="title"><h2>{$_lang['database_restore']}</h2></div>
+			<div class="detail">
+			<form method="post" action="#" id="frm_art_search">
+   			
+ 
+        <div id="loading" style="background:url('tpl/img/loading.gif') no-repeat center;width:400px;height:150px;position:absolute;left:50%;margin-left:-200px;text-align:center;line-height:150px;display:none;">
+            {$_lang['just_a_moment_restoring']}
+        </div>
+             
+      <table width="100%" border="0" cellspacing="0" cellpadding="0">
+                <tr>
+                    <th class="100" align="left">
+                        {$_lang['database_name']}
+                    </th>
+                    <th width="200">
+                       {$_lang['time']}
+                    </th>
+                    <th width="60">
+                        {$_lang['restore']}
+                    </th>
+   
+                    <th width="60">
+                        {$_lang['delete']}
+                    </th>
+                </tr>
+                {loop $file_arr $k $value}
+                <tr>
+                    <td align="left">
+                    	 <!--{eval echo kekezu::set_star($value['name'],7,11,'3','*');}--> 
+                    </td>
+                    <td>
+                        <!--{eval echo  date('Y-m-d H:i:s',$value['date']);}-->
+                    </td>
+                    <td>
+                        <a href="#" onclick="restore('{$k}');" class="button"><span calss="reload icon"></span>{$_lang['restore']}</a>
+                    </td>
+                 	 <td>
+                        <a href="index.php?do={$do}&view={$view}&ac=del&restore_name=$k" class="button" onclick="return cdel(this);"><span calss="trash icon"></span>{$_lang['delete']}</a>
+                    </td>
+                </tr>{/loop}
+                <tr>
+                    <th colspan="5" align="left">
+                        <div class="page">
+                            {$pages['page']}
+                        </div>
+                    </th>
+                </tr>
+            </table>
+  </form>
+	</div>	
+</div>
+				
+				
+<script type="text/javascript">
+    $(function(){
+        $("#loading").ajaxStart(function(){
+            $(this).show();
+        }).ajaxStop(function(){
+            $(this).hide();
+        })
+    })
+    
+    function restore(id){
+		art.dialog({
+   				title: "{$_lang['comfirm_to_tips']}",
+  				content: "{$_lang['comfirm_to_restore_data']}",
+				icon: 'succeed',
+   				yesFn: function(){
+					url = 'index.php?do={$do}&view={$view}&ac=restore&restore_name=' + id;
+          			  $.getJSON(url, function(json){
+						art.dialog(json.msg);
+           		 })},
+				noFn :function(){this.close();return false;}
+			})
+    }
+    
+    function download(filename){
+    	var i = confirm("{$_lang['comfirm_to_upload_data_file']}");
+        if ( i== true) {
+            url = 'index.php?do={$do}&view={$view}&ac=download&file_name=' + filename;
+            location.href = url;
+        }
+    }
+    
+</script>
+<!--{template ADMIN_DIRECTORY/tpl/admin_footer}-->

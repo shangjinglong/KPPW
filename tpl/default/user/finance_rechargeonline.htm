@@ -1,0 +1,43 @@
+<!--{template user/header}-->
+<div class="container" id="tipsUser">
+  <div class="nav-action">
+		<!--{template user/left_side}-->
+  </div>
+  <!-- nav-action end -->
+  <div class="content-panel">
+      <div class="tab">
+        <a {if $op === 'rechargeonline'}class="selected"{/if} href="index.php?do=user&view=finance&op=rechargeonline" >在线充值</a>
+        <a {if $op === 'rechargeoffline'}class="selected"{/if} href="index.php?do=user&view=finance&op=rechargeoffline" >线下充值</a>
+      </div>
+      <div class="tab_detail">
+      	 <!--messages消息 start-->
+		   <p class="text-info">
+		     <i class="fa fa-info-circle"></i>
+		         单笔充值最低金额:{c:$arrPayConfig['recharge_min']['v']}{$_lang['zh_jh']}  如有问题，请及时联系管理员
+		   </p>
+		  <!--messages消息 end-->
+      		<!-- 充值 start -->
+          <form role="form" action="{$strUrl}" class="form-horizontal" name="onlineRechargeForm" id="onlineRechargeForm" method="post">
+	         <input type="hidden" name="formhash" id="formhash" value="{FORMHASH}">
+	           <div class="form-group mt_20">
+	                <label class="col-sm-2 control-label" for="truename">输入充值金额：</label>
+	                <div class="col-sm-4">
+	                	<div class="input-group">
+                            <span class="input-group-addon">￥</span>
+	                  		<input type="text"  name="floatRecharge" id="floatRecharge"  class="form-control" value="{$floatRecharge}">
+	                  	</div>
+						
+	                </div>
+	            </div>
+	            <div class="t_c">
+	            	  <!-- <button class="btn btn-default" type="submit" value="1" >充值</button>-->
+  		          <span class="text-success" id="tipsUser"></span>
+	            <button class="btn btn-default" type="submit">确定，去付款</button>
+	            </div>
+				</form>
+      		<!-- 充值 end -->
+      </div>
+  </div>
+  </div>
+<script src="static/js/model/user/finance.js"></script>
+<!--{template user/footer}-->

@@ -1,0 +1,102 @@
+<!--{template ADMIN_DIRECTORY/tpl/admin_header}-->
+	<div class="page_title">
+    	<h1>{$_lang['pay_manage']}</h1>
+        <div class="tool">
+            <a href="index.php?do=config&view=pay&op=config">{$_lang['pay_config']}</a>
+            <a href="index.php?do=config&view=pay&op=online"  class="here">{$_lang['online_pay_interface']}</a>
+			<a href="index.php?do=config&view=pay&op=offline">{$_lang['line_pay_interface']}</a>
+    	</div>
+    </div>
+<div class="box post">
+	<div class="tabcon">
+        	<div class="title"><h2>{$payment_config['pay_name']}{$_lang['config_payment_interface']}</h2></div>
+            <div class="detail">
+                <form name="frm_config_basic" id="frm_config_basic" action="index.php?do=config&view=$view&type={$type}" method="post" >    
+                   <input type="hidden" name="payname"   value="{$payname}">
+				   <input type="hidden" name="pk[payment]" value="{$payment_config['pay_dir']}">
+				    <table width="100%" border="0" cellspacing="0" cellpadding="0">
+                      <tr>
+                        <th scope="row" width="160">{$_lang['interface_name']}:</th>
+                        <td>{$payment_config['pay_name']}</td>
+                      </tr>
+                      <tr>
+                        <th scope="row"> {$_lang['interface_description']}:</th>
+                        <td>{$payment_config['pay_desc']}</td>
+                      </tr>
+                      <tr>
+                        <th scope="row"> {$_lang['is_enabled']}:</th>
+                        <td>
+                        	<label for="rdo_pay_status1"><input type="radio" id="rdo_pay_status1" name="fds[pay_status]" {if $pay_config['pay_status']} checked="checked" {/if}  value="1">{$_lang['open']}</label>
+                            <label for="rdo_pay_status2"><input type="radio" id="rdo_pay_status2" name="fds[pay_status]" {if !$pay_config['pay_status']} checked="checked" {/if} value="0">{$_lang['close']}</label></td>
+                      </tr>
+					  {loop $items $v}
+					  	{if $v['k']=='per_charge'}
+					  		</table><div>
+					  			<div class="title">
+					  				<h2>{$payment_config['pay_name']}{$_lang['mention_now_charge_configuration']}</h2>
+					  			</div></div>
+					  		<table width="100%" border="0" cellspacing="0" cellpadding="0">
+					  		<tbody>
+					  		 
+					  	{/if}
+						<tr>
+		                   <th scope="row" width="180px">{$v['name']}:</th>
+			               <td>
+			                    <input type="text" name="fds[{$v['k']}]" value="{$v['v']}" class="txt" style=" width:260px;"/>
+								{if $payname =='alipayjs'&&$v['k']=='account'}
+									<button class="pill" type="button" onclick="getPidKey(this);">
+										<span class="icon plus">&nbsp;</span>
+										{$_lang['get_pid_key']}
+									</button>
+									<script type="text/javascript">
+										function getPidKey(obj){
+											var par = $(obj).prev();
+											var acc = $.trim(par.val());
+												if(acc){
+													window.open("https://b.alipay.com/order/pidKey.htm?pid=2088501217834340&product=fastpay","_blank");
+												}else{
+													art.dialog.alert("{$_lang['enter_your_alipay_account']}");
+												}
+										}
+									</script>
+								{/if}
+								{if $v['k']=='per_charge'}
+									<div class="padt10 direct"><p>({$_lang['user_a_single_charge_ratio']})</p></div>
+								{elseif $v['k']=='per_high'}
+									<div class="padt10 direct"><p>({$_lang['user_single_charge_highest_amount']})</p></div>
+								{elseif $v['k']=='per_low'}
+									<div class="padt10 direct"><p>({$_lang['user_single_charge_minimum_amount']})</p></div>
+								{/if}
+						  </td>
+					   </tr>
+					  {/loop}		
+			  		 {if $payname =='alipayjs'}
+                      <tr>
+                        <th scope="row"> {$_lang['payment_charges']}</th>
+                        <td>
+                        	<img src="{$_K['siteurl']}/payment/alipayjs/rate_img.gif">
+                        </td>
+                      </tr>
+					 {/if}
+					  <tr>
+                        <th scope="row"> {$_lang['message_tips']}:</th>
+                        <td><textarea name="fds[descript]" cols="100" rows="5">{$pay_config['descript']}</textarea></td>
+                      </tr>
+                      <tr>
+                        <th scope="row">&nbsp;</th>
+                        <td>
+                            <div class="clearfix padt10">
+                                <button class="positive pill primary button" type="submit" onclick="return checkForm(document.getElementById('frm_config_basic'),false)"  name="sbt_edit" ><span class="check icon"></span>{$_lang['submit']}</button>
+                             
+                            </div>
+                        </td>
+                      </tr>
+                      </tbody>
+                    </table>
+                    
+                </form>
+            </div>
+        </div>
+</div>
+
+<!--{template ADMIN_DIRECTORY/tpl/admin_footer}-->

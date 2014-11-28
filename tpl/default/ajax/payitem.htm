@@ -1,0 +1,84 @@
+<div class="modal-body">
+	<form class="form-inline" action="index.php?do=payitem" method="post" name="payitemForm" id="payitemForm" role="form">
+		<input type="hidden" name="formhash" id="formhash" value="{FORMHASH}">
+		<input type="hidden" name="objId" id="objId" value="$objId">
+		<input type="hidden" name="type" id="type" value="$type">
+	<table class="table table-hover">
+        <thead>
+          <tr>
+            <th width="10%">增值工具</th>
+            <th width="15%">购买说明</th>
+            <th width="30%">购买数量</th>
+            <th width="15%">价格</th>
+          </tr>
+        </thead>
+        <tbody>
+        	{loop $arrPayitemLists $k $v}
+          <tr>
+          	<input type="hidden" name="code" value="$v['item_code']">
+            <td><span class="marked $v['style']">$v['abbr']</span></td>
+            <td>$v['exttips']</td>
+            <td>
+            	<div class="form-group">
+             		{if $v['buystatus']}
+                        $v['buystatus']
+					{/if}
+					{if !$v['buystatus']||$k=='tasktop'||$k=='goodstop'}
+				        <input type="text" name="txt_{$v['item_code']}" data-unit-price="{$v['item_cash']}" data-code="{$v['item_code']}"  class="form-control input-sm"  id="txt_{$v['item_code']}"  placeholder="数量" style="width:80px" >
+
+				    {/if}
+				</div>
+			</td>
+            <td><span class="money"><sub>￥</sub>$v['item_cash'] 元 / $v['item_standard']</span></td>
+          </tr>
+		  {/loop}
+        </tbody>
+        <tfoot>
+        	<tr>
+        		<td></td>
+        		<td></td>
+        		<td></td>
+        		<td> 合计：<span class="money lead" ><sub>￥</sub><span  id="payitem-costs">0</span></span></td>
+        	</tr>
+        </tfoot>
+      </table>
+	  <div class="modal-footer">
+	<button type="submit" value="1" class="btn btn-primary" id="btn-payitempay" disabled="disabled">立即支付</button>
+</div>
+</form>
+</div>
+
+<script type="text/javascript" src="static/js/model/payitem/payitem.js"></script>
+<script type="text/javascript">
+		//提交验证
+	$('#payitemForm').scojs_valid({
+		rules: {
+			txt_urgent  : ['digit'],
+			txt_tasktop : ['digit'],
+			txt_workhide:['digit'],
+			txt_goodstop:['digit']
+		},
+		messages: {
+			txt_urgent: {
+				digit: "请输入有效数字"
+			},
+			txt_tasktop: {
+				digit: "请输入有效数字"
+			},
+			txt_workhide:{
+				digit: "请输入有效数字"
+			},
+			txt_goodstop:{
+                digit: "请输入有效数字"
+			}
+		},
+		wrapper:'.form-group'
+			,onSuccess: function(response, validator) {
+				tipsOp(response.data);
+				if(response.url){
+					window.location.href=response.url;
+					//setTimeout(function(){window.location.href=response.url;},3000);
+				}
+			}
+	});
+</script>

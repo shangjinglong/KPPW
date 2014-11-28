@@ -1,0 +1,71 @@
+<!--{template user/header}-->
+<div class="container">
+  <div class="nav-action">
+		<!--{template user/left_side}-->
+  </div>
+  <!-- nav-action end -->
+  <div class="content-panel">
+      <div class="tab">
+        <a {if $op === 'basic'}class="selected"{/if} href="index.php?do=user&view=account&op=basic" >基本资料</a>
+        <a {if $op === 'contact'}class="selected"{/if} href="index.php?do=user&view=account&op=contact" >联系方式</a>
+        <a {if $op === 'skill'}class="selected"{/if} href="index.php?do=user&view=account&op=skill">技能标签</a>
+      </div>
+      <div class="tab_detail">
+
+            <!--from表单 start-->
+            <form role="form" action="{$strUrl}" method="post" name="editSkillForm" id="editSkillForm">
+                <input type="hidden" name="formhash" id="formhash" value="{FORMHASH}">
+					<input type="hidden" name="pk[uid]" value="{$gUserInfo['uid']}">
+					<input type="hidden" name="strUserTags" id="strUserTags" value="{$gUserInfo['skill_ids']}">
+					<div class="form-group clearfix mt_20">
+
+
+			                <div class="col-sm-6">
+			                	<label for="indus_pid" class="mb_10">选择行业 <small>选择行业获取相应技能标签</small></label>
+									<select name="indus_pid" id="indus_pid" class="form-control"
+                                	onchange="InsertIndus($('#indus_pid option:selected').val(),'skill_tags');">
+                                    {loop $indus_p_arr $v}
+                                    	<option {if $user_indus['indus_pid']==$v['indus_id']}  selected="selected"{/if}  value="{$v['indus_id']}">{$v['indus_name']}  </option>
+                                    {/loop}
+                                	</select>
+                            	<div class="tags-box" id="skill_tags">
+                            		标签显示在这里
+                            	</div>
+
+							</div>
+
+							<div class="col-sm-6">
+								<label class="mb_10">选择的标签 <small>最多5项</small></label>
+								<!--tags_box 标签 start-->
+                                <div class="tags_box">
+                                	<span id="tags" type="text" class="tags" /></span>
+                            	</div>
+                            	<!--tags_box 标签 end-->
+				                <div class="help-block">
+				                  	已选择的技能标签，可点击 “&times;” 去除。请确保点击”保存“来保存设置
+				                </div>
+			                </div>
+
+			            </div>
+
+
+
+	              <div class="text-center">
+	                <button class="btn btn-default" type="submit" onclick="return save_skill();" value="1">保存</button>
+	                <span class="text-success" id="tipsUser"></span>
+	              </div>
+
+            </form>
+            <!--from表单 end-->
+
+      </div>
+  </div>
+  </div>
+<script type="text/javascript" src="static/js/model/user/skill.js" ></script>
+<script type="text/javascript" src="static/js/jqplugins/tagsinput/jquery.tagsinput.js" ></script>
+<link href="static/js/jqplugins/tagsinput/jquery.tagsinput.css" rel="stylesheet" charset="utf-8">
+<script type="text/javascript" src="static/js/jqplugins/tagsinput/jquery.tagsinput.min.js" ></script>
+<script type="text/javascript" >
+	var arrUserSkill = "{$gUserInfo['skill_ids']}";
+</script>
+<!--{template user/footer}-->

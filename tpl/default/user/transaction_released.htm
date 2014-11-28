@@ -1,0 +1,123 @@
+<!--{template user/header}-->
+<div class="container">
+<div class="nav-action">
+    <!--{template user/left_side}-->
+  </div>
+
+  <div class="content-panel">
+
+    <div class="tab">
+        <a href="index.php?do=user&view=transaction&op=released" class="selected">我发布的任务</a>
+    </div>
+    <div class="tab_detail">
+
+      <ul class="nav nav-pills second-nav">
+        {loop $arrTaskNavs $v}
+            <li {if $v['model_id'] == $intModelId} class="active" {/if}>
+              <a href="{$strUrl}&intModelId={$v['model_id']}">{$v['model_name']}</a>
+            </li>
+        {/loop}
+      </ul>
+
+
+    <div class="action-bar">
+    <form action="{$strUrl}" method="post" name="searchTransactionForm" id="searchTransactionForm">
+        <div class="action-item">
+        <input type="text" placeholder="请输入编号" class="form-control" name="intTaskId" id="intTaskId" value="{$intTaskId}">
+        </div>
+        <div class="action-item">
+        <input type="text" placeholder="请输入名称" class="form-control" name="strTaskTitle" id="strTaskTitle" value="{$strTaskTitle}">
+        </div>
+        <div class="action-item">
+          <select class="form-control" name="intTaskStatus" id="intTaskStatus">
+            <option value="-1">任务状态</option>
+             {loop $arrTaskStatus $k $v}
+            	<option value="{$k}" {if $intTaskStatus ==$k} selected="selected"{/if}>{$v}</option>
+            {/loop}
+          </select>
+        </div>
+        <div class="action-item">
+          <select class="form-control" name="strOrder" id="strOrder">
+            {loop $arrListOrder $k $v}
+            	<option value="{$k}" {if $strOrder ==$k} selected="selected"{/if}>{$v}</option>
+            {/loop}
+
+          </select>
+        </div>
+
+        <div role="toolbar" class="action-item btn-toolbar">
+          <div class="btn-group">
+            <button class="btn btn-default" type="submit">搜索</button>
+          </div>
+        </div>
+      </form>
+      </div>
+
+      <div class="table-responsive">
+        <table class="table table-hover ">
+        <thead>
+          <tr>
+            <th>编号</th>
+            <th>标题</th>
+            <th>金额（元）</th>
+            <th>发布时间</th>
+            <th>状态</th>
+            <th>操作</th>
+          </tr>
+        </thead>
+        <tbody>
+        {if $arrTaskLists}
+        {loop $arrTaskLists $k $v}
+          <tr>
+            <td>{$v['task_id']}</td>
+            <td><a href="index.php?do=task&id={$v['task_id']}" title="{$v['task_title']}">{$v['task_title']}</a></td>
+            <td>
+              <span class="money">
+            	{if $v['task_cash_coverage']}
+            		<sub>￥</sub>{$arrCashCoves[$v['task_cash_coverage']]['cove_desc']}
+            	{else}
+            		<sub>￥</sub>{$v['task_cash']}
+            	{/if}
+              </span>
+            </td>
+            <td><!--{eval echo date('Y-m-d',$v['start_time'])}--></td>
+            <td>{$arrTaskStatus[$v['task_status']]}</td>
+            <td>
+            	<!--{eval
+				if($v[model_id]==4||$v[model_id]==5||$v[model_id]==12){
+				$opera = master_opera($v['model_id'],$v['task_id'],$strUrl,$v['real_cash']);
+				}else{
+				$opera = master_opera($v['model_id'],$v['task_id'],$strUrl,$v['task_cash']);
+				}}-->
+				 {loop $opera $k $v}
+				<a href="{$v['href']}" {if $v['click']}onclick="{$v['click']}"{/if}>$v['desc']</a>
+				 {/loop}
+            	<!--<a href="index.php?do=task&id={$v['task_id']}">查看</a>
+            	<a href="javascript:opSingle('{$strUrl}&objId={$v['task_id']}&action=delSingle&intPage={$intPage}');void(0);">删除</a>-->
+            </td>
+          </tr>
+
+         {/loop}
+
+         {else}
+         	<tr>
+         		<td colspan="6" class="text-center">暂无相关任务</td>
+         	</tr>
+         {/if}
+        </tbody>
+      </table>
+      </div>
+      <div class="clearfix">
+        我发布的{$arrTaskNavs[$intModelId]['model_name']}任务数 共：<!--{eval echo intval($intCount);}-->个
+      	{if $strPages}
+	      <ul class="pagination pagination-sm pull-right">
+	       {$strPages['page']}
+	      </ul>
+	    {/if}
+      </div>
+    </div>
+  </div>
+  </div>
+<script src="task/match/tpl/default/matchtask.js" charset="{CHARSET}"></script>
+  <!-- 我的消息 end &content-panel end -->
+<!--{template user/footer}-->

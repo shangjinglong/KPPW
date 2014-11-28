@@ -1,0 +1,67 @@
+<!--{template ADMIN_DIRECTORY/tpl/admin_header}-->
+<div class="page_title">
+    	<h1>{$_lang['map_api']}</h1>
+</div>
+
+<div class="box post">
+   <div class="tabcon">
+      <div class="title"><h2>{$_lang['map_api']}</h2></div>
+         <div class="detail">
+         	<form name="frm_map" id="frm_map" action="index.php?do=$do&view=$view" method="post">
+           	  <table width="100%" border="0" cellspacing="0" cellpadding="0">
+              <tr>
+              	 <th scope="row" width="130">{$_lang['api_select']}{$_lang['zh_mh']}</th>
+                  <td>
+                   	{loop $api_open $k $v}
+						{if $k=='baidu_api'}
+					    <label for="$k">
+						<input type="checkbox" name="open" id="$k" value="{$k}" {if $v=='1'}checked="checked"{/if}>{$map_apis[$k]['desc']}
+						</label>
+						{/if}
+					{/loop}
+				  </td>
+			</tr>
+             <!-- <tr>
+              	 <th scope="row" width="130">{$_lang['google_map']}{$_lang['zh_mh']}</th>
+				<td>
+                   <tr>
+                        <th scope="row" width="140">Google Maps API{$_lang['zh_mh']}</th>
+                        <td>
+                        	<input type="text" name="conf[google_api]" id="google_api" value="{$map_apis['google_api']['v']}" class="txt" style="width:260px;" msgArea="span_google"
+							limit="required:true;len:2-200" title="&nbsp;&nbsp;&nbsp;&nbsp;{$_lang['enter_google_map_api_key']}" msg="&nbsp;&nbsp;&nbsp;&nbsp;{$_lang['enter_google_map_api_key']}"/> 
+						<button id="reg" onclick="window.open('http://code.google.com/intl/zh-CN/apis/maps/signup.html')" type="button" class="pill">
+						<span class="icon plus">&nbsp;</span>{$_lang['click_apply']}</button>
+						<span id="span_google"></span>
+						</td>
+                    </tr>
+				</td>
+			</tr>-->
+              
+                   <tr>
+                        <th scope="row" width="140">Baidu Maps API{$_lang['zh_mh']}</th>
+                        <td>
+                        	<input type="text" name="conf[baidu_api]" id="baidu_api" value="{$map_apis['baidu_api']['v']}" class="txt" style="width:300px;" msgArea="span_baidu"
+							limit="required:true;len:2-200" title="&nbsp;&nbsp;&nbsp;&nbsp;{$_lang['enter_baidu_map_api_key']}" msg="&nbsp;&nbsp;&nbsp;&nbsp;{$_lang['enter_baidu_map_api_key']}"/> 
+						<span id="span_baidu"></span>&nbsp;&nbsp;{$_lang['baidu_map_description']}
+						</td>
+                    </tr>
+			 
+		    <tr>
+				<th scope="row">&nbsp;</th>
+						<td>
+							<div class="clearfix padt10">
+                        		 <button class="positive primary pill button" type="submit" id="sbt_edit" name='sbt_edit' value="{$_lang['submit']}" onclick="return checkForm(document.getElementById('frm_map'))"><span class="check icon"></span>{$_lang['submit']}</button>
+                        		 
+                			</div>
+						</td>
+					</tr>
+					
+           		 </form>
+				</table>
+</div>
+</div>
+</div>
+<script type="text/javascript">
+	
+</script>
+<!--{template ADMIN_DIRECTORY/tpl/admin_footer}-->

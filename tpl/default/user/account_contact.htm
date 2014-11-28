@@ -1,0 +1,160 @@
+<!--{template user/header}-->
+<div class="container">
+  <div class="nav-action">
+		<!--{template user/left_side}-->
+  </div>
+  <!-- nav-action end -->
+  <div class="content-panel">
+      <div class="tab">
+        <a {if $op === 'basic'}class="selected"{/if} href="index.php?do=user&view=account&op=basic" >基本资料</a>
+        <a {if $op === 'contact'}class="selected"{/if} href="index.php?do=user&view=account&op=contact" >联系方式</a>
+        <a {if $op === 'skill'}class="selected"{/if} href="index.php?do=user&view=account&op=skill">技能标签</a>
+      </div>
+      <div class="tab_detail">
+      		<!-- 基本资料 start -->
+          <form role="form" action="{$strUrl}" method="post" class="form-horizontal" name="editContactForm" id="editContactForm">
+          	<input type="hidden" name="formhash" id="formhash" value="{FORMHASH}">
+          	<input type="hidden" name="pk[uid]" value="{$gUserInfo['uid']}">
+          	<!-- 邮箱 start -->
+            <div class="form-group">
+              <label class="col-sm-2 control-label" for="email">邮箱：</label>
+              <div class="col-sm-10 row">
+                <div class="col-sm-8">
+                {if $boolEmailAuth}
+                   {$gUserInfo['email']}
+                {else}
+                	<input type="email" placeholder="邮箱" name="email" id="email" value="{$gUserInfo['email']}" class="form-control">
+                {/if}
+                </div>
+                <div class="col-sm-2">
+					<select  class="form-control" name="sect[email]">
+						<option value="1" {if $arrMemberExts['email']['v1']==1}selected="selected"{/if}>不公开</option>
+						<option value="2" {if $arrMemberExts['email']['v1']==2}selected="selected"{/if}>公开</option>
+					</select>
+				</div>
+                <div class="col-sm-2">
+                {if $boolEmailAuth}
+                	<i class="fa fa-envelope"></i> 已认证
+				{else}
+					<a class="btn btn-default btn-block" href="index.php?do=user&view=account&op=auth&code=email">
+						<i class="fa fa-envelope"></i> 邮箱认证
+					</a>
+				{/if}
+				</div>
+              </div>
+            </div>
+            <!-- 邮箱 end -->
+            <!-- 手机 start -->
+            <div class="form-group">
+              <label class="col-sm-2 control-label" for="mobile">手机：</label>
+              <div class="col-sm-10 row">
+                <div class="col-sm-8">
+                 {if $boolMobileAuth}
+                   {$gUserInfo['mobile']}
+                {else}
+                	<input type="text" placeholder="手机" name="mobile" id="mobile" value="{$gUserInfo['mobile']}" class="form-control">
+                {/if}
+
+                </div>
+                <div class="col-sm-2">
+					<select  class="form-control" name="sect[mobile]">
+						<option value="1" {if $arrMemberExts['mobile']['v1']==1}selected="selected"{/if}>不公开</option>
+						<option value="2" {if $arrMemberExts['mobile']['v1']==2}selected="selected"{/if}>公开</option>
+					</select>
+				</div>
+            
+              </div>
+            </div>
+            <!-- 手机 end -->
+            <!-- QQ start -->
+            <div class="form-group">
+              <label class="col-sm-2 control-label" for="qq">QQ：</label>
+              <div class="col-sm-10 row">
+                <div class="col-sm-8">
+                  <input type="text" placeholder="QQ" name="qq" id="qq" value="{$gUserInfo['qq']}" class="form-control">
+                </div>
+                <div class="col-sm-2">
+					<select  class="form-control" name="sect[qq]">
+						<option value="1" {if $arrMemberExts['qq']['v1']==1}selected="selected"{/if}>不公开</option>
+						<option value="2" {if $arrMemberExts['qq']['v1']==2}selected="selected"{/if}>公开</option>
+					</select>
+				</div>
+              </div>
+            </div>
+            <!-- QQ end -->
+            <!-- MSN start -->
+            <div class="form-group">
+              <label class="col-sm-2 control-label" for="msn">MSN：</label>
+              <div class="col-sm-10 row">
+                <div class="col-sm-8">
+                  <input type="text" placeholder="MSN" name="msn" id="msn" value="{$gUserInfo['msn']}" class="form-control">
+                </div>
+                <div class="col-sm-2">
+					<select  class="form-control" name="sect[msn]">
+						<option value="1" {if $arrMemberExts['msn']['v1']==1}selected="selected"{/if}>不公开</option>
+						<option value="2" {if $arrMemberExts['msn']['v1']==2}selected="selected"{/if}>公开</option>
+					</select>
+				</div>
+              </div>
+            </div>
+            <!-- MSN end -->
+            <!-- 固定电话 start -->
+            <div class="form-group">
+              <label class="col-sm-2 control-label" for="phone">固定电话：</label>
+              <div class="col-sm-10 row">
+                <div class="col-sm-8">
+                  <input type="text" placeholder="固定电话" name="phone" id="phone" value="{$gUserInfo['phone']}" class="form-control">
+                </div>
+                <div class="col-sm-2">
+					<select  class="form-control" name="sect[phone]">
+						<option value="1" {if $arrMemberExts['phone']['v1']==1}selected="selected"{/if}>不公开</option>
+						<option value="2" {if $arrMemberExts['phone']['v1']==2}selected="selected"{/if}>公开</option>
+					</select>
+				</div>
+              </div>
+            </div>
+            <!-- 固定电话 end -->
+            <!-- 所在地 start -->
+            <div class="form-group">
+              <label class="col-sm-2 control-label">所在地：</label>
+              <div class="col-sm-10 row">
+                <div class="col-sm-3">
+                  <select class="form-control" name="province" id="province" onchange="getZone(this.value,'city');">
+                  	<option>选择省份</option>
+					{loop $arrProvinces $k $v}
+					<option value="{$v['id']}" {if $gUserInfo['province']==$v[id]}selected="selected"{/if}>{$v['name']}</option>
+					{/loop}
+                  </select>
+                  </div>
+                <div class="col-sm-3">
+                  <select class="form-control" name="city" id="city" onchange="getZone(this.value,'area');">
+                  	<option>选择城市</option>
+					{if $gUserInfo['city']}
+					<option value="{$arrCity['id']}" selected="selected">{$arrCity['name']}</option>
+					{/if}
+                  </select>
+                </div>
+               <div class="col-sm-3">
+                  <select class="form-control" name="area" id="area" >
+                  	<option>选择区域</option>
+					{if $gUserInfo['area']}
+					<option value="{$arrArea['id']}" selected="selected">{$arrArea['name']}</option>
+					{/if}
+                  </select>
+                </div>
+              </div>
+            </div>
+            <!--所在地 end -->
+            <div class="form-group">
+              <div class="col-sm-offset-2 col-sm-10">
+                <button class="btn btn-default" type="submit" value="1">保存</button>
+                <span class="text-success" id="tipsUser"></span>
+              </div>
+            </div>
+          </form>
+      		<!-- 基本资料 end -->
+      </div>
+  </div>
+  </div>
+<script type="text/javascript" src="static/js/model/user/account.js" ></script>
+<!--{template user/footer}-->

@@ -1,0 +1,55 @@
+<!--{template ADMIN_DIRECTORY/tpl/admin_header}-->  
+<div class="page_title">
+	<h1>{$_lang['system_group_manage']}</h1>
+   
+     <div class="tool"> 
+        <a href="index.php?do=user&view=group_list"      {if $view=='group_list'}class="here"{/if}>{$_lang['user_group_manage']}</a>
+        <a href="index.php?do=user&view=group_add&op=add" {if $view=='group_add'}class="here"{/if}>{$_lang['add_user_group']}</a>
+	</div>
+</div>
+<!--页头结束-->
+
+
+<div class="box list">
+    	<div class="title"><h2>{$_lang['user_group_manage']}</h2></div>
+        <div class="detail">
+			<form method="post" action="#" id="frm_user_search">
+		  		<table cellpadding="0" cellspacing="0">
+		  		  <tbody>
+		          <tr>
+		            <th>{$_lang['id']}</th>
+					<th>{$_lang['group_name']}</th>
+					<th>{$_lang['update_time']}</th>
+					<th>{$_lang['operate']}</th>
+		          </tr>
+				  
+				{loop $grouplist_arr $key $value}
+		        <tr class="item">
+		            <td>$value['group_id']</td>
+		            <td class="motif">$value['groupname']</td>
+		            <td><!--{date('Y-m-d H:i:s',$value['on_time'])}--></td>
+					<td>
+						<a href="index.php?do=user&view=group_add&op=add&editgid={$value['group_id']}&page={$page}" class="button dbl_target"><span class="pen icon"></span>{$_lang['edit']}</a>
+						<a href="index.php?do=user&view=group_list&op=del&editgid={$value['group_id']}&page={$page}" onclick="return cdel(this);"class="button"><span class="trash icon"></span>{$_lang['delete']}</a>
+					</td>
+		          </tr>
+				 {/loop}
+		          <tr>
+		          	<td colspan="4">
+		            <div class="clearfix">
+		            	<button type="button" name="sbt_add" value="{$_lang['add_user_group']}" class="positive pill button" onclick="document.location.href='index.php?do=user&view=group_add&op=add'"/><span class="check icon"></span>{$_lang['add_user_group']}</button>
+					</div>
+					</td>
+		          </tr>
+				  </tbody>
+		        </table>
+				<div class="page">{$pages['page']}</div>
+			</form>
+        </div>
+</div>
+<!--主体结束-->
+
+
+<!--{template ADMIN_DIRECTORY/tpl/admin_footer}-->
+
+

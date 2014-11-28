@@ -1,0 +1,106 @@
+
+<div class="modal-body">
+		  <form role="form" action="{$strUrl}" method="post" class="form-horizontal" name="editReportForm" id="editReportForm">
+          	 <input type="hidden" name="formhash" id="formhash" value="{FORMHASH}">
+			 <input type="hidden" name="objType" value="{$objType}">
+		     <input type="hidden" name="objId" value="{$objId}">
+		     <input type="hidden" name="type" value="{$type}">
+		     <input type="hidden" name="toUid" value="{$toUid}">
+			 <input type="hidden" name="agreeId" value="{$agreeId}" id="agreeId">
+			 <input type="hidden" name="taskId" value="{$taskId}" id="taskId">
+		     <input type="hidden" name="toUsername" value="{$toUsername}">
+			 <input type="hidden" name="serviceId"  value="{$serviceId}">
+
+           <div class="form-group">
+              <label class="col-sm-2 control-label">{$transname}类型：</label>
+                   <div class="col-sm-4">
+                   <select class="form-control" name="sltReason" id="sltReason" >
+					 	{loop $report_reason $k $v}
+					 		<option value="{$v}">{$v}</option>
+						{/loop}
+                   </select>
+                 </div>
+           </div>
+           <div class="form-group">
+              <label class="col-sm-2 control-label" for="tarContent">{$transname}说明：</label>
+              <div class="col-sm-8">
+                 <textarea id="tarContent" name="tarContent" rows="5" class="form-control"></textarea>
+              </div>
+            </div>
+            <div class="form-group">
+              <label class="col-sm-2 control-label" for="upload">图片上传：</label>
+                <div class="col-sm-8">
+                	  <input type="file" name="upload" id="upload" class="file">
+                  	  <input type="hidden"  name="filepath" id="filepath"  class="form-control" >
+                  	  <ul class="affix-list" id="fileList"></ul>
+                  	  <p class="ws_break text-muted">
+			              	<small>一次最多传1个，每个文件大小上限2M，格式:*.jpg;*.jpeg;*.gif;*.bmp;*.png;</small>
+			            </p>
+
+						<script type="text/javascript">
+						$(function(){
+						 	uploadify(
+								{
+					             	debug:false,
+					             	text:'上传附件',
+					             	auto:true,
+					             	file:'upload',
+					             	hide:false,
+					             	resText:'filepath',
+					             	exts:'*.jpg;*.jpeg;*.gif;*.bmp;*.png;',
+					             	limit:1
+				             	},
+				             	{
+					                taskId:'{$taskId}',
+									objType:'work'
+				             	},
+				             		uploadResponse
+				             	);
+						})
+							function uploadResponse(json){
+								$("#fileList").append('<li class="affix-list-item">'+json.msg.name+'</li>');
+						}
+                        </script>
+                </div>
+
+            </div>
+
+
+            <div class="form-group">
+              <div class="col-sm-offset-2 col-sm-10">
+                <button class="btn btn-default" type="submit" value="1" >确定</button>
+                <span class="text-success" id="tipsUser"></span>
+              </div>
+            </div>
+          </form>
+</div>
+<script type="text/javascript">
+$(function(){
+	$('#editReportForm').scojs_valid({
+	    rules:{
+	    	tarContent: ['not_empty',{'max_length': 140}]
+
+	    },
+	    messages: {
+	    	tarContent: {
+				not_empty: "请输入举报说明",
+				max_length:'输入最大长度不得超过140个字符'
+			}
+
+	    },
+	    wrapper:'.form-group'
+	    ,onSuccess: function(response, validator) {
+	    	//关闭举报弹窗，延迟提示
+	    	$('.close').trigger('click');
+	    	var stt = setTimeout(function(){
+	    		tipsOp(response.data,response.status);
+	    		clearTimeout(stt);
+	    		if(response.url){
+	    			setTimeout(function(){window.location.href=response.url;},2000);
+	      	  	}
+	    	},1000);
+	    }
+	});
+});
+
+</script>

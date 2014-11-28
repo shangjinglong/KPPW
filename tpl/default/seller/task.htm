@@ -1,0 +1,103 @@
+<!--{template top}-->
+<!--{template seller/banner}-->
+<!--{template seller/nav}-->
+
+			<div class="store_info_box">
+				<div class="list list-dl">
+				    <dl class="list-body">
+				      <dt class="list-label">
+				        <ul>
+				          <li class="w4">名称</li>
+				          <li class="w2">赏金</li>
+				          <li class="w1">模式</li>
+				          <li class="w1">查看/投稿</li>
+				          <li class="w1">状态</li>
+				          <li class="w1"></li>
+				        </ul>
+				      </dt>
+					  {if $arrTaskLists}
+					  {loop $arrTaskLists $k $v}
+				      <dd class="list-item">
+				        <ul class="list-item-body">
+				          <li class="w4">
+				            <a class="list-title" href="index.php?do=task&id={$v['task_id']}" title="$v['task_title']">
+				              {if $v['top_time']>time()&&$arrPayitemConfig['2']['small_pic']} <img src="{$_K['siteurl']}/{$arrPayitemConfig['2']['small_pic']}" alt="{$_lang['top']}" title="{$_lang['top']}">{/if}
+               {if $v['urgent_time']>time()&&$arrPayitemConfig['3']['small_pic']}<img src="{$_K['siteurl']}/{$arrPayitemConfig['3']['small_pic']}" alt="{$_lang['hurry_up']}" title="{$_lang['hurry_up']}">{/if}
+			   {if $v['pay_item'] == '1'} <img src="{$_K['siteurl']}/{$arrPayitemConfig['1']['small_pic']}" alt="隐藏" title="隐藏">{/if}
+	           {if stristr($v['pay_item'],'4')&&$arrPayitemConfig['4']['small_pic']}<img src="{$_K['siteurl']}/{$arrPayitemConfig['4']['small_pic']}" alt="{$_lang['map']}" title="{$_lang['map']}">{/if}
+			   {if stristr($v['pay_item'],'5')&&$arrPayitemConfig['5']['small_pic']}<img src="{$_K['siteurl']}/{$arrPayitemConfig['5']['small_pic']}" alt="屏蔽搜索引擎" title="屏蔽搜索引擎">{/if}
+			   {if $v['is_top'] == '1'}<img src="{$_K['siteurl']}/static/img/ico/tj.png" alt="{$_lang['recommend']}" title="{$_lang['recommend']}">{/if}
+			   {if $v['task_union'] == '2'}<img src="{$_K['siteurl']}/static/img/ico/lm.png" alt="{$_lang['union']}" title="{$_lang['union']}">{/if}
+			   {if $v['is_delay'] == '1'}<img src="{$_K['siteurl']}/static/img/ico/yq.png" alt="{$_lang['delay']}" title="{$_lang['delay']}">{/if}
+				              <!--{eval echo kekezu::cutstr($v['task_title'],50)}-->
+				            </a>
+				          </li>
+				          <li class="w2">
+				            <span class="money">
+				            	{if $v['task_cash_coverage']}
+				            		<sub>￥</sub>{$arrCashCoves[$v['task_cash_coverage']]['cove_desc']}
+				            	{else}
+				            		<sub>￥</sub>{$v['task_cash']}
+				            	{/if}
+							</span>
+				          </li>
+				          <li class="w1">{$arrTaskNavs[$v['model_id']]['model_name']}</li>
+				          <li class="w1">{$v['view_num']}/{$v['work_num']}</li>
+				          <li class="w1d5">   <!-- 2天后投稿截止 -->&nbsp;
+	          <!--{eval   $end_time = $arrTaskTimeDesc[$v[task_status]]['time'];}-->
+	          	<!--{eval echo keke_search_class::task_time_desc($v['task_status'],$v[$end_time])}-->
+	     </li>
+
+				            <!-- 收藏  START-->
+		<li class="wd5" >
+		{if $v['favorite']}
+          	<a id="favorite{$v['task_id']}" href="javascript:cancelFavorite('task',{$v['task_id']});" title="取消收藏" class="action-collect on"><i class="fa fa-star"></i></a>
+		  {else}
+          	<a id="favorite{$v['task_id']}" href="javascript:addFavorite('task',{$v['task_id']});" title="收藏" class="action-collect"><i class="fa fa-star"></i></a>
+
+		 {/if}
+		 </li>
+        <!-- 收藏 END -->
+
+				        </ul>
+				        <ul class="list-item-body list-visible">
+				          <li class="w8">
+						    <div class="list-desc"><!--{eval echo kekezu::chinesesubstr($v['task_desc'],0,300)}-->
+				            </div>
+				          </li>
+				          <li class="w2">
+				            <a href="index.php?do=pubtask&id={$v['model_id']}" class="btn btn-primary btn-sm">发布一个类似任务</a>
+				          </li>
+				        </ul>
+				      </dd>
+					{/loop}
+					{else}
+					<dd class="list-item text-center">
+			              <!--{template nodata}-->
+                    </dd>
+					{/if}
+
+				    </dl>
+				  </div>
+				  <!-- list end-->
+
+				  <div class="list-page">
+				    <div class="page-tips pull-left">
+				      显示 {$arrDatas['pages']['st']}~{$arrDatas['pages']['en']} 项 共 {$intTaskCount} 个任务
+				    </div>
+				 	{if $strPages['page']}
+				      <ul class="pagination pagination-sm pull-right">
+				       {$strPages['page']}
+				      </ul>
+				    {/if}
+				  </div>
+				  <!-- list-page end -->
+			</div>
+			<!-- store_info_box end -->
+
+
+</div><!-- store_down end-->
+</div><!-- store_detail end -->
+</div><!-- space_body end-->
+</div><!-- #space_bg end-->
+<!--{template footer}-->

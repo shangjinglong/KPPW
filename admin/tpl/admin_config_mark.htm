@@ -1,0 +1,69 @@
+<!--{template ADMIN_DIRECTORY/tpl/admin_header}--> 
+<div class="page_title">
+	<h1>{$_lang['rule_manage']}</h1>
+     <div class="tool"> 
+        <a href="index.php?do=$do&view=$view"        {if $op!='edit'}class="here"{/if}>{$_lang['credit_rules_manage']}</a>
+        <a href="index.php?do=$do&view=$view&op=edit" {if $op=='edit'}class="here"{/if}>{$_lang['add_credit_rules']}</a>
+	</div>
+</div>
+<div class="box tip clearfix p_relative" id="man_tips">
+    	<div class="control"><a title={$_lang['close']} href="javascript:void(0);"><b>×</b></a></div>
+        <div class="title"><h2>{$_lang['tips']}</h2></div>
+        <div class="detail pad10">
+            <ul>
+            	<li>{$_lang['role_relationship_notice']}</li>
+            </ul>
+        </div>
+</div>
+
+
+<div class="box list">
+    	<div class="title"><h2>{$_lang['credit_rules_list']}</h2></div>
+        <div class="detail">
+			<form method="" action="" id="frm_user_search">
+		  		<table cellpadding="0" cellspacing="0">
+		  		  <tbody>
+		          <tr>
+		            <th>{$_lang['id']}</th>
+					<th>{$_lang['credit_value']}</th>
+					<th>{$_lang['ability_value']}</th>
+					<th>{$_lang['buyers_title']}</th>
+					<th>{$_lang['seller_title']}</th>
+					<th>{$_lang['buyers_icon']}</th>
+					<th>{$_lang['seller_icon']}</th>
+					<th>{$_lang['operate']}</th>
+		          </tr>
+				{loop $mark_rule $key $value}
+		        <tr class="item">
+		            <td>{$value['mark_rule_id']}</td>
+		            <td>{$value['g_value']}</td>
+					<td>{$value['m_value']}</td>
+		            <td>{$value["g_title"]}</td>
+					<td>{$value["m_title"]}</td>
+					<td>{if $value["g_ico"]}<a href="../{$value["g_ico"]}" target="_blank"><img src="../{$value["g_ico"]}" /></a>{else}{$_lang['picture_not_upload']}{/if}</td>
+					<td>{if $value["m_ico"]}<a href="../{$value["m_ico"]}" target="_blank"><img src="../{$value["m_ico"]}" /></a>{else}{$_lang['picture_not_upload']}{/if}</td>
+					<td>
+						<a class="button dbl_target" href="index.php?do={$do}&view={$view}&op=edit&mark_rule_id={$value['mark_rule_id']}"><span class="pen icon"></span>{$_lang['edit']}</a>
+						<a class="button" href="index.php?do={$do}&view={$view}&op=del&mark_rule_id={$value['mark_rule_id']}" onclick="return cdel(this);"><span class="trash icon"></span>{$_lang['delete']}</a>
+					</td>
+		          </tr>
+				 {/loop}
+		          <tr>
+		          	<td colspan="8">
+		          		
+		          	</td>
+		          </tr>
+				  </tbody>
+		        </table>
+			</form>
+        </div>
+</div>
+<script type="text/javascript">
+	$(function(){
+		$(".control").add(".title").click(function(){
+			$(".tip").children().not($(".control,.title")).slideToggle('800');
+		});
+	})
+</script>
+<!--主体结束-->
+<!--{template ADMIN_DIRECTORY/tpl/admin_footer}-->

@@ -1,0 +1,238 @@
+<!--{template header}-->
+<div  class="container">
+  <div id="main">
+      <div class="buy-user-info">
+      <div class="media">
+        <div class="avatar">
+          <!--{userpic($arrTaskInfo['uid'],'middle')}-->
+        </div>
+        <div class="media-body">
+          <strong class="meida-heading"> <span class="money"><sub>￥</sub>{$arrCoverCash[$arrTaskInfo['task_cash_coverage']]['start_cove']}-<sub>￥</sub>{$arrCoverCash[$arrTaskInfo['task_cash_coverage']]['end_cove']}</span> {$arrTaskInfo['task_title']}</strong>
+          <ul class="user-meta">
+            <li>{$arrModelInfo['model_name']}模式</li>
+            <li>
+              <i class="fa fa-money"></i> 已支付网站服务费用：<sub>￥</sub>{$arrTaskInfo['real_cash']}
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+<div class="turnaround">
+    <h2 class="min-title">
+      我来报价
+    </h2>
+    <div class="turnaround-body">
+      <div class="col-sm-8">
+
+        <form role="form" class="turnaround-form"
+		    action="index.php?do=taskhandle&op=planquote&taskId={$taskId}" method="post"
+        	id = "editQuoteForm" name = "editQuoteForm"
+        	enctype="application/x-www-form-urlencoded">
+          <input type="hidden" name="formhash" id="formhash" value="{FORMHASH}">
+          <div class="form-group">
+            <label for="exampleInputPrice1">报价</label>
+            <div class="input-group">
+              <span class="input-group-addon">￥</span>
+              <input type="text" id="quote" name="quote" class="form-control" placeholder="0.00">
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="exampleInputDate1">工作周期</label>
+            <div class="input-group">
+              <input type="text" id="cycle" name="cycle" class="form-control" placeholder="0">
+              <span class="input-group-addon">天</span>
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="exampleInputDate1">所在地</label>
+                <div class="form-inline">
+                  <select class="form-control" name="province" id="province" onchange="getZone(this.value,'city');">
+                  	<option value="-1">选择省份</option>
+					{loop $arrProvinces $k $v}
+					<option value="{$v['id']}" {if $gUserInfo['province']==$v[id]}selected="selected"{/if}>{$v['name']}</option>
+					{/loop}
+                  </select>
+
+                  <select class="form-control" name="city" id="city" onchange="getZone(this.value,'area');">
+                  	<option value="-1">选择城市</option>
+					{if $gUserInfo['city']}
+					<option value="{$arrCity['id']}" selected="selected">{$arrCity['name']}</option>
+					{/if}
+                  </select>
+
+                  <select class="form-control" name="area" id="area" >
+                  	<option value="-1">选择区域</option>
+					{if $gUserInfo['area']}
+					<option value="{$arrArea['id']}" selected="selected">{$arrArea['name']}</option>
+					{/if}
+                  </select>
+               </div>
+          </div>
+
+          <div class="form-group">
+            <label for="exampleInputDesc">描述</label>
+            <textarea name="message" id = "message" class="form-control" rows="5"></textarea>
+          </div>
+		  <div id="plan_item">
+          <div class="form-group plane" id="plan1">
+            <label for="del_plan">工作计划--1</label>
+            <div class="well well-sm">
+              <div class="form-group">
+                  <label for="inputText1" class="control-label">计划金额</label>
+                  <div class="input-group">
+                      <span class="input-group-addon">￥</span>
+                      <input type="text" class="form-control" id="inputText1" name="plan_amount[]" placeholder="0.0">
+                  </div>
+              </div>
+              <div class="form-group clearfix">
+                <div class="col-sm-6">
+                  <label for="Startday1" class="control-label">开始时间</label>
+                  <div class="input-group">
+                      <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+                      <input type="text" class="form-control for-day" id="inputStartday1" name="start_time[]" placeholder="开始时间" data-link-format="yyyy-mm-dd" data-date-format="yyyy-mm-dd" data-date="" >
+                  </div>
+                </div>
+                <div class="col-sm-6">
+                  <label for="Endday1" class="control-label">结束时间</label>
+                  <div class="input-group">
+                      <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+                      <input type="text" class="form-control for-day" id="Endday1" name="end_time[]" placeholder="结束时间" data-link-format="yyyy-mm-dd" data-date-format="yyyy-mm-dd" data-date="" >
+                  </div>
+                </div>
+              </div>
+
+              <div class="form-group">
+                  <label for="inputAction1" class="control-label">工作目标</label>
+                  <input type="text" class="form-control" id="inputAction1" name="plan_title[]" placeholder="工作目标">
+
+              </div>
+
+            </div>
+			<i class="hidden">1</i>
+            <!-- well end -->
+          </div>
+          <!-- 工作计划1  end-->
+          </div>
+          <div class="form-group">
+            <button class="btn btn-default btn-block" id="addplan" type="button">新增工作计划</button>
+          </div>
+
+          <div class="text-center">
+            <a href="javascript:history.back();">返回</a>
+            <button type="submit" class="btn btn-default">交稿</button>
+			<span class="text-success" id="tipsUser"></span>
+          </div>
+        </form>
+      </div>
+
+    </div>
+  </div>
+    </div>
+  </div>
+
+<script type="text/javascript">
+$(function(){
+  $('.for-day').datetimepicker({
+    language: 'zh-CN',
+    weekStart: 1,
+    todayBtn: 1,
+    autoclose: 1,
+    todayHighlight: 1,
+    startView: 2,
+    minView: 2,
+    forceParse: 0
+  });
+	//基本资料
+	$('#editQuoteForm').scojs_valid({
+	    rules: {
+			quote:['not_empty','decimal'],
+			cycle:['not_empty','digit'],
+	    	message: ['not_empty',{'min_length': 10},{'max_length': 1000}]
+	    },
+	    messages: {
+			quote: {
+				not_empty: "请输入您的报价",
+				decimal:'请输入有效的打款金额'
+			},
+            cycle: {
+				not_empty: "请输入工作周期",
+				decimal:'请输入有效的工作周期'
+			},
+	    	message: {
+				not_empty: "请输入描述",
+				min_length: "最少输入10字",
+				max_length: "最多可以输入:1000字"
+			}
+	    },
+	    wrapper:'.form-group'
+	    ,onSuccess: function(response, validator, form) {
+	    	  tipsUser(response.data,response.status);
+	    	  if(response.url){
+					window.location.href=response.url;
+	    	  }
+	    }
+	});
+  //添加
+  $('#addplan').click(function() {
+	var i = parseInt($(".turnaround-form i:last").html());
+	var k = i+1;
+	if(k>5){
+		tipsOp('工作计划最多添加5个');
+	}else{
+		var planHtml =
+		   '<div class="form-group plane" id="plan'+k+'"> '+
+             '<label>工作计划--'+k+'</label> '+
+            ' <div class="well well-sm"> '+
+            '   <div class="form-group"> '+
+                   '<label for="inputText'+k+'" class="control-label">计划金额</label> '+
+                 '  <div class="input-group"> '+
+                     '  <span class="input-group-addon">￥</span> '+
+                '       <input type="text" class="form-control" id="inputText'+k+'" name="plan_amount[]" placeholder="0.0"> '+
+                  ' </div> '+
+               '</div> '+
+               '<div class="form-group clearfix"> '+
+                ' <div class="col-sm-6"> '+
+                   '<label for="Startday'+k+'" class="control-label">开始时间</label> '+
+                   '<div class="input-group"> '+
+                       '<span class="input-group-addon"><i class="fa fa-calendar"></i></span> '+
+                       '<input type="text" class="form-control for-day" id="inputStartday'+k+'" name="start_time[]" placeholder="开始时间" data-link-format="yyyy-mm-dd" data-date-format="yyyy-mm-dd" data-date="" > '+
+                   '</div> '+
+                 '</div> '+
+                ' <div class="col-sm-6"> '+
+                  ' <label for="Endday'+k+'" class="control-label">结束时间</label> '+
+                   '<div class="input-group"> '+
+                       '<span class="input-group-addon"><i class="fa fa-calendar"></i></span> '+
+                       '<input type="text" class="form-control for-day" id="Endday'+k+'" name="end_time[]" placeholder="结束时间" data-link-format="yyyy-mm-dd" data-date-format="yyyy-mm-dd" data-date="" > '+
+                   '</div> '+
+                 '</div> '+
+               '</div> '+
+              ' <div class="form-group"> '+
+                '   <label for="inputAction'+k+'" class="control-label">工作目标</label> '+
+                  '<input type="text" class="form-control" id="inputAction'+k+'" name="plan_title[]" placeholder="工作目标"> '+
+               '</div> '+
+			   	  '<button class="btn btn-default btn-block" type="button" onclick="delPlan('+k+')">删除工作计划</button>'+
+            '</div> '+
+			 '<i class="hidden">'+k+'</i> '+
+           '</div>';
+		   $("#plan_item").append(planHtml);
+		    $('.for-day').datetimepicker({
+		    language: 'zh-CN',
+		    weekStart: 1,
+		    todayBtn: 1,
+		    autoclose: 1,
+		    todayHighlight: 1,
+		    startView: 2,
+		    minView: 2,
+		    forceParse: 0
+		  });
+	}
+  });
+
+});
+
+//删除工作计划
+function delPlan(id){
+	$('#plan'+id).remove();
+}
+</script>
+<!--{template footer}-->

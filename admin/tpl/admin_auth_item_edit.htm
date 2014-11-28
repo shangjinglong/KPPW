@@ -1,0 +1,244 @@
+<!--{template ADMIN_DIRECTORY/tpl/admin_header}-->
+<div class="page_title">
+    <h1>{$auth_item['auth_title']}{$_lang['edit']}</h1>
+    <div class="tool">
+        <a href="index.php?do=auth&view=item_list">{$_lang['auth_list']}</a>
+        <a href="index.php?do=auth&view=item_edit&code={$code}" class="here">{$_lang['edit']}</a>
+    </div>
+</div>
+<div class="box post">
+    <div class="tabcon">
+        <div class="title">
+            <h2>{$_lang['edit_auth']}</h2>
+        </div>
+        <div class="detail">
+            <form method="post" action="index.php?do={$do}&view={$view}&code={$code}"  enctype="multipart/form-data" name='authItemEdit' id='authItemEdit'>
+                <input type="hidden" name="pk[auth_code]" value="{$code}">
+                <table width="100%" border="0" cellspacing="0" cellpadding="0">
+                    <tr>
+                        <th scope="row" width="130">
+                            {$_lang['edit_auth_name']}
+                        </th>
+                        <td>
+                            <input type="text" value="{$auth_item['auth_title']}" name="fds[auth_title]" id="title" class="txt" style=" width:260px;" limit="required:true;len:1-50" title="{lang:edit_auth_name_ttitle" msg="{$_lang['edit_auth_name_limits']}" msgArea="item_title_msg"/><b style="color:red">*</b>
+                            <span id="item_title_msg"></span>
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <th scope="row" width="130">{$_lang['workdays']}</th>
+                        <td>
+                            <input type="text" value="{$auth_item['auth_day']}" name="fds[auth_day]" id="auth_day" class="txt" style=" width:260px;" limit="required:true;len:1-50" title="{$_lang['workday_tips']}" msg="{$_lang['workday_limits']}" msgArea="link_name_msg"/><b style="color:red">*</b>
+                            <span id="link_name_msg"></span><div class="padt10 direct"><p>（{$auth_item['auth_day']}{$_lang['workdays_complete']}）</p></div>
+                        </td>
+                    </tr>
+
+            <!--   <tr>
+                        <th scope="row" width="130">{$_lang['auth_cash']}</th><td>
+                            <input type="text" value="{$auth_item['auth_cash']}" name="fds[auth_cash]" id="auth_cash" class="txt" style=" width:260px;">
+                            <div class="padt10 direct"> <p>（{$_lang['null_and_free']}）</p></div>
+                        </td>
+                    </tr>-->
+
+                    <tr>
+                        <th scope="row" width="130">{$_lang['auth_period']}</th>
+                        <td>
+                            <input type="text" value="{$auth_item['auth_expir']}" name="fds[auth_expir]" id="auth_expir" class="txt" style=" width:260px;" limit="required:false;len:0-50" msg="{$_lang['auth_period_limits']}" msgArea="link_period_msg" /><b style="color:red">*</b>
+                            <span id="link_period_msg"></span><div class="padt10 direct"><p>（{$_lang['auth_period_tips']}）</p></div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th scope="row" width="130">{$_lang['auth_big_icon']}</th>
+                        <td>
+						        <input type="file" class="file" name="upload1" id="upload1">
+                                <div class="po_ab" style="left:130px;top:5px;">
+                                    <span style="line-height:15px;" class="ws_prewrap mr_5">({$_lang['best_size']}50px*32px)</span>
+                                </div>
+								<span id="span_big_icon">
+										<img id="imgPreview1" src="../$auth_item['auth_big_ico']" {if !$auth_item['auth_big_ico']} class="hidden" {/if} height="60px" width="60px" />
+
+								</span>
+                                <input type="hidden" name="filepath1" id="filepath1" value="{$auth_item['auth_big_ico']}">
+						</td>
+                     </tr>
+                    <tr>
+                        <th scope="row" width="130">
+                            {$_lang['auth_normal_icon']}
+                        </th>
+                        <td>
+                        	<div style="width:200px;float:left;">
+                                <input type="file" class="file" name="upload2" id="upload2">
+                                <div class="po_ab" style="left:130px;top:5px;">
+                                    <span style="line-height:15px;" class="ws_prewrap mr_5">(认证前{$_lang['best_size']}16px*16px)</span>
+                                </div>
+								<span id="span_big_icon">
+										<img id="imgPreview2" src="../$auth_item['auth_small_n_ico']" {if !$auth_item['auth_small_n_ico']} class="hidden" {/if} height="60px" width="60px" />
+
+								</span>
+                                <input type="hidden" name="filepath2" id="filepath2" value="{$auth_item['auth_small_n_ico']}">
+                            </div>
+
+							<div style="width:200px;float:left;">
+
+                                <input type="file" class="file" name="upload3" id="upload3">
+                                <div class="po_ab" style="left:130px;top:5px;">
+                                    <span style="line-height:15px;" class="ws_prewrap mr_5">(认证后{$_lang['best_size']}16px*16px)</span>
+                                </div>
+								<span id="span_big_icon">
+										<img id="imgPreview3" src="../$auth_item['auth_small_ico']" {if !$auth_item['auth_small_ico']} class="hidden" {/if} height="60px" width="60px" />
+
+								</span>
+                                <input type="hidden" name="filepath3" id="filepath3" value="{$auth_item['auth_small_ico']}">
+								</div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th scope="row">{$_lang['auth_description']}</th>
+                        <td><textarea rows="10" style="width:45%;" name="fds[auth_desc]">{$auth_item['auth_desc']}</textarea></td>
+                    </tr>
+                    <tr>
+                        <th scope="row" width="130">
+                            {$_lang['is_open']}
+                        </th>
+                        <td>
+                            <p>
+                                <label for="rdo_auth_open_1">
+                                    <input type="radio" name="fds[auth_open]" value="1" id="rdo_auth_open_1" {if $auth_item['auth_open']}checked="checked"{/if}/> {$_lang['yes']}
+                                </label>
+                                <label for="rdo_auth_open_2">
+                                    <input name="fds[auth_open]" type="radio" id="rdo_auth_open_2" value="0" {if !$auth_item['auth_open']}checked="checked"{/if} /> {$_lang['no']}
+                                </label>
+                            </p>
+                        </td>
+                    </tr>
+					<tr>
+                        <th scope="row" width="130">
+                           {$_lang['order']}
+                        </th>
+                        <td>
+                            <input type="text" value="{$auth_item['listorder']}" name="fds[listorder]" id="listorder" class="txt" style=" width:260px;" limit="required:true;type:int" title="{$_lang['input_serial_num']}" msg="{$_lang['serial_num_not_null']}" msgArea="link_listorder_msg"/>
+                            <span id="link_listorder_msg"></span>
+                            <div class="padt10 direct">
+                                <p>
+                                    （{$_lang['order_by_auth']}）
+                                </p>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th scope="row">
+                            &nbsp;
+                        </th>
+                        <td>
+                            <div class="clearfix padt10">
+                                <button class="positive pill primary button" type="submit" name="sbt_edit"  onclick="return checkForm(document.getElementById('authItemEdit'));" value="{$_lang['submit']}">
+                                    <span class="check icon"></span>{$_lang['submit']}
+                                </button>
+                            </div>
+                        </td>
+                    </tr>
+                </table>
+            </form>
+        </div>
+    </div>
+</div>
+
+
+<script type="text/javascript">
+
+							$(function(){
+                                	uploadify({
+									  file:'upload1',
+									  text:'上传图片',
+									  auto:true,
+									  limit:1,
+									  hide:true,
+									  exts:'*.jpg;*.jpeg;*.gif;*.png;*.bmp'
+									  },{
+									  	mode: 'back',
+									  	fileType:'sys',
+									  	objType:'auth'
+									},response1);
+                            });
+
+							$(function(){
+                                	uploadify({
+								      //debug:true,
+									  text:'上传图片',
+									  auto:true,
+									  limit:1,
+									  file:'upload2',
+									  hide:true,
+									  exts:'*.jpg;*.jpeg;*.gif;*.png;*.bmp'
+									  },{
+									  	mode: 'back',
+									  	fileType:'sys',
+									  	objType:'auth'
+									},response2);
+                            });
+
+							$(function(){
+                                	uploadify({
+									  file:'upload3',
+									  text:'上传图片',
+									  auto:true,
+									  limit:1,
+									  hide:true,
+									  exts:'*.jpg;*.jpeg;*.gif;*.png;*.bmp'
+									  },{
+									  	mode: 'back',
+									  	fileType:'sys',
+									  	objType:'auth'
+									},response3);
+                            });
+
+		                    function response1(json){
+
+			                      $("#filepath1").val(json.msg.url);
+			                      $('#imgPreview1').removeClass('hidden');
+			                      $('#imgPreview1').attr('src','../'+json.msg.url);
+		                    }
+
+							function response2(json){
+
+			                      $("#filepath2").val(json.msg.url);
+			                      $('#imgPreview2').removeClass('hidden');
+			                      $('#imgPreview2').attr('src','../'+json.msg.url);
+		                    }
+
+							function response3(json){
+
+			                      $("#filepath3").val(json.msg.url);
+			                      $('#imgPreview3').removeClass('hidden');
+			                      $('#imgPreview3').attr('src','../'+json.msg.url);
+		                    }
+
+
+
+								var xyq = "<!--{eval echo $xyq = session_id();}-->";
+					        </script>
+				     <script src="../static/js/uploadify/jquery.uploadify.min.js" type="text/javascript"></script>
+					 <link href="../static/js/uploadify/uploadify.css" rel="stylesheet">
+					 <!--上传附件end-->
+
+<script type="text/javascript">
+/**
+ * 上传完成后的页面响应
+ * @param json json数据
+ */
+
+    function del(str,span){
+		var value = $("#"+str).val().split("?")['0'];
+		var fid=$("#"+str+"_fid").val();
+    	var url  = '../index.php?do=ajax&view=file&ajax=del&filepath='+value+"&fid="+fid;
+				$.post(url,function(json){
+					if(json.status==1){
+						 $("#"+str).val("delete");
+						 $("#"+span).children().remove();
+					}
+
+				},'json');
+		return false;
+	}
+</script>
+<!--{template ADMIN_DIRECTORY/tpl/admin_footer}-->

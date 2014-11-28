@@ -1,0 +1,42 @@
+<!DOCTYPE HTML>
+<html lang="en-US">
+<head>
+	<meta charset="UTF-8">
+	<title>{$_lang['the_site_has_been_closed']}</title>
+	<link href="static/css/reset.css" rel="stylesheet">
+	<!--公用样式-->
+	<link href="static/css/base.css" rel="stylesheet">
+	<!--box样式-->
+	<link href="static/css/box.css" rel="stylesheet">
+	<link href="static/css/animate.css" rel="stylesheet" type="text/css">
+	<script src="static/js/jquery.js" type="text/javascript"></script>
+</head>
+<body style="background:#eaeaea;">
+	
+<div class=" errow_box" style="height:auto;">
+	<div  class="systips animated">
+			<div class="systips_detail error">
+				<div class="tip_icon"></div>
+				<div class="pt_20" style="padding-left: 150px;">
+					<div class="tip_title">{$_lang['the_site_has_been_closed']}</div>
+					<div class="tip_messages">
+						{$basic_config['close_reason']}
+						
+					</div>
+				</div>	
+			</div>	
+	</div>	
+</div>	
+
+<script>
+	$(function(){
+		$('.systips').addClass('bounceIn');
+	})
+</script>
+</body>
+</html>
+
+
+
+
+

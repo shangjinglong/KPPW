@@ -1,0 +1,99 @@
+<!--{template admin/tpl/admin_header}-->
+	<div class="page_title">
+    	<h1>{$_lang['payitem_manage']}</h1>
+		 <div class="tool"> 
+        <a href="index.php?do=$do&view=$view&user_type=witkey" {if $user_type=='witkey'}class="here"{/if}>{$_lang['witkey']}</a>
+        <a href="index.php?do=$do&view=$view&user_type=employer" {if $user_type=='employer'}class="here"{/if}>{$_lang['employer']}</a>
+	</div>
+    </div>
+	  <div class="box list">
+	  	<div class="title"><h2>{$_lang['payitem_manage']}</h2></div>
+        	<div class="detail">
+        		<form action="index.php?do=$do&view=$view&op=add" method="post">
+        			 <table cellpadding="0" cellspacing="0">
+            	<tr>
+               <!-- <th scope="row">
+                    {$_lang['serve_id']}
+                </th>-->
+                <th scope="row">
+                    {$_lang['use_status']}
+                </th>
+               <th scope="row">
+                    {$_lang['serve_name']}
+                </th>
+                <th scope="row">
+                  {$_lang['serve_icon']}
+                </th>
+            
+               <th scope="row">
+                    {$_lang['serve_cost']}
+                </th>
+           
+                <th scope="row" >
+                   {$_lang['user_type']}
+                </th>
+                <th scope="row">
+                    {$_lang['set_to_disable']}
+                </th>
+				<th scope="row">
+       	         {$_lang['config']}       
+                </th>
+				<th scope="row">
+                  {$_lang['uninstall']}
+                </th>
+				
+            </tr>
+       {loop $payitem_arr $v}
+			 
+            <tr>
+            <!--    <td>
+                    $v['item_id']
+                </td>-->
+                <td>
+                    {if $v['is_open']==1}
+                    {$_lang['yes']}{else}<font color="red">{$_lang['disable']}</font>{/if}
+                </td>
+                <td>
+                    $v['item_name']
+                </td>
+                <td>
+                   <img src="../{$v['small_pic']}" />
+                </td>
+                <td>
+                   {c:$v['item_cash']}/{$unit[$v['item_standard']]}
+                </td>
+               
+                <td>
+                     {$type_arr[$v['user_type']]}
+                </td>
+                <td>
+                    {if $v['is_open']==1}
+					<a href="index.php?do=$do&view=$view&user_type=$v['user_type']&op=close&item_id={$v['item_id']}&payitem_name=$v['item_name']"  class="button"><span class="cross icon"></span>{$_lang['set_to_disable']}</a>
+                    {else}
+					<a href="index.php?do=$do&view=$view&user_type=$v['user_type']&op=open&item_id={$v['item_id']}&payitem_name=$v['item_name']" class="button" ><span class="check icon"></span>{$_lang['set_to_enable']}</a>
+                    {/if}
+				</td>
+				<td>
+					<a href="index.php?do=$do&view=config&item_code={$v['item_code']}" class="button"><span class="cog icon"></span>{$_lang['config']}</a>
+				</td>
+				<td>
+					<a href="index.php?do=$do&view=$view&item_id=$v['item_id']&op=del" onclick="return confirm({$_lang['comfirm_to_uninstall_model']});" class="button"><span class="downarrow icon"></span>{$_lang['uninstall']}</a>
+                </td>
+            </tr>
+			 
+	  {/loop}
+            
+                <tr>
+                    <td colspan="7">
+                        {$_lang['install_payitem_input_contents']}: <input type="text" name="txt_item_code" value="" class="txt">
+						<button type="submit" name="submit" class="button pill" value={$_lang['install']} ><span class="uparrow icon"></span>{$_lang['install']}
+						</button>
+                    </td>
+                </tr>
+           
+        </table>
+		 </form>
+		   </div>
+
+</div>
+<!--{template admin/tpl/admin_footer}-->

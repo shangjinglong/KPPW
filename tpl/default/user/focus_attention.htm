@@ -1,0 +1,49 @@
+<!--{template user/header}-->
+<div class="container">
+	<div class="nav-action">
+		<!--{template user/left_side}-->
+    </div>
+
+	<div class="content-panel">
+	        <div class="tab">
+	        <a href="#" class="selected">全部关注</a>
+	        </div>
+			{if $arrFollowLists}
+			<div class="table-responsive">
+			<table class="table table-hover">
+			  {loop $arrFollowLists $k $v}
+			  <tr>
+			  	<td>
+
+				  <div class="media">
+				  <a class="pull-left" href="index.php?do=seller&id=$v['focus_uid']">
+
+					<!--{userpic($v['focus_uid'],big)}-->
+				  </a>
+				  <div class="media-body">
+				  	<div class="pull-right">
+				  		<span class="label label-success"><i class="fa fa-check"></i> 已关注</span>
+						<button class="btn btn-default btn-xs"
+						onclick="opCancelFocus('{$strUrl}&action=cancelFocus&intFollowUid={$v[follow_id]}');" type="button" >取消关注</button>
+					</div>
+				    <strong class="media-heading"><a href="index.php?do=seller&id=$v['focus_uid']">$v['focus_username']</a></strong>
+				  </div>
+				  </div>
+			  </td>
+			  </tr>
+			  {/loop}
+			  </table>
+			 </div>
+			{/if}
+
+
+  	        {if $strPages}
+              <ul class="pagination pagination-sm pull-right">
+              {$strPages['page']}
+              </ul>
+            {/if}
+
+	</div>
+</div>
+
+<!--{template user/footer}-->

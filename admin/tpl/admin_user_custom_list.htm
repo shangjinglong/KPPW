@@ -1,0 +1,185 @@
+<!--{template ADMIN_DIRECTORY/tpl/admin_header}-->
+<div class="page_title">
+    <h1>{$_lang['kf_manage']}</h1>
+    <div class="tool">
+        <a href="index.php?do=user&view=custom_list" class="here">{$_lang['kf_list']}</a>
+        <a href="index.php?do=user&view=custom_add">{$_lang['add_new_kf']}</a>
+    </div>
+</div>
+<div class="box search p_relative">
+    <div class="title">
+        <h2>{$_lang['search']}</h2>
+    </div>
+    <div class="detail" id="detail">
+        <form action="index.php?do=user&view=custom_list" method="post" >
+            <input type="hidden" name="do" value="$do">
+			<input type="hidden" name="view" value="$view">
+			<input type="hidden" name="page" value="$page">
+            <table cellspacing="0" cellpadding="0">
+                <tbody>
+                    <tr>
+                        <th>
+                            {$_lang['user']} 编号
+                        </th>
+                        <td>
+                            <input type="text" value="{$w['uid']}" name="w[uid]" class="txt" onkeyup="clearstr(this);"/>
+                        </td>
+                        <th>
+                            {$_lang['username']}
+                        </th>
+                        <td>
+                            <input type="text" name='w[username]' value="{$w['username']}" onkeyup="clearspecial(this);" class="txt"/>&nbsp;&nbsp;{$_lang['search_by_like']}
+                        </td>
+                        <th>
+                            &nbsp;
+                        </th>
+                        <td>
+                            &nbsp;
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>
+                            {$_lang['user_status']}
+                        </th>
+                        <td>
+                            <select class="ps vm" name="w[status]" id="catid">
+                                <option value="0" {if $w['status']=='1'}selected="selected"{/if}> {$_lang['all']}</option>
+                                <option value="1" {if $w['status']=='1'}selected="selected"{/if}> {$_lang['normal']}</option>
+                                <option value="2" {if $w['status']=='2'}selected="selected"{/if}> {$_lang['disable']}</option>
+                            </select>
+                        </td>
+                        <th>
+                            {$_lang['result_order']}
+                        </th>
+                        <td>
+                            <select name="ord[uid]">
+                                <option {if $ord['uid']=='desc'  or !isset($ord)}selected="selected" {/if}  value="desc">{$_lang['order_id_desc']}</option>
+                                <option {if $ord['uid']=='asc'}selected="selected" {/if}  value="asc">{$_lang['order_id_asc']}</option>
+                            </select>
+                        </td>
+                        <th>
+                            {$_lang['list_result']}
+                        </th>
+                        <td>
+                            <select name="w[page_size]">
+                                <option value="10" {if $w['page_size']=='10'}selected="selected"{/if}>{$_lang['page_size']}10</option>
+                                <option value="20" {if $w['page_size']=='20'}selected="selected"{/if}>{$_lang['page_size']}20</option>
+                                <option value="30" {if $w['page_size']=='30'}selected="selected"{/if}>{$_lang['page_size']}30</option>
+                            </select>
+                            <button class="pill" type="submit" value="{$_lang['search']}" name="sbt_search">
+                                <span class="icon magnifier">&nbsp;</span>{$_lang['search']}
+                            </button>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </form>
+    </div>
+</div>
+<!--搜索结束-->
+<div class="box list">
+    <div class="title">
+        <h2>{$_lang['kf_manage']}</h2>
+    </div>
+    <div class="detail">
+    	<form name="frm_list" id="frm_list" action="index.php?do=user&view=custom_list" method="post" >
+    	<div id="ajax_dom"><input type="hidden" name="page" value="{$page}" />
+        <table cellpadding="0" cellspacing="0">
+            <tr>
+            	<th width="15">
+            		<input type="checkbox" onclick="checkall();" id="checkbox" name="checkbox"/>UID
+            	</th>
+               
+                <th width="100" class="motif">
+                    {$_lang['username']}
+                </th>
+                <th>
+                    {$_lang['users']}
+                </th>
+                <th>
+                    {$_lang['contact_tel']}
+                </th>
+                <th>
+                    E-mail
+                </th>
+                <th>
+                    QQ
+                </th>
+                <th>
+                    {$_lang['edit']}
+                </th>
+                <th>
+                    {$_lang['delete']}
+                </th>
+            </tr>
+            {loop $userlist_arr $k $v}
+            <tr class="item">
+            	<td>
+                   <input type="checkbox" {if $admin_info['uid'] == $v['uid']} disabled="disabled" {/if} name="ckb[]" class="checkbox" value="{$v['uid']}">  {$v['uid']}
+                </td>
+             
+                <td class="motif">
+                    <a href="javascript:void(0)">{$v['username']}</a>
+                </td>
+                <td>
+                    $grouplist_arr[$v['group_id']]['groupname']
+                </td>
+                <td>
+                    {$v['phone']}
+                </td>
+                <td>
+                    {$v['email']}
+                </td>
+                <td>
+                    {$v['qq']}
+                </td>
+                <td>
+				{if $admin_info['uid']!=$v['uid']}
+                    <a class="button dbl_target" href="index.php?do=user&view=custom_add&op=add&edituid={$v['uid']}&page={$page}"><span class="pen icon"></span>{$_lang['edit']}</a>
+                
+				{/if}
+				</td>
+                <td>
+                {if $admin_info['uid']!=$v['uid']}
+                    <a class="button" href="index.php?do=user&view=custom_list&op=del&delid={$v['uid']}&page={$page}" onclick="return cdel(this);">
+                    	<span class="trash icon"></span>{$_lang['delete']}</a>
+                    	{/if}
+                </td>
+            </tr>{/loop}
+            <tr>
+                <td colspan="8">
+                    <div class="clearfix">
+					<label for="checkbox" onclick="checkall(event);">{$_lang['select_all']}</label>
+					<input type="hidden" name="sbt_action" class="sbt_action">
+                    <button name="sbt_action" type="submit" value="{$_lang['mulit_delete']}" onclick="return batch_act(this,'frm_list');" class="pill negative">
+                        <span class="icon trash"></span>{$_lang['mulit_delete']}
+                    </button>
+                    <a name="sbt_action" value="{$_lang['add_new_kf']} " class="positive pill button" href="index.php?do=user&view=custom_add">
+					<span class="plus icon"></span>{$_lang['add_new_kf']}
+                    </a>
+                </div>
+                </td>
+            </tr>
+        </table>
+		<div class="page">{$pages['page']}</div>
+		</div>
+		</form>
+    </div>
+</div>
+<script type="text/javascript">
+    function showpl(){
+        $('#sbt_del').show();
+        $('#slt_action').show();
+    }
+	
+	function has_selecte(action){
+	var count = $("#frm_list input:checked:not([id=checkbox])");
+	var len = count.length;
+	if(len>0){
+		return confirm("{$_lang['confirm']}"+action+"{$_lang['ma']}?") 
+	}else{
+		alert("{$_lang['choose_operate_item']}");return false;
+	}		
+	}
+</script>
+<!--{template ADMIN_DIRECTORY/tpl/admin_footer}-->

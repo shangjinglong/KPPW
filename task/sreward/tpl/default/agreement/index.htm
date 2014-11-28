@@ -1,0 +1,86 @@
+<!--{template header}-->
+<script src="static/js/uploadify/jquery.uploadify.min.js" type="text/javascript"></script>
+<link href="static/js/uploadify/uploadify.css" rel="stylesheet">
+<div  class="container">
+  <div class="deliver">
+
+	<div class="buy-user-info">
+      <div class="media">
+        <div class="media-body">
+          <strong class="meida-heading">
+            <span class="money"><sub>￥</sub>{$arrTaskInfo['task_cash']}</span> $arrTaskInfo['task_title']
+            <span class="label label-info">交付中</span>
+          </strong>
+          <ul class="user-meta">
+            <li>单人悬赏模式</li>
+            <li>
+              <i class="fa fa-money"></i> 已托管：￥{$arrTaskInfo['task_cash']}
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div><!-- buy-user-info end -->
+	<div class="deliver-progress">
+      <ul class="step step4">
+          {loop $arrAgreementProgress $k $v}
+          <li class="step-item {if $v['step'] <= $step}action{/if}">
+            <span class="step-num">{if $v['step'] < $step}<i class="fa fa-check"></i>{else}{$v['num']}{/if}</span>
+            <div class="step-text step-bottom">
+              <p><strong class="step-title">{$v['state']}</strong></p>
+            </div>
+          </li>
+          {/loop}
+        </ul>
+    </div>
+    <!-- 中标者信息 -->
+    	<div class="deliver-other-side">
+		  <!--{userpic($arrWitkeyInfo['uid'],'larger')}-->
+		  <p class="user-name">{$arrWitkeyInfo['username']} (中标者)</p>
+		  <ul>
+		    <li>姓名：{$arrWitkeyInfo['truename']}</li>
+		    <li>电话：{if $arrWitkeyInfo['phone']} {$arrWitkeyInfo['phone']} {else} 暂未填写 {/if}</li>
+		    <li>手机：{if $arrWitkeyInfo['mobile']} {$arrWitkeyInfo['mobile']} {else} 暂未填写 {/if}</li>
+		    <li>等级：{$arrWitkeyLevel['pic']}</li>
+		    <li>好评率：<span>{if $arrWitkeyInfo['seller_good_num']}<!--{eval echo number_format($arrWitkeyInfo['seller_good_num']/$arrWitkeyInfo['seller_total_num'],4)*100}-->{else}0{/if}<sub>%</sub></span></li>
+		    <li>近三月收入：<span class="money"><sub>￥</sub>{$nearlyIncome}</span></li>
+		    <li>来自：{if $arrWitkeyInfo['comefrom']}{$arrWitkeyInfo['comefrom']}{else}暂未填写{/if}</li>
+		  </ul>
+		</div>
+	<!-- 中标者信息 -->
+
+<!-- 步骤信息 -->
+		<!--{eval require keke_tpl_class::template("task/".$arrModelInfo['model_dir']."/tpl/".$_K['template']."/agreement/".$step); }-->
+<!-- 步骤信息 -->
+
+	<!-- 雇主信息 -->
+		<div class="deliver-self">
+		  <!--{userpic($arrEmploymerInfo['uid'],'larger')}-->
+		  <p class="user-name">{if $arrEmploymerInfo['username']} {$arrEmploymerInfo['username']} {else} 暂未填写 {/if} (雇主)</p>
+		  <ul>
+		    <li>姓名：{$arrEmploymerInfo['truename']}</li>
+		    <li>电话：{if $arrEmploymerInfo['phone']} {$arrEmploymerInfo['phone']} {else} 暂未填写 {/if}</li>
+		    <li>手机：{if $arrEmploymerInfo['mobile']} {$arrEmploymerInfo['mobile']} {else} 暂未填写 {/if}</li>
+		    <li>等级：{$arrEmploymerLevel['pic']}</li>
+		    <li>好评率：<span>{if $arrEmploymerInfo['buyer_good_num']}<!--{eval echo number_format($arrEmploymerInfo['buyer_good_num']/$arrEmploymerInfo['buyer_total_num'],4)*100}-->{else}0{/if}<sub>%</sub></span></li>
+		    <li>来自：{if $arrEmploymerInfo['comefrom']}{$arrEmploymerInfo['comefrom']}{else}暂未填写{/if}</li>
+		  </ul>
+		</div>
+	<!-- 雇主信息 -->
+
+
+
+
+
+   </div>
+  <!-- deliver end -->
+</div>
+
+
+<!-- 每个任务模型对应的JS -->
+<!-- 每个任务模型对应的JS -->
+
+<script type="text/javascript" src="task/sreward/tpl/default/agreement/agreement.js"></script>
+<script type="text/javascript">
+var strUrl = '{$strUrl}';
+</script>
+<!--{template footer}-->

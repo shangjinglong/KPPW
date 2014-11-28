@@ -1,0 +1,76 @@
+<!--{template user/header}-->
+<div class="container">
+<div class="nav-action">
+  <!--{template user/left_side}-->
+  </div>
+
+  <div class="content-panel">
+    <div class="tab">
+		<a href="javascript:void(0);" class="selected">消息详情</a>
+    </div>
+    <div class="tab_detail">
+
+        <div class="action-bar">
+          <div class="action-item">
+            <a  class="btn btn-default" href="javascript:history.go(-1);void(0)"  onclick=""> {$_lang['return']}</a>
+          </div>
+          <div class="action-item">
+            <div class="btn-group">
+            	 {if $arrMsgInfo['uid']&&$arrMsgInfo['uid']!=$uid}
+				 <a  class="btn btn-default" href="index.php?do=user&view=message&op=send&objUid={$arrMsgInfo['uid']}"> 回复</a>
+				 {/if}
+             <a  class="btn btn-default" href="javascript:opSingle('{$strUrl}&msgId=$arrMsgInfo['msg_id']&action=delSingle&type={$type}&intPage={$intPage}');void(0);">{$_lang['delete']}</a>
+             </div>
+          </div>
+        </div>
+
+        <div class="panel panel-default">
+          <div class="panel-heading">
+            <h1 class="panel-title">$arrMsgInfo['title']</h1>
+          </div>
+          <div class="panel-body ws_break">
+            <!--{eval echo htmlspecialchars_decode($arrMsgInfo['content']);}-->
+          </div>
+          <div class="panel-footer">
+
+            <span class="mr_10">收件人：$arrMsgInfo['to_username']</span>
+
+            <span class="mr_10"><i class="fa fa-clock-o"></i> {$_lang['time']}：<!--{date('Y-m-d H:i:s',$arrMsgInfo['on_time'])}--> </span>
+
+            <span class="mr_10">来自：{if $arrMsgInfo['uid']}$arrMsgInfo['username']{else}{$_lang['system_msg']}{/if}</span>
+          </div>
+        </div>
+
+
+          <ul class="pager">
+            <li class="previous">
+              {if $arrPre}
+              <a href="{$_K['siteurl']}/{$strUrl}&type=$type&msgId={$arrPre['msg_id']}">
+               上一条: {$arrPre['title']}
+              </a>
+              {else}
+              <span>暂无</span>
+              {/if}
+            </li>
+            <li class="next">
+              {if $arrNext}
+              <a href="{$_K['siteurl']}/{$strUrl}&type=$type&msgId={$arrNext['msg_id']}">
+                下一条: {$arrNext['title']}
+              </a>
+              {else}
+              <span>暂无</span>
+              {/if}
+            </li>
+          </ul>
+
+
+
+
+
+
+
+    </div>
+  </div>
+  </div>
+  <!-- 我的消息 end &content-panel end -->
+<!--{template user/footer}-->

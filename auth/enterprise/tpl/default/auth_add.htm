@@ -1,0 +1,212 @@
+<!--{template header}-->
+<div class="wrapper">
+<div class="container_24">
+<!--{template user/user_nav}-->
+	<!--main start-->
+<section class="clearfix section">
+<!--{template user/user_side}-->
+<div class="show_panel container_24 po_re">
+ <div class="prefix_3 grid_21">
+  <div class="panel clearfix box">
+  <!--main content-->
+  <div class="">
+   <!--header内容头部 start-->
+    <header class="clearfix box_header" >
+      <h2 class="grid_4 alpha omega box_title t_c">{$_lang['auth_center']}</h2>
+        <div class="grid_17 alpha omega">
+          <nav class="box_nav"> <ul>
+               {loop $auth_item_list $v}
+                 <li {if $code=='enterprise'}
+				        {if $v['auth_code']=='realname'||$v['auth_code']=='enterprise'}
+						 class="selectedLava"
+						{/if}
+				       {elseif $code==$v['auth_code']}
+					   class="selectedLava"
+					   {/if}>
+				{if $v['auth_code']=='realname'||$v['auth_code']=='enterprise'}
+				  {if $identy_auth_info['enterprise']}
+                         <a href="index.php?do={$do}&view={$view}&op={$op}&code=enterprise#userCenter" title="{$v[auth_title]}{$_lang['info']}">
+									身份认证
+						 </a>
+				   {else}
+				        <a href="index.php?do={$do}&view={$view}&op={$op}&code=realname#userCenter" title="{$v[auth_title]}{$_lang['info']}">
+									身份认证
+						 </a>
+				   {/if}
+				{else}
+				    <a href="index.php?do={$do}&view={$view}&op={$op}&code={$v[auth_code]}#userCenter" title="{$v[auth_title]}{$_lang['info']}">
+						{$v[auth_title]}
+				    </a>
+				{/if}
+				</li>
+			   {/loop}
+             </ul>
+          </nav>
+       </div>
+     <div class="clear"></div>
+   </header>
+  <!--header内容头部 end-->
+   {if $verify}
+		 <!--{template verify}-->
+{else}
+  <!--detail内容 start-->
+  <article class="box_detail last_step_three">
+  	<div class="tab clearfix prefix_1 suffix_1 mt_20">
+					{if !$identy_auth_info['realname']&&!$identy_auth_info['enterprise']}
+					<a href="index.php?do={$do}&view={$view}&op={$op}&code=realname" {if $code=='realname'}class="selected"{/if}><span>个人认证</span><b class="arrow arrow_b"></b></a>
+					<a href="index.php?do={$do}&view={$view}&op={$op}&code=enterprise" {if $code=='enterprise'}class="selected"{/if}><span>企业认证</span><b class="arrow arrow_b"></b></a>
+					{elseif $identy_auth_info['realname']}
+					<a href="index.php?do={$do}&view={$view}&op={$op}&code=realname" {if $code=='realname'}class="selected"{/if}><span>个人认证</span><b class="arrow arrow_b"></b></a>
+					{elseif $identy_auth_info['enterprise']}
+					<a href="index.php?do={$do}&view={$view}&op={$op}&code=enterprise" {if $code=='enterprise'}class="selected"{/if}><span>企业认证</span><b class="arrow arrow_b"></b></a>
+				    {/if}
+				</div>
+
+				<div class=" border_t_c">
+
+
+   <!--messages消息 start-->
+    <div class="messages m_infor">
+       <div class="icon16">warning</div>
+                    企业认证免费. {$_lang['customer_service_personnel_will']} {$auth_item[auth_day]}{$_lang['working_days_to_complete_certification']}{$_lang['zh_mh']}客服电话：{if $strRandKf['phone']}{$strRandKf['phone']}{else}暂未填写{/if}
+       <a href="###" class="close">&times;</a>
+    </div>
+    <!--messages消息 end-->
+    <div class="prefix_1 suffix_1 clearfix">
+      <!--step步骤 start-->
+        <div class="step_progress clearfix">
+           {loop $step_arr $k $v}
+			 <div class="step {$k} {if $k==$step}selected{/if}">
+               <span class="icon32">{$k}</span><strong>{$v[0]}</strong>{$v[1]}
+             </div>
+		   {/loop}
+        </div>
+     <!--step步骤 end-->
+    {if $step=='step1'}
+	 <form action="{$ac_url}&step=step2" method="post" id="frm_auth" enctype="multipart/form-data" name="frm_auth">
+	      <div class="form_box pt_20">
+	      <div class="rowElem clearfix">
+			<label class="grid_5 clearfix">
+				<div class="fl_r pr_10">
+					<img src="{$auth_item['auth_big_ico']}" alt="" />
+				</div>
+			</label>
+            <div class="grid_6"> <strong class="font14b">{$auth_item['auth_title']}</strong>
+			<!--<span class="c999 block">{$auth_item['auth_desc']}</span> -->
+			</div>
+           	</div>
+        <div class="rowElem clearfix">
+           <label class="grid_5 t_r">{$_lang['username']}{$_lang['zh_mh']}</label>
+           <div class="grid_4">{$user_info[username]}</div>
+        </div>
+		<div class="rowElem clearfix">
+           <label class="grid_5 t_r">{$_lang['enterprise_name']}{$_lang['zh_mh']}</label>
+             <input type="text" name="fds[company]" id="company"
+			  size="40" {if $auth_info[company]}value="{$auth_info[company]}"{/if}/
+			  limit="required:true;len:4-100" msg="{$_lang['msg_about_registration_num']}" title="{$_lang['title_about_registration_num']}"
+			 msgArea="span_company" class="mr_5" /><span id="span_company"></span>
+        </div>
+        <div class="rowElem clearfix">
+           <label class="grid_5 t_r">{$_lang['ckeck_in_registration_num']}{$_lang['zh_mh']}</label>
+            <input type="text" name="fds[licen_num]" id="licen_num"
+			size="40" {if $auth_info[licen_num]}value="{$auth_info[licen_num]}"{/if}/
+			limit="required:true;len:5-30" msg="{$_lang['msg_about_ckeck_in_registration_num']}" title="{$_lang['title_about_ckeck_in_registration_num']}"
+			msgArea="span_licen_num" class="mr_5" /><span id="span_licen_num"></span>
+        </div>
+        <div class="rowElem clearfix">
+           <label class="grid_5 t_r">{$_lang['business_license_pic']}{$_lang['zh_mh']}</label>
+				<input type="file" name="licen_pic" ext='.gif,.jpg,.png' onchange="isExtName(this,1);" id="licen_pic"/>
+		</div>
+        <div class="rowElem clearfix form_button">
+          {if $auth_info&&$auth_info['auth_status']===0}
+		   <button type="button" class="button" value="{$_lang['wait_for_verify']}"><span class="icon"></span>{$_lang['wait_for_verify']}</button>
+		 {else}
+			<input type="hidden" name="formhash" id="formhash" value="{FORMHASH}">
+            <button type="button" name="sbt_add" class="button" value="{$_lang['auth_now']}" onclick="user_auth()">{$_lang['auth_now']}</button>
+         {/if}
+		</div>
+      </div>
+    </form >
+	{elseif $step=='step2' or $step=='step3'}
+	 <div class="box complete form_box ml_40 mr_40">
+        <div class="prefix_4 suffix_4 clearfix ">
+          	<div class="last_success_step clearfix">
+          	<div class="fl_l {$auth_style} po_re" style="top:30px; left:30px; _left:0px;">
+					<span class="tip_icon"></span>
+            </div>
+            <div class="completedata clearfix">
+               <ul>
+               	<li class="clearfix">
+                     <div class=" grid_2"><img src="{$auth_item['auth_big_ico']}" /></div>
+                      <div class="font14b">{$auth_item['auth_title']}<span class="font12">（{$auth_tips}）</span></div>
+                     <!-- <div class="c999 grid_3 alpha omega">{$auth_item['auth_desc']}</div>-->
+                 </li>
+
+				<li class="clearfix">
+					<div class=" grid_2 ">{$_lang['ckeck_in_registration_num']}{$_lang['zh_mh']}</div>
+					 <div class="c999"> <!--{eval echo kekezu::set_star($auth_info['licen_num'],3,3);}--></div>
+               	 </li>
+
+            </ul>
+        </div>
+       		<div class="fl_r pad10">
+				<a  href="{$ac_url}&step=step1" class="button" onclick="return return_update(this);"  >{$_lang['return_and_modify']}</a>
+			</div>
+			<script type="text/javascript">
+				 function return_update(obj){
+					var url = obj.href;
+					showDialog("返回修改后将重新认证，之前的认证信息会作废，是否确定返回？",'confirm',"{$_lang['operate_notice']}","jump_url('"+url+"');");
+					return false;
+				}
+
+				function jump_url(url){
+					location.href=url
+				}
+
+			</script>
+		</div>
+	   </div>
+     </div>
+    </div>
+   {/if}
+   </div>
+   <div class="clear"></div>
+   </div>
+ </article>
+   <!--detail内容 end-->
+   {/if}
+  </div>
+	 <!--main content end -->
+	<div class="clear"></div>
+  </div>
+ </div>
+ </section>
+ <!--main end-->
+  </div>
+</div>
+<script type="text/javascript">
+	In("form");
+	function user_auth(){
+
+		//var licen_pic = ;
+			//alert(licen_pic);
+       if(!$("#licen_pic").val()){
+	   //	alert(111);
+	   	  showDialog('请上传营业执照图片！', 'alert', '错误提示');return false;
+	   }else{
+
+			form_sbt();
+	   }
+
+
+	}
+	function form_sbt(){
+		//$('#frm_auth').submit();
+		formSub('frm_auth','form',true);
+	}
+	function online_pay(cash){
+		window.location.href='index.php?do=user&view=finance&op=recharge&cash='+cash+'#userCenter';
+	}
+</script>
+<!--{template user/user_footer}-->
+<!--{template footer}-->

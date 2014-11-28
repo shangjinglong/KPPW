@@ -1,0 +1,128 @@
+<!--{template ADMIN_DIRECTORY/tpl/admin_header}-->
+ <script src="../static/js/uploadify/jquery.uploadify.min.js" type="text/javascript"></script>
+<link href="../static/js/uploadify/uploadify.css" rel="stylesheet">
+	<div class="page_title">
+    	<h1>{$_lang['rule_manage']}</h1>
+     	<div class="tool">
+        <a href="index.php?do=$do&view=$view"        {if $op!='edit'}class="here"{/if}>{$_lang['credit_rules_manage']}</a>
+        <a href="index.php?do=$do&view=$view&op=edit" {if $op=='edit'}class="here"{/if}>{$_lang['add_credit_rules']}</a>
+		</div>
+    </div>
+		<div class="box post">
+        <div class="tabcon">
+        	<div class="title"><h2>{if $mark_rule_id}{$_lang['edit_rules']}{else}{$_lang['add_rules']}{/if}</h2></div>
+            <div class="detail">
+               <form action="{$url}" method="post" name="frm1" id="frm1" enctype="multipart/form-data">
+               	   <input type="hidden" name="hdn_mark_rule_id" value="$mark_rule_id">
+                    <table width="100%" border="0" cellspacing="0" cellpadding="0">
+                      <tr>
+                        <th scope="row" width="200">{$_lang['credit_value']}{$_lang['zh_mh']}</th>
+                        <td><input name="txt_g_value" type="text" value="{$mark_info['g_value']}" class="txt" style=" width:260px;" />
+					  </td>
+                      </tr>
+					  <tr>
+                        <th scope="row" width="200">{$_lang['ability_value']}{$_lang['zh_mh']}</th>
+                        <td><input name="txt_m_value" type="text" value="{$mark_info['m_value']}" class="txt" style=" width:260px;" />
+					  </td>
+                      </tr>
+                     <tr>
+                        <th scope="row">{$_lang['employer_name']}{$_lang['zh_mh']}</th>
+                        <td> <input name="txt_g_title" type="text" value="{$mark_info['g_title']}" class="txt" style=" width:260px;" /></td>
+                      </tr>
+
+					  <tr>
+                        <th scope="row">{$_lang['witkey_name']}{$_lang['zh_mh']}</th>
+                        <td> <input name="txt_m_title" type="text" value="{$mark_info['m_title']}" class="txt" style=" width:260px;" /></td>
+                      </tr>
+					 <tr>
+                       <th scope="row">{$_lang['employer_icon']}{$_lang['zh_mh']}</th>
+					   <td>
+						        <input type="file" class="file" name="upload1" id="upload1">
+                                <div class="po_ab" style="left:130px;top:5px;">
+                                    <span style="line-height:15px;" class="ws_prewrap mr_5"></span>
+                                </div>
+								<span id="span_big_icon">
+										<img id="imgPreview1" src="../{$mark_info['g_ico']}" {if !$mark_info['g_ico']} class="hidden" {/if}  />
+
+								</span>
+                                <input type="hidden" name="hdn_g_ico" id="hdn_g_ico" value="{$mark_info['g_ico']}">
+						</td>
+
+                      </tr>
+					  <tr>
+                        <th scope="row">{$_lang['witkey_icon']}{$_lang['zh_mh']}</th>
+                        <td>
+                        	  <input type="file" class="file" name="upload2" id="upload2">
+                                <div class="po_ab" style="left:130px;top:5px;">
+                                    <span style="line-height:15px;" class="ws_prewrap mr_5"></span>
+                                </div>
+								<span id="span_big_icon">
+										<img id="imgPreview2" src="../{$mark_info['m_ico']}" {if !$mark_info['m_ico']} class="hidden" {/if}  />
+
+								</span>
+                                <input type="hidden" name="hdn_m_ico" id="hdn_m_ico" value="{$mark_info['m_ico']}">
+
+						</td>
+                      </tr>
+
+                      <tr>
+                        <th scope="row">&nbsp;</th>
+                        <td>
+	                    	<div class="clearfix padt10">
+	                    	<input type="hidden" name="is_submit" value="1">
+	                        <button class="positive pill primary button" type="submit"
+							onclick="return checkForm(document.getElementById('frm1'),false);"
+							 value={$_lang['submit']}>
+	                        	<span class="check icon"></span>{$_lang['submit']}</button>
+
+	                    	</div>
+                        </td>
+                      </tr>
+                    </table>
+               </form>
+        	</div>
+   		</div>
+    </div>
+<script type="text/javascript">
+	$(function(){
+        	uploadify({
+			  file:'upload1',
+			  text:'上传',
+			  auto:true,
+			  limit:1,
+			  hide:true,
+			  exts:'*.jpg;*.jpeg;*.gif;*.png;*.bmp'
+			  },{
+			  	mode: 'back'
+			},response1);
+    });
+	$(function(){
+            	uploadify({
+			      //debug:true,
+				  text:'上传',
+				  auto:true,
+				  limit:1,
+				  file:'upload2',
+				  hide:true,
+				  exts:'*.jpg;*.jpeg;*.gif;*.png;*.bmp'
+				  },{
+				  	mode: 'back'
+				},response2);
+        });
+	  function response1(json){
+
+              $("#hdn_g_ico").val(json.msg.url);
+              $('#imgPreview1').removeClass('hidden');
+              $('#imgPreview1').attr('src','../'+json.msg.url);
+        }
+
+		function response2(json){
+
+              $("#hdn_m_ico").val(json.msg.url);
+              $('#imgPreview2').removeClass('hidden');
+              $('#imgPreview2').attr('src','../'+json.msg.url);
+        }
+
+
+</script>
+<!--{template ADMIN_DIRECTORY/tpl/admin_footer}-->

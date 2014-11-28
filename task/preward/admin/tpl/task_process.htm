@@ -1,0 +1,166 @@
+<!--{template ADMIN_DIRECTORY/tpl/admin_header}-->
+<div class="page_title">
+    <h1>{$action_arr[$type][1]}{$_lang['manage']}</h1>
+    <div class="tool">
+        <a href="index.php?do=trans&view=rights&type={$type}">{$action_arr[$type][1]}{$_lang['list']}</a>
+		<a href="javascript:void(0);" class="here">{$action_arr[$type][1]}{$_lang['manage']}</a>
+    </div>
+</div>
+ <div class="box post">
+  <div class="tabcon">
+   <div class="title"><h2>{$trans_object[$report_info[obj]]}{$action_arr[$type][1]}#{$report_id}</h2></div>
+    <div class="detail">
+     <form action="index.php?do={$do}&view={$view}&type={$type}&report_id={$report_id}" method="post" name="frm" id="frm">
+      <table width="100%" border="0" cellspacing="0" cellpadding="0">
+
+
+	   <tr>
+       <th scope="row" width="130">{$action_arr[$type][1]}{$_lang['the_promoters']}</th>
+       <td>
+       		<a href="{$_K[siteurl]}/index.php?do=seller&id={$report_info[uid]}" target="_blank">$report_info['username']</a>
+			<font color="red">E-mail</font>:{$user_info['email']}&nbsp;||&nbsp;<font color="red">{$_lang['tel']}</font>:{if $user_info['phone']}$user_info['phone']{else}{$_lang['not_completed']}{/if}&nbsp;||&nbsp;<font color="red">QQ</font>:{if $user_info['qq']}$user_info['qq']{else}{$_lang['not_completed']}{/if}&nbsp;||&nbsp;<font color="red">{$_lang['mobile']}</font>:{if $user_info[mobile]}{else}{$_lang['not_completed']}{/if}
+	   </td>
+      </tr>
+	  <tr>
+       <th scope="row" width="130">{$action_arr[$type][1]}{$_lang['object']}</th>
+       <td>
+       		<a href="{$_K[siteurl]}/index.php?do=seller&id={$report_info[to_uid]}" target="_blank">$report_info['to_username']</a>
+			<font color="red">E-mail</font>:{$to_userinfo['email']}&nbsp;||&nbsp;<font color="red">{$_lang['tel']}</font>:{if $to_userinfo['phone']}$to_userinfo['phone']{else}{$_lang['not_completed']}{/if}&nbsp;||&nbsp;<font color="red">QQ</font>:{if $to_userinfo['qq']}$to_userinfo['qq']{else}{$_lang['not_completed']}{/if}&nbsp;||&nbsp;<font color="red">{$_lang['mobile']}</font>:{if $to_userinfo[mobile]}$to_userinfo[mobile]{else}{$_lang['not_completed']}{/if}
+	   </td>
+      </tr>
+	  <tr>
+         <th scope="row" width="130">{$_lang['apply']}{$action_arr[$type][1]}{$_lang['time']}</th>
+         <td><!--{date('Y-m-d H:i:s',$report_info[on_time])}--></td>
+      </tr>
+	  <tr>
+        <th scope="row" width="130">{$_lang['apply_status']}</th>
+        <td>{$trans_status[$report_info[report_status]]}</td>
+      </tr>
+	 <tr>
+        <th scope="row" width="130">{$action_arr[$type][1]}{$_lang['explain']}</th>
+        <td><!--{eval echo nl2br($report_info['report_desc'])}--></td>
+     </tr>
+	 <tr>
+        <th scope="row" width="130">{$action_arr[$type][1]}{$_lang['attachment']}</th>
+        <td>
+			<!--{eval $filename=substr($report_info[report_file],strrpos($report_info[report_file],'/')+1);}-->
+			{if $report_info[report_file]}<a href="index.php?do={$do}&view={$type}&ac=download&filename=$filename&filepath={$v[report_file]}">{$filename}</a>{else}{$_lang['uncommitted_attachment']}{/if}
+		</td>
+    </tr>
+	<tr>
+         <th scope="row" width="130">任务所属</th>
+         <td>
+         	<a href="{$_K[siteurl]}/index.php?do=task&id={$obj_info[origin_id]}" target="_blank">{$obj_info[origin_title]}</a>
+		{$_lang['task_cost']}{$_lang['zh_mh']} {$obj_info[cash]}
+		  {$trans_object[$report_info[obj]]}{$_lang['id']}#{$report_info['obj_id']}<a href="{$_K[siteurl]}/index.php?do=task&id={$obj_info[origin_id]}&view=work" target="_blank">查看稿件</a>
+		 </td>
+       </tr>
+	<tr>
+       <th scope="row" width="130">{$action_arr[$type][1]}{$_lang['treatment_scheme']}</th>
+	   <td>
+	   	{if $report_info['report_status'] != 4}
+			{if $process_can['close']}
+			{if $report_info['obj'] == 'task'}
+				<input type="radio" name="op_result[task]" value="1" checked="checked">关闭此任务
+				<input type="radio" name="op_result[task]" value="2">系统选稿
+			{elseif $report_info['obj'] == 'work'}
+				  {if in_array($obj_info['obj_status'],array(1,2,3,4,6))}
+				<input type="radio" name="op_result[task]" value="5">取消中标,系统选稿
+				{else}
+				<input type="radio" name="op_result[task]" value="4" checked="checked">屏蔽稿件
+                {/if}
+			{/if}
+
+				<input type="radio" name="op_result[task]" value="3">举报无效
+				<input type="radio" name="op_result[task]" value="6">账号禁用
+			{/if}
+		{else}
+		{$report_info[op_result]}
+		{/if}
+	   </td>
+	</tr>
+	<tr>
+      <th scope="row">&nbsp;</th>
+      <td>
+          <div class="clearfix padt10">
+             {if $report_info['report_status'] != 4}
+			 <input type="hidden" name="op_result[result]" id="result">
+          	 <input type="hidden" name="op_result[action]" id="action">
+			 <label for="reply" id="lab_replay" style="display:none;" >{$_lang['please_explain_reason']}{$_lang['zh_mh']}<br>
+			 <textarea cols="25"  rows="7"  style="width:360px;" name="op_result[reply]" id="reply" onclick="this.value=''">{$_lang['please_enter_untenable_reason']}</textarea>
+			 </label>
+          	 <button class="positive primary pill button" type="submit" name="btn_report" id="btn_report" value="{$_lang['handle']}{$action_arr[$type][1]}" onclick="return report();"><span class="icon pen"></span>{$_lang['handle']}{$action_arr[$type][1]}</button>
+			 {if $type == 'rights'}
+			 <button class="positive primary pill button" type="submit" name="btn_report" value="{$action_arr[$type][1]}{$_lang['untenable']}" onclick="return check();"><span class="icon cross "></span>{$action_arr[$type][1]}{$_lang['untenable']}</button>
+			 {/if}
+			 {/if}
+          </div>
+      </td>
+   </tr>
+ </table>
+ </form>
+ </div>
+ </div>
+</div>
+<script type="text/javascript">
+	function report(){
+		var reportType='{$type}';//交易维权类型 rights 维权    report举报
+		if(reportType=="report"){
+	    	var content='';
+				if($("#cancel_bid").is(":checked")){
+					content+="{$_lang['cancel_user']}{$report_info['to_username']}{$_lang['de']}#{$report_info['obj_id']}{$_lang['hao']}{$trans_object[$report_info['obj']]}{$_lang['bid_status']};<br>";
+				}
+				switch($('input:radio:checked').val()){
+						case '1':
+						content+="关闭此任务";
+						break;
+						case '2':
+						content+="系统选稿";
+						break;
+						case '3':
+						content+="举报无效";
+						break;
+						case '4':
+						content+="屏蔽稿件";
+						break;
+						case '5':
+						content+="取消中标，系统选稿";
+						break;
+						case '6':
+						content+="账号禁用";
+						break;
+					}
+			art.dialog({
+						title: "{$_lang['confirmation_prompts']}",
+				 		content: "{$_lang['current_treatment_options']}{$_lang['zh_mh']}<br>"+content,
+						icon: 'question',
+						yesFn: function(){
+						$("#result").val(content);
+						$("#action").val('pass');$("#frm").submit()},
+				    noFn :function(){this.close();return false;}
+				});
+			return false;
+
+		}
+	}
+	function check(){
+		art.dialog({
+   			title: "{$_lang['confirmation_not_accept']}{$action_arr[$type][1]}{$_lang['record']}?",
+ 			content:document.getElementById('lab_replay'),
+			follow: document.getElementById('btn_report'),
+			icon: 'question',
+   			yesFn: function(){
+				var i = document.getElementById('reply').value;
+				if(!i){
+					art.dialog.alert("{$_lang['not_accept_reason_not_empty']}!");
+					return false;
+				}
+				$("#result").val("{$action_arr[$type][1]}{$_lang['not_established']}:"+document.getElementById('reply').value);
+				$("#action").val('no_pass');$("#frm").submit()},
+			noFn :function(){this.close();return false;}
+		});
+
+		return false;
+	}
+</script>
+<!--{template ADMIN_DIRECTORY/tpl/admin_footer}-->

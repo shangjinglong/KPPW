@@ -1,0 +1,100 @@
+<!--{template ADMIN_DIRECTORY/tpl/admin_header}-->
+<div class="page_title">
+    	<h1>{$_lang['admin_msg_intertpl_title']}</h1>
+         <div class="tool">         
+            <a href="index.php?do=msg&view=internal" {if $view == 'internal'}class="here"{/if} > {$_lang['sms_config']}</a>
+            <a href="index.php?do=msg&view=intertpl" {if $view == 'intertpl'}class="here"{/if} > {$_lang['sms_tpl_edit']}</a>
+    	</div>
+</div>
+<div class="box post">
+        <div class="tabcon">
+        	<div class="title"><h2> {$_lang['sms_email_config_manage']}</h2></div>
+			 <div class="detail">
+			 	
+    <form name="frm_config_msg" action="index.php?do=msg&view=intertpl" method="post">
+        <input type="hidden" name="hdn_tpl_code" id="hdn_tpl_code" value="{$slt_tpl_code}">
+        <table width="96%" height="" border="0" cellspacing="0" cellpadding="0" >
+            <tr>    
+                 <th scope="row" width="130">
+                    {$_lang['type_of_sms_email']}{$_lang['zh_mh']}
+                </th>
+                <td>
+                    <select name="slt_tpl_code" id="slt_tpl_code" class="ps vm">
+                        <option value="-1">{$_lang['select_tpl_type']}</option>
+						{loop $config_msg_arr $v}
+							<option {if $slt_tpl_code==$v['k']}selected="selected"{/if}  value="{$v['k']}">{$v['desc']}{$_lang['msg_tips']}</option>
+						{/loop}
+                    </select>
+                </td>
+            </tr>
+            <tr>
+                 <th scope="row">
+                    {$_lang['sms_email_content']}{$_lang['zh_mh']}
+                </th>
+                <td>
+                    <div class="field" style="margin-left:-10px;*margin-left:0">
+                        <textarea name="tar_msg_temp_content" id="system-create-location_1" id="tar_content" class="xheditor {tools:'Source',urlBase:'{$_K['siteurl']}',html5Upload:false,upImgUrl:'../index.php?do=ajax&view=upload&filename=filedata'}" cols="70" style="width: 75%; display: none;" rows="15">$msg_tpl</textarea>
+                    </div>
+                </td>
+            </tr> 
+			
+            <tr>
+            	<th scope="row">&nbsp;</th>
+				<td>
+					<div class="clearfix padt10">
+					  <button class="positive primary pill button" type="submit" name='sbt_edit' value="{$_lang['submit']}"><span class="check icon"></span>{$_lang['submit']}</button>
+					
+                 </div>
+				</td>
+				
+            </tr>
+        </table>
+    </form>
+</div></div></div>
+<script type="text/javascript">
+	$(function(){
+		$("#slt_tpl_code").change(function(){
+			var selectValue = $(this).val();
+            if (selectValue != '-1') {
+                var url = "index.php?do=msg&view=intertpl";
+                $.ajax({
+                    type: "POST",
+                    url: url,
+                    cache: false,
+                    async: false,
+                    data: "tpl_code=" + selectValue,
+                    dataType: "json",
+                    error: function(json){
+                        $('#system-create-location_1').val('');
+							if($("#system-create-location_2")){
+								$("#system-create-location_2").val('');
+							}
+                        $("#hdn_tpl_code").val('');
+                        $('#list').html("{$_lang['null_result_please_retry_later']}");
+                        
+                    },
+                    success: function(json){
+                        if (json.status == 0) {
+                            $('#list').html("{$_lang['null_tpl_content']}");
+                        }
+                        else {
+							var data=json.data;
+                            $('#list').html('');
+                            $('#system-create-location_1').val(data['0'].content);
+								if($("#system-create-location_2")){
+									$("#system-create-location_2").val(data['1'].content);
+								}
+                            $("#hdn_tpl_code").val(data['0'].tpl_code);
+                        }
+                    }
+                });
+            }
+            else {
+				art.dialog.alert("{$_lang['select_tpl']}");
+                $('#system-create-location_'+i).val('');
+                return false;
+            }
+		})
+	})
+</script>
+<!--{template ADMIN_DIRECTORY/tpl/admin_footer}-->

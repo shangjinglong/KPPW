@@ -1,0 +1,495 @@
+<!--{template ADMIN_DIRECTORY/tpl/admin_header}-->
+<div class="page_title">
+    	<h1>{$_lang['global_config']}</h1>
+         <div class="tool">
+            <a href="index.php?do=config&view=basic&op=info" {if $op == 'info'}class="here"{/if} > {$_lang['website_config']}</a>
+            <a href="index.php?do=config&view=basic&op=conf" {if $op == 'conf'}class="here"{/if} >	{$_lang['basic_config']}</a>
+			<a href="index.php?do=config&view=basic&op=seo" {if $op == 'seo'}class="here"{/if} >{$_lang['seo_config']}</a>
+			<a href="index.php?do=config&view=mail" {if $view == 'mail'}class="here"{/if} >{$_lang['mail_config']}</a>
+    	</div>
+</div>
+
+<div class="box post">
+        <div class="tabcon">
+        	<div class="title"><h2>{if $op == 'info'}{$_lang['website_config']}{elseif $op == 'conf'}{$_lang['basic_config']}{elseif $op == 'seo'}SEO配置{/if}<span ><a href="#" style="font-size:small;">{if $op == 'seo'}查看相关教程{/if}</a></span></h2>
+			</div>
+            <div class="detail">
+                 <form name="frm_config_basic" id="frm_config_basic" action="index.php?do=config&view=basic&op={$op}" method="post" accept-charset="{$_K['charset']}" enctype='multipart/form-data'>
+                    <table width="100%" border="0" cellspacing="0" cellpadding="0">
+                     {if $op=='info'}
+					  <tr>
+                        <th scope="row" width="130"> {$_lang['site_name']}{$_lang['zh_mh']}</th>
+                        <td>
+						<input type="text" size="50" class="txt" name="website_name"
+						 value="$config_arr['website_name']" maxlength="100"
+						 limit="required:true;len:3-100;general:false"
+						 msg="{$_lang['site_name_cannot_be_empty']}{$_lang['zh_dh']}{$_lang['length_3_100']}" title='{$_lang['please_input_the_website_name']}'
+						 msgArea="web_name_msg" />
+                    	<span id="web_name_msg"></span>
+						<br/>&nbsp;&nbsp;{$_lang['site_name_description']}
+                        </td>
+                      </tr>
+                      <tr>
+                        <th scope="row">{$_lang['website_URL']}{$_lang['zh_mh']}</th>
+                        <td><input type="text" size="50" name="website_url"  value="$config_arr['website_url']" maxlength="100" limit="required:true;len:3-100;general:false" msg="{$_lang['website_address_error']}{$_lang['zh_dh']}{$_lang['length']}3-100" msgArea="web_url_msg" class="txt"/>
+                    <span id="web_url_msg"></span><br/>&nbsp;&nbsp;{$_lang['fill_in_your_site_complete_domain_name']}{$_lang['zh_jh']}{$_lang['for_example']}: http://www.kekezu.com{$_lang['zh_dh']}{$_lang['not_slash_at_the_end_of']} (“/”) </td>
+                      </tr>
+
+                     <tr>
+         <th scope="row">
+                    {$_lang['website_logo']}{$_lang['zh_mh']}
+                </th>
+                <td>
+                	<input type="file" class="file" name="upload" id="upload"><span id="span_msg" style="color:red"></span>
+                    <input type="hidden" name = "web_logo" id="web_logo" value="$config_arr['web_logo']">
+					 <img id="logo_img" src="../{$config_arr['web_logo']}" {if !$config_arr['web_logo']}class="hidden"{/if} width="210px;" height="65px;">
+                    <div class="c999">
+                        {$_lang['support_img_type']}
+                    </div>
+					&nbsp;&nbsp;LOGO建议大小：{$_lang['height']}65px {$_lang['width']}210px {$_lang['map_type']}:jpeg,gif,png,jpg
+}
+                </td>
+            </tr>
+            <tr>
+                <th scope="row">
+                    {$_lang['company_name']}{$_lang['zh_mh']}
+                </th>
+                <td>
+                    <input type="text" size="50" name="company" value="{$config_arr['company']}" limit="len:3-100" msg="{$_lang['company_name']}{$_lang['length']}{$_lang['zh_mh']}3-100,{$_lang['no_special_characters']}" msgArea="txt_company_msg" class="txt"/><span id="txt_company_msg"></span><br/>&nbsp;&nbsp;{$_lang['bottom_show_contact']}
+                </td>
+            </tr>
+            <tr>
+                <th scope="row">
+                    {$_lang['contact_address']}{$_lang['zh_mh']}
+                </th>
+                <td>
+                    <input type="text" size="50" maxlength="200" name="address" value="{$config_arr['address']}" limit="len:3-200;general:false" msg="{$_lang['contact_address']}{$_lang['length']}{$_lang['zh_mh']}3-200" msgArea="txt_address_msg" class="txt"/><span id="txt_address_msg"></span><br/>&nbsp;&nbsp;{$_lang['bottom_show_contact']}
+                </td>
+            </tr>
+            <tr>
+                <th scope="row">
+                    {$_lang['contact_tel']}{$_lang['zh_mh']}
+                </th>
+                <td>
+                    <input type="text" size="50" maxlength="20" name="phone" value="{$config_arr['phone']}" class="txt"/><br/>&nbsp;&nbsp;{$_lang['bottom_show_contact']}
+                </td>
+            </tr>
+
+
+            <tr>
+                <th scope="row">
+                    {$_lang['zip_the_website_registration']}{$_lang['zh_mh']}
+                </th>
+                <td>
+                    <input type="text" size="50" name="filing" value="{$config_arr['filing']}" limit="len:3-20;general:false" msg="{$_lang['record_number_length']}3-20" msgArea="txt_filing_msg" class="txt"/><span id="txt_filing_msg"></span><br/>&nbsp;&nbsp;{$_lang['icp_info']}
+                </td>
+            </tr>
+
+		    <tr>
+                <th scope="row">
+                                                      前台页脚版权信息修改{$_lang['zh_mh']}
+                </th>
+                <td>
+                   <input type="text" size="50" name="copyright" value="{$config_arr['copyright']}" limit="len:3-100" msg="" msgArea="" class="txt"/><span id=""></span><br/>将显示在页面底部的版权信息处
+                </td>
+            </tr>
+
+            <tr>
+                <th scope="row">
+                    {$_lang['default_lang']}{$_lang['zh_mh']}
+                </th>
+                <td>
+                <select name="lang">
+                {loop $lang_arr $k $v}
+                	<option value="{$k}" {if $config_arr['lang']==$k}selected{/if}>{$v}</option>
+                {/loop}
+                </select>
+                </td>
+            </tr>
+            <tr>
+                <th scope="row">
+                    {$_lang['third_party_code_statistics']}{$_lang['zh_mh']}
+                </th>
+                <td>
+                    <textarea cols="50" name="stats_code" msg="{$_lang['third_party_code_statistics']}{$_lang['length']}3-500" msgArea="txt_stats_code_msg" rows="3" class="textarea"><!--{eval echo stripslashes(stripslashes($config_arr['stats_code']));}--></textarea>
+                    <span id="txt_stats_code_msg"></span><br/>&nbsp;&nbsp;{$_lang['js_code']}
+                </td>
+            </tr>
+            <tr>
+                <th scope="row">
+                    {$_lang['is_close']}{$_lang['zh_mh']}
+                </th>
+                <td>
+                    <label for="checkclose1">
+                        <input type="radio" id="checkclose1" name="is_close" {if $config_arr['is_close']==1}checked="checked"{/if} value="1" />{$_lang['close']}
+                    </label>
+                    <label for="checkclose2">
+                        <input type="radio" id="checkclose2" name="is_close" {if $config_arr['is_close']==2}checked="checked"{/if} value="2" />{$_lang['open']}
+                    </label>
+                </td>
+            </tr>
+            <tr id="close_true" style="display:none;">
+                <th scope="row">
+                    {$_lang['website_close_reason']}{$_lang['zh_mh']}
+                </th>
+                <td>
+                    <textarea cols="52" name="close_reason" rows="3" class="textarea">{$config_arr['close_reason']}</textarea>
+                </td>
+            </tr>
+			{elseif $op=='conf'}
+
+     <!--    <tr>
+                <th scope="row">
+                    {$_lang['voucher_is_enabled']}{$_lang['zh_mh']}
+                </th>
+                <td>
+                    <label for="rdo_credit_is_allow">
+                        <input type="radio" id="rdo_credit_is_allow" onclick="if(this.checked){$('#sp_inp_credit_rename').hide();}else{$('#sp_inp_credit_rename').show()}" name="credit_is_allow" {if $config_arr['credit_is_allow']==2}checked="checked" {/if} value="2">{$_lang['close']}
+                    </label>
+                    <label for="rdo_crdeit_is_allow2">
+                        <input type="radio" id="rdo_crdeit_is_allow2" onclick="if(this.checked){$('#sp_inp_credit_rename').show();}else{$('#sp_inp_credit_rename').hide()}" name="credit_is_allow" {if $config_arr['credit_is_allow']==1}checked="checked" {/if} value="1">{$_lang['open']}
+                    </label><b style="font-weight:normal;" id="sp_inp_credit_rename" {if $credit_is_allow==2}style="display:none;"{/if}>{$_lang['vouchers_renamed']}{$_lang['zh_mh']}  <input type="text"  class="txt" name="credit_rename" id="inp_credit_rename" value="$config_arr['credit_rename']">({$_lang['default_please_leave_blank']})</b>
+                </td>
+            </tr> -->
+			<tr>
+                <th scope="row">
+                    {$_lang['attachment_cap']}{$_lang['zh_mh']}
+                </th>
+                <td>
+                    <input type="text" size="50" name="max_size" value="{$config_arr['max_size']}" limit="required:true;type:int;len:1-2" value="2" msg="{$_lang['attachment_cap']}" msgArea="txt_max_size_msg" class="txt"/><b style="color:red">*</b>
+                    <span id="txt_max_size_msg"></span>{$_lang['attachment_cap_notice']}
+                </td>
+            </tr>
+            <tr>
+                <th scope="row">
+                    {$_lang['attachment_format']}{$_lang['zh_mh']}
+                </th>
+                <td>
+                    <input type="text" size="50" name="file_type" value="{$config_arr['file_type']}" limit="required:true;len:3-100;general:false" msg="{$_lang['attachment_format_msg']}{$_lang['zh_mh']}3-100" msgArea="txt_file_type_msg" class="txt"/><b style="color:red">*</b>
+                    <span id="txt_file_type_msg"></span>{$_lang['attachment_format_notice']}
+                </td>
+            </tr>
+            <tr>
+                <th scope="row">
+                    {$_lang['user_disable_keyword']}{$_lang['zh_mh']}
+                </th>
+                <td>
+                    <textarea cols="50" name="ban_users" rows="3" class="textarea">{$config_arr['ban_users']}</textarea>
+                   {$_lang['user_disable_keyword_msg']}
+                </td>
+            </tr>
+            <tr>
+                <th scope="row">
+                    {$_lang['content_disable_keyword']}{$_lang['zh_mh']}
+                </th>
+                <td>
+                    <textarea cols="50" name="ban_content" rows="3" class="textarea">{$config_arr['ban_content']}</textarea>
+                   {$_lang['content_disable_keyword_msg']}
+                </td>
+            </tr>
+            <tr>
+                <th scope="row">
+                    {$_lang['register_time_limit']}{$_lang['zh_mh']}
+                </th>
+                <td>
+                    <input type="text" size="51" name="reg_limit" value="{$config_arr['reg_limit']}" limit="type:int" msg="{$_lang['register_time_limit_msg']}" msgArea="txt_reg_limit_msg" class="txt"/><span id="txt_reg_limit_msg"></span>{$_lang['register_time_limit_notice']}
+                </td>
+            </tr>
+			<tr>
+                <th scope="row">
+                   {$_lang['user_email_active']}{$_lang['zh_mh']}
+                </th>
+                <td>
+                	<label for="red_reg">
+                        <input type="radio" id="rdo_reg" name="allow_reg_action" {if $config_arr['allow_reg_action']==1}checked="checked" {/if}value="1" />{$_lang['open']}
+                    </label>
+                    <label for="rdo_reg2">
+                        <input type="radio" id="rdo_reg2" name="allow_reg_action" {if $config_arr['allow_reg_action']==0}checked="checked" {/if}value="0" />{$_lang['close']}
+                    </label>
+					{$_lang['user_email_active_notice']}
+
+                </td>
+            </tr>
+			{elseif $op=='seo'}
+
+			<tr>
+               <th scope="row">
+                      {$_lang['is_pseudo_static']}{$_lang['zh_mh']}
+                </th>
+                <td>
+                    <label for="rdo_is_rewrite_1">
+                        <input type="radio" id="rdo_is_rewrite_1" name="is_rewrite" {if $config_arr['is_rewrite']==0||!$config_arr['is_rewrite']} checked="checked" {/if} value="0" />{$_lang['close']}
+                    </label>
+                    <label for="rdo_is_rewrite_2">
+                        <input type="radio" id="rdo_is_rewrite_2" name="is_rewrite" {if $config_arr['is_rewrite']==1} checked="checked" {/if} value="1" />{$_lang['open']}
+                    </label>
+                    
+                </td>
+            </tr>
+
+			<tr>
+               <th scope="row">
+            {$_lang['second_domain']}
+                </th>
+                <td>
+                    <label for="rdo_second_domain_1">
+                        <input type="radio" id="rdo_second_domain_1" name="second_domain" {if $config_arr['second_domain']==0||!$config_arr['second_domain']} checked="checked" {/if} value="0" />{$_lang['close']}
+                    </label>
+                    <label for="rdo_second_domain_2">
+                        <input type="radio" id="rdo_second_domain_2" name="second_domain" {if $config_arr['second_domain']==1} checked="checked" {/if} value="1" />{$_lang['open']}
+                    </label>
+					<span id="t_domain" style='display:none;'>
+					<input type="text" size="20" name="top_domain" id="top_domain" value="{$config_arr['top_domain']}"
+					 class="txt"><b style="color:red">*</b>{$_lang['top_domain_desc']}
+              		</span>
+					<div>({$_lang['pan_analytic']})</div>
+			   </td>
+            </tr>
+            <tr>
+                <th scope="row">
+                    首页seo标题{$_lang['zh_mh']}
+                </th>
+                <td>
+                    <input type="text" size="50" name="index_seo_title" value="{$config_arr['index_seo_title']}" limit="required:true;len:3-100;general:false" msg="{$_lang['website_title_msg']}" msgArea="index_seo_title_msg" maxlength="100" class="txt"/><b style="color:red">*</b>
+                    <span id="index_seo_title_msg"></span>{$_lang['website_title_notice']}
+                </td>
+            </tr>
+				<tr>
+                <th scope="row">
+                    首页seo关键字{$_lang['zh_mh']}
+                </th>
+                <td>
+                    <input type="text" size="50" name="index_seo_keyword" value="{$config_arr['index_seo_keyword']}" limit="required:true;len:3-500;general:false" msg="{$_lang['meta_keywords_msg']}" msgArea = "index_seo_keywords_msg" class="txt"/>
+                    <span id="index_seo_keywords_msg"></span>{$_lang['meta_keywords_notice']}
+                </td>
+	            </tr>
+	            <tr>
+                <th scope="row">
+                    首页seo描述{$_lang['zh_mh']}
+                </th>
+                <td>
+                    <textarea cols="50" rows="8" name="index_seo_desc" limit="required:true;len:3-500;general:false" msg="{$_lang['meta_description_msg']}" msgArea = "index_seo_description_msg" rows="3" class="textarea">{$config_arr['index_seo_desc']}</textarea>
+                    <span id="index_seo_description_msg"></span>{$_lang['meta_description_notice']}
+                </td>
+            	</tr>
+				 <tr>
+                <th scope="row">
+                    任务大厅seo标题{$_lang['zh_mh']}
+                </th>
+                <td>
+                    <input type="text" size="50" name="task_seo_title" value="{$config_arr['task_seo_title']}" limit="required:true;len:3-100;general:false" msg="{$_lang['website_title_msg']}" msgArea="task_seo_title_msg" maxlength="100" class="txt"/><b style="color:red">*</b>
+                    <span id="task_seo_title_msg"></span>
+                </td>
+            </tr>
+				<tr>
+                <th scope="row">
+                    任务大厅seo关键字{$_lang['zh_mh']}
+                </th>
+                <td>
+                    <input type="text" size="50" name="task_seo_keyword" value="{$config_arr['task_seo_keyword']}" limit="required:true;len:3-500;general:false" msg="{$_lang['meta_keywords_msg']}" msgArea = "task_seo_keywords_msg" class="txt"/>
+                    <span id="task_seo_keywords_msg"></span>
+                </td>
+	            </tr>
+	            <tr>
+                <th scope="row">
+                   任务大厅seo描述{$_lang['zh_mh']}
+                </th>
+                <td>
+                    <textarea cols="50" rows="8" name="task_seo_desc" limit="required:true;len:3-500;general:false" msg="{$_lang['meta_description_msg']}" msgArea = "task_seo_description_msg" rows="3" class="textarea">{$config_arr['task_seo_desc']}</textarea>
+                    <span id="task_seo_description_msg"></span>
+                </td>
+            	</tr>
+					 <tr>
+                <th scope="row">
+                   威客商城seo标题{$_lang['zh_mh']}
+                </th>
+                <td>
+                    <input type="text" size="50" name="goods_seo_title" value="{$config_arr['goods_seo_title']}" limit="required:true;len:3-100;general:false" msg="{$_lang['website_title_msg']}" msgArea="goods_seo_title_msg" maxlength="100" class="txt"/><b style="color:red">*</b>
+                    <span id="goods_seo_title_msg"></span>
+                </td>
+            </tr>
+				<tr>
+                <th scope="row">
+                    威客商城seo关键字{$_lang['zh_mh']}
+                </th>
+                <td>
+                    <input type="text" size="50" name="goods_seo_keyword" value="{$config_arr['goods_seo_keyword']}" limit="required:true;len:3-500;general:false" msg="{$_lang['meta_keywords_msg']}" msgArea = "goods_seo_keywords_msg" class="txt"/>
+                    <span id="goods_seo_keywords_msg"></span>
+                </td>
+	            </tr>
+	            <tr>
+                <th scope="row">
+                  威客商城seo描述{$_lang['zh_mh']}
+                </th>
+                <td>
+                    <textarea cols="50" rows="8" name="goods_seo_desc" limit="required:true;len:3-500;general:false" msg="{$_lang['meta_description_msg']}" msgArea = "goods_seo_description_msg" rows="3" class="textarea">{$config_arr['goods_seo_desc']}</textarea>
+                    <span id="goods_seo_description_msg"></span>
+                </td>
+            	</tr>
+					 <tr>
+                <th scope="row">
+                    服务商列表seo标题{$_lang['zh_mh']}
+                </th>
+                <td>
+                    <input type="text" size="50" name="seller_seo_title" value="{$config_arr['seller_seo_title']}" limit="required:true;len:3-100;general:false" msg="{$_lang['website_title_msg']}" msgArea="seller_seo_title_msg" maxlength="100" class="txt"/><b style="color:red">*</b>
+                    <span id="seller_seo_title_msg"></span>
+                </td>
+            </tr>
+				<tr>
+                <th scope="row">
+                    服务商列表seo关键字{$_lang['zh_mh']}
+                </th>
+                <td>
+                    <input type="text" size="50" name="seller_seo_keyword" value="{$config_arr['seller_seo_keyword']}" limit="required:true;len:3-500;general:false" msg="{$_lang['meta_keywords_msg']}" msgArea = "seller_seo_keywords_msg" class="txt"/>
+                    <span id="seller_seo_keywords_msg"></span>
+                </td>
+	            </tr>
+	            <tr>
+                <th scope="row">
+                   服务商列表seo描述{$_lang['zh_mh']}
+                </th>
+                <td>
+                    <textarea cols="50" rows="8" name="seller_seo_desc" limit="required:true;len:3-500;general:false" msg="{$_lang['meta_description_msg']}" msgArea = "seller_seo_description_msg" rows="3" class="textarea">{$config_arr['seller_seo_desc']}</textarea>
+                    <span id="seller_seo_description_msg"></span>
+                </td>
+            	</tr>
+					 <tr>
+                <th scope="row">
+                    成功案例seo标题{$_lang['zh_mh']}
+                </th>
+                <td>
+                    <input type="text" size="50" name="case_seo_title" value="{$config_arr['case_seo_title']}" limit="required:true;len:3-100;general:false" msg="{$_lang['website_title_msg']}" msgArea="case_seo_title_msg" maxlength="100" class="txt"/><b style="color:red">*</b>
+                    <span id="case_seo_title_msg"></span>
+                </td>
+            </tr>
+				<tr>
+                <th scope="row">
+                    成功案例seo关键字{$_lang['zh_mh']}
+                </th>
+                <td>
+                    <input type="text" size="50" name="case_seo_keyword" value="{$config_arr['case_seo_keyword']}" limit="required:true;len:3-500;general:false" msg="{$_lang['meta_keywords_msg']}" msgArea = "case_seo_keywords_msg" class="txt"/>
+                    <span id="case_seo_keywords_msg"></span>
+                </td>
+	            </tr>
+	            <tr>
+                <th scope="row">
+                   成功案例seo描述{$_lang['zh_mh']}
+                </th>
+                <td>
+                    <textarea cols="50" rows="8" name="case_seo_desc" limit="required:true;len:3-500;general:false" msg="{$_lang['meta_description_msg']}" msgArea = "case_seo_description_msg" rows="3" class="textarea">{$config_arr['case_seo_desc']}</textarea>
+                    <span id="case_seo_description_msg"></span>
+                </td>
+            	</tr>
+				 <tr>
+                <th scope="row">
+                    资讯中心seo标题{$_lang['zh_mh']}
+                </th>
+                <td>
+                    <input type="text" size="50" name="article_seo_title" value="{$config_arr['article_seo_title']}" limit="required:true;len:3-100;general:false" msg="{$_lang['website_title_msg']}" msgArea="article_seo_title_msg" maxlength="100" class="txt"/><b style="color:red">*</b>
+                    <span id="article_seo_title_msg"></span>
+                </td>
+            </tr>
+				<tr>
+                <th scope="row">
+                    资讯中心seo关键字{$_lang['zh_mh']}
+                </th>
+                <td>
+                    <input type="text" size="50" name="article_seo_keyword" value="{$config_arr['article_seo_keyword']}" limit="required:true;len:3-500;general:false" msg="{$_lang['meta_keywords_msg']}" msgArea = "article_seo_keywords_msg" class="txt"/>
+                    <span id="article_seo_keywords_msg"></span>
+                </td>
+	            </tr>
+	            <tr>
+                <th scope="row">
+                   资讯中心seo描述{$_lang['zh_mh']}
+                </th>
+                <td>
+                    <textarea cols="50" rows="8" name="article_seo_desc" limit="required:true;len:3-500;general:false" msg="{$_lang['meta_description_msg']}" msgArea = "article_seo_description_msg" rows="3" class="textarea">{$config_arr['article_seo_desc']}</textarea>
+                    <span id="article_seo_description_msg"></span>
+                </td>
+            	</tr>
+			{/if}
+			<th scope="row">&nbsp;</th>
+			<td>
+				<div class="clearfix padt10">
+                                <button class="positive pill primary button" type="submit" name='submit' value="{$_lang['submit']}"><span class="check icon"></span>{$_lang['submit']}</button>
+
+                </div>
+			</td>
+
+                    </table>
+
+
+
+        </form>
+            </div>
+        </div>
+
+
+    </div>
+
+<script src="../static/js/uploadify/jquery.uploadify.min.js" type="text/javascript">
+        </script>
+        <link href="../static/js/uploadify/uploadify.css" rel="stylesheet">
+<script type="text/javascript">
+    $(function(){
+    	$("#rdo_second_domain_2").click(function(){
+			$("#t_domain").show();
+		})
+		if($("#rdo_second_domain_2").is(":checked")){
+			$("#t_domain").show();
+		}
+    	$("#rdo_second_domain_1").click(function(){
+			$("#t_domain").hide();
+		})
+        $("#frm_config_basic").submit(function(){
+            var value = $("#fle_web_logo").val();
+            if (value) {
+                s = value.lastIndexOf(".");
+                lastname = value.substring(s, value.length);
+                if (lastname.toLowerCase() != ".gif" && lastname.toLowerCase() != ".jpg" && lastname.toLowerCase() != ".png" && lastname.toLowerCase() != ".jpeg") {
+                    alert("{$_lang['file_type_error']}")
+                    $(this).focus();
+                    return false;
+                }
+                else {
+                    return true;
+                }
+            }
+
+
+        })
+        if ($("#checkclose1").attr("checked")) {
+            $("#close_true").show();
+        }
+        else {
+            $("#close_true").hide();
+        }
+        $("#checkclose1").click(function(){
+            $("#close_true").show();
+        })
+        $("#checkclose2").click(function(){
+            $("#close_true").hide();
+        })
+$(function(){
+    uploadify({
+        auto: true,
+        size: "{$basic_config['max_size']}MB",
+        exts: '*.;*.jpeg;*.gif;*.png',
+		resText: 'hdn_logo_img',
+		text   :'上传LOGO',
+        limit: 1,
+    },{
+        fileType: 'att',
+        objType: 'att',
+		mode: 'back'
+    },uploadResponse);
+});
+
+    })
+	function uploadResponse(json){
+		$('#logo_img').removeClass('hidden');
+		$('#logo_img').attr('src','../'+json.msg.url);
+	    $("#web_logo").val(json.msg.url);
+}
+</script>
+<!--{template ADMIN_DIRECTORY/tpl/admin_footer}-->

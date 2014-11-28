@@ -1,0 +1,155 @@
+<!--{template ADMIN_DIRECTORY/tpl/admin_header}-->
+<div class="page_title">
+    <h1>{$_lang['prom_relation_manage']}</h1>
+    <div class="tool">
+        <a href="index.php?do={$do}&&view={$view}" class="here">{$_lang['relation_manage']}</a>
+    </div>
+</div>
+<div class="box search p_relative">
+    <div class="title">
+        <h2>{$_lang['search']}</h2>
+    </div>
+    <div class="detail">
+        <form method="post" action="index.php?do={$do}&view={$view}" id="frm_art_search">
+        <input type="hidden" name="page" value="{$page}">
+        <table cellspacing="0" cellpadding="0">
+         <tbody>
+           <tr>
+             <th>
+          编号
+             </th>
+              <td>
+                <input type="text" size='10' class="txt" name="w[relation_id]" value="{$w['relation_id']}" onkeyup="clearstr(this);">
+              </td>
+               <th>
+                        {$_lang['upline']}
+              </th>
+                <td>
+                  <input type="text" size="10" class="txt" name='w[prom_username]' value="{$w['prom_username']}">
+                </td>
+			<th>
+                        {$_lang['downline']}
+              </th>
+                <td>
+                  <input type="text" size="10" class="txt" name='w[username]' value="{$w['username']}">
+                </td>
+              <th>
+                         {$_lang['prom_type']}
+               </th>
+                <td>
+                  <select name="w[prom_type]">
+                      <option value="">--{$_lang['all']}--</option>
+					  {loop $type_arr $k $v}
+					   {if $v['type']!='auth'}
+					  	<option {if $w['prom_type']==$v['prom_code']}selected="selected" {/if}  value="{$v['prom_code']}">$v['prom_item']</option>
+					 {/if}
+					  {/loop}
+                  </select>
+               </td>
+            </tr>
+             <tr>
+             	<th>
+                        {$_lang['relation_status']}
+               </th>
+                <td>
+                  <select name="w[relation_status]">
+                      <option value="-1">--{$_lang['all']}--</option>
+                      {loop $status_arr $k $v}
+						  <option value="$k" {if $w['relation_status']==$k}selected="selected"{/if}>{$v}</option>
+					  {/loop}
+                  </select>
+               </td>
+                 <th>
+                     {$_lang['result_order']}
+                 </th>
+                  <td>
+                     <select name="w[ord][]">
+                           <option value="relation_id" {if $w['ord']['0']=='relation_id' or !isset($w['ord']['0'])} selected="selected"{/if}>{$_lang['default']}{$_lang['order']}</option>
+                           <option value="on_time" {if $w['ord']['0']=='on_time' } selected="selected"{/if}>{$_lang['end_time']}</option>
+                      </select>
+                      <select name="w[ord][]">
+                            <option {if $w['ord']['1']=='desc' or !isset($w['ord']['1'])}selected="selected" {/if} value="desc">{$_lang['desc']}</option>
+                            <option {if $w['ord']['1']=='asc'}selected="selected" {/if} value="asc">{$_lang['asc']}</option>
+                      </select>
+                   </td>
+              <th>
+                         {$_lang['show_reslut']}
+               </th>
+                   <td>
+                     <select name="w[page_size]">
+                          <option value="10" {if $w['page_size']=='10'}selected="selected"{/if}>{$_lang['page_size']}10</option>
+                          <option value="20" {if $w['page_size']=='20'}selected="selected"{/if}>{$_lang['page_size']}20</option>
+                          <option value="30" {if $w['page_size']=='30'}selected="selected"{/if}>{$_lang['page_size']}30</option>
+                     </select>
+					 <button class="pill" type="submit" value="{$_lang['search']}" name="sbt_search"><span class="icon magnifier">&nbsp;</span>{$_lang['search']}</button>
+                   </td>
+
+                <th>
+                   &nbsp;
+                </th>
+                 <td>
+                 	&nbsp;
+                 </td>
+             </tr>
+          </tbody>
+        </table>　
+     </form>
+   </div>
+</div>
+	 <div class="box list">
+	 	<div class="title">
+ 	   <h2>{$_lang['prom_relation_manage']}</h2></div>
+		  <div class="detail">
+		  	 <form method="post" action="index.php?do={$do}&view={$view}" id="frm_list">
+		  	 	<input type="hidden" name="w[page_size]" value="{$page_size}">
+				<input type="hidden" name="page" value="{$page}">
+				<div  id="ajax_dom">
+			<table cellpadding="0" cellspacing="0">
+               <tbody>
+               	<tr>
+               		<th>
+	<input type="checkbox" id="checkbox" onclick="checkall();" class="checkbox" >编号
+</th>
+					<th>{$_lang['upline']}</th>
+					<th>{$_lang['downline']}</th>
+					<th>{$_lang['prom_type']}</th>
+					<th>{$_lang['prom_time']}</th>
+					<th>{$_lang['relation_status']}</th>
+                    <th width="130">{$_lang['operate']} </th>
+				<tr>
+				 {loop $prom_relation_arr $v}
+               	<tr class="item">
+               		<td><input type="checkbox" name="ckb[]" class="checkbox" value="{$v['relation_id']}">{$v['relation_id']}&nbsp;</td>
+					<td> $v['prom_username']&nbsp;</td>
+					<td>$v['username']&nbsp;</td>
+					<td>$type_arr[$v['prom_type']]['prom_item']&nbsp;</td>
+               		<td>
+               			<!--{date('Y-m-d H:i:s',$v['on_time'])}-->&nbsp;
+					</td>
+                    <td>
+                    	{$status_arr[$v['relation_status']]}
+					</td>
+					<td>
+                    <a  href="index.php?do=prom&view=relation_add&ac=edit&relation_id=$v['relation_id']" class="button dbl_target"><span class="pen icon"></span>查看</a>
+                    <a onclick="return cdel(this);" href="{$ac_url}&ac=del&relation_id=$v['relation_id']" class="button"><span class="trash icon"></span>{$_lang['delete']}</a>
+                    </td>
+				</tr>
+				{/loop}
+				<tr>
+                	<td colspan="8">
+                	<div class="page fl_right">{$pages['page']}</div>
+                    <div class="clearfix">
+                            <label for="checkbox" onclick="checkall(event);">{$_lang['select_all']}</label>　
+							<input type="hidden" name="sbt_action" class="sbt_action"/>
+							<button type="submit" name="sbt_action" value="{$_lang['mulit_delete']}" onclick="return batch_act(this,'frm_list')" class="pill negative">
+							<span class="trash icon"></span>{$_lang['mulit_delete']}</button>&nbsp;&nbsp;
+					</div>
+				   </td>
+            	 </tr>
+               </tbody>
+			</table>
+			</div>
+		  </div>
+	 </div>
+   </div>
+<!--{template ADMIN_DIRECTORY/tpl/admin_footer}-->

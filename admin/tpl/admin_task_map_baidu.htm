@@ -1,0 +1,146 @@
+<!--{template ADMIN_DIRECTORY/tpl/admin_header}-->
+ {if $_K['map_api']=='baidu'}
+<script type="text/javascript" src="{$_K['baidu_api']}"></script>
+{else}
+<script type="text/javascript" src="{$_K['google_api']}"></script>
+{/if}
+<div id="div_map">
+
+		<div class="rowElem clearfix mt_5 mb_5">
+			<form  method="post">
+				 <input type="hidden" name="px" id="px" value="{if $task_info['px']}$task_info['px']{else}30.51667{/if}"/>
+						   <input type="hidden" name="py" id="py" value="{if $task_info['py']}$task_info['py']{else}114.31667{/if}"/>					 
+						   <input type="hidden" name="zo" id="zo" value="{if $task_info['zo']}$task_info['zo']{else}10{/if}"/>
+						   <input type="hidden" name="point" id="point">
+						   <input type="hidden" name="province1" id="hdn_province1"/>
+	      		<label class="fl_l ml_5">请选择区域</label>
+	      		<div id="show_area" class="fl_l mr_5">
+	      		<select name="province" id="province" ></select><select name="city" id="city"></select><select name="area" id="area"></select></div>
+				<label class="fl_l">详细地址</label><input type="text" name="address" size="18" id="address" ><button id="map_search"  type="button" class="ml_5"><span class="icon magnifier"></span>{$_lang['search']}</button>
+	    		<button id="sbt_map" type="button" name="sbt_map"  style="*margin-left:5px;"><span class="icon check"></span>确定坐标</button>	
+			</form>
+		</div>
+		<div id="container" style="width:800px;height:300px"></div>
+		
+		<!--{eval $aa = explode(",",$task_info['province'])}-->					
+	</div>
+	
+	<!--{eval $owner_info['residency'] = explode(',',$owner_info['residency']);
+	    
+	}-->
+<script type="text/javascript" src="../static/js/artdialog/artDialog.js"></script>
+<script type="text/javascript" src="../static/js/artdialog/jquery.artDialog.js?skin=default"></script>
+<script type="text/javascript" src="../static/js/artdialog/artDialog.iframeTools.source.js"></script>
+<script type="text/javascript" src="../lang/$language/script/lang.js"></script>
+<script type="text/javascript" src="../static/js/system/PCASClass.js"></script>
+<script type="text/javascript">	
+$(function(){new PCAS("province","city","area","{$local['0']}","{$local['1']}","{$local['2']}",'map');});
+
+var map = new BMap.Map("container");
+map.enableScrollWheelZoom(); //鼠标滑动设置地图级别
+map.addControl(new BMap.NavigationControl()); //添加平移缩放控件
+map.centerAndZoom(new BMap.Point(116.404, 39.915),15);  
+map.addEventListener("click",function(e){
+		document.getElementById("px").value=e.point.lat;
+		document.getElementById("py").value=e.point.lng;								
+		map.clearOverlays();
+		map.addOverlay( new BMap.Marker(e.point)); 
+})       
+
+
+//map.setViewport(new BMap.Point(116.404, 39.915));
+//地图搜索，传入参数为一个详细地址的字符串
+function local_search(address){
+	var options = {onSearchComplete: function(results){  
+	   if (local.getStatus() == BMAP_STATUS_SUCCESS){  // 判断状态是否正确  		
+			map.clearOverlays();
+			marker = new BMap.Marker( results.getPoi(0).point);
+			map.addOverlay(marker);   //添加标注 	
+			//map.centerAndZoom(results.getPoi(0).point,15);   
+			map.panTo(results.getPoi(0).point) 
+			$("#px").val(results.getPoi(0).point.lat);
+			$("#py").val(results.getPoi(0).point.lng);
+	   }
+	 }  
+	};  
+	var local = new BMap.LocalSearch(map, options);									
+	local.search(address);
+}
+
+{if $owner_info['residency']}
+local_search($("#province").val()+','+$("#city").val()+','+$("#area").val());
+{/if}
+//搜索地址
+$("#map_search").click(function(){
+		if($("#province").val().length<=0){
+		
+				showDialog("{$_lang['please_choose_search_province']}",'alert',"{$_lang['message_notice']}","$('#province').focus()",0);return false;
+		}else if($("#city").val().length<=0){
+			showDialog("{$_lang['please_choose_search_city']}",'alert',"{$_lang['message_notice']}","$('#city').focus()",0);return false;					
+		}else{ 
+			 local_search($("#province").val()+','+$("#city").val()+','+$("#area").val());
+			 $("#hdn_province1").val($("#province").val()+','+$("#city").val()+','+$("#area").val());
+			 $("#point").val($("#px").val()+","+$("#py").val());
+		}
+	}
+)
+//确定坐标
+$("#sbt_map").click(function(){
+		if($("#province").val().length<=0){
+			art.dialog.alert("{$_lang['please_choose_search_province']}");return false;
+				//showDialog("{$_lang['please_choose_search_province']}",'alert',"{$_lang['message_notice']}","$('#province').focus()",0);return false;
+		}else if($("#city").val().length<=0){
+			art.dialog.alert("{$_lang['please_choose_search_city']}");return false;
+			//showDialog("{$_lang['please_choose_search_city']}",'alert',"{$_lang['message_notice']}","$('#city').focus()",0);return false;					
+		}else{
+			 $("#hdn_province1").val($("#province").val()+','+$("#city").val()+','+$("#area").val());
+			 $("#point").val($("#px").val()+","+$("#py").val());
+			
+			 if($("#hdn_province1").val().length<=0||$("#point").val().length<=0){
+			 	art.dialog.alert("{$_lang['please_choose_search_province']}");return false;
+			 	//showDialog("{$_lang['please_choose_search_province']}",'alert',"{$_lang['message_notice']}","$('#province').focus()",0);return false;
+			 }else{
+			 	art.dialog.confirm("确认坐标?",function(){
+					var point = $("#point").val();
+			        var prov = $("#hdn_province1").val();
+					art.dialog.data('mypoint',point);
+					art.dialog.data('myprovince',prov);
+					art.dialog.close();
+					
+				});return false;
+			 	//showDialog("坐标确认完成",'right',"操作提示",'qd()');
+		
+			 }
+		}
+	}
+)
+//function qd(){
+//	
+//}
+//province下拉框搜索
+function province_search(){
+		if($("#province").val().length<=0){
+				showDialog("{$_lang['please_choose_search_province']}",'alert',"{$_lang['message_notice']}","$('#province').focus()",0);return false;
+		}else{
+			 local_search($("#province").val()+','+$("#city").val()+','+$("#area").val());
+			 $("#hdn_province1").val($("#province").val()+','+$("#city").val());
+			 $("#point").val($("#px").val()+","+$("#py").val());
+		}
+}
+
+//city下拉框搜索
+function city_search(){
+		if($("#province").val().length<=0){
+				showDialog("{$_lang['please_choose_search_province']}",'alert',"{$_lang['message_notice']}","$('#province').focus()",0);return false;
+		}else if($("#city").val().length<=0){
+			showDialog("{$_lang['please_choose_search_city']}",'alert',"{$_lang['message_notice']}","$('#city').focus()",0);return false;					
+		}else{
+			 local_search($("#province").val()+','+$("#city").val()+','+$("#area").val());
+			 $("#hdn_province1").val($("#province").val()+','+$("#city").val());
+			 $("#point").val($("#px").val()+","+$("#py").val());
+		}
+}
+
+
+ </script>
+<!--{template ADMIN_DIRECTORY/tpl/admin_footer}-->					

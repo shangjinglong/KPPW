@@ -1,0 +1,73 @@
+{if $view=='account'}
+<a href="javascript:void(0);" class="nav-toggle"><i class="fa fa-reorder"></i></a>
+<dl class="nav-list">
+      <dt class="nav-list-title"><i class="fa fa-minus"></i> 我的帐号</dt>
+      <dd class="nav-list-body">
+        <a href="index.php?do=user&view=account&op=basic" {if $op=='basic'||$op=='contact'||$op=='skill'}class="selected"{/if} >基本资料</a>
+        <a href="index.php?do=user&view=account&op=chooseavatar" {if $op=='uploadavatar'||$op=='chooseavatar'}class="selected"{/if} >头像设置</a>
+        <a href="index.php?do=user&view=account&op=password" {if $op=='security'|| $op=='password'}class="selected"{/if} >安全设置</a>
+        <a href="index.php?do=user&view=account&op=binding" {if $op=='binding'}class="selected"{/if} >账号绑定</a>
+        <a href="index.php?do=user&view=account&op=auth" {if $op=='auth'}class="selected"{/if} >账号认证</a>
+		<a href="index.php?do=user&view=account&op=report" {if $op=='report'}class="selected"{/if} >交易维权</a>
+      </dd>
+</dl>
+{elseif $view=='message'}
+<a href="javascript:void(0);" class="nav-toggle"><i class="fa fa-reorder"></i></a>
+    <dl class="nav-list">
+      <dt class="nav-list-title"><i class="fa fa-minus"></i> 我的消息</dt>
+      <dd class="nav-list-body">
+        <a href="index.php?do=user&view=message&op=notice" {if $op=='notice'}class="selected"{/if} >{if $intCountNotice}<span class="badge">{$intCountNotice}</span>{/if} 交易提醒</a>
+        <a href="index.php?do=user&view=message&op=private"  {if $op=='private'}class="selected"{/if} >{if $intCountPrivate}<span class="badge">{$intCountPrivate}</span>{/if}私人短信</a>
+        <a href="index.php?do=user&view=message&op=outbox"  {if $op=='outbox'}class="selected"{/if} >我的发件箱</a>
+        <a href="index.php?do=user&view=message&op=send"  {if $op=='send'}class="selected"{/if} >写消息</a>
+      </dd>
+    </dl>
+
+{else}
+<a href="javascript:void(0);" class="nav-toggle"><i class="fa fa-reorder"></i></a>
+<dl class="nav-list">
+      <dt class="nav-list-title"><i class="fa fa-minus"></i> 交易管理</dt>
+      <dd class="nav-list-body">
+        <a href="index.php?do=user&view=transaction&op=released" {if $op=='released'}class="selected"{/if}>我发布的任务</a>
+        <a href="index.php?do=user&view=transaction&op=undertake" {if $op=='undertake'}class="selected"{/if}>我承接的任务</a>
+        <a href="index.php?do=user&view=transaction&op=service" {if $op=='service'||$op=='works'}class="selected"{/if}>我的商品文件</a>
+        <a href="index.php?do=user&view=transaction&op=orders" {if $op=='sold'||$op=='orders'}class="selected"{/if}>我的商品订单</a>
+      </dd>
+      <dt class="nav-list-title"><i class="fa fa-minus"></i> 店铺管理</dt>
+      <dd class="nav-list-body">
+        <a href="index.php?do=user&view=shop&op=setting" {if $op=='setting'}class="selected"{/if}>店铺设置</a>
+        <a href="index.php?do=user&view=shop&op=caselist" {if $op=='caselist'||$op=='caseadd'}class="selected"{/if}>案例管理</a>
+      </dd>
+      <dt class="nav-list-title"><i class="fa fa-minus"></i> 我的收藏</dt>
+      <dd class="nav-list-body">
+
+        <a href="index.php?do=user&view=collect&op=task" {if $op=='task'}class="selected"{/if}>收藏的任务</a>
+        <a href="index.php?do=user&view=collect&op=work" {if $op=='work'}class="selected"{/if}>收藏的稿件</a>
+        <a href="index.php?do=user&view=collect&op=goods" {if $op=='goods'}class="selected"{/if}>收藏的商品</a>
+      </dd>
+      <dt class="nav-list-title"><i class="fa fa-minus"></i> 我的关注</dt>
+      <dd class="nav-list-body">
+
+        <a href="index.php?do=user&view=focus&op=attention"  {if $op=='attention'}class="selected"{/if}>全部关注</a>
+        <a href="index.php?do=user&view=focus&op=fans"  {if $op=='fans'}class="selected"{/if}>我的粉丝</a>
+        <a href="index.php?do=user&view=focus&op=each" {if $op=='each'}class="selected"{/if}>相互关注</a>
+      </dd>
+      <dt class="nav-list-title"><i class="fa fa-minus"></i> 我的推广</dt>
+      <dd class="nav-list-body">
+
+        <a href="index.php?do=user&view=prom&op=code"  {if $op=='code'}class="selected"{/if}>推广代码</a>
+        <a href="index.php?do=user&view=prom&op=benefit" {if $op=='benefit'}class="selected"{/if}>推广收益</a>
+      </dd>
+      <dt class="nav-list-title"><i class="fa fa-minus"></i> 我的财务</dt>
+      <dd class="nav-list-body">
+        <a href="index.php?do=user&view=finance&op=basic" {if in_array($op,array('basic','details','rechargelog','withdrawlog'))}class="selected"{/if}>账目明细</a>
+        <a href="index.php?do=user&view=finance&op=rechargeonline" {if in_array($op,array('rechargeonline','rechargeoffline'))}class="selected"{/if}>账号充值</a>
+        <a href="index.php?do=user&view=finance&op=withdraw"  {if $op=='withdraw'}class="selected"{/if}>账号提现</a>
+      </dd>
+      <!--<dt class="nav-list-title"><i class="fa fa-caret-right"></i> 增值服务</dt>
+      <dd class="nav-list-body">
+        <a href="#">工具箱</a>
+      </dd>-->
+</dl>
+
+{/if}

@@ -1,0 +1,86 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset={$_K['charset']}">
+<title>keke admin</title>
+</head>
+<link href="tpl/css/admin_management.css" rel="stylesheet" type="text/css" />
+<link href="../static/css/button/stylesheets/css3buttons.css" rel="stylesheet" type="text/css" />
+<link title="style1" href="tpl/skin/default/style.css" rel="stylesheet" type="text/css" />
+<script type="text/javascript" src="../static/js/jquery.js"></script>
+</head>
+<body class="skin">
+<!--[if IE 6]><div id="ie6"><![endif]-->
+<!--[if IE 7]><div id="ie7"><![endif]-->
+<!--[if IE 8]><div id="ie8"><![endif]-->
+<div id="append_parent"></div>
+
+<div class="login_con1">
+    <table border="0" cellspacing="0" cellpadding="0" style="width:323px; margin:auto;height:50px">
+      <tr>
+         <td>
+        	  <form action="#" name="lock_frm" id="lock_frm" style="margin:0;padding:0">
+              <div id="unlock_tips"></div>
+			  {$_lang['password']}:
+                <input name="unlock_pwd"  id="unlock_pwd"  type="password" class="txt" tabindex="2" limit="required:true" msg="{$_lang['password_can_not_null']}" title="{$_lang['please_input_right_password_unlock']}" msgArea="unlock_tips"/>
+            	<input  type="hidden" name="unlock_num" id="unlock_times" value="{$unlock_times}"/>
+				 <button type="button" name="screen_unlock" id="screen_lock" onclick="unlock();"> <span class="icon key">&nbsp;</span>{$_lang['confirm']}</button>
+			  </form>
+          </td>
+      </tr>
+    </table>
+  </div>
+
+<!--[if IE 6]></div><![endif]-->
+<!--[if IE 7]></div><![endif]-->
+<!--[if IE 8]></div><![endif]-->
+
+<script type="text/javascript" src="../static/js/system/form_and_validation.js"></script>
+<script type="text/javascript" src="../static/js/artdialog/artDialog.js"></script>
+<script type="text/javascript" src="../static/js/artdialog/jquery.artDialog.js?skin=default"></script>
+<script type="text/javascript" src="../static/js/artdialog/artDialog.iframeTools.source.js"></script>
+<script type="text/javascript">
+	/**unlock screen**/
+document.getElementById("unlock_pwd").onkeydown = function(event){
+    if ($.browser.msie) {
+        if (window.event.keyCode == 13) {
+			$("#screen_lock").focus();
+			}
+    }
+    else {
+        if (event.keyCode == 13) {
+			$("#screen_lock").focus();}
+    }
+}
+	function unlock(){
+		var win=art.dialog.open.origin;
+			var unlock_num=$("#unlock_times").val();
+			var unlock_pwd=$("#unlock_pwd").val();
+			if (checkForm(document.getElementById('lock_frm'))) {
+				if(unlock_num>0)
+					$.post(
+					"index.php?do=index&ac=unlock&unlock_pwd="+unlock_pwd+"&unlock_num="+unlock_num,
+						function(json){
+							if (json.status == 2) {//锟斤拷锟斤拷晒锟�
+								success(win);
+								return false;
+							}
+							else if(json.status == 1) {
+								$("#unlock_tips").html(json.msg + "{$_lang['you_have']}" + json.data + "{$_lang['times_try_chance']}");
+								$("#unlock_times").val(json.data);;return false;
+							}else{
+								$("#unlock_tips").html(json.msg);
+								win.location='index.php?do=login';
+								return false;
+							}
+						},'json')		
+			}
+		
+	}
+	function success(win){
+		win.showpanel();
+	   	art.dialog.open.api.close();
+	}
+</script>
+</body>
+</html>

@@ -1,0 +1,47 @@
+<!--任务扩展内容-->
+ {if $op=='work'}
+	{if $ac=='comm'}<!--加载点评--> 
+	  {if $c_list}
+	  	{loop $c_list $v}
+			<div class='ws_break pad10'>
+				<!--{eval echo mb_strcut($v['content'],0,50,$_K['charset']);}-->..
+				<span class="fl_r"><!--{date('Y-m-d H:i:s',$v['on_time'])}--></span></div>
+		{/loop}
+	  {else}
+			<font color="red">{$_lang['no_data']}</font>
+	  {/if}
+	{elseif $ac='file'}<!--加载附件--> 
+		{if $f_list}
+			{loop $f_list $v}
+				<a href="{$_K['siteurl']}/index.php?do=ajax&view=file&ajax=download&file_name={$v['file_name']}&file_path={$v['save_name']}">2.1货币汇率模块开发设计.doc</a>
+			{/loop}
+		{else}
+			<font color="red">{$_lang['no_data']}</font>
+		{/if}
+	{/if}
+{/if}
+{if $op=='comm'}<!--加载楼层--> 
+	{if $list}
+		{loop $list $v}
+		<div class="pad10" style="width:70%" id="c_{$v['comment_id']}">
+		    <a class='fl_l' href="{$_K['siteurl']}/index.php?do=seller&id={$v['uid']}" target="_blank" title="{$v['username']}"><!--{userpic($v['uid'],'small')}--></a>
+		    <a class='fl_l' href="{$_K['siteurl']}/index.php?do=seller&id={$v['uid']}" target="_blank">{$v['username']}</a>
+		    {$_lang['comm_time']}{$_lang['zh_mh']}<!--{date('Y-m-d H:i:s',$v['on_time'])}-->
+		    <div class="pad10 fl_r">
+		        <a href='javascript:void(0);' onclick="Cdel('{$v[comment_id]}',1);" class='button'><span class="icon trash">&nbsp;</span>{$_lang['delete_comm']}</a>
+		    </div>
+		    <div class="ws_break pad10 fl_r">
+		        {$v['content']}
+		    </div>
+		</div>
+		<div class="clear">
+		</div>
+		{/loop}
+	{else}
+		<div>
+		    <font color="red">
+		        {$_lang['no_data']}
+		    </font>
+		</div>
+	{/if}
+{/if}

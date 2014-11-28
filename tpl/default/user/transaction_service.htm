@@ -1,0 +1,99 @@
+<!--{template user/header}-->
+<div class="container">
+<div class="nav-action">
+    <!--{template user/left_side}-->
+  </div>
+
+  <div class="content-panel">
+    <div class="tab">
+    	<a href="index.php?do=user&view=transaction&op=service" {if $op == 'service'} class="selected" {/if}>我的商品</a>
+        <a href="index.php?do=user&view=transaction&op=works" {if $op == 'works'} class="selected" {/if}>我的稿件</a>
+    </div>
+    <div class="tab_detail">
+     	<ul class="nav nav-pills second-nav">
+          <li {if $intModelId == '6'} class="active" {/if}><a href="index.php?do=user&view=transaction&op=service&intModelId=6" >文件</a></li>
+          <li {if $intModelId == '7'} class="active" {/if}><a href="index.php?do=user&view=transaction&op=service&intModelId=7" >服务</a></li>
+        </ul>
+    <div class="action-bar">
+    <form action="{$strUrl}" method="post" name="searchServiceForm" id="searchServiceForm">
+        <div class="action-item">
+        <input type="text" placeholder="请输入编号" class="form-control" name="intId" id="intId" value="{$intId}">
+        </div>
+        <div class="action-item">
+        <input type="text" placeholder="请输入名称" class="form-control" name="strTitle" id="strTitle" value="{$strTitle}">
+        </div>
+        <div class="action-item">
+          <select class="form-control" name="strOrder" id="strOrder">
+            {loop $arrListOrder $k $v}
+            	<option value="{$k}" {if $strOrder ==$k} selected="selected"{/if}>{$v}</option>
+            {/loop}
+
+          </select>
+        </div>
+        <div role="toolbar" class="action-item btn-toolbar">
+          <div class="btn-group">
+            <button class="btn btn-default" type="submit">搜索</button>
+          </div>
+        </div>
+      </form>
+      </div>
+      <div class="table-responsive">
+        <table class="table table-hover">
+        <thead>
+          <tr>
+            <th>编号</th>
+            <th>名称</th>
+            <th>售价（元）</th>
+          	<th>销售量</th>
+            <th>发布时间</th>
+            <th>状态</th>
+            <th>操作</th>
+          </tr>
+        </thead>
+        <tbody>
+        {if $arrLists}
+        {loop $arrLists $k $v}
+          <tr>
+            <td>{$v['service_id']}</td>
+            <td title="{$v['title']}"><a href="index.php?do=goods&id={$v['service_id']}"><!--{eval echo kekezu::cutstr($v['title'],16)}--></a></td>
+            <td>
+              <span class="money">
+              	<sub>￥</sub>{$v['price']}
+              </span>
+            </td>
+            <td>
+            	{$v['sale_num']}
+            </td>
+            <td><!--{eval echo date('Y-m-d',$v['on_time'])}--></td>
+            <td>{$arrStatus[$v['service_status']]}</td>
+            <td>
+            <a  href="javascript:editWork('{$v[service_id]}',0);void(0);" >编辑</a>
+			{if $v['service_status']==2&&TOOL=='TRUE'}
+		    <a  href="javascript:payitem('goods','{$v[service_id]}','{$uid}');void(0);">增值工具</a>
+			{/if}
+            <a href="javascript:opSingle('{$strUrl}&objId={$v['service_id']}&action=delSingle&intPage={$intPage}');void(0);">删除</a>
+            </td>
+          </tr>
+         {/loop}
+         {else}
+         	<tr>
+         		<td colspan="7" class="text-center">暂无相关商品</td>
+         	</tr>
+         {/if}
+        </tbody>
+      </table>
+      </div>
+      <div class="clearfix">
+      	{if $strPages}
+	      <ul class="pagination pagination-sm pull-right">
+	       {$strPages['page']}
+	      </ul>
+	    {/if}
+      </div>
+    </div>
+  </div>
+  </div>
+  <!-- 我的消息 end &content-panel end -->
+  <script type="text/javascript" src="static/js/xheditor/xheditor.js"></script>
+  		
+<!--{template user/footer}-->

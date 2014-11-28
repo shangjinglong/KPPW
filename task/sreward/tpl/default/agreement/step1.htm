@@ -1,0 +1,21 @@
+<div class="deliver-content">
+  <div class="deliver-agreement">
+    <h2 class="min-title">稿件源文件交付协议</h2>
+    <p><!--{tag 任务交付协议简介}--></p>
+  </div>
+  <div class="deliver-footer">
+  {if ($arrProcessCan['buyer_sign']&&$intUserType =='2')||($arrProcessCan['seller_sign']&&$intUserType=='1')}
+    <button class="btn btn-default" type="button" onclick="taskAgree('{$intUserType}')">同意协议并开始交付</button>
+	{if $gUid == $arrAgreeInfo['buyer_uid']}
+	    <a href="javascript:report(1,'work','{$arrAgreeInfo[seller_uid]}','{$arrAgreeInfo[task_id]}','{$arrAgreeInfo[work_id]}');void(0);" class="btn btn-default">
+	    	<i class="fa fa-bell"></i> 维权
+	    </a>
+	{else}
+        <a href="javascript:report(1,'task','{$arrAgreeInfo[buyer_uid]}','{$arrAgreeInfo[task_id]}','{$arrAgreeInfo[task_id]}');void(0);" class="btn btn-default">
+	    	<i class="fa fa-bell"></i> 维权
+	    </a>
+	{/if}
+
+  {/if}
+  </div>
+</div>

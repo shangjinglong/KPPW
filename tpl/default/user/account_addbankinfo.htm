@@ -1,0 +1,135 @@
+<!--{template user/header}-->
+<div class="container">
+  <div class="nav-action">
+		<!--{template user/left_side}-->
+  </div>
+  <!-- nav-action end -->
+  <div class="content-panel">
+      <div class="tab">
+        <a {if $op === 'addbankinfo'}class="selected"{/if} href="index.php?do=user&view=account&op=addbankinfo" >新增账号</a>
+        <a {if $op === 'banklist'}class="selected"{/if} href="index.php?do=user&view=account&op=banklist" >账号列表</a>
+      </div>
+      <div class="tab_detail">
+      {if !$step||$step === 'step1'}
+      		<!-- start -->
+          <form role="form" action="{$strUrl}&step=step1" method="post" class="form-horizontal" name="editAddBankInfoForm" id="editAddBankInfoForm">
+          	<input type="hidden" name="formhash" id="formhash" value="{FORMHASH}">
+          	<input type="hidden" name="pk[uid]" value="{$gUserInfo['uid']}">
+          	<!-- 企业机构名称/真实姓名 start -->
+            <div class="form-group">
+              <label class="col-sm-3 control-label" for="txt_name">{$strAccountName}：</label>
+                <div class="col-sm-8">
+                  <input type="text" placeholder="{$strAccountName}" name="txt_name" id="txt_name"  class="form-control">
+                </div>
+            </div>
+            <!-- 企业机构名称/真实姓名 end -->
+            <!-- 开户银行 start -->
+            <div class="form-group">
+              <label class="col-sm-3 control-label" for="mobile">开户银行：</label>
+                <div class="col-sm-8">
+                  <select class="form-control" name="bank_name" id="bank_name">
+					{loop $arrBankList $k $v}
+						<option value="{$k}" >{$v}</option>
+					{/loop}
+                  </select>
+                </div>
+            </div>
+            <!-- 开户银行 end -->
+
+
+            <!-- 开户银行所在地 start -->
+            <div class="form-group">
+              <label class="col-sm-3 control-label">开户银行所在地：</label>
+              <div class="col-sm-8 row">
+                <div class="col-sm-3">
+                  <select class="form-control" name="province" id="province" onchange="getZone(this.value,'city');">
+                  	<option>选择省份</option>
+					{loop $arrProvinces $k $v}
+					<option value="{$v['id']}" >{$v['name']}</option>
+					{/loop}
+                  </select>
+                  </div>
+                <div class="col-sm-3">
+                  <select class="form-control" name="city" id="city">
+                  	<option>选择城市</option>
+                  </select>
+                </div>
+              </div>
+            </div>
+            <!--开户银行所在地 end -->
+            <!-- 开户行名称 start -->
+            <div class="form-group">
+              <label class="col-sm-3 control-label" for="bank_full_name">开户行名称：</label>
+
+                <div class="col-sm-8">
+                  <input type="text" placeholder="开户行名称" name="bank_full_name" id="bank_full_name" class="form-control">
+                </div>
+
+            </div>
+            <!-- 开户行名称 end -->
+            <!-- 银行卡号start -->
+            <div class="form-group">
+              <label class="col-sm-3 control-label" for="card_num">银行卡号：</label>
+
+                <div class="col-sm-8">
+                  <input type="text" placeholder="银行卡号" name="card_num" id="card_num"  class="form-control">
+                </div>
+
+            </div>
+            <!-- 银行卡号 end -->
+            <!-- 再一次输入银行卡号 start -->
+            <div class="form-group">
+              <label class="col-sm-3 control-label" for="card_num2">再一次输入银行卡号：</label>
+                <div class="col-sm-8">
+                  <input type="text" placeholder="再一次输入银行卡号" name="card_num2" id="card_num2" class="form-control">
+                </div>
+            </div>
+            <!-- 再一次输入银行卡号 end -->
+            <div class="form-group">
+              <div class="col-sm-offset-3 col-sm-4">
+                <button class="btn btn-default" type="submit" value="1">保存</button>
+                <span class="text-success" id="tipsUser"></span>
+              </div>
+            </div>
+          </form>
+      		<!-- 基本资料 end -->
+      		{/if}
+      		{if $step === 'step2'}
+      		<!-- 第二步 start -->
+
+            <div class="table-responsive">
+              <table class="table table-bordered">
+                <thead>
+                  <tr>
+                    <th>开户银行</th>
+                    <th>银行账户类型</th>
+                    <th>银行卡号</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>{$arrBankList[$arrBankInfo['bank_name']]}</td>
+                    <td>{if $arrBankInfo['bank_type']=='1'}个人{else}企业{/if}</td>
+                    <td><!--{eval echo kekezu::set_star($arrBankInfo['card_num'],3,3);}--></td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+
+			      <div  class="text-right">
+								<a href="{$strUrl}" class="btn btn-default">继续绑定</a>
+                <a href="index.php?do=user&view=account&op=auth&auth_code=bank&step=step3&show=list&#userCenter" class="btn btn-primary">现在就去银行认证？</a>
+						</div>
+
+
+
+      		<!-- 第二步 end -->
+      		{/if}
+      </div>
+  </div>
+  </div>
+<script type="text/javascript" src="static/js/model/user/addbank.js" ></script>
+<script type="text/javascript">
+	var strAccountName = '{$strAccountName}';
+</script>
+<!--{template user/footer}-->

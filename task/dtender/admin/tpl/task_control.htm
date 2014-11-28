@@ -1,0 +1,181 @@
+<!--{template ADMIN_DIRECTORY/tpl/admin_header}-->
+<style type="text/css">
+    table tr .t_r {
+        text-align: right
+    }
+</style>
+<div class="page_title">
+    <h1>{$model_info[model_name]}{$_lang['task_config']}</h1>
+    <div class="tool">
+        <a href="index.php?do={$do}&model_id={$model_id}&view={$view}&op=config">{$_lang['basic_config']}</a>
+        <a href="index.php?do={$do}&model_id={$model_id}&view={$view}&op=control" class="here">{$_lang['control_config']}</a>
+        <a href="index.php?do={$do}&model_id={$model_id}&view={$view}&op=priv">{$_lang['private_config']}</a>
+    </div>
+</div>
+<div class="box post">
+    <div class="tabcon">
+        <div class="title">
+            <h2>{$_lang['control_config']}</h2>
+        </div>
+        <form name="frm_config_reward" action="{$ac_url}" method="post" id="frm_config_reward">
+            <input type="hidden" name="pk[model_id]" value="{$model_id}">
+            <table width="100%" border="0" cellspacing="0" cellpadding="0">
+            	  <tr>
+                    <th scope="row" width="200"  class="t_r">
+                        {$_lang['whether_open_audit']}{$_lang['zh_mh']}
+                    </th>
+                    <td>
+                        <label for="open_open_audit_yes">
+                            <input type="radio" name="conf[open_audit]" {if !$open_audit||$open_audit  =='open'}  checked {/if}  id="open_open_audit_yes" value="open">{$_lang['open']}
+                        </label>
+                        <label for="open_open_audit_no">
+                            <input type="radio" name="conf[open_audit]" {if $open_audit  =='close'}  checked {/if}  id="open_open_audit_no" value="close">{$_lang['close']}
+                        </label>
+						（任务发布成功是否需要站长审核）
+
+                    </td>
+                </tr>
+				
+                <tr>
+                    <th scope="row" width="200">
+                        <b>{$_lang['task_commission_tactics_setting']}</b>{$_lang['zh_mh']}任务规则设置和异常任务资金分配
+
+                    </th>
+                    <td>
+                        &nbsp;
+                    </td>
+                </tr>
+                <tr>
+                    <th scope="row" width="200" class="t_r">
+                        {$_lang['tender_deposit']}{$_lang['zh_mh']}
+                    </th>
+                    <td>
+                        <input type="text" size="10" name="conf[deposit]" id="deposit" onkeyup="clearstr(this);" value="{$deposit}" limit="required:true;type:int;between:10-1000" msg={$_lang['tender_deposit_input_error']} title={$_lang['tender_deposit_range']} msgArea="span_deposit" class="txt">{$_lang['yuan']}<span id="span_deposit"></span>
+                    </td>
+                </tr>
+				 <tr>
+                    <th scope="row" width="200" class="t_r">
+                        {$_lang['task_percentage']}{$_lang['zh_mh']}
+                    </th>
+                    <td>
+                        <input type="text" size="10" name="conf[task_rate]" maxlength="3" id="task_rate" onkeyup="clearstr(this);" value="{$task_rate}" limit="required:true;type:int;between:0-100" msg={$_lang['bidding_percentage_input_error']} title={$_lang['bidding_percentage_is']} msgArea="span_task_rate" class="txt">%({$_lang['bidding_percentage_range_is']})<span id="span_task_rate"></span>
+                    </td>
+                </tr>
+				 <tr>
+                    <th scope="row" width="200" class="t_r">
+                     {$_lang['task_fail_percentage']}{$_lang['zh_mh']}
+                    </th>
+                    <td>
+                        <input type="text" size="10" name="conf[task_fail_rate]" maxlength="3" id="task_fail_rate" onkeyup="clearstr(this);" value="{$task_fail_rate}" limit="required:true;type:int;between:0-100" msg={$_lang['fail_bidding']} title={$_lang['fail_bidding_percentage_is']} msgArea="span_task_fail_rate" class="txt">%({$_lang['fail_bidding_commission_ratio_is']})<span id="span_task_fail_rate"></span>
+                    </td>
+                </tr>
+			    
+                <tr>
+                    <th scope="row" width="130">
+                        {$_lang['task_time_rule_set']}{$_lang['zh_mh']}任务交易时间规则和用户参与时间限制
+
+
+                    </th>
+                    <td>
+                        &nbsp;
+                    </td>
+                </tr>
+                <tr>
+                    <th scope="row" width="200" class="t_r">
+                      竞标截止最大时间{$_lang['zh_mh']}
+                    </th>
+                    <td>
+                        <input type="text" size="10" name="conf[bid_max_time]" maxlength="3" id="bid_max_time" value="{$bid_max_time}" limit="required:true;type:int;between:1-100" msg={$_lang['task_time_rule_set_enter_err']} title={$_lang['bid_time_range']} msgArea="span_bid_time" class="txt">{$_lang['bid_day']}<span id="span_bid_time"></span>
+                    </td>
+                </tr>
+				  <tr>
+                    <th scope="row" width="200" class="t_r">
+                      竞标截止最小时间{$_lang['zh_mh']}
+                    </th>
+                    <td>
+                        <input type="text" size="10" name="conf[bid_min_time]" maxlength="3" id="bid_min_time" value="{$bid_min_time}" limit="required:true;type:int;between:1-100" msg={$_lang['choose_standard_time_enter_err']} title={$_lang['choose_standard_time_range']} msgArea="span_select_time" class="txt">{$_lang['select_day']}<span id="span_select_time"></span>
+                    </td>
+                </tr>
+				<!--  <tr>
+                    <th scope="row" width="200" class="t_r">
+                      工作时间期限{$_lang['zh_mh']}
+                    </th>
+                    <td>
+                        <input type="text" size="10" name="conf[work_time]" maxlength="3" id="work_time" value="{$work_time}" limit="required:true;type:int;between:1-" msg={$_lang['work_standard_time_enter_err']} title={$_lang['work_standard_time_range']} msgArea="span_work_time" class="txt">{$_lang['work_day']}<span id="span_work_time"></span>
+                    </td>
+                </tr>-->
+				 <tr>
+                    <th scope="row" width="200" class="t_r">
+                       雇主托管最大时间{$_lang['zh_mh']}
+                    </th>
+                    <td>
+                        <input type="text" size="10" name="conf[pay_limit_time]" maxlength="3" id="pay_limit_time" value="{$pay_limit_time}" limit="required:true;type:int;between:1-100" msg='雇主托管的最大时间限制' title='雇主托管的最大时间限制' msgArea="span_pay_limit_time" class="txt">天(雇主托管赏金的最大时间限制)<span id="span_pay_limit_time"></span>
+                    </td>
+                </tr>
+				<tr>
+                    <th scope="row" width="200" class="t_r">
+                       {$_lang['payment_term']}{$_lang['zh_mh']}
+                    </th>
+                    <td>
+                        <input type="text" size="10" name="conf[confirm_limit_time]" maxlength="3" id="confirm_limit_time" value="{$confirm_limit_time}" limit="required:true;type:int;between:1-100" msg={$_lang['payment_term_enter_err']} title={$_lang['payment_term_enter_range']} msgArea="span_confirm_limit_time" class="txt">小时{$_lang['payment_day']}<span id="span_confirm_limit_time"></span>
+                    </td>
+                </tr>
+			  	<tr><th scope="row" width="200">{$_lang['cash_cove_config']}{$_lang['zh_mh']}</th>
+				<td><a class="button" href="index.php?do=model&model_id=$model_id&view=config&op=cash_rule&ac=add">
+						<span class="pen icon"></span>{$_lang['add_new_cove']}
+					</a>
+				</td>
+				</tr>
+				<tr>
+					<th scope="row" width="200" class="t_r">&nbsp;</th> 
+					 <td>
+						<ul>
+						 	{loop $cash_cove $k $v}
+								<li>
+									{$v['cove_desc']}&nbsp;&nbsp;&nbsp;
+										<a class="button" href="index.php?do=model&model_id=$model_id&view=config&op=cash_rule&ac=edit&rule_id={$k}">
+											<span class="pen icon"></span>{$_lang['edit']}
+										</a>&nbsp;&nbsp;
+										<a class="button" href="index.php?do=model&model_id=$model_id&view=config&op=cash_rule&ac=del&rule_id={$k}">
+											<span class="trash icon"></span>{$_lang['delete']}
+										</a>
+								</li>
+							{/loop}
+						</ul>
+					</td>
+				</tr>
+                <tr>
+                    <th scope="row">
+                        &nbsp;
+                    </th>
+                    <td>
+                        <div class="clearfix padt10">
+                        	<input type="hidden" name="sbt_edit" value="1">
+                            <button class="positive primary pill button" type="button" name="sbt_edit" value="{$_lang['submit']}" onclick="confirmSub()">
+                                <span class="check icon"></span>{$_lang['submit']}
+                            </button>
+                        </div>
+                    </td>
+                </tr>
+            </table>
+        </form>
+    </div>
+</div>
+<!--{template ADMIN_DIRECTORY/tpl/admin_footer}-->
+<script type="text/javascript">
+	function confirmSub(){
+		var i = checkForm(document.getElementById('frm_config_reward'));
+		var min_day = parseInt($("#bid_min_time").val())+0;
+		var max_day = parseInt($("#bid_max_time").val())+0;
+		if(i){
+			//alert(min_day);
+			if(min_day>max_day){
+				art.dialog.alert("竞标截止最大时间限制不能小于竞标截止最小时间限制");return false;
+			}else{
+				$("#frm_config_reward").submit();
+			}
+		}else{
+			return false;
+		}
+	}
+</script>

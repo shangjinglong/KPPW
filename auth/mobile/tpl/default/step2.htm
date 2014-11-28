@@ -1,0 +1,70 @@
+<!--{template user/header}-->
+<div class="container">
+  <div class="nav-action">
+		<!--{template user/left_side}-->
+  </div>
+  <!-- nav-action end -->
+  <div class="content-panel">
+      <div class="tab">
+      <!--{template user/account_auth_nav}-->
+      </div>
+      <div class="tab_detail">
+      		<form role="form" action="{$strUrl}&step={$step}" method="post" enctype="multipart/form-data" name="editMobileValidForm" id="editMobileValidForm">
+          	<input type="hidden" name="formhash" id="formhash" value="{FORMHASH}">
+
+            <div class="media">
+              <div class="pull-left">
+                  <img class="media-object" src="{$auth_item['auth_big_ico']}" alt="{$auth_item['auth_title']}">
+              </div>
+              <div class="media-body">
+                  <div class="form-group">
+                    <label class="control-label" for="mobile">手机号：</label>
+                      <p class="form-control-static">
+                        {$arrAuthInfo['mobile']}
+                      </p>
+                  </div>
+
+                  <div class="form-group">
+                    <label class="control-label" for="valid_code">手机验证码：</label>
+
+                        <input type="text"  name="valid_code" id="valid_code"  class="form-control" autocomplete="off">
+
+                  </div>
+
+                  <div class="form-group">
+
+                      <button class="btn btn-default" type="submit" value="1"  >立即认证</button>
+                      <button class="btn btn-default" type="button" id="reset" name="reset" value="reset">重新发送验证码</button>
+                      <span class="text-success" id="tipsUser"></span>
+
+                  </div>
+
+              </div>
+            </div>
+
+
+
+
+
+          </form>
+      </div>
+  </div>
+  </div>
+  <script src="static/js/model/user/auth.js"></script>
+  <script type="text/javascript">
+	var time=60000;//設定倒數2分
+	$("#reset").bind('load',DisableEnable());
+	function DisableEnable(){
+		if(time<=0){
+		    $("#reset").text('重新发送验证码');
+		    $("#reset").addClass("submit");
+		    $("#reset").attr("disabled",false);
+		}else{
+			$("#reset").attr("disabled",true);
+			$("#reset").text((time/1000) + " 秒，重新发送验证码");
+		    setTimeout("DisableEnable()",1000);
+		}
+		time-=1000;
+	}
+</script>
+<!--{template user/footer}-->

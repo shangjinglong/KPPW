@@ -1,0 +1,60 @@
+<!--{template ADMIN_DIRECTORY/tpl/admin_header}--> 
+<div class="page_title">
+	<h1>{$_lang['mutual_evaluation_list']}</h1>
+</div>
+<div class="box tip clearfix p_relative" id="man_tips">
+    	<div class="control"><a title={$_lang['close']} href="javascript:void(0);"><b>×</b></a></div>
+        <div class="title"><h2>{$_lang['tips']}</h2></div>
+        <div class="detail pad10">
+            <ul>
+            	<li>{$_lang['mark_tips']}</li>
+            </ul>
+        </div>
+</div>
+
+<div class="box list">
+    	<div class="title"><h2>{$_lang['credit_rules_list']}</h2></div>
+        <div class="detail">
+			<form method="get" action="{$url}" id="frm_user_search">
+		  		<table cellpadding="0" cellspacing="0">
+		  		  <tbody>
+		          <tr>
+		            <th>{$_lang['id']}</th>
+					<th>{$_lang['object']}</th>
+					<th>{$_lang['good_value']}</th>
+					<th>{$_lang['middle_value']}</th>
+					<th>{$_lang['bad_value']}</th>
+					<th>{$_lang['role']}</th>
+					<th>{$_lang['operate']}</th>
+		          </tr>
+				{loop $mark_config_arr $k $v}
+		        <tr class="item">
+		            <td>{$v['mark_config_id']}</td>
+		            <td>{$model_list2[$v['obj']]}</td>
+					<td>{$v['good']}%</td>
+		            <td>{$v["normal"]}%</td>
+					<td>{$v["bad"]}%</td>
+					<td>{$juese[$v["type"]]}</td>
+					<td>
+						<a class="button dbl_target" href="index.php?do={$do}&view={$view}&op=config_add&mark_config_id={$v['mark_config_id']}"><span class="pen icon"></span>{$_lang['edit']}</a>
+						<a class="button" href="index.php?do={$do}&view={$view}&op={$op}&ac=del&mark_config_id={$v['mark_config_id']}" onclick="return cdel(this);"><span class="trash icon"></span>{$_lang['delete']}</a>
+					</td>
+		          </tr>
+				 {/loop}
+		   		</tbody>
+		        </table>
+			</form>
+        </div>
+</div>
+<script type="text/javascript">
+	$(function(){
+		$(".control").add(".title").click(function(){
+			$(".tip").children().not($(".control,.title")).slideToggle('800');
+		});
+	})
+</script>
+<!--主体结束-->
+
+<!--{template ADMIN_DIRECTORY/tpl/admin_footer}-->
+
+

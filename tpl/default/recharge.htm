@@ -1,0 +1,77 @@
+<!--{template header}-->
+
+<div  class="container">
+<div id="main">
+	<div class="payfor">
+		
+		<div class="payfor-money">
+				<div class="alert alert-warning">
+					您要充值的金额为：<strong class="money"><sub>￥</sub>{$cash} <sub>元</sub></strong>
+				</div>
+		</div>
+		<!-- payfor-money end -->
+
+		<div class="payfor-progress">
+			<ul class="step step2">
+		      <li class="step-item  {if !$status}action{/if}">
+		        <span class="step-num" >1</span>
+		        <div class="step-text step-bottom">
+		          <p><strong class="step-title ">选择支付方式</strong></p>
+		        </div>
+		      </li>
+		      <li class="step-item {if $status==1}action{/if}">
+		        <span class="step-num">2</span>
+		        <div class="step-text step-bottom">
+		          <strong class="step-title ">充值完成</strong></p>
+		        </div>
+		      </li>
+		    </ul>
+		</div>
+		<!-- payfor-progress end -->
+		<div class="payfor-nav">
+			<ul class="nav nav-tabs">
+			  <li  class="active"><a href="javascript:void(0);">在线充值</a></li>
+			</ul>
+		</div>
+		<div class="payfor-body">
+			{if $status==1}
+			<p class="lead text-success text-center mt_20 "><i class="fa fa-check-circle"></i> 恭喜，您已完成付款 <sub>￥</sub>{$cash} <sub>元</sub>！</p>
+			<div class="text-center mb_20">
+				<a href="index.php?do=user&view=finance&op=rechargelog" class="btn btn-primary">确定</a>
+				<a href="index.php?do=user&view=finance&op=rechargelog" class="btn btn-primary">到用户中心查看详细</a>
+			</div>
+			{else}
+				 <form role="form" action="{$strUrl}" method="post" class="form-horizontal" name="payForm" id="payForm" target="_blank">
+			 	<input type="hidden" name="formhash" id="formhash" value="{FORMHASH}">
+				<input name="cash" value="{$cash}" type="hidden">
+			<div class="tab-content">
+			  <div class="tab-pane active" id="online">
+			  	<div class="payfor-selecter">
+					{loop $arrOnlinePayList $k $v}
+					{if $v['pay_status']}
+					<span class="btn btn-default">
+					<label class="radio-inline">
+					  <input type="radio" {if $v['payment']=='alipayjs'}checked="checked"{/if}  value="{$v['payment']}" name="bank">
+					  <img align="absmiddle" src="include/payment/{$v['payment']}/{$v['payment']}.gif" style="width:100px;" alt="{$v['pay_name']}" >
+					</label>
+					</span>
+					{/if}
+					{/loop}
+                </div>
+			  </div>
+			  </div>
+			  	<div class="text-center mb_20">
+						<button class="btn btn-primary" type="button" onclick="payTips();$('#payForm').submit();">确定，去付款</button>
+					</div>
+			</div>		
+		</div>
+		</form>
+			{/if}
+		
+		<!-- pafor-body end-->
+	</div>
+	<!-- payfor end -->
+</div>        
+</div>
+<script type="text/javascript" src="static/js/model/pay/pay.js"></script>
+<!--{template footer}-->

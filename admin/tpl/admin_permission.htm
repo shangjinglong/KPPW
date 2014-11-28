@@ -1,0 +1,73 @@
+<!--{template ADMIN_DIRECTORY/tpl/admin_header}-->  
+<div class="page_title">
+    	<h1>{$_lang['rights_edit']}</h1>
+     	<div class="tool"> 
+			<a href="index.php?do=$do&model_id={$model_id}&op_code={$op_code}" id="task_qx" class="here">{$_lang['private_config']}</a>
+		</div>
+    </div>
+		<div class="box post">
+        <div class="tabcon">
+        	<div class="title"><h2>{$model_info['model_name']}-{$_lang['rights_edit']}</h2></div>
+            <div class="detail">
+               <form action="index.php?do=$do&model_id={$model_id}&op_code={$op_code}" method="post" name="frm1" id="frm1">
+                    <input type="hidden" value="{$perm_rule[$op_code]['op_id']}" name="fds[op_id]">
+					<table width="100%" border="0" cellspacing="0" cellpadding="0">
+					  <tr>
+                        	<th scope="row" width="130">{$_lang['nisonshift_model']}</th>
+                        	<td>
+                     			{$model_info['model_name']}/{$perm_rule[$op_code]['op_name']}
+					  		</td>
+                      </tr>
+                     <tr>
+                       		<th scope="row">{$_lang['condition_limit']}</th>
+                        	<td>
+                        		{$_lang['user_must_pass_synchronously']}<br>
+									{loop $auth_item $k $v}
+										&nbsp;&nbsp;<label for="auth_{$k}"><input type="checkbox" id="auth_{$k}" name="fds[condit][]" value="{$v['auth_code']}" {if strpos($perm_rule[$op_code]['condit'],$v['auth_code'])!==FALSE}checked="checked"{/if}>{$v['auth_title']}</label><br>
+									{/loop}
+								{$_lang['only_can']}{$perm_rule[$op_code]['op_name']}
+                        	</td>
+							<th scope="row">{$_lang['private_config']}</th>
+                        	<td> 
+								<dl>
+									{loop $perm_item[$op_code] $v}
+										<dt>
+											{$_lang['honor']}  <b>{if $v['limit_obj']==1}{$v['m_title']}{else}{$v['g_title']}{/if}</b> {$_lang['de_user']}   
+										</dt>
+										<dd>
+											{if $perm_rule[$op_code]['allow_times']=='0'}											
+											<label id="forbid_{$v['r_id']}">
+												<input type=radio id="forbid_{$v['r_id']}" name="fds[rule][{$v[r_id]}]" value="-1" {if $v['rule']=='-1'}checked="ckecked"{/if}>{$_lang['forbid']}{$v['op_name']}</label><br>
+											<label id="nolimit_{$v['r_id']}">
+												<input type=radio id="nolimit_{$v['r_id']}"  name="fds[rule][{$v[r_id]}]" value="0" {if $v['rule']=='0'||!$v['rule']}checked="ckecked"{/if}>{$_lang['no_limit']}{$v['op_name']}</label><br>
+											{elseif $perm_rule[$op_code]['allow_times']=='1'}											
+											<label id="allow_{$v['r_id']}"><input id="allow_{$v['r_id']}" type=radio name="fds[rule][{$v['r_id']}]" value="1" {if $perm_rule[$op_code]['allow_times']==1}checked="ckecked"{/if}>{$_lang['limit_every_24hour']}
+											</label>	<input type=text size=2 class="txt" name="fds[times][{$v[r_id]}]" value="$v['rule']" id="times_{$v['r_id']}" limit="len:1-5;between:1-" title="{$_lang['limit_times_large_one']}" title="{$_lang['choose_button_if_not']}" msgArea="span_times_{$v['r_id']}">{$_lang['times']}
+												(-1{$_lang['forbid']}，0，{$_lang['not_limit']}，1~X{$_lang['limited']})
+												<span id="span_times_{$v['r_id']}"></span>
+											{/if}
+										</dd>
+									{/loop}
+								</dl>
+							</td>
+							 
+                      </tr>
+					  <tr>
+                        <th scope="row">&nbsp;</th>
+                        <td>
+                            <div class="clearfix padt10">
+                                <button class="positive primary pill button" type="submit" value="{$_lang['edit']}" name="sbt_action"><span class="check icon"></span>{$_lang['submit']}</button>
+                               
+                            </div>
+                        </td>
+                      </tr>
+                    </table>
+                    
+                </form>
+        </div>
+        
+        
+    </div>
+  
+ </div>
+<!--{template ADMIN_DIRECTORY/tpl/admin_footer}-->

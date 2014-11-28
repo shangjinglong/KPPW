@@ -1,0 +1,45 @@
+<!--{template user/header}-->
+<div class="container">
+  <div class="nav-action">
+		<!--{template user/left_side}-->
+  </div>
+  <!-- nav-action end -->
+  <div class="content-panel">
+       <div class="tab">
+      <!--{template user/account_auth_nav}-->
+      </div>
+      <div class="tab_detail">
+      		<!--  start -->
+
+			   <div class="alert alert-success">
+
+			       <p>
+			            <i class="fa fa-check-circle"></i> 验证邮件已发送到邮箱 {$arrAuthInfo['email']} ，请查看邮箱进行验证
+						<a class="alert-link" href="javascript:viewMail('{$strMailExt}');void(0)">查看邮箱</a>
+
+			       </p>
+			    </div>
+
+				<p class="text-info"><strong><i class="fa fa-info-circle"></i> 如果您没有收到邮件</strong></p>
+
+				<p>
+					<i class="fa fa-arrow-circle-o-right"></i> 邮件到达需要2-3分钟，若您长时间未收到邮件，建议您检查<strong>垃圾箱</strong>或者
+					<a href="javascript:reSend();void(0)" >重发邮件</a>
+				</p>
+
+				<p>
+					<i class="fa fa-arrow-circle-o-right"></i> 如果您邮箱填写有误或一直无法收到邮件，建议您
+					<a href="index.php?do=user&view=account&op=auth&del_auth_id={$arrAuthInfo['email_a_id']}&step=step1&code=email">重新认证</a>
+				</p>
+
+
+
+
+
+
+      		<!-- end -->
+      </div>
+  </div>
+  </div>
+  <script src="static/js/model/user/auth.js"></script>
+<!--{template user/footer}-->

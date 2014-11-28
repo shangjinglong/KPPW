@@ -1,0 +1,65 @@
+<!--{template top}-->
+<script src="static/js/model/user/user.js"></script>
+<script src="static/js/model/user/transaction.js"></script>
+  <!-- 首页 start -->
+	<nav class="top-nav">
+        <div class="container">
+
+                <div class="nav-header">
+                  <a class="nav-brand" href="index.php?do=user">用户中心</a>
+                </div>
+                <!-- nav-header end -->
+                <ul class="menu">
+                    <li class="line"></li>
+                    <li><a href="index.php?do=user" {if $view=='collect'||$view=='finance'||$view=='focus'||$view=='prom'||$view=='shop'||$view=='transaction'||$view=='index'}class="selected"{/if}><i class="fa fa-tachometer"></i> <span>首页</span></a></li>
+                    <li class="line"></li>
+                    <li><a href="index.php?do=user&view=account&op=basic" {if $view=='account'}class="selected"{/if}><i class="fa fa-cogs"></i> <span>帐号设置</span></a></li>
+                    <li class="line"></li>
+                    <li><a href="index.php?do=user&view=message&op=notice" {if $view=='message'}class="selected"{/if}><i class="fa fa-envelope" ></i> <span>我的消息</span>{if $intCountMessage} <span class="badge">{$intCountMessage}</span>{/if}</a></li>
+                    <li class="line"></li>
+                    <li><a href="index.php?do=seller&id={$gUid}"  target="_blank"><i class="fa fa-home"></i> <span>我的店铺</span></a></li>
+                    <li class="line"></li>
+                </ul>
+                <!-- menu end -->
+
+                <form action="{if $do =='tasklist'||$do =='goodslist'||$do =='sellerlist'}{$strUrl}{else}index.php?do=tasklist{/if}"  class="navbar-form navbar-right" role="search" id="topHeaderSearch" method="post" >
+                  <div class="btn-group">
+                        <button type="button" class="btn btn-sm btn-default dropdown-toggle " data-toggle="dropdown" id="searchType">
+			                {if $do == 'goodslist'}
+			                 		商品
+			                {elseif $do == 'tasklist'}
+			                		任务
+			                {elseif $do == 'sellerlist'}
+			                		服务商
+			                {else}
+			                	{if $task_open}
+			                		任务
+								{elseif !$task_open&&$shop_open}
+			               			 商品
+								{/if}
+			                {/if}
+						<span class="caret"></span></button>
+                        <ul class="dropdown-menu" id="searchOption">
+		                  {if $task_open}
+		                  <li {if $do == 'tasklist'||($do != 'goodslist'&&$do != 'sellerlist')}class="active"{/if}><a href="javascript:void(0);" rel="tasklist" >任务</a></li>
+						  {/if}
+						  {if $shop_open}
+		                  <li {if $do == 'goodslist'}class="active"{/if}><a href="javascript:void(0);" rel="goodslist">商品</a></li>
+						  {/if}
+		                  <li {if $do == 'sellerlist'}class="active"{/if}><a href="javascript:void(0);" rel="sellerlist">服务商</a></li>
+		                </ul>
+                        
+                  </div>
+                    <div class="form-group">
+                      <input type="text" name="ky" onkeydown="searchKeydown(event);" placeholder="{if $ky}{$ky}{/if}"  class="form-control input-sm">
+                    </div>
+                    <button type="submit" class="btn btn-default btn-sm"><i class="fa fa-search"></i></button>
+                   <!-- input-group end -->
+
+                </form>
+
+        </div>
+        <!-- container end -->
+</nav>
+<!-- nav end -->
+

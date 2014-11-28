@@ -1,0 +1,74 @@
+
+  <ul class="nav nav-pills second-nav">
+    {loop $arrSearchStatus $k $v}
+    	<li {if $s == $k}class="active"{/if}><a href="index.php?do=task&id={$id}&view={$view}&s={$k}#detail">{$v}</a></li>
+    {/loop}
+  </ul>
+  <!-- second-nav end -->
+
+  <div class="evaluate">
+  <div class="table-responsive">
+    <table class="table">
+      <thead>
+        <tr>
+          <th>评价人</th>
+          <th>评价</th>
+
+        </tr>
+      </thead>
+      <tbody>
+		  {loop $arrMarkLists $v}
+        <tr>
+          <td>
+            <div class="evaluate-avatar">
+              <!--{userpic($v['by_uid'],'small')}-->
+            </div>
+            <p class="evaluate-username">{$v['by_username']}</p>
+          </td>
+          <td>
+            <p>对{$v['username']}的评价
+			{if $v['mark_status']==1}
+			<span class="label label-danger">好评</span>
+			<img src="resource/img/ico/ico_mark_1.gif" alt="好评">
+			{elseif $v['mark_status']==2}
+			<span class="label label-warning">中评</span>
+			<img src="resource/img/ico/ico_mark_2.gif" alt="中评">
+			{elseif $v['mark_status']=='3'}
+			<span class="label label-default">差评</span>
+			<img src="resource/img/ico/ico_mark_3.gif" alt="差评">
+			{else}暂无评价{/if}
+              <time class="evaluate-time"><!--{eval echo date('Y-m-d H:i:s',$v['mark_time'])}--></time>
+            </p>
+            <p class="evaluate-content">{$v['mark_content']}</p>
+            <div class="evaluate-meta">
+               {loop $v['aid'] $v1}
+              <div class="evaluate-meta-item">
+                $v1['aid_name'] <span class="text-danger">$v1['star']分</span>
+                <span class="stars a5 s5"><span class="star_selected"></span></span>
+              </div>
+			  {/loop}
+            </div>
+          </td>
+
+        </tr>
+		{/loop}<!--end评价-->
+		<tr>
+			<td>
+           <div class="list-page">
+		    <div class="page-tips pull-left">
+		      显示 {$strPages['st']}~{$strPages['en']} 项 共 <!--{eval echo count($arrMarkLists);}--> 个评价
+		    </div>
+		    <ul class="pagination pagination-sm pull-right">
+		        {$strPages[page]}
+		    </ul>
+		  </div>
+		</td>
+		</tr>
+
+
+      </tbody>
+    </table>
+  </div>
+  </div>
+  <!-- evaluate end -->
+

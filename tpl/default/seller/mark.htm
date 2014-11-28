@@ -1,0 +1,281 @@
+<!--{template top}-->
+<!--{template seller/banner}-->
+<!--{template seller/nav}-->
+
+	{if $type==2}
+			<div class="store_info_box">
+				<ul class="second-nav">
+		            <li class="active"><a href="index.php?do=seller&view=mark&type=2&id={$id}">能力等级</a></li>
+		            <li><a href="index.php?do=seller&view=mark&type=1&id={$id}">信誉等级</a></li>
+		        </ul>
+				<!-- second-nav end -->
+				<div class="user-level">
+					<div class="level-img weike">
+						{$arrSellerLevel['pic']}
+						<span>等级：{$arrSellerLevel['score_id']}</span>
+						<small> 升到下一级还需{$arrSellerLevel['level_up']}能力值 </small>
+					</div>
+					<div class="progress progress-striped active">
+					  <div class="progress-bar"  role="progressbar" aria-valuenow="{$arrSellerLevel['value']}" aria-valuemin="0" aria-valuemax="{$arrSellerLevel['next']}" style="width: {$arrSellerLevel['rate']}%">
+					    <span class="sr-only">{$arrSellerLevel['rate']}% Complete</span>
+					  </div>
+					</div>
+				</div>
+
+				<ul class="user-atten">
+					<li>
+		                <p><span class="user-num">{if $arrSellerInfo['seller_total_num']}<!--{eval echo number_format($arrSellerInfo['seller_good_num']/$arrSellerInfo['seller_total_num'],4)*100}-->{else}0{/if}<sub>%</sub></span></p>
+		                <p>好评率</p>
+		            </li>
+					<li>
+		                <p><span class="user-num">{$arrSellerLevel['value']}</span></p>
+		                <p>能力值</p>
+		            </li>
+		            <li>
+		            	<p><span class="user-num">{$arrSellerInfo['accepted_num']}</span></p>
+		                <p>中标稿件数</p>
+		            </li>
+		            <li>
+		            	<p><span class="user-num">{$arrSellerInfo['seller_total_num']}</span></p>
+		                <p>出售商品数</p>
+		            </li>
+		            <li>
+		                <p><span class="user-num"><sub>￥</sub>{$arrFoundCount['task']}<sub>元</sub></span></p>
+		                <p>获得任务款</p>
+		            </li>
+		            <li>
+		                <p><span class="user-num"><sub>￥</sub>{$arrFoundCount['goods']}<sub>元</sub></span></p>
+		                <p>获得服务款</p>
+		            </li>
+				</ul>
+
+				<div class="evaluate-meta leader">
+					<h2 class="evaluate-meta-title">综合评分 <small>共{$arrDatas['count']}人评分</small></h2>
+					{loop $arrSellerMark $k $v}
+				  <div class="evaluate-meta-item">
+	               	{$v['aid_name']}
+					<span class="text-danger">{$v['avg']}分</span>
+					<!--{eval echo keke_user_mark_class::gen_star2($v['avg']);}-->
+	              </div>
+					{/loop}
+	            </div>
+
+				<div class="evaluate">
+				  <div class="table-responsive">
+				    <table class="table table-hover">
+				    	<thead>
+				    		<tr>
+				    			<th>评价人</th>
+				    			<th>评价内容</th>
+				    		</tr>
+				    	</thead>
+				      <tbody>
+				      	{loop $arrMarkLists $k $v}
+				        <tr>
+				          <td>
+				            <div class="evaluate-avatar">
+				              	<!--{userpic($v['by_uid'],'middle')}-->
+				            </div>
+				            <p class="evaluate-username">{$v['by_username']}</p>
+				          </td>
+				          <td>
+				            <p>
+				            	<span class="marked marked-task">{$v['model']}</span>
+				            	<a href="{$v['url']}">{$v['title']} </a>
+								{if $v['mark_status']==1}
+								<span class="label label-danger">好评</span>
+				              <img src="tpl/default/img/ico_mark_1.gif" alt="好评">
+								{elseif $v['mark_status']==2}
+								<span class="label label-warning">中评</span>
+				              <img src="tpl/default/img/ico_mark_2.gif" alt="中评">
+								{elseif $v['mark_status']==3}
+								<span class="label label-primary">差评</span>
+				              <img src="tpl/default/img/ico_mark_3.gif" alt="差评">
+							  {else}
+							  <span class="label label-danger">好评</span>
+				              <img src="tpl/default/img/ico_mark_1.gif" alt="好评">
+								{/if}
+				              <time class="evaluate-time"><!---{date('Y-m-d',$v['mark_time'])}--></time>
+				            </p>
+				            <p class="evaluate-content">
+				            		{$v['mark_content']}
+							</p>
+				            <div class="evaluate-meta">
+				              <div class="evaluate-meta-item">
+				                工作速度 <span class="text-danger">{$v[star][0]}分</span>
+				                <span class="stars a5 s{$v[star][0]}"><span class="star_selected"></span></span>
+				              </div>
+				              <div class="evaluate-meta-item">
+				                工作质量 <span class="text-danger">{$v[star][1]}分</span>
+				                <span class="stars a5 s{$v[star][1]}"><span class="star_selected"></span></span>
+				              </div>
+				              <div class="evaluate-meta-item">
+				                工作态度 <span class="text-danger">{$v[star][2]}分</span>
+				                <span class="stars a5 s{$v[star][1]}"><span class="star_selected"></span></span>
+				              </div>
+				            </div>
+				          </td>
+				        </tr>
+						{/loop}
+				      </tbody>
+				    </table>
+				  </div><!-- table-responsive end-->
+
+				  <div class="list-page">
+				    <div class="page-tips pull-left">
+				       显示 {$strPages['st']}~{$strPages['en']} 项
+				    </div>
+				    <ul class="pagination pagination-sm pull-right">
+				      {$strPages[page]}
+				    </ul>
+				  </div><!-- list-page end -->
+
+				  </div><!-- evaluate end -->
+
+			</div><!-- store_info_box end -->
+
+
+{elseif $type==1}
+
+			<div class="store_info_box">
+
+				<ul class="second-nav">
+		                 <li><a href="index.php?do=seller&view=mark&type=2&id={$id}">能力等级</a></li>
+		            <li class="active"><a href="index.php?do=seller&view=mark&type=1&id={$id}">信誉等级</a></li>
+		        </ul>
+				<!-- second-nav end -->
+
+				<div class="user-level">
+					<div class="level-img employer">
+						{$arrBuyerLevel['pic']}
+						<span>等级：{$arrBuyerLevel['score_id']}</span>
+						<small> 升到下一级还需{$arrBuyerLevel['level_up']}信誉值 </small>
+					</div>
+
+					<div class="progress progress-striped active">
+					  <div class="progress-bar progress-bar-success"  role="progressbar" aria-valuenow="{$arrBuyerLevel['value']}" aria-valuemin="0" aria-valuemax="{$arrBuyerLevel['next']}" style="width: {$arrBuyerLevel['rate']}%">
+					    <span class="sr-only">{$arrBuyerLevel['rate']}% Complete</span>
+					  </div>
+					</div>
+				</div>
+
+				<ul class="user-atten">
+					<li>
+		                <p><span class="user-num">{if $arrSellerInfo['buyer_total_num']}<!--{eval echo number_format($arrSellerInfo['buyer_good_num']/$arrSellerInfo['buyer_total_num'],4)*100}-->{else}0{/if}<sub>%</sub></span></p>
+		                <p>好评率</p>
+		            </li>
+					<li>
+		                <p><span class="user-num">{$arrBuyerLevel['value']}</span></p>
+		                <p>信誉值</p>
+		            </li>
+		            <li>
+		            	<p><span class="user-num">{$arrSellerInfo['pub_num']}</span></p>
+		                <p>发布任务数</p>
+		            </li>
+		            <li>
+		            	<p><span class="user-num">{$arrSellerInfo['buyer_total_num']}</span></p>
+		                <p>购买商品数</p>
+		            </li>
+		            <li>
+		                <p><span class="user-num"><sub>￥</sub>{$arrFoundCount['task']}<sub>元</sub></span></p>
+		                <p>支付任务款</p>
+		            </li>
+		            <li>
+		                <p><span class="user-num"><sub>￥</sub>{$arrFoundCount['goods']}<sub>元</sub></span></p>
+		                <p>支付服务款</p>
+		            </li>
+				</ul>
+
+
+
+				<div class="evaluate-meta leader">
+					<h2 class="evaluate-meta-title">综合评分 <small>共{$arrDatas['count']}人评分</small></h2>
+			          {loop $arrBuyerMark $k $v}
+					  <div class="evaluate-meta-item">
+		               	{$v['aid_name']}
+						<span class="text-danger">{$v['avg']}分</span>
+						<!--{eval echo keke_user_mark_class::gen_star2($v['avg']);}-->
+
+		              </div>
+						{/loop}
+	            </div>
+	            <!-- evaluate-meta end -->
+
+				<div class="evaluate">
+				  <div class="table-responsive">
+				    <table class="table table-hover">
+				    	<thead>
+				    		<tr>
+				    			<th>评价人</th>
+				    			<th>评价内容</th>
+				    		</tr>
+				    	</thead>
+				      <tbody>
+				        {loop $arrMarkLists $k $v}
+				        <tr>
+				          <td>
+				            <div class="evaluate-avatar">
+				              	<!--{userpic($v['by_uid'],'middle')}-->
+				            </div>
+				            <p class="evaluate-username">{$v['by_username']}</p>
+				          </td>
+				          <td>
+				            <p>
+				            	<span class="marked marked-task">{$v['model']}</span>
+				            	<a href="{$v['url']}">{$v['title']} </a>
+								{if $v['mark_status']==1}
+								<span class="label label-danger">好评</span>
+				              <img src="tpl/default/img/ico_mark_1.gif" alt="好评">
+								{elseif $v['mark_status']==2}
+								<span class="label label-warning">中评</span>
+				              <img src="tpl/default/img/ico_mark_2.gif" alt="中评">
+								{elseif $v['mark_status']==3}
+								<span class="label label-primary">差评</span>
+				              <img src="tpl/default/img/ico_mark_3.gif" alt="差评">
+							  {else}
+							  <span class="label label-danger">好评</span>
+				              <img src="tpl/default/img/ico_mark_1.gif" alt="好评">
+								{/if}
+				              <time class="evaluate-time"><!---{date('Y-m-d',$v['mark_time'])}--></time>
+				            </p>
+				            <p class="evaluate-content">
+				            		{$v['mark_content']}
+							</p>
+				            <div class="evaluate-meta">
+				              <div class="evaluate-meta-item">
+				                付款及时性  <span class="text-danger">{$v[star][0]}分</span>
+				                <span class="stars a5 s{$v[star][0]}"><span class="star_selected"></span></span>
+				              </div>
+				                <div class="evaluate-meta-item">
+					              合作愉快度<span class="text-danger">{$v[star][1]}分</span>
+					              <span class="stars a5 s{$v[star][1]}"><span class="star_selected"></span></span>
+					        </div>
+							 </div>
+				          </td>
+				        </tr>
+						{/loop}
+				      </tbody>
+				    </table>
+				  </div><!-- table-responsive end-->
+
+					<div class="list-page">
+					    <div class="page-tips pull-left">
+					       显示 {$strPages['st']}~{$strPages['en']} 项
+					    </div>
+					    <ul class="pagination pagination-sm pull-right">
+					        {$strPages[page]}
+					    </ul>
+					  </div><!-- list-page end -->
+
+				  </div>
+				  <!-- evaluate end -->
+
+			</div>
+			<!-- store_info_box end -->
+{/if}
+
+</div><!-- store_down end-->
+</div><!-- store_detail end -->
+</div><!-- space_body end-->
+</div><!-- #space_bg end-->
+<!--{template footer}-->

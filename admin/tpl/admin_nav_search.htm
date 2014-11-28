@@ -1,0 +1,26 @@
+<!--{template ADMIN_DIRECTORY/tpl/admin_header}-->
+<div class="box quick_link">
+    	        
+        <div class="box link">
+            <div class="detail pad10">
+        	{if $nav_search}
+			<ul>
+        		{loop $nav_search $k $v}
+            	<li><a href="javascript:s('{$v['resource_url']}')"><span class="font_st">·</span>{$v['resource_name']}</a></li>
+            	{/loop}
+			</ul>
+			{else}
+				{$_lang['now_no_result']}
+			{/if}
+            </div>
+        </div>
+      </div>  
+ <script type="text/javascript">
+ 	function s(url){
+	 var win = art.dialog.open.origin;
+	 win.display_frame.location = url; 
+	 art.dialog.open.api.close();	
+	}
+	
+</script>
+<!--{template ADMIN_DIRECTORY/tpl/admin_footer}-->

@@ -1,0 +1,136 @@
+<!--{template ADMIN_DIRECTORY/tpl/admin_header}-->
+<div class="page_title">
+    <h1>{$_lang['case_manage']}</h1>
+    <div class="tool">
+        <a href="index.php?do=$do&view=list">{$_lang['case_list']}</a>
+        <a class="here" href="index.php?do=$do&view=add&case_id={$case_id}">{if $case_info['case_id']}{$_lang['edit']}{else}{$_lang['add']}{/if}{$_lang['case']}</a>
+    </div>
+</div>
+<div class="box post">
+    <div class="title">
+        <h2>{if $case_info['case_id']}{$_lang['edit']}{else}{$_lang['add']}{/if}{$_lang['case']}</h2>
+    </div>
+    <div class="detail">
+        <form action="index.php?do=$do&view=add" method="post" id="frm" name="frm" enctype="multipart/form-data">
+            <input type="hidden" name="hdn_case_id" value="{$case_id}"><input type="hidden" id="obj_id" name="fds[obj_id]">
+            <table width="100%" border="0" cellspacing="0" cellpadding="0">
+                <tr>
+                    <th scope="row" width="130">
+                        {$_lang['case_type']}{$_lang['zh_mh']}
+                    </th>
+                    <td>
+                        <select name="case_type" id="case_type" onchange ="search_case();">
+                            <option value="0">---{$_lang['please_choose']}---</option>
+                            <option value="task" {if $case_info['obj_type']=='task'}selected="selected"{/if}>---{$_lang['task']}--- </option>
+                            <option value="service" {if $case_info['obj_type']=='service'}selected="selected"{/if}>---{$_lang['shop']}--- </option>
+                        </select>
+                        <span id="case_type_msg"></span>
+                    </td>
+                </tr>
+                <tr>
+                    <th scope="row" width="130">
+                        {$_lang['case_name']}{$_lang['zh_mh']}
+                    </th>
+                    <td>
+                        <input type="text" id="txt_task_title" value="{if $case_info['case_title']}$case_info['case_title']{else}$case_info['task_title']{/if}" name="fds[case_title]" class="txt" style=" width:260px;" limit="required:true;len:2-50" msg="{$_lang['txt_case_title_msg']}" title="{$_lang['txt_case_title_msg']}" msgarea="span_name"/><span id="span_name"></span>
+                    </td>
+                </tr>
+                <tr>
+                    <th scope="row" width="130">
+                        {$_lang['case_money']}{$_lang['zh_mh']}
+                    </th>
+                    <td>
+                        <input type="text" id="txt_case_price" value="{if $case_info['case_price']}{$case_info['case_price']}{elseif $case_info['task_price']}$case_info['task_price']{else}{/if}" name="fds[case_price]" class="txt" style=" width:260px;" onkeyup="clearstr(this)"/>
+                    </td>
+                </tr>
+                <tr>
+                    <th scope="row" width="130">
+                        {$_lang['case_img']}{$_lang['zh_mh']}
+                    </th>
+                    <td>
+
+
+                        <input type="file" class="file" name="upload" id="upload"><span id="span_msg" style="color:red"></span>
+                        <input type="hidden" name = "hdn_case_img" id="hdn_case_img" value="$case_info['case_img']">
+						<img id="case_img" src="../{$case_info['case_img']}" {if !$case_info['case_img']}class="hidden"{/if} width="100px;" height="100px;">
+                        <div class="c999">
+                            {$_lang['support_img_type']}
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <th scope="row">
+                        &nbsp;
+                    </th>
+                    <td>
+                        <div class="clearfix padt10">
+                            <input type="hidden" name="sbt_edit" value="1">
+                            <button class="positive pill primary button" name="sbt_edit" type="button" value="{$_lang['submit']}" onclick="case_sbt();">
+                                <span class="icon check"></span>
+                                {$_lang['submit']}
+                            </button>
+                        </div>
+                    </td>
+                </tr>
+            </table>
+            </div>
+        </div>
+        <script src="../static/js/uploadify/jquery.uploadify.min.js" type="text/javascript">
+        </script>
+        <link href="../static/js/uploadify/uploadify.css" rel="stylesheet">
+<script type="text/javascript">
+function case_sbt(){
+	if(!$("#case_type").val()){
+		$("#case_type_msg").html('请选择类型');
+		return false;
+	}
+	if($("#hdn_case_img").val()){
+		if(checkForm(document.getElementById('frm'))){
+			$("#frm").submit();
+		}
+	}else{
+		$("#span_msg").html('请上传图片');
+		return false;
+	}
+}
+
+$(function(){
+    uploadify({
+        auto: true,
+        size: "{$basic_config['max_size']}MB",
+        exts: '*.jpg;*.jpeg;*.gif;*.png',
+		resText: 'hdn_case_img',
+        limit: 1,
+    },{
+        fileType: 'service',
+        objType: 'service',
+		mode: 'back'
+    },uploadResponse);
+});
+
+function search_case(){
+	var search_type = $("#case_type").val();
+	art.dialog.open('index.php?do=case&view=search&search_type='+search_type,{
+		title:"{$_lang['case_search']}",
+		height:400,
+		width:700,
+		closeFn:function (){
+				$("#obj_id").val(art.dialog.data('obj_id_val'));
+				$("#txt_task_title").val(art.dialog.data('title_val'));
+				$("#txt_case_price").val(art.dialog.data('cash_val'));
+				$("#hdn_case_img").val(art.dialog.data('case_img'));
+				$("#case_type").val(art.dialog.data('case_type'));
+			}
+		},false);
+}
+
+function uploadResponse(json){
+	$("#hdn_case_img").val(json.msg.url);
+	$('#case_img').removeClass('hidden');
+	$('#case_img').attr('src','../'+json.msg.url);
+}
+
+var xyq = "<!--{eval echo $xyq = session_id();}-->";
+
+</script>
+<!--{template ADMIN_DIRECTORY/tpl/admin_footer}-->

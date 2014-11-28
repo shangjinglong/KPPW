@@ -1,0 +1,102 @@
+<!--{template user/header}-->
+<div class="container">
+  <div class="nav-action">
+		<!--{template user/left_side}-->
+  </div>
+  <!-- nav-action end -->
+  <div class="content-panel">
+      <div class="tab">
+       <a {if $op === 'basic'}class="selected"{/if} href="index.php?do=user&view=finance&op=basic">账户信息</a>
+       <a {if $op === 'details'}class="selected"{/if} href="index.php?do=user&view=finance&op=details">收支明细</a>
+       <a {if $op === 'rechargelog'}class="selected"{/if} href="index.php?do=user&view=finance&op=rechargelog">充值记录</a>
+       <a {if $op === 'withdrawlog'}class="selected"{/if} href="index.php?do=user&view=finance&op=withdrawlog">提现记录</a>
+      </div>
+      <div class="tab_detail">
+        <div class="well well-sm">
+      	  现金余额:<span class="money">{c:$gUserInfo['balance']}</span>
+        </div>
+    	 <div class="action-bar">
+    <form action="{$strUrl}" method="post" name="searchEventForm" id="searchEventForm">
+        <div class="action-item">
+        <input type="text" placeholder="请输入财务编号" class="form-control" name="intFinaId" id="intFinaId" value="{$intFinaId}">
+        </div>
+        <div class="action-item">
+          <select class="form-control" name="strFinaType">
+        	<option value="" {if !$strFinaType}selected="selected"{/if}>{$_lang['all']}</option>
+            <option value="in" {if $strFinaType=='in'}selected="selected"{/if}>{$_lang['income']}</option>
+            <option value="out" {if $strFinaType=='out'}selected="selected"{/if}>支出</option>
+        </select>
+        </div>
+		<div class="action-item">
+          <select class="form-control" name="strOrder">
+                {loop $arrOrd $k $v}
+					<option value="$k" {if $k==$strOrder}selected="selected"{/if}>{$v} </option>
+                {/loop}
+            </select>
+        </div>
+		<div class="action-item">
+            <select class="form-control" name="intPagesize">
+                <option value="10" {if $intPagesize=='10'}selected="selected"{/if}>{$_lang['page_size']}10{$_lang['tiao']}</option>
+                <option value="20" {if $intPagesize=='20'}selected="selected"{/if}>{$_lang['page_size']}20{$_lang['tiao']}</option>
+                <option value="30" {if $intPagesize=='30'}selected="selected"{/if}>{$_lang['page_size']}30{$_lang['tiao']}</option>
+            </select>
+        </div>
+        <div role="toolbar" class="action-item btn-toolbar">
+          <div class="btn-group">
+            <button class="btn btn-default" type="submit">搜索</button>
+          </div>
+        </div>
+      </form>
+      </div>
+      <div class="table-responsive">
+        <table class="table table-hover">
+        <thead>
+          <tr>
+            <th> 编号</th>
+			<th>{$_lang['use']}</th>
+            <th>收入</th>
+			<th>支出</th>
+			<th>剩余金额</th>
+            <th>{$_lang['time']}</th>
+          </tr>
+        </thead>
+        <tbody>
+        	{loop $arrFinanceLists $k $v}
+          <tr>
+            <td>
+                  $v['fina_id']
+            </td>
+
+            <td>  <p>{$arrAction[$v['fina_action']]}</p>
+			   {if $v['task_title']&&$v['obj_type']=='task'}
+			   		<p>
+              <a href="{$_K['siteurl']}/index.php?do=task&id={$v['obj_id']}" target="_blank" title="{$v['task_title']}"><!--{eval echo kekezu::cutstr($v['task_title'],'20');}--></a>
+              </p>
+				{elseif $v['title']&&$v['obj_type']=='goods'}
+					<a href="{$_K['siteurl']}/index.php?do=goods&id={$v['obj_id']}" target="_blank" title="{$v['title']}"><!--{eval echo kekezu::cutstr($v['title'],'20');}--></a>
+				{/if}</td>
+				<td style="color:green;">+{if $v['fina_type']=='in'}{c:$v['fina_cash']}{else}{c:0}{/if}</td>
+				<td style="color:red;">-{if $v['fina_type']=='out'}{c:$v['fina_cash']}{else}{c:0}{/if}</td>
+			<td>{c:$v['user_balance']}</td>
+            <td><!--{eval echo date('Y-m-d H:i:s',$v['fina_time']);}--></td>
+          </tr>
+		  {/loop}
+
+        </tbody>
+      </table>
+      </div>
+
+      <div class="clearfix">
+
+      <ul class="pagination pagination-sm pull-right">
+        {$strPages['page']}
+      </ul>
+      </div>
+
+    </div>
+  </div>
+  </div>
+
+<script src="static/js/model/user/finance.js"></script>
+
+<!--{template user/footer}-->

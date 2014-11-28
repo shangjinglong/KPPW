@@ -1,0 +1,6 @@
+<nav class="page_nav">
+    <a href="index.php?do=seller&view=goods&id={$id}" {if $view=='goods'||!$view}class="selected"{/if}>商品 {if $intGoodsCount}<span class="badge">$intGoodsCount</span>{/if}</a>
+	<a href="index.php?do=seller&view=task&id={$id}" {if $view=='task'}class="selected"{/if}>任务 {if $intTaskCount}<span class="badge">$intTaskCount</span>{/if}</a>
+    <a href="index.php?do=seller&view=case&id={$id}" {if $view=='case'}class="selected"{/if}>案例 {if $intCaseCount}<span class="badge">$intCaseCount</span>{/if}</a>
+    <a href="index.php?do=seller&view=mark&id={$id}" {if $view=='mark'}class="selected"{/if}>评价详情</a>
+</nav><!-- page_nav end -->

@@ -1,0 +1,163 @@
+<!--{template ADMIN_DIRECTORY/tpl/admin_header}--> 
+ 
+	<div class="page_title">	
+    	<h1>{if $type=='art'}{$_lang['article']}{elseif $type=='help'}{$_lang['help']}{elseif $type=='bulletin'}{$_lang['bulletin']}{elseif $type=='about'}{$_lang['about']}{else}{$_lang['single_page']}{/if}{$_lang['manage']}</h1>
+         <div class="tool">
+            <a href="index.php?do=$do&view=list&type=$type" {if $view=='list'}class="here" {/if}>文章列表</a>     
+            {if $type!='about'}<a href="index.php?do=$do&view=edit&type=$type" {if $view=='edit'}class="here" {/if}>添加文章</a>{/if}     
+    	</div>
+	</div>
+    <!--页头结束-->
+
+    <!--提示结束-->
+     
+        <div class="box search p_relative">
+    	<div class="title"><h2>{$_lang['search']}</h2></div>
+        <div class="detail" id="detail">
+           
+		    <form action="#" method="get" name="s" id="sl">
+            	<input type="hidden" name="do" value="$do">
+				<input type="hidden" name="view" value="$view">
+				<input type="hidden" name="type" value="$type">
+				<input type="hidden" name="page" value="$page">
+                <table cellspacing="0" cellpadding="0">
+					<tbody>
+                        <tr>
+                            <th>{$_lang['author']}</th>
+                            <td><input type="text" value="$w['username']" name="w[username]" class="txt"/></td>
+                            <th>{$_lang['article_title']}</th>
+                            <td colspan="3"><input type="text" value="$w['art_title']" name="w[art_title]" class="txt"/>*{$_lang['search_by_like']}</td>
+						</tr>
+                        <tr> 
+						{if $type=='art' or $type=='help'}
+                            <th>{$_lang['section']}</th>
+                            <td>
+                            	<select class="ps vm" name="w[art_cat_id]" id="catid">
+                            	{loop $cat_arr_list $v}
+									$v
+								{/loop}
+								
+								</select>
+								</td>
+							{/if}
+							<th>{$_lang['order']}</th>
+							<td>
+                                <select name="ord[]">
+                                	<option value="art_id" {if $ord['0']=='art_id' or !isset($ord['0'])} selected="selected"{/if}>{$_lang['default']}{$_lang['order']}</option>
+                                	<option value="pub_time" {if $ord['0']=='pub_time' } selected="selected"{/if}>{$_lang['pub_time']}</option>
+                                </select>
+                                <select name="ord[]">
+                               		 <option {if $ord['1']=='desc' or !isset($ord['1'])}selected="selected" {/if} value="desc">{$_lang['desc']}</option>
+                                	<option {if $ord['1']=='asc'}selected="selected" {/if} value="asc">{$_lang['asc']}</option>
+                                </select>
+							</td> 
+                            <th>{$_lang['list_result']}</th>
+                            <td><select name="page_size">
+									<option value="10" {if $page_size=='10'}selected="selected"{/if}>{$_lang['page_size']}10</option>
+									<option value="20" {if $page_size=='20'}selected="selected"{/if}>{$_lang['page_size']}20</option>
+									<option value="30" {if $page_size=='30'}selected="selected"{/if}>{$_lang['page_size']}30</option>
+								</select>
+                              	<button class="pill" type="submit" value="{$_lang['search']}" name="sbt_search">
+                            		<span class="icon magnifier"></span>{$_lang['search']}
+								</button>
+								</td>
+                        </tr>
+                         
+                        
+                    </tbody>
+                </table>
+            </form>
+			
+        </div>
+    </div>
+    <!--搜索结束-->
+    
+    <div class="box list">
+    	<div class="title"><h2>{if $type=='art'}{$_lang['article']}{elseif $type=='help'}{$_lang['help']}{elseif $type=='bulletin'}{$_lang['bulletin']}{elseif $type=='about'}{$_lang['about']}{else}{$_lang['single_page']}{/if}{$_lang['list']}</h2></div>
+        <div class="detail">
+        	<form action="" id='frm_list' method="post">
+        		<div id="ajax_dom">
+        		<input type="hidden" name="page" value="{$page}">
+              <table cellpadding="0" cellspacing="0">
+                <thead>
+                  <tr>
+                    <th>
+	<input type="checkbox" id="checkbox" onclick="checkall();" class="checkbox" >编号
+</th>
+                    <th width="60">{$_lang['category']}</th>
+                    <th width="30%" >{if $type=='art'}{$_lang['article']}{elseif $type=='help'}{$_lang['help']}{elseif $type=='bulletin'}{$_lang['bulletin']}{elseif $type=='about'}{$_lang['about']}{else}{$_lang['single_page']}{/if}{$_lang['title']}</th>
+                    <th width="60">访问量</th>
+                    <th width="60">{$_lang['pub_name']}</th>
+                    <th width="60">{$_lang['pub_time']}</th>
+					
+                    <th width="25%">{$_lang['operate']}</th>
+                  </tr>
+				  </thead>
+                  <tbody>
+                  {loop $art_arr $k $v}
+                  <tr class="item">
+                  	<td><input type="checkbox" name="ckb[]" value="{$v['art_id']}" class="checkbox">{$v['art_id']}</td>
+                    <td class="td28 wraphide">
+                    	{if $v['art_cat_id']}<!--{eval echo(kekezu::cutstr($art_cat_arr[$v['art_cat_id']]['cat_name'],20))}-->{else}{if $type=='bulletin'}{$_lang['bulletin']}{elseif $type=='about'}{$_lang['about']}{/if}{/if}</td>
+                    <td>
+                    	<a href="index.php?do={$do}&view=edit&art_id={$v['art_id']}&type={$type}&page={$page}" >
+							<!--{eval echo(kekezu::cutstr($v['art_title'],50));}-->
+							{if $v['is_recommend']==1&&$type !='help'} [{$_lang['recommend']}]{/if}
+							{if $v['art_pic']} [{$_lang['img']}]{/if}
+						</a>
+					</td>
+                    <td class="wraphide">$v['views']</td>
+                    <td class="wraphide">{if $v['username']}{$v['username']}{else}{$_lang['anonymous']}{/if}</td>
+                    <td class="ws_break"><!--{date('Y-m-d',$v['pub_time'])}--></td>
+                    <td>
+                    	 
+						<a href="{if $type=='art'}../index.php?do=article&id={$v['art_id']}&page={$page}{elseif $type=='help'}../index.php?do=help&spid={$v['art_cat_id']}&page={$page}{else}../index.php?do=single&id={$v['art_id']}{/if}" target="_blank" class="button"><span class="book icon"></span>{$_lang['view']}</a> 
+						<a href="index.php?do={$do}&view=edit&art_id={$v['art_id']}&type=$type&page={$page}" class="button dbl_target"><span class="pen icon"></span>{$_lang['edit']}</a>
+						<a href="$url&art_id=$v['art_id']&ac=del&page={$page}"  onclick="return cdel(this);" class="button"><span class="trash icon"></span>{$_lang['delete']}</a>
+					</td>
+                  </tr>
+                  {/loop}
+                  </tbody>
+				  <tfoot>
+                  <tr>
+                    <td colspan="7">
+	                    <div class="clearfix">
+	                        <label for="checkbox" onclick="checkall(event);">{$_lang['select_all']}</label><!-- 全选 -->
+	                        <input type="hidden" name="sbt_action" class="sbt_action"/>
+							<button name="sbt_action" type="submit" value="{$_lang['mulit_delete']}" onclick="return batch_act(this,'frm_list');" class="pill negative"><span class="icon trash"></span>{$_lang['mulit_delete']}</button>
+	                    </div>
+                    </td>
+                  </tr>
+                </tfoot>
+              </table>
+			  <div class="page">{$pages['page']}</div>
+			  </div>
+        	</form>
+        </div>       
+    </div>
+	<!--主体结束-->
+<script type="text/javascript">
+	function createHtml(writedir,filename){
+		var url = "index.php?do=static&view=update&sbt_edit=1&write_dir="+writedir+"&file_name="+filename;
+			ajaxDialog(url);
+	}
+ function ajaxDialog(url){
+ 	 art.dialog({
+			title: "{$_lang['static_file_update']}",
+			content: "{$_lang['start_update_static_file']}",
+			yesFn: function(){
+				var dia = this;
+				dia.content("{$_lang['static_file_update_not_operation']}").lock();
+						$.getJSON(url,function(json){
+							if(json.status==1){dia.close();
+								art.dialog({icon: 'succeed',content: json.msg,time:3});
+							}else{art.dialog.alert(json.msg);}
+							return false;
+						})
+						 return false;
+				},
+				noFn :function(){this.close();return false;}
+		})
+ }
+</script>
+<!--{template ADMIN_DIRECTORY/tpl/admin_footer}-->

@@ -1,0 +1,97 @@
+<!--{template ADMIN_DIRECTORY/tpl/admin_header}-->
+	<div class="page_title">
+    	<h1>$_lang['nav_mange']</h1>
+    </div>
+<div class="box post">
+	<div class="tabcon">
+        	<div class="title"><h2>$_lang['nav']{if $nav_id}$_lang['edit']{else}$_lang['add']{/if}</h2></div>
+            <div class="detail">
+                <form name="frm_config_basic" id="frm_config_basic" action="" method="post" >    
+				    <input type="hidden" id="nav_id" name="pk[nav_id]" value="{$nav_config['nav_id']}">
+				    <table width="100%" border="0" cellspacing="0" cellpadding="0">
+                      <tr>
+                         <th scope="row" width="160">$_lang['menu'].$_lang['title']{$_lang['zh_mh']}</th>
+                     	 <td>
+                        	<input type="text" name="fds[nav_title]" id="nav_title" value="{$nav_config['nav_title']}" class="txt" style="width:260px;" limit="required:true;len:1-50" 
+	                         msg="{$_lang['name_error']}" msgArea="obj_name_msg" title="$_lang['menu_desc']" />
+	                        <span id="obj_name_msg"></span>
+						 </td>
+					  </tr>
+                      <tr>
+                         <th scope="row" width="160">$_lang['menu'].$_lang['link']{$_lang['zh_mh']}</th>
+                     	 <td>
+                        	<div style="float:left; padding-top:10px">
+                        	<input type="text" name="fds[nav_url]" id="nav_url" value="{$nav_config['nav_url']}" class="txt" style="width:260px;" {if $readonly}disabled="true"{/if}  />
+                        	</div>
+                        	<div style="float:left;margin-left:20px; width:50%">
+						 	<span>$_lang['link_before_desc']<br>$_lang['link_after_desc']</span></br><font color="red">站内的可用链接、一经填写无法修改！</font>
+						 	</div>
+						 </td>
+					  </tr>
+					  <tr>
+                         <th scope="row" width="160">$_lang['menu'].$_lang['style']{$_lang['zh_mh']}</th>
+                     	 <td>
+                        	<input type="text" {if $nav_id} readonly="readonly" {/if} name="fds[nav_style]" id="nav_style"  value="{$nav_config['nav_style']}" class="txt" style="width:260px;"/>
+						 </td>
+					  </tr>
+					  <tr>
+                         <th scope="row" width="160">$_lang['menu'].$_lang['order'].{$_lang['zh_mh']}</th>
+                     	 <td>
+                        	<input type="text" name="fds[listorder]" id="listorder" value="{$nav_config['listorder']}" class="txt" style="width:260px;"/>
+						 </td>
+					  </tr>
+					  <tr>
+                         <th scope="row" width="160">$_lang['open_new_window'].{$_lang['zh_mh']}</th>
+                     	 <td>
+                     	 	<select name="fds[newwindow]" id='newwindow'>
+                     	 		<option {if $nav_config['newwindow']==1} selected="selected" {/if} value='1'>$_lang['yes']</option>
+                     	 		<option {if $nav_config['newwindow']==0} selected="selected" {/if} value='0'>$_lang['no']</option>
+                     	 	</select>
+						 </td>
+					  </tr>
+					  <tr>
+                         <th scope="row" width="160">$_lang['show_model']{$_lang['zh_mh']}</th>
+                     	 <td>
+                        	<select name="fds[ishide]" id="ishide">
+                     	 		<option {if $nav_config['ishide']==0} selected="selected" {/if} value='0'>$_lang['is_show']</option>
+                     	 		<option {if $nav_config['ishide']==1} selected="selected" {/if} value='1'>$_lang['is_hide']</option>
+                     	 	</select>
+						 </td>
+					  </tr>
+					  {if $nav_config['nav_style']!=='index'}
+					  <tr>
+                         <th scope="row" width="160">$_lang['set_index']{$_lang['zh_mh']}</th>
+                     	 <td>
+                        	<select name="set_index">
+                     	 		<option {if $nav_config['nav_style']==$kekezu->_sys_config['set_index']} selected="selected" {/if} value='1'>$_lang['yes']</option>
+                     	 		<option {if $nav_config['nav_style']!=$kekezu->_sys_config['set_index']} selected="selected" {/if} value='0'>$_lang['no']</option>
+                     	 	</select>
+						 </td>
+					  </tr>
+					  {/if}
+                      <tr>
+                        <th scope="row">&nbsp;</th>
+                        <td>
+                            <div class="clearfix padt10">
+                                <button class="positive pill primary button" type="submit" name="sbt_edit" onclick="return checkForm(document.getElementById('frm_config_basic'),false)" value="{$_lang['submit']}" ><span class="pen icon"></span>{$_lang['submit']}</button>
+                                
+                            </div>
+                        </td>
+                      </tr>
+                    </table>
+                    
+                </form>
+            </div>
+        </div>
+</div>
+<script type="text/javascript">
+var nav_list = {$nav_list_json};
+$('#navs').change(function(){
+	var nav_info = nav_list[$(this).val()];
+	for(var i in nav_info){
+		$("#"+i).attr('value',nav_info[i]);
+	}
+});
+</script>
+
+<!--{template ADMIN_DIRECTORY/tpl/admin_footer}-->

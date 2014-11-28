@@ -1,0 +1,77 @@
+<!--{template user/header}-->
+<div class="container">
+<div class="nav-action">
+   <!--{template user/left_side}-->
+  </div>
+
+  <div class="content-panel">
+    <div class="tab">
+        <a {if $op === 'benefit'}class="selected"{/if} href="index.php?do=user&view=prom&op=benefit" >推广收益</a>
+    </div>
+    <div class="tab_detail">
+    	 <div class="action-bar">
+    <form action="{$strUrl}" method="post" name="searchEventForm" id="searchEventForm">
+        <div class="action-item">
+        <input type="text" placeholder="请输入编号" class="form-control" name="intEventId" id="intEventId" value="{$intEventId}">
+        </div>
+        <div class="action-item">
+          <select class="form-control" name="strEventType" id="strEventType">
+            <option value="" {if !$strEventType} selected="selected"{/if}>事件类型</option>
+             {loop $arrEventType $k $v}
+            	<option value="{$k}" {if $strEventType ==$k} selected="selected"{/if}>{$v['prom_item']}</option>
+            {/loop}
+          </select>
+        </div>
+        <div role="toolbar" class="action-item btn-toolbar">
+          <div class="btn-group">
+            <button class="btn btn-default" type="submit">搜索</button>
+          </div>
+        </div>
+      </form>
+      </div>
+    	<form method="post" name="listPromForm" id="listPromForm" action="{$strUsersUrl}&op=benefit">
+        <input type="hidden" name="action" value="" id="action">
+		<input type="hidden" name="intPage" value="{$intPage}" >
+      <div class="table-responsive">
+        <table class="table table-hover">
+        <thead>
+          <tr>
+            <th>编号</th>
+            <th>事件类型</th>
+			<th>推广下线</th>
+            <th>推广金额</th>
+            <th>推广时间</th>
+            <th>事项状态</th>
+          </tr>
+        </thead>
+        <tbody>
+        	{loop $arrPromLists $k $v}
+          <tr>
+            <td>
+                 $v['event_id']
+            </td>
+            <td>$v['event_desc']</td>
+            <td>$v['username']</td>
+			<td>$v['rake_cash']</td>
+            <td><!--{eval echo date('Y-m-d',$v['event_time']);}--></td>
+            <td> {$arrEventStatus[$v['event_status']]}</td>
+          </tr>
+		  {/loop}
+
+        </tbody>
+      </table>
+      </div>
+
+      <div class="clearfix">
+
+      <ul class="pagination pagination-sm pull-right">
+        {$strPages['page']}
+      </ul>
+      </div>
+</form>
+
+    </div>
+  </div>
+  </div>
+  <!-- 我的消息 end &content-panel end -->
+<!--{template user/footer}-->

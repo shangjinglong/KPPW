@@ -1,0 +1,113 @@
+<!--{template ADMIN_DIRECTORY/tpl/admin_header}-->
+
+<div class="page_title"><h1>{$_lang['email_auth_list']}</h1></div>
+<!--页头结束-->
+
+
+<div class="box search p_relative">
+	<div class="control">
+   <a href="javascript:d();"><b>&times;</b></a>
+	</div>
+	<div class="title"><h2>{$_lang['search']}</h2></div>
+	<div class="detail" id="detail">
+	<form method="post" action="index.php?do={$do}&view={$view}&code=$code&page={$page}" id="frm_art_search">
+		<table cellspacing="0" cellpadding="0">
+			<tbody>
+				<tr>
+					<th>{$_lang['auth_num']}</th>
+					<td><input type="text" class="txt" name="w[email_a_id]" 	value="{$w[email_a_id]}" onkeyup="clearstr(this);"></td>
+					<th>{$_lang['auth_user']}</th>
+					<td><input type="text" class="txt" name='w[username]' value="{$w[username]}"></td>
+				</tr>
+				<tr>
+					<th>{$_lang['list_result']}</th>
+					<td>
+						<select name="w[page_size]">
+						<option value="10" {if $w[page_size]=='10'}selected="selected"{/if}>{$_lang['page_size']}10</option>
+						<option value="20" {if $w[page_size]=='20'}selected="selected"{/if}>{$_lang['page_size']}20</option>
+						<option value="30" {if $w[page_size]=='30'}selected="selected"{/if}>{$_lang['page_size']}30</option>
+						</select>
+						<button class="pill" type="submit" value="{$_lang['search']}" name="sbt_search"><span class="icon magnifier">&nbsp;</span>{$_lang['search']}</button>
+					 </td>
+					 <th>&nbsp;</th>
+					<td>&nbsp;</td>
+				</tr>
+			</tbody>
+		</table>
+		</form>
+	</div>
+</div>
+<!--搜索结束-->
+
+<div class="box list">
+    	<div class="title"><h2>{$_lang['email_auth']}</h2></div>
+        <div class="detail">
+        <form action="" id='frm_list' method="post">
+        <div id="ajax_dom"><input type="hidden" name="page" value="{$page}" />
+        <table cellspacing="0" cellpadding="0">
+         <tbody>
+          <tr>
+          	<th width="15"><input type="checkbox" id="checkbox" onclick="checkall();"></th>
+            <th>{$_lang['auth_num']}</th>
+            <th>{$_lang['user_id']}</th>
+            <th>{$_lang['username']}</th>
+			<th>{$_lang['auth_email']}</th>
+			<th>{$_lang['auth_time']}</th>
+			<th>{$_lang['auth_status']}</th>
+			<!--<th>{$_lang['operate']}</th>-->
+		 </tr>
+		  {loop $email_arr $v}
+		<tr class="item">
+			<td><input type="checkbox" name="ckb[]" id="cbk_selected" value="{$v[email_a_id]}"></td>
+			<td>{$v[email_a_id]}</td>
+			<td>{$v[uid]}</td>
+			<td>{$v[username]}</td>
+			<td>{$v[email]}</td>
+			<td><!--{eval echo date("Y-m-d H:i:s",$v[auth_time])}--></td>
+			<td>
+				{if $v[auth_status]==1}
+					<font color="green">{$_lang['confirmed']}</font>
+				{else}
+					<font color="red">{$_lang['wait_confirm']}</font>
+				{/if}	
+				<!--
+				{if $v[auth_status]==2||$v[auth_status]==0}
+					<a href="index.php?do=$do&view=$view&code=$code&action=pass&auth_id=$v[email_a_id]&euid={$v['uid']}" onclick="return cdel(this,'{$_lang[confirm_pass]}')" class="button dbl_target"><span class="check icon"></span>{$_lang['pass']}</a>
+				{/if}
+			
+				{if $v[auth_status]==0}
+					<a href="index.php?do=$do&view=$view&code=$code&action=not_pass&auth_id=$v[email_a_id]" onclick="return cdel(this,'{$_lang[confirm_nopass]}')" class="button"><span class="cross icon"></span>{$_lang['nopass']}</a>
+				{/if}
+				-->
+				{if $v[auth_status]!=1}
+					<a  href="index.php?do={$do}&view={$view}&code=$code&ac=del&email_a_id={$v[email_a_id]}&obj=$v[username]" 	class="button"   onclick="return cdel(this);"><span class="trash icon"></span>{$_lang['delete']}</a>
+				{/if}
+		   </td>
+ 
+		</tr>
+		 {/loop}
+		 <tr>
+	         <td colspan="8">
+	        	 
+				 
+				 <label for="checkbox">{$_lang['select_all']}</lable>　
+				 <input type="hidden" name="sbt_action" class="sbt_action"/>
+				 <button type="submit" name="sbt_action" value="{$_lang['mulit_delete']}"   class="pill negative" onclick="return batch_act(this,'frm_list');"><span class="icon trash"></span>{$_lang['mulit_delete']}</button>
+	          </td>
+	      </tr>
+		 
+		  </tbody>
+        </table>
+		<div class="page">{$pages[page]}</div>	
+		</div>
+		</form>
+		</div>
+</div>
+<!--主体结束-->
+<script language="javascript">
+function d()
+{
+		$("#frm_art_search").slideToggle('800');	  
+}
+</script>
+<!--{template ADMIN_DIRECTORY/tpl/admin_footer}-->

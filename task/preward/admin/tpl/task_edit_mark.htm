@@ -1,0 +1,68 @@
+<!--{template ADMIN_DIRECTORY/tpl/admin_header}-->
+<link href="{$_K['siteurl']}/static/css/box.css" type="text/css" rel="stylesheet">
+<div class="page_title" id="taskScroll">
+    <h1>{$model_info['model_name']}{$_lang['manage']}</h1>
+    <div class="tool">
+        <a href="index.php?do=$do&model_id=$model_id&view=list">{$_lang['task_list']}</a>
+        {loop $ops $v}<a href="index.php?do=$do&model_id={$model_id}&view=edit&task_id={$task_id}&op={$v}" class="{if $op==$v}here{/if}">{$_lang['b_task_'.$v]}</a>
+        {/loop}
+    </div>
+</div>
+<!--页头结束-->
+<div class="box post">
+    <div class="tabcon">
+        <div class="title">
+            <h2>{$_lang['b_task_'.$op]}</h2>
+        </div>
+        <div class="detail">
+            <div id="ajax_dom">
+            	{if $list}
+                <table width="100%" border="0" cellpadding="5">
+                    {loop $list $v}
+                    <tbody id="c_{$v['comment_id']}">
+                        <tr>
+                            <td width="70">
+                                <a href="{$_K['siteurl']}/index.php?do=seller&id={$v['by_uid']}" target="_blank" title="{$v['by_username']}"><!--{userpic($v['uid'],'small')}--></a>
+                                
+                            </td>
+                            <td style="padding:0" align="left">
+                            	<div class="fl_l pad10">
+                            		<a href="{$_K['siteurl']}/index.php?do=seller&id={$v['by_uid']}" target="_blank">{$v['by_username']}</a>
+                                	{$_lang['mark']}
+									<a href="{$_K['siteurl']}/index.php?do=seller&id={$v['uid']}" target="_blank">{$v['username']}</a>
+                                	{$_lang['mark_time']}{$_lang['zh_mh']}
+										{if $v['mark_status']}
+										<img src="{$_K['siteurl']}/resource/img/ico/ico_mark_{$v['mark_status']}.gif" alt=''>
+										<!--{date('Y-m-d H:i:s',$v['mark_time'])}-->
+										{else}
+											{$_lang['no_mark']}
+										{/if}
+								</div>
+								<div class="clear"></div>
+                                <div class="ws_break pad10 fl_l">{$v['mark_content']}</div>
+								<!--{eval $aid_info=keke_user_mark_class::get_user_aid($v['by_uid'],$v['mark_type'],$v['mark_status'],2,$v['model_code'],$v['obj_id']);}-->
+								<div class="fl_r pad10" style="width:250px">
+									{loop $aid_info $k2 $v2}
+										<span class="grid_4 omega">
+								        	 <b>{$v2['aid_name']}</b>&nbsp;&nbsp;&nbsp;&nbsp;<font color="red">{$v2['avg']}</font>{$_lang['fen']}
+								          </span>
+								       <span class="grid_3 alpha">
+								             <!--{eval echo keke_user_mark_class::gen_star2($v2['avg']);}-->
+								         </span>
+										<div class="clear"></div>
+									{/loop}
+								</div>
+                            </td>
+                        </tr>
+                    </tbody>
+                    {/loop}
+                </table>
+				{else}
+				<div class='t_c'>{$_lang['no_data']}</div>
+				{/if}
+            </div>
+        </div>
+    </div>
+</div>
+<!--主体结束-->
+<!--{template ADMIN_DIRECTORY/tpl/admin_footer}-->

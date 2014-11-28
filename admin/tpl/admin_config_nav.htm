@@ -1,0 +1,83 @@
+<!--{template ADMIN_DIRECTORY/tpl/admin_header}--> 
+<div class="box list">
+	<div class="title"><h2>{$_lang['nav_menu']}</h2></div>
+        <div class="detail">
+        	<form name="frm_config_basic" id="frm_config_basic" action="index.php?do=config&view=nav" method="post" enctype='application/x-www-form-urlencoded'>
+            <table cellspacing="0" cellpadding="0">
+            
+			<tr>
+                <th width="150">{$_lang['title']}</th>
+                <th width="200" >{$_lang['link']}</th>
+               <th width="12%">{$_lang['style']}</th>
+                <th width="100">{$_lang['order']}</th>
+                <th width="120">{$_lang['open_new_window']}</th>
+                <th width="100">{$_lang['display_mode']}</th>
+                <th width="200">{$_lang['operate']}</th>
+            </tr>
+			
+            {loop $nav_list $k $v}
+            <tr id="olditem_$k" class="item">
+            	{if $v['nav_style']==$kekezu->_sys_config['set_index']}
+               	 	<td style='font-weight:bold'>
+              			<input type="text" value="{$v['nav_title']}" name="nav[$k][nav_title]" class='txt' size='12'>
+						({$_lang['default_index']})
+				 	</td>
+                {else}
+                	<td>
+              			<input type="text" value="{$v['nav_title']}" name="nav[$k][nav_title]" class='txt' size='12'>
+					</td>
+                {/if}
+                <td><!--{eval $readonly = nav_analysis($v['nav_url']);}-->
+                	{if $readonly}
+						$v['nav_url']
+					{else}
+						<input type="text" value="{$v['nav_url']}" name="nav[$k][nav_url]" class='txt' size="30">
+					{/if}
+				</td>
+                <td style="width:80px;">
+					<input type="text" value="{$v['nav_style']}" name="nav[$k][nav_style]" class='txt' size='10'>
+				</td>
+               	<td style="width:30px;">
+					<input type="text" value="{$v['listorder']}" name="nav[$k][listorder]" class='txt' size='3'>
+				</td>
+                <td class="wraphide">
+                	<label>{if $v['newwindow']}{$_lang['yes']}&nbsp;{else}{$_lang['no']}{/if}</label>
+					</td>
+                <td class="wraphide">
+                	<label>{if !$v['ishide']}{$_lang['show']}{else}{$_lang['hide']}{/if}</label>
+                </td>
+                <td>
+	                <a href="$url&nav_id=$v['nav_id']&ac=edit" class="button dbl_target"><span class="pen icon"></span>{$_lang['edit']}</a>
+	                <a href="$url&nav_id=$v['nav_id']&ac=del"  onclick="return cdel(this);" class="button"><span class="trash icon"></span>{$_lang['delete']}</a>
+	            	<a href="$url&nav_style=$v['nav_style']&ac=set_index" class="button"><span class="check icon"></span>{$_lang['set_index']}</a>
+	            </td>
+            </tr>
+			{/loop}
+            <tbody id='newitemlist'></tbody>
+			
+            <tr>
+            	<td colspan="6">
+				<div class="clearfix">
+                  <button onclick="location.href='index.php?do=config&view=nav&ac=edit'" class="positive pill negative" type="button"><span class="plus icon"></span>{$_lang['add']}</button>
+           		  <input type="hidden" name="sbt_edit" value="1">
+				  <button onclick="modify();" class="positive pill negative" type="button"><span class="check icon"></span>提交更改</button>
+           		</div>
+				</td>
+		   </tr>
+           </table>
+		   </form>
+      </div>
+</div>
+<!--主体结束-->
+
+    
+<script type="text/javascript">
+	function modify(){
+		art.dialog.confirm('确定提交更改吗?',function(){
+			$('#frm_config_basic').submit();
+		});
+	}
+</script>
+					
+
+<!--{template ADMIN_DIRECTORY/tpl/admin_footer}-->

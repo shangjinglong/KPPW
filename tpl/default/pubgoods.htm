@@ -1,0 +1,117 @@
+<!--{template header}-->
+<div class="container">
+<div id="main">
+  <div class="release">
+    <div class="release-msg">
+      <div class="alert alert-info"><i class="fa fa-exclamation-circle"></i>
+      	联系客服
+	      	电话：	{if $strRandKf['phone']}  {$strRandKf['phone']}  {else}暂未填写{/if}
+	      	QQ：		{if $strRandKf['qq']} 	  {$strRandKf['qq']}     {else}暂未填写{/if}
+	      	邮箱：	{if $strRandKf['email']}  {$strRandKf['email']}  {else}暂未填写{/if}
+      </div>
+    </div>
+
+    <div class="release-progress">
+    <ul class="step step3">
+	    {loop $arrPubProcess $k $v}
+	      <li class="step-item {if $v['step'] <= $step}action{/if}">
+	        <span class="step-num">{if $v['step'] < $step}<i class="fa fa-check"></i>{else}{$k}{/if}</span>
+	        <div class="step-text step-bottom">
+	          <p><strong class="step-title" title="{$v['desc']}">{$v['desc']}</strong></p>
+	        </div>
+	      </li>
+	    {/loop}
+    </ul>
+    </div>
+    <!-- release-progress end-->
+
+    <div class="release-body">
+    {if $step == 'step1'}
+	      <nav class="release-nav">
+	        <ul>
+		        {loop $arrModelLists $k $v}
+		            <li {if $id == $v['model_id']}class="selected"{/if}>
+		                <a href="index.php?do=pubgoods&id={$v['model_id']}&step={$step}">
+		                 {$v['model_name']}
+		                  <span class="arrow_b"></span>
+		                </a>
+		            </li>
+				{/loop}
+	        </ul>
+	      </nav>
+	      <!-- release-nav end-->
+
+
+
+	      <div class="release-help">
+	        <h3 class="release-help-title">什么是{$arrModelInfo['model_name']}？</h3>
+	        <div class="hidden" id="DivTaskDesc">
+	     		<!--{eval echo htmlspecialchars_decode($arrModelInfo['model_desc'])}-->
+	      	</div>
+
+	      </div>
+	      <div class="release-help-ctrl">
+	      	<a href="javascript:void(0);" id="toggleTaskDesc">{$arrModelInfo['model_name']}说明 <i class="fa fa-caret-down"></i></a>
+	      </div>
+
+      {/if}
+      <!-- release-help end  -->
+
+      <!-- 加载各任务对应步骤  -->
+      		<!--{eval require keke_tpl_class::template("shop/{$arrModelInfo['model_dir']}/tpl/{$_K['template']}/$step") }-->
+      <!-- 加载各任务对应步骤  -->
+
+    </div>
+    <!-- release-body end -->
+  </div>
+  <!-- release end-->
+</div>
+</div>
+
+
+<!-- 每个任务模型对应的JS -->
+<script type="text/javascript" src="shop/{$arrModelInfo['model_dir']}/tpl/default/{$arrModelInfo['model_dir']}.js"></script>
+<script type="text/javascript" src="static/js/model/user/user.js"></script>
+<!-- 每个任务模型对应的JS -->
+
+<script type="text/javascript">
+var strUrl = "{$strUrl}&step={$step}";
+var splitStr = ",";
+	/**
+	 * 日期选择插件*/
+	$('.form_datetime').datetimepicker({
+	      language:  'zh-CN',
+	      weekStart: 1,
+	      todayBtn:  1,
+	      autoclose: 1,
+	      todayHighlight: 1,
+	      startView: 2,
+	      minView: 2,
+	      forceParse: 0
+	  });
+
+
+	$(function(){
+		/**
+		 *切换任务说明*/
+		$("#toggleTaskDesc").click(function(){
+			if($(this).children('i').hasClass('fa-caret-down')){
+				$(this).children('i').removeClass('fa-caret-down');
+				$(this).children('i').addClass('fa-caret-up');
+			}else{
+				$(this).children('i').removeClass('fa-caret-up');
+				$(this).children('i').addClass('fa-caret-down');
+			}
+			$("#DivTaskDesc").toggleClass('hidden');
+		});
+
+		/**
+		 *查看发布协议*/
+		 $("#viewPubAgreement").click(function(){
+			$('.release-agreement').toggleClass('hidden');
+		 });
+	});
+
+
+</script>
+<!--{template footer}-->

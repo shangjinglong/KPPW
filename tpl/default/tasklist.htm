@@ -1,0 +1,334 @@
+<!--{template header}-->
+
+
+<div class="container">
+
+
+<div id="side">
+      <div class="category-list category-lg">
+      <a href="javascript:void(0);" class="category-title"><i class="fa fa-list-ul"></i> 分类 <i class="fa fa-angle-down"></i></a>
+      <ul class="category-down">
+        {loop $arrNewIndusC $key $value}
+        <li class="category-item">
+          <div class="category-top">
+            {loop $value $k1 $v1}
+      {if $k1<2}
+            <a href="{$strUrl}&i=$v1['indus_id']"  {if $v1['is_recommend']==1}class="hot"{/if} tabindex="-1">$v1['indus_name']</a>、
+      {/if}
+      {/loop}
+            <i class="fa fa-angle-right"></i>
+          </div>
+          <div class="category-inner">
+            <h3 class="category-inner-title">全部{$arrIndusP[$key]['indus_name']}</h3>
+        {loop $value $k2 $v2}
+       <a href="{$strUrl}&i=$v2['indus_id']" tabindex="-1" {if $v2['is_recommend']==1}class="hot"{/if}>$v2['indus_name']</a>
+       {/loop}
+          </div>
+        </li>
+    {/loop}
+      </ul>
+  </div>
+  <!-- category-list end -->
+
+  <div class="box-header">
+    <h2 class="min-title">最新发布动态</h2>
+  </div>
+  <div class="box-body">
+    <ul class="record-list">
+    	{if $arrFeedPubs}
+    	{loop $arrFeedPubs $k $v}
+        <li>
+          <p class="record-list-title">
+            <a href="$v['event']['url']"><span class="marked marked-shop">{$arrModelLabel[$v['event']['model_id']]}</span> <span class="money"><sub>￥</sub>
+			 {if $v['event']['model_id']=='4'||$v['event']['model_id']=='5'}
+               	 {$arrCashCoves[$v['event']['cash']]['start_cove']}-<sub>￥</sub>{$arrCashCoves[$v['event']['cash']]['end_cove']}
+             {else}
+               	 {$v['event']['cash']}
+             {/if}</span> $v['event']['content']</a>
+          </p>
+          <p>
+          	<!--{eval $timeDesc = kekezu::time2Units(time()-$v['feed_time'],'hour');}-->
+            <time datetime="2008-02-14">{if $timeDesc}{$timeDesc}前{else}刚刚{/if}</time>
+            <a href="$v['feed_username']['url']">{$v[username]}</a> 发布
+          </p>
+        </li>
+		{/loop}
+		{else}
+暂无数据
+		{/if}
+      </ul>
+  </div>
+  <!-- 最新发布动态 & box-body end -->
+
+
+  <div class="box-header">
+    <h2 class="min-title">推荐服务商</h2>
+  </div>
+  <div class="box-body">
+    <ul class="record-list img">
+    	{if $arrRecommShops}
+    	{loop $arrRecommShops $k $v}
+        <li>
+          <a href="index.php?do=seller&id=$v['uid']" class="avatar" title="$v['shop_name']">
+           <!--{userpic($v['uid'],'middle')}-->
+          </a>
+
+          <div class="avatar-detail">
+            <p class="record-list-title">
+              <a href="index.php?do=seller&id=$v['uid']" title="$v['shop_name']">
+               $v['shop_name']
+              </a>
+            </p>
+            <p class="record-list-meta">好评率 <span><!--{eval echo $v['good_rate']*100}--><sub>%</sub></span></p>
+            <p>
+              <span class="marked marked-tags">{$indus_p_arr[$v[indus_pid]][indus_name]}</span>
+              <span class="marked marked-tags">{$indus_c_arr[$v[indus_id]][indus_name]}</span>
+            </p>
+          </div>
+        </li>
+		{/loop}
+		{else}
+暂无数据
+		{/if}
+      </ul>
+  </div><!-- 推荐服务商 & box-body end -->
+</div>
+<!-- #side end -->
+
+
+
+<div id="main">
+
+  <div class="for-advertise">
+  	<!--{ad_show(TASKLIST_HEAD)}-->
+  <!-- <img src="" data-src="holder.js/950x50/#f8f8f8:#ddd/text:AD">-->
+  </div>
+  <!-- for-advertise end -->
+
+  <div class="category-list category-xs">
+      <a href="javascript:void(0);" class="category-title"><i class="fa fa-list-ul"></i> 分类 <i class="fa fa-angle-down"></i></a>
+      <ul class="category-down">
+      	{loop $arrNewIndusC $key $value}
+        <li class="category-item">
+          <div class="category-top">
+          	{loop $value $k1 $v1}
+			{if $k1<2}
+            <a href="{$strUrl}&i=$v1['indus_id']"  {if $v1['is_recommend']==1}class="hot"{/if} tabindex="-1">$v1['indus_name']</a>、
+			{/if}
+			{/loop}
+            <i class="fa fa-angle-right"></i>
+          </div>
+          <div class="category-inner">
+          	<h3 class="category-inner-title">全部{$arrIndusP[$key]['indus_name']}</h3>
+			  {loop $value $k2 $v2}
+			 <a href="{$strUrl}&i=$v2['indus_id']" tabindex="-1" {if $v2['is_recommend']==1}class="hot"{/if}>$v2['indus_name']</a>
+			 {/loop}
+          </div>
+        </li>
+		{/loop}
+      </ul>
+  </div>
+  <!-- category-list end -->
+
+  <div class="tab tab-darken">
+    <a href="index.php?do=tasklist" class="selected">所有任务</a>
+  </div>
+  <!-- tab end -->
+
+{if $pd||$i||$ky}
+
+	  <ul class="nav nav-pills second-nav">
+	    {if $pd}<li class="active"><a href="{$strUrl}&pd=0">{$arrIndusPInfo['indus_name']} <i class="fa fa-times"></i></a></li>{/if}
+	    {if $i}<li class="active"><a href="{$strUrl}&i=0">{$arrIndusInfo['indus_name']} <i class="fa fa-times"></i></a></li>{/if}
+	    {if $ky}<li class="active"><a href="{$strUrl}&ky=0">{$ky} <i class="fa fa-times"></i></a></li>{/if}
+	    <li>共<!--{eval echo intval($intCount);}-->条类似任务</li>
+	  </ul>
+
+
+  {/if}
+
+  <!-- second-nav end -->
+
+  <ul class="list-filter">
+    <li>
+      <label class="col-xs-1">任务模式</label>
+      <div class="col-xs-11 condition">
+        <a href="{$strUrl}&m=0" {if !$m} class="selected" {/if}>全部</a>
+        {loop $arrTaskNavs $k $v}
+        	<a href="{$strUrl}&m={$v['model_id']}" {if $v['model_id'] == $m} class="selected" {/if}>$v['model_name']</a>
+        {/loop}
+
+      </div>
+    </li>
+    <li>
+      <label class="col-xs-1">赏金状态</label>
+      <div class="col-xs-11 condition">
+        <a href="{$strUrl}&r=0" {if !$r} class="selected" {/if}>全部</a>
+        <a href="{$strUrl}&r=1" {if 1==$r} class="selected" {/if}>未托管</a>
+        <a href="{$strUrl}&r=2" {if 2==$r} class="selected" {/if}>已托管</a>
+      </div>
+    </li>
+    <li>
+      <label class="col-xs-1">任务状态</label>
+      <div class="col-xs-11 condition">
+        <a href="{$strUrl}&s=0" {if !$s} class="selected" {/if}>全部</a>
+        <a href="{$strUrl}&s=1" {if 1==$s} class="selected" {/if}>工作中</a>
+        <a href="{$strUrl}&s=2" {if 2==$s} class="selected" {/if}>选稿中</a>
+		<a href="{$strUrl}&s=3" {if 3==$s} class="selected" {/if}>交付中</a>
+        <a href="{$strUrl}&s=4" {if 4==$s} class="selected" {/if}>已结束</a>
+      </div>
+    </li>
+  </ul>
+  <!-- filter end -->
+
+
+  <div class="tool-bar">
+    <div class="actions">
+	    {if $o == 1}
+	    	<a href="{$strUrl}&o=2" class="tool-bar-item selected">剩余时间  <i class="fa fa-sort-amount-desc"></i></a>
+	    {elseif $o == 2}
+	    	<a href="{$strUrl}&o=1" class="tool-bar-item selected">剩余时间 <i class="fa fa-sort-amount-asc"></i></a>
+	    {else}
+	    	<a href="{$strUrl}&o=1" class="tool-bar-item ">剩余时间</a>
+	    {/if}
+
+	    {if $o == 3}
+	    	<a href="{$strUrl}&o=4" class="tool-bar-item selected">金额  <i class="fa fa-sort-numeric-desc"></i></a>
+	    {elseif $o == 4}
+	    	<a href="{$strUrl}&o=3" class="tool-bar-item selected">金额 <i class="fa fa-sort-numeric-asc"></i></a>
+	    {else}
+	    	<a href="{$strUrl}&o=3" class="tool-bar-item ">金额</a>
+	    {/if}
+	    {if $o == 5}
+	    	<a href="{$strUrl}&o=6" class="tool-bar-item selected">稿件数  <i class="fa fa-sort-numeric-desc"></i></a>
+	    {elseif $o == 6}
+	    	<a href="{$strUrl}&o=5" class="tool-bar-item selected">稿件数 <i class="fa fa-sort-numeric-asc"></i></a>
+	    {else}
+	    	<a href="{$strUrl}&o=5" class="tool-bar-item ">稿件数</a>
+	    {/if}
+    </div>
+<div class="actions">
+      <a href="javascript:void(0);" class="tool-bar-item" data-toggle="dropdown" >{if $arrCityInfo['name']} {$arrCityInfo['name']} {else}所在地区{/if} <span class="caret"></span></a>
+      <ul class="dropdown-menu for-city" role="menu" aria-labelledby="dLabel" >
+        <li {if !$p}class="active"{/if}><a href="{$strUrl}&p=0">所有地区</a></li>
+		{loop $arrDisplaypro $k $v}
+        <li {if $p==$v['id']}class="active"{/if}><a href="{$strUrl}&p=$v['id']" role="menuitem" tabindex="-1" >$v['name']</a></li>
+		{/loop}
+      </ul>
+    </div>
+  </div>
+  <!-- tool-bar end -->
+
+  <div class="list list-dl">
+    <dl class="list-body"  id="ajax_dom">
+      <dt class="list-label">
+        <ul>
+          <li class="w4">名称</li>
+          <li class="w2">赏金</li>
+          <li class="w1">模式</li>
+          <li class="w1">查看/投稿</li>
+          <li class="w1">状态</li>
+          <li class="w1"></li>
+        </ul>
+      </dt>
+      {if $arrTaskLists}
+      {loop $arrTaskLists $k $v}
+      <dd class="list-item">
+        <ul class="list-item-body">
+
+          <li class="w4">
+            <a href="index.php?do=task&id={$v['task_id']}" class="list-title"  title="<!--{eval echo kekezu::cutstr($v['task_title'],50)}-->">
+            <!-- 增值工具显示区域 start --> <!-- <span class="marked marked-speed">加急</span> -->
+			{if $v['task_status']==2}
+               {if $v['is_delay'] == '1'}<span class="marked marked-map">延期</span>{/if}
+               {if $v['urgent'] == '1'}<span class="marked marked-speed">加急</span>{/if}
+               {if $v['tasktop'] == '1'}<span class="marked marked-spread">置顶</span>{/if}
+			{/if}
+            <!-- 增值工具显示区域 start -->
+
+              <!--{eval echo kekezu::cutstr($v['task_title'],50)}-->
+            </a>
+          </li>
+		<!-- 赏金 START  -->
+          <li class="w2">
+            <span class="money">
+            	{if $v['task_cash_coverage']}
+            		<sub>￥</sub>{$arrCashCoves[$v['task_cash_coverage']]['cove_desc']}
+            	{else}
+            		<sub>￥</sub>{$v['task_cash']}
+            	{/if}
+              </span>
+          </li>
+		<!-- 赏金 END  -->
+          <li class="w1">{$arrTaskNavs[$v['model_id']]['model_name']}</li>
+          <li class="w1"><!--{eval echo intval($v['view_num']);}-->/<!--{eval echo intval($v['work_num']);}--></li>
+          <li class="w1d5">
+	          <!-- 2天后投稿截止 -->&nbsp;
+	          <!--{eval   $end_time = $arrTaskTimeDesc[$v[task_status]]['time'];}-->
+	          	<!--{eval echo keke_search_class::task_time_desc($v['task_status'],$v[$end_time])}-->
+
+          </li>
+
+        <!-- 收藏  START-->
+        <li class="wd5" >
+		{if $v['favorite']}
+
+          	<a href="javascript:cancelFavorite('task',{$v['task_id']});" id="favorite{$v['task_id']}" title="取消收藏" class="action-collect on"><i class="fa fa-star"></i></a>
+		  {else}
+
+          	<a href="javascript:addFavorite('task',{$v['task_id']});" id="favorite{$v['task_id']}" title="收藏" class="action-collect"><i class="fa fa-star"></i></a>
+
+		 {/if}
+		  </li>
+        <!-- 收藏 END -->
+
+        </ul>
+        <ul class="list-item-body list-visible">
+          <li class="w8">
+            <div class="list-desc">
+            	<!--{eval echo kekezu::chinesesubstr($v['task_desc'],0,300)}-->
+            </div>
+          </li>
+          <li class="w2">
+            <a href="index.php?do=pubtask&id={$v[model_id]}"  class="btn btn-primary btn-sm">发布一个类似任务</a>
+          </li>
+        </ul>
+      </dd>
+      {/loop}
+      {else}
+		<dd class="list-item text-center">
+
+			<!--{template nodata}-->
+        </dd>
+      {/if}
+
+    </dl>
+  </div>
+  <!-- list end-->
+
+  <div class="list-page">
+    <div class="page-tips pull-left">
+      	显示 {$arrDatas['st']}~{$arrDatas['en']} 项 共  <!--{eval echo intval($intCount);}--> 个任务
+    </div>
+
+   	{if $strPages}
+      <ul class="pagination pagination-sm pull-right">
+       {$strPages}
+      </ul>
+    {/if}
+
+
+  </div>
+  <!-- list-page end -->
+
+  <div class="for-advertise">
+   <!--{ad_show(TASKLIST_BOTTOM)}-->
+  </div>
+  <!-- for-advertise end -->
+
+
+</div>
+</div>
+<!-- container end -->
+
+<!--{template footer}-->

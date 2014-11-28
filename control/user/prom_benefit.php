@@ -1,0 +1,18 @@
+<?php defined ( 'IN_KEKE' ) or exit ( 'Access Denied' );
+$objPromEventT = keke_table_class::get_instance ( 'witkey_prom_event' );
+$strUrl = 'index.php?do=user&view=prom&op=benefit';
+$intEventId and $strUrl .= "&intEventId=" . intval ( $intEventId );
+$strEventType and $strUrl .= "&strEventType= $strEventType " ;
+$intPage and $strUrl .= '&intPage=' . $intPage;
+$arrEventStatus = keke_prom_class::get_pevent_status ();
+$arrEventType = keke_prom_class::get_prom_type ();
+$strWhere = " parent_uid=" . intval ( $gUid );
+$intEventId && $intEventId != '' and $strWhere .= " and event_id=" . intval ( $intEventId );
+$strEventType and $strWhere .= " and action = '$strEventType' ";
+$page and $intPage = intval ( $page );
+$intPage = intval ( $intPage ) ? $intPage : 1;
+$intPagesize = intval ( $intPagesize ) ? $intPagesize : 10;
+$strWhere .= " order by event_id desc";
+$arrDatas = $objPromEventT->get_grid ( $strWhere, $strUrl, $intPage, $intPagesize, null, null, null );
+$arrPromLists = $arrDatas ['data'];
+$strPages = $arrDatas ['pages'];

@@ -1,0 +1,163 @@
+<!--{template ADMIN_DIRECTORY/tpl/admin_header}-->  
+<div class="page_title">
+    	<h1>{$_lang['user_manage']}</h1>
+        <div class="tool">
+            <a href="index.php?do=user&view=list" >{$_lang['user_manage']}</a>
+            <a href="index.php?do=user&view=add" class="here">{if $edituid}{$_lang['edit']}{else}{$_lang['add']}{/if}{$_lang['user']}</a>
+    	    <a href="index.php?do=user&view=charge">{$_lang['charge']}</a>
+    	</div>
+    </div>
+		<div class="box post">
+        <div class="tabcon">
+        	<div class="title"><h2>{if $edituid}{$_lang['edit_member_info']}{else}{$_lang['add_member_info']}{/if}</h2></div>
+            <div class="detail">
+               <form action="index.php?do=user&view=add&edituid=$edituid" method="post" name="frm_add" id="frm_add">
+                    <input type="hidden" value="{$edituid}" name="edituid">
+					<table width="100%" border="0" cellspacing="0" cellpadding="0">
+					<tbody>
+                      <tr>
+                        <th scope="row" width="130">用户昵称{$_lang['zh_mh']}</th>
+                        <td>
+                       <input type="text" class="txt" style=" width:260px;" {if $edituid}disabled="disabled" ignore="true"{/if} value="{$member_arr['username']}" name="fds[username]" id="txt_username" maxlength="50" title="{$_lang['please_input_limit_char_username']}" limit="required:true;len:2-20" msg="{$_lang['please_input_limit_char_username']}" ajax="../index.php?do=register&check_username=" msgArea="txt_username_msg" valid="1"/><b style="color:red"> *</b><span id="txt_username_msg"></span>
+
+					  </td>
+                      </tr>
+                     
+					  <tr>
+                        <th scope="row">真实姓名{$_lang['zh_mh']}</th>
+                        <td> <input type="text" class="txt" style="width:260px;" name="fds[truename]" id="truename" value="{$member_arr['truename']}" limit="required:false;len:2-20" title="{$_lang['please_input_limit_char_username']}" msg="{$_lang['please_input_limit_char_username']}" msgArea="pwd_truename_msg"  class="input_t"/><span id="pwd_truename_msg"></span>
+						</td>
+                      </tr>
+					  
+					  <tr>
+                        <th scope="row">手机号码{$_lang['zh_mh']}</th>
+                        <td> <input type="text" class="txt" style="width:260px;" name="fds[phone]" id="phone" value="{$member_arr['phone']}" limit="required:false;type:mobileCn" title="请填写正确的电话号码" msg="请填写正确的电话号码" msgArea="pwd_tel_msg"  class="input_t"/><span id="pwd_tel_msg"></span>
+						</td>
+                      </tr>
+					  
+					   <tr>
+                        <th scope="row">QQ号码{$_lang['zh_mh']}</th>
+                        <td> <input type="text" class="txt" style="width:260px;" name="fds[qq]" id="qq"  value="{$member_arr['qq']}" limit="required:false;type:int;len:5-13" title="请填写正确的QQ号码"  onkeyup="clearstr(this);" msg="请填写正确的QQ号码" msgArea="pwd_QQ_msg"  class="input_t"/><span id="pwd_QQ_msg"></span>
+						</td>
+                      </tr>
+					  
+					  <tr>
+                        <th scope="row">所属行业{$_lang['zh_mh']}</th>
+                        <td> <select class="form-control" name="fds[indus_pid]" id="indus_pid" onchange="getIndustry(this.value,'indus_id')">
+                             <option value="">请选择父行业</option>
+                             {loop $arrTopIndustrys $v}
+                     	     <option value="{$v['indus_id']}" {if $member_arr['indus_pid'] ==$v['indus_id']} selected="selected"{/if}>{$v['indus_name']}</option>
+                             {/loop}
+                             </select>
+						 
+                             <select class="form-control" name="fds[indus_id]" id="indus_id">
+                             <option value="">请选择子行业</option>
+							  {if $member_arr['indus_id']}
+                             {loop $arrAllIndustrys $v}
+							 <option value="{$v['indus_id']}" {if $member_arr['indus_id'] ==$v['indus_id']} selected="selected"{/if}>{$v['indus_name']}</option>
+							 {/loop}
+							 {/if}
+                             </select>
+						</td>
+                      </tr>
+					  
+					  <tr>
+                        <th scope="row">出生日期{$_lang['zh_mh']}</th>
+                        <td> <input name="fds[birthday]" onclick="showcalendar(event, this, 0)" size="30" name="fds[birthday]" id="birthday" value="{$member_arr[birthday]}" type="text" id="txt_task_day"   msgArea="span_task_day" onkeyup="clearstr(this)"
+			   	              limit="" msg="{$_lang['task_round_msg']}" max="" class="txt" style="width:260px;"/> 
+				            <span id="span_task_day" class="ml_5"></span>
+						</td>
+                      </tr>
+					  
+					  <tr>
+                        <th scope="row">{$_lang['password']}{$_lang['zh_mh']}</th>
+                        <td> <input type="password" class="txt" style="width:260px;" name="fds[password]" id="password"limit="{if !$edituid}required:true;len:6-20{else}len:6-20{/if}" title="{$_lang['please_input_password']}..." msg="{$_lang['password_limit']}" msgArea="pwd_pwd_msg"  class="input_t"/>{if !$edituid}<b style="color:red">*</b>{/if}<span id="pwd_pwd_msg"></span>
+						</td>
+                      </tr>
+ 
+					  <tr>
+                       <th scope="row">{$_lang['email']}{$_lang['zh_mh']}</th>
+                        <td> <input type="text" class="txt" style="width:260px;" name="fds[email]" id="email"limit="required:true;type:email" value="{$member_arr['email']}" msg="{$_lang['format_error']}" title="{$_lang['please_input_right_email']}..." msgArea="txt_email_msg"/><b style="color:red"> *</b><span id="txt_email_msg"></span></td>
+                      </tr>
+					  {if $edituid&&$shop_open}
+ 					   <tr>
+                        <th scope="row">{$_lang['is_recommend']}{$_lang['zh_mh']}</th>
+                        <td>
+                          <p>
+                             
+                           <label for="rdo_0">
+                              <input type="radio" name="fds[recommend]" id="rdo_0" value="1"  {if $member_arr['recommend']==1}checked=checked{/if}>
+							  {$_lang['yes']}</label>
+                            <label for="rdo_1">
+                              <input type="radio" name="fds[recommend]" id="rdo_1" value="0" {if !$member_arr['recommend']}checked=checked{/if}>
+							   {$_lang['no']}</label>
+                            <br/>
+                        </p></td>
+                      </tr>
+					  <tr>
+                        <th scope="row">{$_lang['is_disable']}{$_lang['zh_mh']}</th>
+                        <td>
+                          <p>
+                             
+                           <label for="rdo_0">
+                              <input type="radio" name="fds[status]" id="rdo_0" value="2"  {if $member_arr['static']==2}checked=checked{/if}>
+							  {$_lang['yes']}</label>
+                            <label for="rdo_1">
+                              <input type="radio" name="fds[status]" id="rdo_1" value="1" {if $member_arr['static']!=2}checked=checked{/if}>
+							   {$_lang['no']}</label>
+                            <br/>
+                        </p></td>
+                      </tr>
+					   
+					  {/if}
+					  {if $member_arr[uid]!=1}
+					  <tr>
+ 						 <th scope="row">{$_lang['user_group']}{$_lang['zh_mh']}</th>
+                        <td> 
+						
+					  <select name="fds[group_id]">
+					  	 <option value="0" {if $member_arr['group_id']<0} selected="selected"{/if}>{$_lang['ordinary_user']}</option>
+					   {loop $member_group_arr $k $v}
+					  	 <option value="{$v['group_id']}" {if $member_arr['group_id']== $v['group_id']}selected="selected"{/if}>$v['groupname']</option>
+					   {/loop}
+					   </select><b style="color:red">*</b>
+					   
+                      </td>
+                      </tr>
+					  {/if}
+					 </tbody>
+					 <tfoot>
+                      <tr>
+                        <th scope="row">&nbsp;</th>
+                        <td>
+                            <div class="clearfix padt10">
+                            	<input type="hidden" name="is_submit" value="1">
+                                <button class="positive primary pill button" type="submit" value="{$_lang['submit']}" onclick="return checkForm(document.getElementById('frm_add'));"><span class="check icon"></span>{$_lang['submit']}</button>
+                              
+                            </div>
+                        </td>
+                      </tr>
+					 </tfoot>
+                    </table>
+                    
+                </form>
+        </div>
+        
+        
+    </div>
+</div>
+
+
+<!--{template ADMIN_DIRECTORY/tpl/admin_footer}-->
+<script type="text/javascript">
+	
+	function getIndustry(id,element){
+		if(id&&element){
+			$.get('../index.php?do=ajax&view=industry',{id:id},function(text){
+				$('#'+element).html(text);
+			},'text')
+		}
+	}
+   
+	
+</script>

@@ -1,0 +1,120 @@
+<!--{template ADMIN_DIRECTORY/tpl/admin_header}-->
+<div class="page_title" id="taskScroll">
+    <h1>{$model_info['model_name']}{$_lang['manage']}</h1>
+    <div class="tool">
+        <a href="index.php?do=$do&model_id=$model_id&view=list">{$_lang['task_list']}</a>
+        {loop $ops $v}<a href="index.php?do=$do&model_id={$model_id}&view=edit&task_id={$task_id}&op={$v}" class="{if $op==$v}here{/if}">{$_lang['b_task_'.$v]}</a>
+        {/loop}
+    </div>
+</div>
+<!--页头结束-->
+<div class="box post">
+    <div class="tabcon">
+        <div class="title">
+            <h2>{$_lang['b_task_'.$op]}</h2>
+        </div>
+        <div class="detail">
+            <div id="ajax_dom">
+            	{if $list}
+                <table width="100%" border="0" cellpadding="5">
+                    {loop $list $v}
+                    <tbody id="c_{$v['comment_id']}">
+                        <tr>
+                            <td width="70">
+                                <a href="{$_K['siteurl']}/index.php?do=seller&id={$v['uid']}" target="_blank" title="{$v['username']}"><!--{userpic($v['uid'],'small')}--></a>
+                                <div class="t_c">
+                                    <a href="{$_K['siteurl']}/index.php?do=seller&id={$v['uid']}" target="_blank">{$v['username']}</a>
+                                </div>
+                            </td>
+                            <td style="padding:0">
+                                <div class="ws_break pad10 fl_l" style="width:69%;">
+								<textarea cols="60px" name="content" id="comm_$v[comment_id]" disabled="disabled">{$v['content']}</textarea>
+								<button style="display:none" type="button" id="button_$v[comment_id]" onclick="comfirm_edit('{$v[comment_id]}')">提交</button>
+								</div>
+                                <div class="pad10 fl_l clearfix" style="width:100%;">
+								  <span class="fl_l">{$_lang['comm_time']}{$_lang['zh_mh']}<!--{date('Y-m-d H:i:s',$v['on_time'])}--></span>
+                                 <div class='fl_l' style="padding-left:15px">
+                                 <a href='javascript:void(0);' onclick="loadFloor('{$v[comment_id]}');" class='button'>
+                                  	<span class="icon loop ">&nbsp;</span>{$_lang['load_floor']}
+								  </a>
+                                  <a href='javascript:void(0);' onclick="Cdel('{$v[comment_id]}',1);" class='button'>
+                                  	<span class="icon trash">&nbsp;</span>{$_lang['delete_comm']}
+								  </a>
+								   <a href='javascript:void(0);' onclick="edit_comment('{$v[comment_id]}');" class='button'>
+                                  	<span class="icon trash">&nbsp;</span>修改留言
+								  </a>
+								  </div>
+                                </div>
+								<div class="clear"></div>
+								<div id="f_{$v['comment_id']}" class='pad10' style="display:none;"></div>
+                            </td>
+                        </tr>
+                    </tbody>
+                    {/loop}
+                    <tfoot>
+                        <tr>
+                            <td colspan="7">
+                                <div class="page fl_right">
+                                    {$pages['page']}
+                                </div>
+                            </td>
+                        </tr>
+                    </tfoot>
+                </table>
+				{else}
+				<div class='t_c'>{$_lang['no_data']}</div>
+				{/if}
+            </div>
+        </div>
+    </div>
+</div>
+<script type="text/javascript">
+	var url = '{$url}';
+    function Cdel(i,t){
+    	art.dialog({
+			title:"{$_lang['operate_notice']}",
+			content:"{$_lang['are_you_sure']}",
+			icon: 'succeed',
+			yesFn:function(){
+				$.getJSON(url,{ac:'del',comm_id:i,type:t},function(json){
+					if(json.status==1){
+						$("#c_"+i).slideUp('slow').remove();
+						art.dialog.tips("{$_lang['task_operate_successfully']}",1.5);
+					}else{
+						art.dialog.tips("{$_lang['task_operate_fail']}",1.5);
+					}
+				})
+			},
+			noFn:function(){this.close();return false;}
+		})
+    }
+    function loadFloor(i){
+		
+		var c = $.trim($('#f_'+i).html());
+		if(!c){
+			$('#f_'+i).load(url+'&ac=load&comm_id='+i).slideToggle();
+		}else{
+			$('#f_'+i).slideToggle();
+		}
+	}
+	function edit_comment(comment_id){
+		$("#comm_"+comment_id).removeAttr("disabled");
+		$("#button_"+comment_id).show();
+	}
+	function comfirm_edit(comment_id){
+		var new_content = $("#comm_"+comment_id).val();
+		//alert(url);
+		//alert(new_content);
+		$.post(url,{ac:'edit',comm_id:comment_id,content:new_content},function(json){
+			       if(json.status==1){
+						$("#comm_"+comment_id).attr("disabled","disabled");
+						$("#button_"+comment_id).hide();
+						art.dialog.tips("修改留言成功！",1.5);
+					}else{
+						art.dialog.tips("修改留言失败！",1.5);
+					}
+		},'json')
+	}
+</script>
+<!--主体结束-->
+<!--{template ADMIN_DIRECTORY/tpl/admin_footer}-->

@@ -1,0 +1,80 @@
+<!--{template ADMIN_DIRECTORY/tpl/admin_header}--> 
+		<div class="box post">
+        <div class="tabcon">
+        	<div class="title"><h2>{if $mark_config_id}{$_lang['edit_mutual_evaluation_list']}{else}{$_lang['add_mutual_evaluation_list']}{/if}</h2></div>
+			<div class="box tip clearfix p_relative" id="man_tips">
+    			<div class="control"><a title={$_lang['close']} onclick="$('#man_tips').fadeOut();" href="javascript:void(0);"><b>×</b></a></div>
+       			<div class="title"><h2>{$_lang['tips']}</h2></div>
+        		<div class="detail pad10">
+            		<ul>
+            				<li>{$_lang['role_relationship_notice']}</li>
+							<li>{$_lang['evaluation_range_notice']}</li>
+							<li>{$_lang['evaluation_reflect_notice']}</li>
+							<li>{$_lang['evaluation_notice']}</li>
+            		</ul>
+        		</div>
+				</div>
+
+            <div class="detail">
+               <form action="" method="post" name="frm1" id="frm1">
+                    <input type="hidden" value="{$mark_config_id}" name="hdn_mark_config_id">
+					<input type="hidden" value="{$model_list2[$mark_config_arr['obj']]}" name="obj_name">
+					<table width="100%" border="0" cellspacing="0" cellpadding="0">
+					  <tr>
+					  	<th scope="row" width="130" >{$_lang['model_type']}</th>
+						<td>
+						{$model_list2[$mark_config_arr['obj']]}
+						</td>
+					  </tr>
+					  <tr>
+                       <th scope="row">{$_lang['good_value']}</th>
+                        <td> <input type="text" class="txt" style="width:260px;" name="fds[good]" id="good" onkeyup="clearstr(this);" limit="type:int;between:0-100;required:true" value="{$mark_config_arr['good']}" msg={$_lang['input_error']} title={$_lang['input_int_number']} msgArea="txt_good_msg"/><span id="txt_good_msg">{$_lang['input_number']}</span></td>
+                      </tr>
+					  <tr>
+                       <th scope="row">{$_lang['middle_value']}</th>
+                        <td> <input type="text" class="txt" style="width:260px;" value="{$mark_config_arr['normal']}" onkeyup="clearstr(this);" name="fds[normal]" id="phone" limit="type:int;between:0-100;required:true" msg={$_lang['input_error']}  title={$_lang['input_int_number']} msgArea="txt_normal_msg"/><span id="txt_normal_msg">{$_lang['input_number']}</span>
+						</td>
+                      </tr>
+					  <tr>
+                       <th scope="row">{$_lang['bad_value']}</th>
+                        <td> <input type="text" class="txt" style="width:260px;" name="fds[bad]" id="bad" onkeyup="clearstr(this);" value="{$mark_config_arr['bad']}" limit="type:int;between:0-100;required:true" msg={$_lang['input_error']}  title={$_lang['input_int_number']} msgArea="txt_bad_msg"/><span id="txt_bad_msg">{$_lang['input_number']}</span> 
+						</td> 
+					  <tr>
+                        <th scope="row">{$_lang['role']}</th>
+                        <td>
+                          <p>{if $mark_config_arr['type']==1}
+                           <label>
+                              <input type="radio"name="fds[type]"value="1"checked=checked>
+							  {$_lang['witkey']}</label>
+							 {else} 
+                            <label>
+                              <input type="radio" name="fds[type]"  value="2" checked=checked>
+							   {$_lang['employer']}</label>{/if}
+							  <span style="color:red;">{$_lang['reminder']}</span>
+                            <br />
+                        </p>
+						 
+						</td>
+                      </tr>
+           
+                      <tr>
+                        <th scope="row">&nbsp;</th>
+                        <td>
+                            <div class="clearfix padt10">
+								<button type="submit" name="sbt_add"  value={$_lang['submit']} class="positive primary pill button"/>
+								<span class="check icon"></span>{$_lang['submit']}</button>
+								
+                            </div>
+                        </td>
+                      </tr>
+					  
+                    </table>
+                    
+                </form>
+        </div>
+        
+        
+    </div>
+ 	<br/>
+    </div>
+<!--{template ADMIN_DIRECTORY/tpl/admin_footer}-->

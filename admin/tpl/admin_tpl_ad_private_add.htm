@@ -1,0 +1,40 @@
+<!--{template ADMIN_DIRECTORY/tpl/admin_header}-->
+<div class="page_title">
+    <h1>{$_lang['add_advertising']}</h1>
+    <div class="tool">
+      <a href="index.php?do=tpl&amp;view=ad_private_add&target_id=$target_id">{$_lang['add_advertising']}</a>
+    </div>
+</div>
+
+<div class="box list">
+	<div class="detail">
+		
+			<form action="index.php?do={$do}&view=ad_private_add" method="post">
+			 <input type="hidden" name="target_id" value="{$target_id}"/>
+				<table>
+				<tr> <th  scope="row" width="150">{$_lang['ads_name']}:</th> 
+					 <td><input type="text" name="name" class="txt"  value="$target_arr['name']" /></td>
+				</tr>
+				<tr> <td>{$_lang['code']}:</td> <td><input type="text" name="code" class="txt" size="100" value="$target_arr['code']"  /></td></tr>
+				<tr> <td>{$_lang['description']}:</td> <td><input type="text" name="description" class="txt" size="100" value="$target_arr['description']" /></td></tr>
+				<tr> <td>{$_lang['range']}:</td> <td>
+					<input type="text" name="targets" class="txt" size="100" value="$target_arr['targets']" />({$_lang['user_separated']})
+					</td>
+				</tr>
+				<tr> <td>{$_lang['p_size']}:</td> <td>
+					<input type="text" name="position" class="txt" size="100" value="$target_arr['position']" />
+				<br/>（{$_lang['position_size']})
+				</td>
+				</tr>
+				<tr> <td>{$_lang['required_number']}:</td> <td><input type="text" name="ad_num" class="txt" value="$target_arr['ad_num']" /></td></tr>
+				<tr> <td>{$_lang['sample_image_address']}:</td> <td><input type="text" name="sample_pic" value="$target_arr['sample_pic']" size="50" class="txt" /></td></tr>
+				<tr><th scope="row"></th><td>
+					<button type="submit" name="stb_add" value={$_lang['confirm']} class="button">{$_lang['confirm']}</button></td>
+				</tr>
+			 </table>
+			</form>
+		
+	</div>
+</div>
+
+<!--{template ADMIN_DIRECTORY/tpl/admin_footer}-->

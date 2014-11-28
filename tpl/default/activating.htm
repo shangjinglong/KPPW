@@ -1,0 +1,38 @@
+<!--{template header}-->
+
+<div  class="container">
+<div id="main">
+	<div class="payfor">
+		
+		<div class="payfor-money">
+				<div class="alert alert-warning">
+					邮箱激活
+				</div>
+		</div>
+		<!-- payfor-money end -->
+
+		<!-- payfor-progress end -->
+		<div class="payfor-nav">
+			<ul class="nav nav-tabs">
+			  <li  class="active"><a href="javascript:void(0);">邮箱激活</a></li>
+			</ul>
+		</div>
+		<div class="payfor-body">
+			{if $strMd5Code==$strExciteCode}
+			<p class="lead text-success text-center mt_20 "><i class="fa fa-check-circle"></i> 恭喜，您已经成功激活邮箱</p>
+			<div class="text-center mb_20">
+				<a href="index.php?do=login" class="btn btn-primary">立即登录</a>
+			</div>
+			{else}
+			<p class="lead text-error text-center mt_20 "><i class="fa fa-check-circle"></i> 抱歉，邮箱激活失败，请检查邮箱激活链接</p>
+			<div class="text-center mb_20">
+				<a href="index.php?do=help" class="btn btn-primary">帮助中心</a>
+			</div>
+			{/if}
+		
+		<!-- pafor-body end-->
+	</div>
+	<!-- payfor end -->
+</div>        
+</div>
+<!--{template footer}-->

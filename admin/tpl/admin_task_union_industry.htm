@@ -1,0 +1,60 @@
+<!--{template ADMIN_DIRECTORY/tpl/admin_header}-->
+<div class="page_title">
+    	<h1>{$_lang['industry_manage']}</h1>
+        <div class="tool">
+            <a href="index.php?do=task&view=industry">{$_lang['industry_list']}</a>
+            <a href="index.php?do=task&view=industry_edit">{if $indus_id}{$_lang['edit']}{else}{$_lang['add']}{/if}{$_lang['industry']}</a> 
+			<a href="index.php?do=$do&view=union_industry" class="here" >{$_lang['industry_union']}</a>
+		</div>
+</div>
+<div class="box post">
+ 
+        <div class="tabcon">
+        	<div class="title"><h2>{$_lang['industry_union']}</h2></div>
+            <div class="detail">
+<form method="post" action="#" id="frm_cat_edit">
+    <input type="hidden" name="do" value="{$do}"><input type="hidden" name="view" value="{$view}"><input type="hidden" name="hdn_indus_id" value="{$indus_info['indus_id']}">
+    <div class="main">
+ 
+        <table width="96%" height="200" border="0" cellspacing="0" cellpadding="0" class="tab_m t_l">
+        <tr>
+            <th scope="row">
+                {$_lang['choose_industry']}{$_lang['zh_mh']}
+            </th>
+            <td>
+                <select name="slt_indus_id">
+                    <option value="0">{$_lang['top']}</option>
+                    {loop $indus_p_arr $k $v}
+                    <option value="$v['indus_id']" >$v['indus_name']</option>
+                    {/loop}
+                </select>　
+				<span style="color:red">({$_lang['industry_will_be_save']})</span>
+            </td>
+        </tr>
+        <tr>
+            <th  scope="row">
+                {$_lang['target_industry']}{$_lang['zh_mh']}
+            </th>
+            <td>
+                <select name="to_indus_id">
+                    <option value="0">{$_lang['top']}</option>
+                    {loop $indus_p_arr $v}
+                      <option value="$v['indus_id']" >$v['indus_name']</option>
+                    {/loop}
+                </select>　
+				<span style="color:red">({$_lang['after_union_will_be_delete']})</span>
+            </td>
+        </tr>
+        <td align="left" colspan="2">
+            <div style="padding-left:300px;">
+               <button value="{$_lang['submit']}" name="sbt_edit" type="submit" class="positive primary pill button"><span class="check icon"></span>{$_lang['submit']}</button>
+			   
+		    </div>
+        </td>
+        </tr>
+    </table>
+    </div>
+</form>
+</div>
+ 
+<!--{template ADMIN_DIRECTORY/tpl/admin_footer}-->

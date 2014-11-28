@@ -1,0 +1,11 @@
+<!--{template top}-->
+<!--{template logo}-->
+<div class="show-msg">
+	<div class="alert alert-danger">
+	    <h2><strong>404</strong></h2>
+	    <hr>
+        <p>对不起，您访问的页面没找到！</p>
+     </div>
+     <p>如您的浏览器不能跳转，您可以 <a class="alert-link" href="javascript:history.go(-1);void(0);">返回上一页</a>  或点击 <a class="alert-link" {if $url}href="{$url}"{else}href="index.php"{/if}>这里</a></p>
+</div>
+<!--{template footer}-->

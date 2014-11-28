@@ -1,0 +1,87 @@
+<!--{template user/header}-->
+<div class="container">
+  <div class="nav-action">
+		<!--{template user/left_side}-->
+  </div>
+  <!-- nav-action end -->
+  <div class="content-panel">
+     <div class="tab">
+      <!--{template user/account_auth_nav}-->
+      </div>
+      <div class="tab_detail">
+	      	{if !$intAuthStatus}
+		      	<ul class="nav nav-pills second-nav">
+		          <li {if $code === 'realname'} class="active" {/if}><a href="index.php?do=user&view={$view}&op={$op}&code=realname">实名认证</a></li>
+		          <li {if $code === 'enterprise'} class="active" {/if}><a href="index.php?do=user&view={$view}&op={$op}&code=enterprise">企业认证</a></li>
+		        </ul>
+		      {/if}
+      		<!--  start -->
+
+          <form role="form" action="{$strUrl}&step={$step}" method="post" enctype="multipart/form-data" name="editRealnameForm" id="editRealnameForm">
+          	<input type="hidden" name="formhash" id="formhash" value="{FORMHASH}">
+
+            <div class="media">
+              <div class="pull-left">
+                  <img class="media-object" src="{$auth_item['auth_big_ico']}" alt="{$auth_item['auth_title']}">
+              </div>
+              <div class="media-body">
+
+
+                  <div class="form-group">
+                    <label class="control-label">用户名：</label>
+                    {if $arrAuthInfo['username']}{$arrAuthInfo['username']}{else}{$gUserInfo['username']}{/if}
+                  </div>
+                  <div class="form-group">
+                    <label class="control-label" for="truename">真实姓名：</label>
+                    <input type="text"  name="truename" id="truename"  class="form-control" value="{if $arrAuthInfo['realname']}{$arrAuthInfo['realname']}{else}{$gUserInfo['truename']}{/if}">
+
+                  </div>
+                  <div class="form-group">
+                    <label class="control-label" for="idcard">身份证号：</label>
+                    <input type="text"  name="idcard" id="idcard"  class="form-control" value="{$arrAuthInfo['id_card']}">
+
+                  </div>
+                  <div class="form-group">
+                    <label class=" control-label" for="filepath">证件图：</label>
+                    <input type="file" class="file" name="upload" id="upload">
+                    <input type="hidden"  name="filepath" id="filepath"  class="form-control" value="{$arrAuthInfo['id_pic']}">
+
+                    <img id="idpic_img" src="{$arrAuthInfo['id_pic']}" {if !$arrAuthInfo['id_pic']}class="hidden"{/if} width="100">
+
+                           <script src="static/js/model/common/base.js" type="text/javascript"></script>
+                           <script src="static/js/uploadify/jquery.uploadify.min.js" type="text/javascript"></script>
+                           <link href="static/js/uploadify/uploadify.css" rel="stylesheet">
+
+                          <script type="text/javascript">
+                                  $(function(){
+                                      uploadify({debug:false,text:'上传图片',auto:true,limit:1,hide:false,size:"{$basic_config['max_size']}MB",exts:'*.jpg;*.jpeg;*.gif;*.png;*.bmp'},'',uploadResponse);
+                                  })
+			                    function uploadResponse(json){
+                                	  $("#filepath").val(json.msg.url);
+			                      $('#idpic_img').removeClass('hidden');
+			                      $('#idpic_img').prop('src',json.msg.url);
+			                    }
+                          </script>
+
+
+                  </div>
+
+                  <div class="form-group">
+
+                      <button class="btn btn-default" type="submit" value="1" onclick="return saveAuthInfo();" >提交</button>
+                      <span class="text-success" id="tipsUser"></span>
+
+                  </div>
+
+
+              </div>
+            </div>
+
+
+          </form>
+      		<!-- end -->
+      </div>
+  </div>
+  </div>
+<script src="static/js/model/user/auth.js"></script>
+<!--{template user/footer}-->

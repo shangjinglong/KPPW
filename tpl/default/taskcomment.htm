@@ -1,0 +1,49 @@
+{if $action == 'add'}
+
+
+    <div class="media comment-item">
+      <div class="media-object comment-avatar">
+        <a href="index.php?do=seller&id={$arrCommentInfo['uid']}">
+          <!--{userpic($arrCommentInfo['uid'],'small')}-->
+        </a>
+      </div>
+      <div class="media-body">
+
+        <div class="media-heading">
+          <strong class="comment-name">{$arrCommentInfo['username']}</strong>
+          <time class="comment-time"><!--{eval echo date('Y-m-d H:i:s',$arrCommentInfo['on_time'])}--></time>
+        </div>
+        <div class="comment-content">
+          <span class="caret"></span>
+          	<!--{eval echo htmlspecialchars_decode($arrCommentInfo['content'])}-->
+        </div>
+		</div>
+    </div>
+{/if}
+
+{if $action == 'reply'}
+<div class="media comment-item {if $arrCommentInfo['uid'] !== $arrCommentInfo['parentcomment']['uid']}reply{/if}">
+	     <div class="media-object comment-avatar">
+	       	<a href="index.php?do=seller&id={$arrCommentInfo['uid']}">
+	     		<!--{userpic($arrCommentInfo['uid'],'small')}-->
+	   		</a>
+	     </div>
+         <div class="media-body">
+           <div class="media-heading">
+
+              {if $arrCommentInfo['uid'] === $arrCommentInfo['parentcomment']['uid']}
+              	<strong class="comment-name">{$arrCommentInfo['parentcomment']['username']} 回复 </strong>
+              {else}
+              	<strong class="comment-name">{$arrCommentInfo['username']} 回复 {$arrCommentInfo['parentcomment']['username']}</strong>
+              {/if}
+
+             <time class="comment-time"><!--{eval echo date('Y-m-d H:i:s',$arrCommentInfo['on_time'])}--></time>
+           </div>
+         <div class="comment-content">
+           <span class="caret"></span>
+          	<!--{eval echo htmlspecialchars_decode($arrCommentInfo['content'])}-->
+         </div>
+       </div>
+</div>
+
+{/if}

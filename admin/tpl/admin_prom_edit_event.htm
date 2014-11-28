@@ -1,0 +1,67 @@
+<!--{template ADMIN_DIRECTORY/tpl/admin_header}-->  
+<div class="page_title">
+    	<h1>{$_lang['view_prom_event']}</h1>
+        <div class="tool">
+            <a href="index.php?do={$do}&view=event" >{$_lang['prom_finance_manage']}</a>
+            <a href="index.php?do={$do}&view={$view}&event_id={$event_id}" class="here">{$_lang['view_prom_event']}</a>
+    	</div>
+    </div>
+<div class="box post">
+	<div class="title"><h2>{$_lang['view_prom_event']}</h2></div>
+            <div class="detail">
+                    <table width="100%" border="0" cellspacing="0" cellpadding="0">
+                      </tr>
+					  <tr>
+                        <th scope="row" width="130">{$_lang['promoter']}</th>
+                        <td>
+                       		$event_info['parent_username']
+                        </td>
+                      </tr>
+					  <tr>
+                        <th scope="row" width="130">{$_lang['be_prom_people']}</th>
+                        <td>
+                       		$event_info['username']
+                        </td>
+                      </tr>
+					  <tr>
+                        <th scope="row" width="130">{$_lang['prom_event']}</th>
+                        <td>
+                       			{$prom_arr[$event_info['action']]['prom_item']}
+							{if $objInfo}
+							<a href="{$objInfo['url']}" target="_blank">{$objInfo['title']}</a>
+							{/if}
+                        </td>
+                      </tr>
+					  <tr>
+                        <th scope="row" width="130">{$_lang['prom_income']}</th>
+                        <td>
+                       		{if $event_info['event_status']==0}
+								{$_lang['no_settlement']}
+							{else}
+								{if $event_info['rake_cash']>0.00}
+									<font color=red> {c:$event_info['rake_cash']}</font>
+								{/if}
+								{if $event_info['rake_credit']>0.00}
+									<font color=red> {c:$event_info['rake_credit']}</font>{CREDIT_NAME}
+								{/if}
+							{/if}
+                        </td>
+                      </tr>
+					  
+					   <tr>
+                        <th scope="row" width="130">{$_lang['prom_time']}</th>
+                        <td>
+                       		 <!--{date('Y-m-d H:i:s',$event_info['event_time'])}-->
+                        </td>
+                      </tr>
+					   <tr>
+                        <th scope="row" width="130">{$_lang['prom_descripton']}</th>
+                        <td>
+                       		<textarea name="tar_auth_desc" cols="80" rows="5">{$event_info['event_desc']}</textarea>
+                        </td>
+                      </tr>
+					   
+   				 </table>
+   	 </div>
+</div>
+<!--{template ADMIN_DIRECTORY/tpl/admin_footer}-->

@@ -1,0 +1,26 @@
+{if $do=='tasklist'}
+	<div class="no-data">
+		<p class="lead text-warning"><i class="fa fa-frown-o fa-lg"></i> 暂无任务显示  <a href="index.php?do=pubtask">我来发布</a></p>
+	</div>
+{/if}
+{if $do=='goodslist'}
+	<div class="no-data">
+		<p class="lead text-warning"><i class="fa fa-frown-o fa-lg"></i> 暂无商品显示  <a href="index.php?do=pubgoods">我来发布</a></p>
+	</div>
+{/if}
+{if $do=='case'}
+	<div class="no-data">
+		<p class="lead text-warning"><i class="fa fa-frown-o fa-lg"></i> 暂无成功案例，去{if $t =='1'}<a href="index.php?do=tasklist">任务大厅</a>{else}<a href="index.php?do=goodslist">威客商城</a>{/if}看看</p>
+	</div>
+{/if}
+{if $do=='task'}
+	<div class="no-data">
+		<p class="lead text-warning"><i class="fa fa-frown-o fa-lg"></i> 还没有人投稿，赶快来投稿吧！</p>
+	</div>
+{/if}
+
+{if $do!='tasklist'&&$do!='goodslist'&&$do!='case'&&$do!='task'}
+	<div class="no-data">
+		<p class="lead text-warning"><i class="fa fa-frown-o fa-lg"></i> 暂无相关记录</p>
+	</div>
+{/if}

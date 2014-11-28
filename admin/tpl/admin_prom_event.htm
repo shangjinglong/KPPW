@@ -1,0 +1,156 @@
+<!--{template ADMIN_DIRECTORY/tpl/admin_header}-->
+<div class="page_title">
+    <h1>{$_lang['prom_finance_manage']}</h1>
+    <div class="tool">
+        <a href="index.php?do={$do}&&view={$view}" class="here">{$_lang['finance_manage']}</a>
+    </div>
+</div>
+<div class="box search p_relative">
+    <div class="title">
+        <h2>{$_lang['search']}</h2>
+    </div>
+    <div class="detail">
+        <form method="post" action="index.php?do={$do}&view={$view}" id="frm_art_search">
+        <input type="hidden" name="page" value="{$page}">
+		 
+        <table cellspacing="0" cellpadding="0">
+         <tbody>
+           <tr>
+             <th>
+          编号
+             </th>
+              <td>
+                <input type="text" size= '10' class="txt"name="w[event_id]" value="{$w['event_id']}" onkeyup="clearstr(this);">
+              </td>
+               <th>
+                        {$_lang['promoter']}*
+              </th>
+                <td>
+                  <input type="text" size="10" class="txt" name='w[parent_username]' value="{$w['parent_username']}">
+                </td>
+			<th>
+                        {$_lang['be_prom_people']}*
+              </th>
+                <td>
+                  <input type="text" size="10" class="txt" name='w[username]' value="{$w['username']}">
+                </td>
+              <th>
+                         {$_lang['event_type']}
+               </th>
+                <td>
+                  <select name="w[action]">
+                      <option value="">--{$_lang['all']}--</option>
+					  {loop $type_arr $k $v}
+					  {if $v['type']!='reg'}
+					  	<option {if $w['action']==$k}selected="selected" {/if}  value="{$k}">$v['prom_item']</option>
+					  {/if}
+					  {/loop}
+                  </select>
+               </td>
+            </tr>
+             <tr>
+                 <th>
+                     {$_lang['result_order']}
+                 </th>
+                  <td>
+                     <select name="w[ord][]">
+                           <option value="event_id" {if $w['ord']['0']=='event_id' or !isset($w['ord']['0'])} selected="selected"{/if}>{$_lang['default']}{$_lang['order']}</option>
+                           <option value="event_time" {if $w['ord']['0']=='event_time' } selected="selected"{/if}>{$_lang['event_time']}</option>
+                      </select>
+                      <select name="w[ord][]">
+                            <option {if $w['ord']['1']=='desc' or !isset($w['ord']['1'])}selected="selected" {/if} value="desc">{$_lang['desc']}</option>
+                            <option {if $w['ord']['1']=='asc'}selected="selected" {/if} value="asc">{$_lang['asc']}</option>
+                      </select>
+                   </td>
+              <th>
+                         {$_lang['list_result']}
+               </th>
+                   <td>
+                     <select name="w[page_size]">
+                          <option value="10" {if $w['page_size']=='10'}selected="selected"{/if}>{$_lang['page_size']}10</option>
+                          <option value="20" {if $w['page_size']=='20'}selected="selected"{/if}>{$_lang['page_size']}20</option>
+                          <option value="30" {if $w['page_size']=='30'}selected="selected"{/if}>{$_lang['page_size']}30</option>
+                     </select>
+					 <button class="pill" type="submit" value="{$_lang['search']}" name="sbt_search"><span class="icon magnifier">&nbsp;</span>{$_lang['search']}</button>
+                   </td>
+				   <th>
+                   &nbsp;
+                </th>
+				<td>
+                   &nbsp;
+                </td>
+                <th>
+                   &nbsp;
+                </th>
+                 <td>
+                 	&nbsp;
+                 </td>
+             </tr>
+          </tbody>
+        </table>　
+		 
+     </form>
+   </div>
+</div>
+	 <div class="box list">
+	 	<div class="title">
+ 	   <h2>{$_lang['prom_finance_manage']}</h2></div>
+		  <div class="detail">
+		  	 <form method="post" action="index.php?do={$do}&view={$view}" id="frm_list">
+		  	 	<input type="hidden" name="w[page_size]" value="{$page_size}">
+				<input type="hidden" name="page" value="{$page}">
+				<div id="ajax_dom">
+			<table cellpadding="0" cellspacing="0">
+               <tbody>
+               	<tr>
+               		<th>
+	<input type="checkbox" id="checkbox" onclick="checkall();" class="checkbox" >编号
+</th>
+					<th>{$_lang['upline']}</th>
+					<th>{$_lang['downline']}</th>
+                    <th>{$_lang['prom_money']}</th>
+                    <th>{$_lang['time']}</th>
+                    <th>{$_lang['prom_event']}</th>
+                    <th>{$_lang['operate']}</th>
+				<tr>
+				{loop $prom_event_arr $v}
+               	<tr class="item">
+               		<td><input type="checkbox" name="ckb[]" class="checkbox" value="{$v['event_id']}">{$v['event_id']}&nbsp;</td>
+					<td>$v['parent_username']&nbsp;</td>
+					<td>$v['username']&nbsp;</td>
+                    <td>
+                    	{if $v['event_status']==1}
+								{$_lang['no_settlement']}
+						{elseif $v['event_status']==2}
+                    		{if $v['rake_cash']>0.00}<font color=red> {c:$v['rake_cash']}</font> {/if}
+							{if $v['rake_credit']>0.00}<font color=red> $v['rake_credit']</font>{CREDIT_NAME}{/if}
+						{else}
+							{$_lang['has_fail']}
+						{/if}
+					</td>
+                    <td><!--{eval echo date("Y-m-d H:i:s",$v['event_time'])}--></td>
+               		<td>$v['event_desc']&nbsp;</td>
+                    <td>
+                    <a href="index.php?do=prom&view=edit_event&event_id=$v['event_id']" class="button"><span class="book icon"></span>{$_lang['view']}</a>
+                    <a onclick="return cdel(this);" href="{$url}&ac=del&event_id=$v['event_id']" class="button"><span class="trash icon"></span>{$_lang['delete']}</a>
+                    </td>
+				</tr>
+				{/loop}	
+				<tr>
+                	<td colspan="7">
+                	
+                    <div class="clearfix">
+							<label for="checkbox" onclick="checkall(event);">{$_lang['select_all']}</label>　
+							<input type="hidden" name="sbt_action" class="sbt_action"/>
+							<button type="submit" name="sbt_action" value="{$_lang['mulit_delete']}" class="pill negative" onclick="return batch_act(this,'frm_list')">
+							<span class="trash icon"></span>{$_lang['mulit_delete']}</button>&nbsp;&nbsp;</div>
+				   </td>
+               </tr>	
+			</tbody>
+             </table>
+			 <div class="page">{$pages['page']}</div>
+			 </div>
+           </form>
+        </div>
+    </div>
+<!--{template ADMIN_DIRECTORY/tpl/admin_footer}-->

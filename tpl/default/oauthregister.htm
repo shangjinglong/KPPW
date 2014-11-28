@@ -1,0 +1,141 @@
+<!--{template header}-->
+
+<div  class="container">
+<div id="main">
+
+    <div class="oauth login-and-register-container">
+
+      <div class="page-header">
+        <div class="pull-right">或 <a href="index.php?do=oauthlogin&type={$type}">绑定已有帐号</a></div>
+        <h1>完善个人信息</h1>
+      </div>
+
+     <form role="form" action="index.php?do=oauthregister&type={$type}"  class="form-horizontal" name="registerForm" id="registerForm" method="post">
+      <input type="hidden" name="formhash" id="formhash" value="{FORMHASH}">
+      <input type="hidden" name="hdn_refer" id="hdn_refer" value="{$_K['refer']}">
+
+      <div class="form-group">
+        <label for="" class="control-label col-xs-3"><img src="static/img/ico/ico_32_{$type}.gif" alt="{$arrOauthType[$type]}帐号"> {$arrOauthType[$type]}帐号</label>
+        <div class="col-xs-7">
+          <p class="form-control-static">{$arrOauthInfo['nickname']}</p>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="account" class="control-label col-xs-3">帐号</label>
+        <div class="col-xs-7">
+          <input type="text" class="form-control" id="account" name="account" placeholder="请输入登录帐号">
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="email" class="control-label col-xs-3">邮箱</label>
+        <div class="col-xs-7">
+          <input type="email" class="form-control" name="email" id="email" placeholder="请输电子邮箱">
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="password" class="control-label col-xs-3">密码</label>
+        <div class="col-xs-7">
+          <input type="password" class="form-control" name="password" id="password" placeholder="请输入帐号的密码" onKeyup="pwStrength(this.value)">
+        </div>
+      </div>
+
+      <div class="form-group" id="pwdStrength">
+        <div class="col-xs-offset-3 col-xs-7">
+          <div class="password_strength">
+            <span class="selected">弱</span>
+            <span>中</span>
+            <span>强</span>
+          </div>
+        </div>
+      </div>
+
+
+      <div class="form-group">
+        <label class="control-label col-xs-3" for="confirmPassword">确认密码</label>
+        <div class="col-xs-7">
+          <input type="password" class="form-control" name="confirmPassword" id="confirmPassword"  placeholder="确认密码">
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="code" class="control-label col-xs-3">验证码</label>
+        <div class="col-xs-3">
+          <input type="text" class="form-control" id="code" name="code" placeholder="验证码">
+        </div>
+        <div class="col-xs-4 code-img">
+          <img id="secode_img" src="index.php?do=ajax&view=captcha" onclick="document.getElementById('secode_img').src='index.php?do=ajax&view=captcha&sid='+Math.random(); return false;">
+         <a class="font14" href="javascript:document.getElementById('secode_img').src='index.php?do=ajax&view=captcha&sid='+Math.random();void(0);" >换一组</a>
+        </div>
+      </div>
+      <div class="form-group">
+        <div class="col-xs-offset-3 col-xs-7">
+          <div class="checkbox">
+            <label>
+              <input type="checkbox"  name="agree" id="agree" value="1" checked="checked"> 我同意 <a href="index.php?do=single&id=312" target="_blank">《网站KPPW条款》</a>
+            </label>
+          </div>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <div class="col-md-offset-3 col-xs-7">
+          <button type="submit" class="btn btn-primary">提交</button>
+        </div>
+      </div>
+
+      </form>
+
+    </div><!-- oauth end -->
+
+</div>
+</div>
+<script type="text/javascript" src="static/js/model/register/register.js"></script>
+<script type="text/javascript">
+
+
+function checkStrong(sPW){
+	//if (sPW.length < 3){
+		//Modes=1;
+	//}else{
+		var pwLength = 	sPW.length;
+		  var patEn = /[a-zA-Z]/;
+		  var patnum = /[0-9]/;
+		  var speChar = /[`~!@#$\^&\*\(\)=\|{}':;',\/\?\[\]\.<>]/;
+		  var isEn = patEn.test(sPW);
+		  var isNum = patnum.test(sPW);
+		  var isSpe = speChar.test(sPW);
+		  Modes = getStrong(isEn,isNum,isSpe,pwLength);
+
+	//}
+	 return Modes;
+}
+
+function getStrong (isEn,isNum,isSpe,pwLength){
+	if (isEn && isNum && isSpe && (pwLength>6)){
+		var setModes = 3;
+	}else{
+		var setModes = 2;
+		if((isEn && isNum)||(isNum && isSpe)||(isEn&&isSpe)){
+			var setModes = 2;
+		}else{
+			var setModes = 1;
+		}
+	}
+	return setModes;
+}
+
+function pwStrength(pwd){
+  if (pwd==null||pwd==""){
+  	S_level = 0;
+  } else{
+	  S_level=checkStrong(pwd);
+	  $("#pwdStrength span:lt("+S_level+")").addClass('selected');
+	  $("#pwdStrength span:gt("+(S_level-1)+")").removeClass('selected');
+  }
+
+}
+</script>
+<!--{template footer}-->

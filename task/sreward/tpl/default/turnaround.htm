@@ -1,0 +1,113 @@
+<!--{template header}-->
+<div  class="container">
+  <div id="main">
+      <div class="buy-user-info">
+      <div class="media">
+        <div class="avatar">
+          <!--{userpic($arrTaskInfo['uid'],'middle')}-->
+        </div>
+        <div class="media-body">
+          <strong class="meida-heading"> <span class="money"><sub>￥</sub>{$arrTaskInfo['task_cash']}</span> {$arrTaskInfo['task_title']}</strong>
+          <ul class="user-meta">
+            <li>{$arrModelInfo['model_name']}模式</li>
+            <li>
+              <i class="fa fa-money"></i> 已托管：￥{$arrTaskInfo['task_cash']}
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+<div class="turnaround">
+    <h2 class="min-title">
+      我来交稿
+    </h2>
+    <div class="turnaround-body">
+      <div class="col-sm-8">
+
+        <form role="form" class="turnaround-form"
+        	action="index.php?do=taskhandle&op=turnaround&taskId={$taskId}" method="post"
+        	id = "editTurnaroundForm" name = "editTurnaroundForm"
+        	enctype="application/x-www-form-urlencoded">
+        	<input type="hidden" name="formhash" id="formhash" value="{FORMHASH}">
+          <div class="form-group">
+            <label for="tar_content">描述</label>
+            <textarea id="tar_content" name="tar_content" class="form-control xheditor-simple {urlBase:'$_K['siteurl']/',html5Upload:false,upImgUrl:'index.php?do=ajax&view=upload&file_type=att&filename=filedata',skin:'nostyle'}"  rows="5"></textarea>
+          </div>
+
+          <div class="form-group">
+            <label for="upload">附件上传</label>
+            <input type="file" id=upload name="upload">
+            <input type="hidden"  name="file_ids" id="file_ids"  class="form-control" value="">
+			<ul class="affix-list" id="fileList"></ul>
+            <p class="help-block ws_hide">
+              	一次最多传5个，每个文件大小上限2M，格式:
+              {$strExtTypes}
+            </p>
+          </div>
+          <div class="text-center">
+            <a href="javascript:history.back();">返回</a>
+            <button type="submit" class="btn btn-default">交稿</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+    </div>
+  </div>
+<script src="static/js/uploadify/jquery.uploadify.min.js" type="text/javascript"></script>
+<link href="static/js/uploadify/uploadify.css" rel="stylesheet">
+<script type="text/javascript" src="static/js/xheditor/xheditor.js"></script>
+		<script type="text/javascript">
+			 $(function(){
+			 	editor = $("#tar_content").xheditor();
+			 })
+		</script>
+<script type="text/javascript">
+$(function(){
+	//基本资料
+	$('#editTurnaroundForm').scojs_valid({
+	    rules: {
+	    	tar_content: ['not_empty',{'min_length': 10},{'max_length': 1000}]
+	    },
+	    messages: {
+	    	tar_content: {
+				not_empty: "请输入稿件描述",
+				min_length: "最少输入10字数",
+				max_length: "最多可以输入:1000字数"
+			}
+	    },
+	    wrapper:'.form-group'
+	    ,onSuccess: function(response, validator) {
+	    	  tipsUser(response.data,response.status);
+	    	  tipsOp(response.data);
+				if(response.url){
+					setTimeout(function(){window.location.href=response.url;},2000);
+				}
+	    }
+	});
+
+             uploadify({
+             	debug:false,
+             	text:'上传附件',
+             	auto:true,
+             	hide:false,
+             	resText:'file_ids',
+             	exts:'{$strExtTypes}',
+             	limit:5
+             	},{
+                taskId:'{$taskId}',
+				objType:'work'
+             	},uploadResponse);
+         });
+	function uploadResponse(json){
+	       	if($("#file_ids").val()){
+				$("#file_ids").val($("#file_ids").val()+','+json.msg.fileid);
+			}else{
+				$("#file_ids").val(json.msg.fileid);
+			}
+			$("#fileList").append('<li class="affix-list-item">'+json.msg.name+'</li>');
+	}
+</script>
+
+  </body>
+</html>

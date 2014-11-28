@@ -1,0 +1,106 @@
+
+<div id="side">
+
+    <div class="box-body site-security">
+      <h2 class="min-title">诚信威客网站，服务更放心</h2>
+      <ul>
+          <li class="col3">
+            <p>
+              <span class="fa-stack fa-2x">
+                <i class="fa fa-circle fa-stack-2x text-success"></i>
+                <i class="fa fa-yen fa-stack-1x fa-inverse"></i>
+              </span>
+            </p>
+            <p>担保交易</p>
+          </li>
+          <li class="col3">
+            <p>
+              <span class="fa-stack fa-2x">
+                <i class="fa fa-circle fa-stack-2x text-success"></i>
+                <i class="fa fa-shield fa-stack-1x fa-inverse"></i>
+              </span>
+            </p>
+            <p>诚信保障</p>
+          </li>
+          <li class="col3">
+            <p>
+              <span class="fa-stack fa-2x">
+                <i class="fa fa-circle fa-stack-2x text-success"></i>
+                <i class="fa fa-user fa-stack-1x fa-inverse"></i>
+              </span>
+            </p>
+            <p>威客认证</p>
+          </li>
+      </ul>
+    </div>
+	{if TOOL === TRUE}
+   {if $uid==$arrTaskInfo['uid']&&$arrPayitemLists&&$arrTaskInfo['task_status']>=2}
+    <div class="box-header">
+      <h2 class="min-title">提升效果，你可能还需要</h2>
+    </div>
+    <div class="box-body apply-for-service">
+    	{loop $arrPayitemLists $k $v}
+      <dl>
+        <dt>
+          <a  href="javascript:payitem('task','{$arrTaskInfo['task_id']}','{$arrTaskInfo['uid']}');void(0);"  class="btn btn-success btn-sm" role="button">$v['item_name']</a>（<span class="money"><sub>￥</sub>$v['item_cash'] 元</span> / $v['item_standard']）
+        </dt>
+        <dd>$v['item_desc']</dd>
+      </dl>
+	  {/loop}
+    </div>
+   {/if}
+   {/if}
+    <div class="box-header">
+      <h2 class="min-title">同类任务</h2>
+    </div>
+    <div class="box-body same-type">
+      <ul class="min-list">
+      	 {if $arrSimpleTasks}
+         {loop $arrSimpleTasks $k $v}
+        <li><a href="index.php?do=task&id=$v['task_id']" title="$v['task_title']"><span class="money">￥
+        	    {if $v['task_cash_coverage']}
+            		{$arrCashCoves[$v['task_cash_coverage']]['cove_desc']}
+            	{else}
+            		{$v['task_cash']}
+            	{/if}</span> $v['task_title']</a></li>
+	     {/loop}
+		 {else}
+暂无数据
+		 {/if}
+      </ul>
+    </div>
+
+    <div class="box-header">
+      <h2 class="min-title">推荐服务商</h2>
+    </div>
+    <div class="box-body">
+      <ul class="record-list img">
+          {if $arrRecommShops}
+          {loop $arrRecommShops $k $v}
+          <li>
+            <a href="index.php?do=seller&id=$v['uid']" class="avatar" title="$v['shop_name']">
+              <!--{userpic($v['uid'],'middle')}-->
+            </a>
+
+            <div class="avatar-detail">
+              <p class="record-list-title">
+                <a href="index.php?do=seller&id=$v['uid']" title="$v['shop_name']">
+                  $v['shop_name']
+                </a>
+              </p>
+              <p class="record-list-meta">好评率 <span><!--{eval echo $v['good_rate']*100}--><sub>%</sub></span></p>
+              <p>
+                <span class="marked marked-tags">{$indus_p_arr[$v[indus_pid]][indus_name]}</span>
+                <span class="marked marked-tags">{$indus_c_arr[$v[indus_id]][indus_name]}</span>
+              </p>
+            </div>
+          </li>
+		  {/loop}
+		  {else}
+暂无数据
+		  {/if}
+        </ul>
+    </div><!-- 推荐服务商 & box-body end -->
+
+
+</div><!-- #side end -->

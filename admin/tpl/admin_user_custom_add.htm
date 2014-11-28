@@ -1,0 +1,92 @@
+<!--{template ADMIN_DIRECTORY/tpl/admin_header}-->
+<div class="page_title">
+    <h1>{$_lang['rights_set']}</h1>
+    <div class="tool">
+  		<a href="index.php?do=user&view=custom_list" {if $view=='custom_list'} class="here" {/if}>{$_lang['customer_service_manage']}</a>
+        <a href="index.php?do=user&view=custom_add" {if $view=='custom_add'} class="here" {/if} >{$_lang['add_customer_service']}</a>
+    </div>
+</div>
+<div class="box post">
+    <div class="title">
+        <h2>{$_lang['set_rights']}</h2>
+    </div>
+    <div class="detail">
+        <form action="index.php?do=user&op=add&view=custom_add&edituid={$edituid}" method="post" id="userCustonAdd">
+            <table width="100%" border="0" cellspacing="0" cellpadding="0">
+           <tr>
+                 <th scope="row" width="70">
+                    <span class="bg1 t_r">{$_lang['user']}ID{$_lang['zh_mh']}</span>
+                 </th>
+                 <td>
+                 	<input type="text" name="fds[uid]" value="$edituid"  id="uid"  style="width:260px;" limit="required:true;len:1-10" msg="请输入用户编号1-10位" msgArea="txt_uid_msg" class="txt"><b style="color:red"> *</b><span id="txt_uid_msg"></span>
+				 
+				 </td>
+             </tr>
+			 <tr>
+                <th  scope="row" width="70">
+                    {$_lang['username']}{$_lang['zh_mh']}
+                </th>
+                <td>
+                    <input type="text" name="fds[username]" id="username" value="{$spaceinfo['username']}" style="width:260px;" limit="required:true;len:2-20" msg="请输入用户昵称2-10位" msgArea="txt_username_msg" class="txt"><b style="color:red"> *</b><span id="txt_username_msg"></span>
+                </td>
+            </tr>
+			
+			<tr>
+                <th  scope="row">
+                    {$_lang['contact_tel']}{$_lang['zh_mh']}
+                </th>
+                <td>
+                    <input type="text" name="fds[phone]"  id="phone" style="width:260px;"  value="{$spaceinfo['phone']}" class="txt" limit="type:tel" msg="{$_lang['format_error']}" title="{$_lang['please_input_right_phone']}" msgArea="txt_phone_msg"><span id="txt_phone_msg"></span>
+                </td>
+            </tr>
+			<tr>
+                <th  scope="row">
+                    E-mail{$_lang['zh_mh']}
+                </th>
+                <td>
+                	<input type="text" class="txt" style="width:260px;" name="fds[email]" id="email"limit="type:email" value="{$spaceinfo['email']}" msg="{$_lang['format_error']}" title="{$_lang['please_input_right_email']}" msgArea="txt_email_msg" /><span id="txt_email_msg"></span>
+                    
+                </td>
+            </tr>
+			<tr>
+                <th  scope="row">
+                   QQ{$_lang['zh_mh']}
+                </th>
+                <td>
+					<input type="text" name="fds[qq]" id="qq" style="width:260px;" value="{$spaceinfo['qq']}" class="txt">
+                </td>
+            </tr>
+		    <tr>
+                <th  scope="row">
+                   {$_lang['user_group']}{$_lang['zh_mh']}
+                </th>
+                <td>
+                     <select name="fds[group_id]" id="group_id">
+					  	 <option value="0" {if $spaceinfo[group_id]<0} selected="selected"{/if}>{$_lang['normal_member_group']}</option>
+					   {loop $member_group_arr $k $v}
+					  	 <option value="{$v['group_id']}" {if $spaceinfo['group_id']== $v['group_id']}selected="selected"{/if}>$v['groupname']</option>
+					   {/loop}
+					   </select><b style="color:red">*</b>
+                </td>
+            </tr>
+              
+                <tr>
+                    <th scope="row">
+                        &nbsp;
+                    </th>
+                    <td>
+                        <div class="clearfix padt10">
+                        	<input type="hidden" name="is_submit" value="1"/>
+							
+                            <button class="positive primary pill button" type="submit" onclick="return checkForm(document.getElementById('userCustonAdd'));" name="sbt_edit" value="{$_lang['submit']}">
+                                <span class="check icon"></span>{$_lang['submit']}
+                            </button>
+                          
+                        </div>
+                    </td>
+                </tr>
+            </table>
+        </form>
+    </div>
+</div>
+<!--{template ADMIN_DIRECTORY/tpl/admin_footer}-->

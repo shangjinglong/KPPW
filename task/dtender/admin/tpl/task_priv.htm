@@ -1,0 +1,49 @@
+<!--{template ADMIN_DIRECTORY/tpl/admin_header}--> 
+<div class="page_title">
+    <h1>{$model_info[model_name]}{$_lang['task_config']}</h1>
+    <div class="tool">
+      <a href="index.php?do={$do}&model_id={$model_id}&view={$view}&op=config">{$_lang['basic_config']}</a>
+      <a href="index.php?do={$do}&model_id={$model_id}&view={$view}&op=control">{$_lang['control_config']}</a>
+      <a href="index.php?do={$do}&model_id={$model_id}&view={$view}&op=priv" class="here">{$_lang['private_config']}</a>
+    </div>
+</div>
+<div class="box post">
+ <div class="title"><h2>{$_lang['private_config']}</h2></div>
+  <div class="detail">
+  <form name="frm_config_reward" action="{$ac_url}" method="post" id="frm_config_reward">
+  	<input type="hidden" name="pk[model_id]" value="{$model_id}">           
+	<table cellpadding="0" cellspacing="0">
+      <tbody>
+       <tr class="item">
+		<th>{$_lang['project_name']}</th>
+		<th>{$_lang['user_identity']}</th>
+		<th>{$_lang['limit_number']}</th>
+		<th>{$_lang['edit']}</th>
+	    </tr>
+	  {loop $perm_item $k $v}
+		<tr class="item">
+		  <td>{$v['op_name']}</td>
+		  <td>{if $v[limit_obj]==2}{$_lang['buyer_employer']}{else}{$_lang['seller_witkey']}{/if}</td>
+		  <td>
+		  	<label for="open_{$k}"><input type=radio id="open_{$k}" name="fds[allow_times][{$v[op_id]}]" value="1"{if $v['allow_times']==1}checked="checked"{/if}>{$_lang['open']}</label>
+			<label for="close_{$k}"><input type=radio id="close_{$k}" name="fds[allow_times][{$v[op_id]}]" value="0" {if !$v['allow_times']||$v['allow_times']==0}checked="checked"{/if}>{$_lang['close']}</label>
+		  </td>
+		  <td>
+			<a href="index.php?do=permission&model_id=$model_id&op_code={$v[op_code]}" class="button"><span class="cog icon"></span>{$_lang['private_config']}</a>
+		  </td>
+		</tr>
+	  {/loop}
+		<tr>
+         <th scope="row">&nbsp;</th>
+         <td colspan="3">
+            <div class="clearfix padt10">
+              <button class="positive primary pill button" type="submit" name="sbt_edit" value="1"><span class="check icon"></span>{$_lang['submit']}</button>
+            </div>
+         </td>
+        </tr>
+       </tbody>
+     </table>
+	 </form>
+   </div>
+  </div>
+<!--{template ADMIN_DIRECTORY/tpl/admin_footer}-->

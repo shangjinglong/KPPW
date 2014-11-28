@@ -1,0 +1,126 @@
+<!--{template ADMIN_DIRECTORY/tpl/admin_header}-->
+<link href="{$_K['siteurl']}/static/css/layout/layout.css" rel="stylesheet">
+<link href="{$_K['siteurl']}/static/css/public.css" type="text/css" rel="stylesheet">
+<div class="page_title" id="taskScroll">
+    <h1>{$model_info['model_name']}{$_lang['manage']}</h1>
+    <div class="tool">
+        <a href="index.php?do=$do&model_id=$model_id&view=list">{$_lang['task_list']}</a>
+        {loop $ops $v}
+			<a href="index.php?do=$do&model_id={$model_id}&view=edit&task_id={$task_id}&op={$v}" class="{if $op==$v}here{/if}">{$_lang['b_task_'.$v]}</a>
+        {/loop}
+    </div>
+</div>
+<!--页头结束-->
+<div class="box post">
+    <div class="tabcon">
+        <div class="title">
+            <h2>{$_lang['b_task_'.$op]}</h2>
+        </div>
+        <div class="detail container_24 pad10" style=" width:960px; margin-left:auto; margin-right:auto;">
+            
+   <!--步骤下部所有内容-->
+	  <div class="clearfix">
+        <!--左边部分-->
+         <div class="grid_21 alpha" style="float:left; width:350px;">
+          <div class="prefix_1 suffix_1 border_r_c" style="padding-left:40px; padding-right:40px;">
+            <!--源文件协议内容-->
+             <div class="source_content1 clearfix">
+               <div class="source_agreement1 clearfix">
+				  <div class="grid_21 prefix_1 clearfix" style="float:left; width:830px; padding-left:40px;">
+                 <!--左边发布者-->
+                   <div class="grid_9 clearfix" style="float:left; width:350px;">
+                    <div class="bidder">
+                      <div class="user_info1 clearfix pad10 ">
+                       <div class="fl_l mr_10">
+                       	<a href="{$_K['siteurl']}/index.php?do=seller&id={$buyer_uid}" target="_blank" title="{$buyer_username}">
+                          <!--{userpic($buyer_uid,'middle')}-->
+						 </a>
+                           <ul class="grid_4 fl_r">
+                              <li class="intor font14b">({$_lang['pub_name']})
+							 	 <a href="{$_K['siteurl']}/index.php?do=seller&id={$buyer_uid}" target="_blank">
+                        			{$buyer_username}
+								 </a>
+							  </li>
+                              <li class="font14b"><i style="color:#FF3D00">{$buyer_status_arr[$buyer_status]}</i></li>
+                           </ul>
+                       </div>
+                      </div>
+                      <div class="pad10 contact">
+                        <span>{$_lang['username']}{$_lang['zh_mh']}{if $buyer_contact['truename']}$buyer_contact['truename']{else}$buyer_username{/if}</span>
+                        <span>{$_lang['tel']}{$_lang['zh_mh']}{if $buyer_contact['phone']}$buyer_contact['phone']{else}{$_lang['now_no']}{/if}</span>
+                        <span>{$_lang['mobile']}{$_lang['zh_mh']}{if $buyer_contact['mobile']}$buyer_contact['mobile']{else}{$_lang['now_no']}{/if}</span>
+                        <span>Q  Q{$_lang['zh_mh']}{if $buyer_contact['qq']}$buyer_contact['qq']{else}{$_lang['now_no']}{/if}</span>
+                        <span>MSN{$_lang['zh_mh']}  {if $buyer_contact['msn']}$buyer_contact['msn']{else}{$_lang['now_no']}{/if}</span>
+                        <span>{$_lang['email']}{$_lang['zh_mh']}{if $buyer_contact['email']}$buyer_contact['email']{else}{$_lang['now_no']}{/if}</span>
+                      </div>
+					  {if $agree_info['buyer_accepttime']}
+					   <div class="pad10 user_info1">
+					   	<span>{$_lang['agree_time']}{$_lang['zh_mh']}<!--{date('Y-m-d H:i:s',$agree_info['buyer_accepttime'])}--></span></br>
+					   	{if $agree_info['buyer_confirmtime']}
+							<span>{$_lang['agree_over_time']}{$_lang['zh_mh']}<!--{date('Y-m-d H:i:s',$agree_info['buyer_confirmtime'])}--></span></br>
+					  	{/if}
+					   </div>
+					   {/if}
+                    </div>
+                 </div>
+                <!--end 左边发布者-->
+                 <div class="grid_3 alpha omega t_c clearfix" style="float:left; width:110px;">
+                    <p style="margin:auto; line-height:300px; text-align:center"></p>
+                    <font color="red"><b>{$status_arr[$agree_status]}</b></font>
+					{if $r}
+						<a class="button" href="index.php?do=trans&view=process&type=report&report_id={$r}">{$_lang['operate_report']}</a>
+					{/if}`
+				 </div>
+                <!--右边中标者-->
+                 <div class="grid_9 clearfix" style="float:left; width:350px;">
+                    <div class="bidder">
+                      <div class="user_info1 clearfix pad10 ">
+                        <div class="fl_l mr_10">
+							 	 <a href="{$_K['siteurl']}/index.php?do=seller&id={$seller_uid}" target="_blank" title="{$seller_username}">
+                          <!--{userpic($seller_uid,'middle')}-->
+						  </a>
+                         <ul class="grid_4 fl_r">
+                            <li class="intor font14b">({$_lang['bidder']})
+							 	 <a href="{$_K['siteurl']}/index.php?do=seller&id={$seller_uid}" target="_blank">
+							 	 	{$seller_username}
+								</a>
+							</li>
+                              <li class="font14b"><i style="color:#FF3D00">{$seller_status_arr[$seller_status]}</i></li>
+                          </ul>
+                        </div>
+                      </div>
+                      <div class="pad10 contact">
+                        <span>{$_lang['username']}{$_lang['zh_mh']}{if $seller_contact['truename']}$seller_contact['truename']{else}$seller_username{/if}</span>
+                        <span>{$_lang['tel']}{$_lang['zh_mh']}{if $seller_contact['phone']}$seller_contact['phone']{else}{$_lang['now_no']}{/if}</span>
+                        <span>{$_lang['mobile']}{$_lang['zh_mh']}{if $seller_contact['mobile']}$seller_contact['mobile']{else}{$_lang['now_no']}{/if}</span>
+                        <span>Q  Q{$_lang['zh_mh']}{if $seller_contact['qq']}$seller_contact['qq']{else}{$_lang['now_no']}{/if}</span>
+                        <span>MSN{$_lang['zh_mh']}  {if $seller_contact['msn']}$seller_contact['msn']{else}{$_lang['now_no']}{/if}</span>
+                        <span>{$_lang['email']}{$_lang['zh_mh']}{if $seller_contact['email']}$seller_contact['email']{else}{$_lang['now_no']}{/if}</span>
+                                                            
+                      </div>
+					  
+					  {if $agree_info['seller_accepttime']}
+					   <div class="pad10 user_info1">
+					   	<span>{$_lang['agree_time']}{$_lang['zh_mh']}<!--{date('Y-m-d H:i:s',$agree_info['seller_accepttime'])}--></span></br>
+					   	{if $agree_info['seller_confirmtime']}
+							<span>{$_lang['agree_over_time']}{$_lang['zh_mh']}<!--{date('Y-m-d H:i:s',$agree_info['seller_confirmtime'])}--></span></br>
+					  	{/if}
+					   </div>
+					   {/if}
+                      </div>
+                  </div>
+                  <!--end 右边中标者-->
+                </div>
+         	 <div class="clear"></div>
+        </div>
+      </div>
+     </div>
+    </div>
+    <!--end 左边部分-->
+  </div>
+  <!--end 步骤下部所有内容--> 
+        </div>
+    </div>
+</div>
+<!--主体结束-->
+<!--{template ADMIN_DIRECTORY/tpl/admin_footer}-->

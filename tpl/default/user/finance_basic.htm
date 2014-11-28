@@ -1,0 +1,58 @@
+<!--{template user/header}-->
+<div class="container">
+  <div class="nav-action">
+		<!--{template user/left_side}-->
+  </div>
+  <!-- nav-action end -->
+  <div class="content-panel">
+      <div class="tab">
+        <a {if $op === 'basic'}class="selected"{/if} href="index.php?do=user&view=finance&op=basic">账户信息</a>
+        <a {if $op === 'details'}class="selected"{/if} href="index.php?do=user&view=finance&op=details">收支明细</a>
+        <a {if $op === 'rechargelog'}class="selected"{/if} href="index.php?do=user&view=finance&op=rechargelog">充值记录</a>
+      <a {if $op === 'withdrawlog'}class="selected"{/if} href="index.php?do=user&view=finance&op=withdrawlog">提现记录</a>
+	  </div>
+      <div class="tab_detail">
+      		<!-- 基本信息 start -->
+
+                <dl class="dl-horizontal mb_20">
+                    <dt>我的财务信息：</dt>
+                    <dd>
+                      <p class="mb_10">用户名：{$username}</p>
+                      <p class="mb_10">账户可用余额：<strong class="money">{c:$gUserInfo['balance']}</strong> </p>
+                      <p class="mb_10">
+                        <a href="index.php?do=user&view=account&op=auth&auth_code=bank" class="btn btn-default">
+                          银行卡认证
+                          {if $arrBankAuth['auth_status']==1}
+                          <span class="label label-success">已认证</span>
+                          {else}
+                          <span class="label label-danger">未认证</span>
+                          {/if}
+                        </a>
+                        <a href="index.php?do=user&view=finance&op=rechargeonline" class="btn btn-default">账户充值</a>
+                        <a href="index.php?do=user&view=finance&op=withdraw" class="btn btn-default">账户提现</a>
+                      </p>
+                    </dd>
+                </dl>
+
+
+                <dl class="dl-horizontal">
+                    <dt>资金安全强度：</dt>
+                    <dd>
+                      <p class="mb_10">您可以通过以下方式提高资金安全强度：</p>
+                      <p class="mb_10">
+                        <a href="index.php?do=user&view=account&op=password" class="btn btn-default"><i class="fa fa-key"></i> 修改密码</a>
+                        <a href="index.php?do=user&view=account&op=security" class="btn btn-default"><i class="fa fa-lock"></i> 修改安全密码</a>
+                        <a href="index.php?do=user&view=account&op=auth" class="btn btn-default"><i class="fa fa-lock"></i> 完善账号安全认证</a>
+                      </p>
+                    </dd>
+                </dl>
+
+
+      		<!-- 基本信息 end -->
+      </div>
+  </div>
+  </div>
+
+<script src="static/js/model/user/finance.js"></script>
+
+<!--{template user/footer}-->

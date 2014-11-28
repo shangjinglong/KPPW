@@ -1,0 +1,96 @@
+<!--{template ADMIN_DIRECTORY/tpl/admin_header}-->  
+  <div class="box search p_relative">
+   
+    
+    </div>
+    <!--搜索结束-->
+
+    <div class="box list">
+    	<div class="title"><h2>{$_lang['case_search']}</h2></div>
+        <div class="detail">
+        	<form action="#" method="post">
+        		<label>{$_lang['case_type']}</label>
+				<select id="search_type" name="search_type">
+					<option value="task" {if $search_type=='task'} selected="selected" {/if}>{$_lang['task']}</option>
+					<option value="service"  {if $search_type=='service'} selected="selected" {/if} >{$_lang['goods']}</option>
+				</select>
+				
+				<label>{$_lang['case_id']}</label>
+				<input type="text" name="search_id" id="search_id" class="txt" value="$search_id"/>
+				<button class="pill" type="submit" value="{$_lang['search']}" name="sbt_search">
+	        		<span class="icon magnifier"></span>{$_lang['search']}
+				</button>
+			</form>
+			
+        	<form action="" id='frm_list' method="post">
+        	<input type="hidden" value="{$page}" name="page">
+			<input type="hidden" name="w[page_size]" value="{$page_size}">
+               <div id="ajax_dom"><input type="hidden" value="{$page}" name="page">
+               <table cellpadding="0" cellspacing="0">
+                <tbody>
+                  <tr>
+                    <th width="12%">{$_lang['case_id']}</th>
+                    <th width="20%">{$_lang['case_title']}</th>
+                    <th width="10%">{$_lang['case_type']}</th>
+                    <th width="15%">{$_lang['case_cash']}</th>
+                    <th width="15%">{$_lang['pub_name']}</th>
+			
+                  </tr>
+                  {loop $task_case_arr $k $v}
+				 
+               
+                  {if $search_type=='task'}
+				     <tr class="item" style="cursor:pointer;" onclick="add_caseinfo('$v['task_id']','')" >
+				    <td class="td25" id="id_$v['task_id']">$v['task_id']</td> 
+                    <td class="td28" id="title_$v['task_id']"  ext="$v['task_title']"><!--{eval echo	kekezu::cutstr($v['task_title'], 20);}--></td>
+                    <td >$model_type_arr[$v['model_id']]</td>
+                    <td> <font color=red id="cash_$v['task_id']">{c:$v['task_cash']}</font> </td>
+					<input type="hidden" id="casher_$v['task_id']" value="$v['task_cash']">
+                    <td>$v['username']</td> 
+				  {else}
+					 <tr class="item" style="cursor:pointer;" onclick="add_caseinfo('$v['service_id']','$v['pic']')" >
+					<td class="td25" id="id_$v['service_id']">$v['service_id']</td> 
+                    <td class="td28" id="title_$v['service_id']"   ext="$v['title']"><!--{eval 	echo kekezu::cutstr($v['title'], 20);}--></td>
+                    <td>$model_type_arr[$v['model_id']]</td>
+                    <td> <font color=red id="cash_$v['service_id']"> {c:$v['price']}</font> </td>
+					<input type="hidden" id="casher_$v['service_id']" value="$v['price']">
+                    <td>$v['username']</td>
+					</tr>
+				  {/if}
+                 	
+                 
+                  {/loop}
+                  
+                </tbody>
+              </table>
+			  <div class="page">{$pages['page']}</div>
+			  </div>
+        	</form>
+        </div>       
+    </div>
+	<!--主体结束-->
+ 
+<script type="text/javascript">
+	function add_caseinfo(k,img){
+		var k = k;
+		var obj_id_val = parseInt($("#id_"+k).html());//对象id
+		var title_val = $("#title_"+k).attr("ext");//案例标题
+		var cash_val = $("#casher_"+k).val();
+		var case_type = '$search_type';
+	
+		if(img){
+			var case_img = img;	
+		}
+		art.dialog.data('cash_val',cash_val);
+		art.dialog.data('title_val',title_val);
+		art.dialog.data('obj_id_val',obj_id_val);
+		art.dialog.data('case_type',case_type);
+		art.dialog.data('case_img',case_img);
+		art.dialog.close();
+	}
+	
+ 
+	
+</script>
+
+<!--{template ADMIN_DIRECTORY/tpl/admin_footer}-->

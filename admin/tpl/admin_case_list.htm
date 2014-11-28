@@ -1,0 +1,144 @@
+<!--{template ADMIN_DIRECTORY/tpl/admin_header}-->
+<div class="page_title">
+    <h1>{$_lang['case_manage']}</h1>
+    <div class="tool">
+    	 <a class="here" href="index.php?do=$do&view=list">{$_lang['case_list']}</a>
+        <a href="index.php?do=$do&view=add">{$_lang['case_add']}</a>
+    </div>
+</div>
+    <div class="box search p_relative">
+		<div class="title"><h2>{$_lang['search']}</h2></div>
+        <div class="detail" id="detail">
+			 <form action="index.php?do=$do&view=list" method="post">
+				<input type="hidden" name="page" value="$page">
+				<table cellspacing="0" cellpadding="0">
+					<tbody>
+						<tr>
+							<th>{$_lang['id']}</th>
+							<td><input type="text" value="$w[case_id]" name="w[case_id]" class="txt"/></td>
+							<th>{$_lang['case_name']}</th>
+							<td><input type="text" value="$w[art_title]" name="w[art_title]" class="txt"/>*{$_lang['search_by_like']}</td>
+							
+							<th>{$_lang['case_type']}</th>
+							<td>
+								<select name="w[obj_type]" class="ps vm">
+									<option value=''>{$_lang['all']}</option>
+ 									<option {if $w['obj_type']=="task"}selected=selected{/if} value='task'>{$_lang['task']}</option>
+									<option {if $w['obj_type']=="service"}selected=selected{/if} value='service'>{$_lang['shop']}</option>
+         						 </select>
+							</td>
+						</tr>
+						<tr>
+						 
+							<th>{$_lang['result_order']}</th>
+                 			 <td>
+                    	<select name="w[ord][]">
+                           <option value="case_id" {if $w['ord']['0']=='case_id' or !isset($w['ord']['0'])} selected="selected"{/if}>{$_lang['default']}{$_lang['order']}</option>
+                           <option value="on_time" {if $w['ord']['0']=='on_time' } selected="selected"{/if}>{$_lang['up_time']}</option>
+                      </select>
+                      <select name="w[ord][]">
+                            <option {if $w['ord']['1']=='desc' or !isset($w['ord']['1'])}selected="selected" {/if} value="desc">{$_lang['desc']}</option>
+                            <option {if $w['ord']['1']=='asc'}selected="selected" {/if} value="asc">{$_lang['asc']}</option>
+                      </select>
+                 			  </td>
+            			  <th>{$_lang['list_result']}</th>
+                  		 <td colspan="3">
+                 			  <select name="w[page_size]">
+                         		  <option value="10" {if $w['page_size']=='10'}selected="selected"{/if}>{$_lang['page_size']}10</option>
+                          		  <option value="20" {if $w['page_size']=='20'}selected="selected"{/if}>{$_lang['page_size']}20</option>
+                         		  <option value="30" {if $w['page_size']=='30'}selected="selected"{/if}>{$_lang['page_size']}30</option>
+                    			  </select>
+								<button class="pill" type="submit" value={$_lang['search']} name="sbt_search">
+                            		<span class="icon magnifier">&nbsp;</span>{$_lang['search']}
+								</button>
+							</td>
+						</tr>
+					</tbody>
+				</table>	
+				</form>
+		</div>
+    </div>
+	
+<div class="box list">
+    	<div class="title"><h2>{$_lang['reply_list']}</h2></div>
+        <div class="detail">
+  		<form action="index.php?do={$do}&view={$view}" id='frm_list' method="post">
+  			<input type="hidden" name="page" value="{$page}">
+			<input type="hidden" name="w[page_size]" value="{$w['page_size']}">
+			<div id="ajax_dom">
+  			<table  cellpadding="0" cellspacing="0">
+  				<thead>
+  					 <tr>
+  					 <th>
+						<input type="checkbox" id="checkbox" onclick="checkall();" class="checkbox" >编号
+					</th>
+					
+                    <th width="38%">
+                        {$_lang['case_name']}
+                    </th>
+                    <th width="10%">
+                       {$_lang['case_money']}
+                    </th>
+                    <th width="10%">
+                       {$_lang['case_type']}
+                    </th>
+                    <th width="17%">
+                        {$_lang['pub_time']}
+                    </th>
+                    <th width="15%">
+                      {$_lang['operate']}
+                    </th>
+                </tr>
+				</thead>
+				<tbody>
+                {loop $case_arr $v}
+                <tr class="item">
+                	<td>
+                		<input type="checkbox" name="ckb[]" class="checkbox" value="{$v['case_id']}">{$v['case_id']}
+                	</td>
+                   
+                    <td>
+                     {if $v[obj_type]=='service'}
+					   <a href="../index.php?do=goods&id=$v['obj_id']" target="_blank">
+                        	<!--{eval echo kekezu::cutstr($v['case_title'],54)}--></a>
+					 {elseif $v[obj_type]=='task'}
+					   <a href="../index.php?do=task&id=$v['obj_id']" target="_blank">
+                        	<!--{eval echo kekezu::cutstr($v['case_title'],54)}--></a>
+					 {/if}
+					  
+                    </td>
+                    <td>
+                        {if $v['task_cash']}{c:$v['task_cash']} {else}{c:$v['case_price']}{/if}
+                    </td>
+                    <td>
+                        {if $v['obj_type']=="task"}{$_lang['task']}{else}{$_lang['shop']}{/if}
+                    </td>
+                    <td>
+                        <!--{eval echo date('Y-m-d H:i',$v['on_time'])}-->
+                    </td>
+                    <td>
+                        <a href="index.php?do=case&view=add&case_id={$v['case_id']}" class="button dbl_target"><span class="pen icon"></span>{$_lang['edit']}</a>
+                       <a href="index.php?do=case&view=list&ac=del&case_id={$v['case_id']}&page=$page&w['page_size']={$w['page_size']}&w['obj_type']={$w['obj_type']}" onclick="return cdel(this);" class="button"><span class="trash icon"></span>{$_lang['delete']}</a>
+                    </td>
+                </tr>
+				{/loop}
+				</tabody>
+				<tfoot>
+				 <tr>
+                    <td colspan="5">
+	                    
+						
+	                       <label for="checkbox" onclick="checkall(event);">{$_lang['select_all']}</label>
+	                        <input type="hidden" name="sbt_action" class="sbt_action"/>
+	                        <button name="sbt_action" type="submit" value={$_lang['mulit_delete']} onclick="return batch_act(this,'frm_list');" class="pill negative" ><span class="icon trash"></span>{$_lang['mulit_delete']}</button>
+						
+					</td>	
+				</tr>		
+				</tfoot>
+  			</table>
+			<div class="page">{$pages['page']}</div>
+			</div>
+		</form>
+      </div>
+</div>	 
+<!--{template ADMIN_DIRECTORY/tpl/admin_footer}-->
